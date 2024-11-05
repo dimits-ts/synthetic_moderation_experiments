@@ -4,7 +4,7 @@ PROJECT_ROOT_DIR="$(dirname "$THIS_DIR")"
 SDF_DIR="$PROJECT_ROOT_DIR/synthetic_discussion_framework/src"
 
 INPUT_DIR="$PROJECT_ROOT_DIR/data/annotation_input/modular_configurations"
-OUTPUT_DIR="$PROJECT_ROOT_DIR/data/annotation_input/conv_data/generated"
+OUTPUT_DIR="$PROJECT_ROOT_DIR/data/annotation_input/generated"
 
 echo "Removing old generated files..."
 rm "$OUTPUT_DIR"/* # scary
