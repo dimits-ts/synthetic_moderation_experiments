@@ -8,7 +8,6 @@ INPUT_DIR="$PROJECT_ROOT_DIR/data/generated_discussions_input/conv_data/generate
 OUTPUT_DIR="$PROJECT_ROOT_DIR/data/generated_discussions_output/new"
 
 MODEL_PATH="$PROJECT_ROOT_DIR/models/llama-3-8B-instruct.gguf"
-PYTHON_SCRIPT_PATH="$SDF_DIR/sdf_create_conversations.py"
 
 LOG_DIR="$PROJECT_ROOT_DIR/logs"
 CURRENT_DATE=$(date +'%Y-%m-%d')
@@ -18,7 +17,6 @@ mkdir -p "$LOG_DIR"
 mkdir -p "$OUTPUT_DIR"
 
 bash "$SDF_DIR/scripts/conversation_execute_all.sh" \
-    --python_script_path "$PYTHON_SCRIPT_PATH" \
     --input_dir "$PROJECT_ROOT_DIR/data/generated_discussions_input/conv_data/generated" \
     --output_dir  "$OUTPUT_DIR" \
     --model_path "$MODEL_PATH" \

@@ -9,8 +9,6 @@ MODEL_PATH="$PROJECT_ROOT_DIR/models/llama-3-8B.gguf"
 CONV_INPUT_DIR="$PROJECT_ROOT_DIR/generated_discussions_output"
 ANNOTATOR_PROMPT_DIR="$PROJECT_ROOT_DIR/data/annotations_input"
 
-PYTHON_SCRIPT_PATH="$SDF_DIR/sdf_create_annotations.py"
-
 LOG_DIR="$PROJECT_ROOT_DIR/logs"
 CURRENT_DATE=$(date +'%Y-%m-%d')
 mkdir -p "$LOG_DIR"
@@ -20,7 +18,6 @@ for DIR in "$CONV_INPUT_DIR"/*; do
     # for each annotator SDB prompt
     for ANNOTATOR_PROMPT_PATH in "$ANNOTATOR_PROMPT_DIR"/*; do
         bash "$THIS_DIR/annotation_execute_all.sh" \
-        --python_script_path "$PYTHON_SCRIPT_PATH" \
         --conv_input_dir "$DIR" \
         --prompt_path "$ANNOTATOR_PROMPT_PATH" \
         --output_dir "$OUTPUT_DIR" \
