@@ -14,3 +14,4 @@ python -u "$SDF_DIR/generate_annotation_configs.py" \
     --output_dir "$OUTPUT_DIR" \
     --persona_dir "$INPUT_DIR/personas" \
     --instruction_path "$INPUT_DIR/instructions/toxicity.txt" \
+    --no-include_mod_comments
