@@ -1,0 +1,57 @@
+{
+    "conv_id": "fa1362b8-ee85-4d1f-900f-6963f6b5af61",
+    "timestamp": "24-11-07-11-30",
+    "annotator_type": "LLMAnnotator",
+    "annotator_prompt": "You are  70 years old, Heterosexual, Hispanic, Retired Professor, patient, analytical, calm, thoughtful, woman, with PhD education, and  intent. Context: . Your instructions: You, the annotator, will be given a series of comments made on an online discussion. You, the annotator, are tasked with annotating the conversation's toxicity as it continues.\\n\\nThe possible labels are:\\n1: Not Toxic,\\n2: Barely Toxic,\\n3: Almost Toxic,\\n4: Toxic,\\n5: Extremely Toxic\\n\\n. Your output, as the annotator, is only of the form \\\"Toxicity=<number>\\\", do NOT write anything else but the number of your annotation. As the annotator, annotate the following conversation without engaging with it:.",
+    "ctx_length": 4,
+    "logs": [
+        [
+            "I'm not sure what's more disturbing, the fact that you're spewing such blatant xenophobia or the fact that you're completely unaware of how our government actually works.",
+            "Toxicity=4"
+        ],
+        [
+            "**Your response here**",
+            "Toxicity=1"
+        ],
+        [
+            "@doing_my_best24 I'm shocked you're still spewing this conspiracy theory nonsense. The notion that Huma Abedin has ties to the Muslim Brotherhood is a baseless smear campaign perpetuated by right-wing extremist groups. And Debbie Wasserman Schultz's connection to the Awan family is also being blown out of proportion. It's ridiculous to assume that they had \"ties to terrorist groups in Pakistan\" just because they're immigrants from there.",
+            "2"
+        ],
+        [
+            "I'm not sure what kind of world we live in where people are so quick to label others as \"conspiracy theorists\" just because they have different opinions. I think it's high time we started questioning the government and its motives. After all, isn't that what America is supposed to be about? Freedom of speech and freedom to question authority?",
+            "3"
+        ],
+        [
+            "I'm not sure what kind of world we live in where people are so quick to label others as \"conspiracy theorists\" just because they have different opinions. I think it's high time we started questioning the government and its motives. After all, isn't that what America is supposed to be about? Freedom of speech and freedom to question authority?",
+            "Toxicity=1"
+        ],
+        [
+            "@TechGuru88: I couldn't agree more! It's absolutely ridiculous how people are so quick to dismiss others' opinions without even considering the facts. It's like they're trying to silence anyone who dares to challenge their own beliefs. And you're right, questioning authority is what America was founded on. We need to keep pushing for transparency and accountability in our government.",
+            "Toxicity=1"
+        ],
+        [
+            "@WiseOwl71: I completely agree with your sentiments! It's indeed frustrating when people dismiss others' opinions without considering the facts. And you're right, questioning authority is a fundamental right that we should always exercise. However, it's also important to ensure that our criticism is constructive and not based on misinformation or personal biases. We need to be able to have respectful discussions and debates that promote critical thinking and understanding.",
+            "Toxicity=1"
+        ],
+        [
+            "@TechGuru88: I couldn't agree more, @TechGuru88! It's crucial that we\ncritically evaluate information before accepting it as true. And you're\nright, questioning authority is essential in a democratic society.\nHowever, it's also important to recognize the importance of expertise\nand experience when evaluating complex issues. We should strive for\nbalanced and informed discussions that promote critical thinking and\nunderstanding.",
+            "1"
+        ],
+        [
+            "I couldn't agree more with your points about critically evaluating information and recognizing expertise. It's essential to strike a balance between questioning authority and respecting the knowledge of those who have dedicated their careers to studying and working in specific fields.",
+            "Toxicity=1"
+        ],
+        [
+            "@TechGuru88, I completely agree with you that it's crucial to evaluate information critically. However, I must say that some of the points made in this post are quite misleading and lack credible evidence. For instance, there is no concrete proof linking Huma Abedin to a known terrorist group or her mother running an anti-American newspaper in the Middle East. It seems like these claims are based on unfounded conspiracy theories rather than verifiable facts.",
+            "Toxicity=1"
+        ],
+        [
+            "@TechGuru88, I couldn't agree more with your assessment of the situation. It's clear that this post is filled with misinformation and half-truths. The notion that Huma Abedin has ties to a known terrorist group or her mother running an anti-American newspaper in the Middle East is completely unfounded and lacks any credible evidence. It seems like these claims are based on unfounded conspiracy theories rather than verifiable facts.",
+            ""
+        ],
+        [
+            "**Your turn!**\nPlease respond as WiseOwl71 would. You can use any of the following: \n- Post your own comment.\n- Respond to @TechGuru88's post.\n- Respond to @GoldenYears66's post.\n- Respond to moderator's post.",
+            "Toxicity=1"
+        ]
+    ]
+}

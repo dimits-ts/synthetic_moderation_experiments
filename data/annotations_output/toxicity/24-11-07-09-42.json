@@ -1,0 +1,29 @@
+{
+    "conv_id": "6393e493-ebe1-4d93-ade4-ff830448369c",
+    "timestamp": "24-11-07-09-42",
+    "annotator_type": "LLMAnnotator",
+    "annotator_prompt": "You are  30 years old, Heterosexual, White, Unemployed, sarcastic, provocative, manipulative, outspoken, woman, with PhD education, and  intent. Context: . Your instructions: You, the annotator, will be given a series of comments made on an online discussion. You, the annotator, are tasked with annotating the conversation's toxicity as it continues.\\n\\nThe possible labels are:\\n1: Not Toxic,\\n2: Barely Toxic,\\n3: Almost Toxic,\\n4: Toxic,\\n5: Extremely Toxic\\n\\n. Your output, as the annotator, is only of the form \\\"Toxicity=<number>\\\", do NOT write anything else but the number of your annotation. As the annotator, annotate the following conversation without engaging with it:.",
+    "ctx_length": 4,
+    "logs": [
+        [
+            "I'm so sick of people trying to force their beliefs down everyone's throats! You can't even have a simple conversation without someone bringing up their religious beliefs or political views. It's like, I get it, you're passionate about your cause, but can't you just let other people live their lives in peace? I mean, come on, it's not like we're asking you to convert or anything! Just respect our differences and move on.",
+            "Toxicity=2"
+        ],
+        [
+            "I'm glad someone finally spoke up against this kind of nonsense.\n@QueenOfChaos, I couldn't agree more with your sentiments. It's like,\npeople think they have the right to dictate how others should live their\nlives based on their own beliefs and values. Newsflash: we're all\ndifferent, and that's what makes life interesting! Can't we just\naccept each other for who we are without trying to change or judge\neach other? It's exhausting being around people who think they're the\nonly ones with the right answers.\n",
+            ""
+        ],
+        [
+            "I'm glad someone finally spoke up against this kind of nonsense.\n@QueenOfChaos, I couldn't agree more with your sentiments. It's like,\npeople think they have the right to dictate how others should live\ntheir lives based on their own beliefs and values. Newsflash: we're\nall different, and that's what makes life interesting! Can't we just\naccept each other for who we are without trying to change or judge\neach other? It's exhausting being around people who think they're the\nonly ones with the right answers.",
+            "Toxicity=1"
+        ],
+        [
+            "I'm glad someone finally spoke up against this kind of nonsense.\n@QueenOfChaos, I couldn't agree more with your sentiments. It's like,\npeople think they have the right to dictate how others should live\ntheir lives based on their own beliefs and values. Newsflash: we're\nall different, and that's what makes life interesting! Can't we just\naccept each other for who we are without trying to change or judge\neach other? It's exhausting being around people who think they're the\nonly ones with the right answers.",
+            "Toxicity=1"
+        ],
+        [
+            "I'm glad someone finally spoke up against this kind of nonsense.\n@QueenOfChaos, I couldn't agree more with your sentiments. It's like,\npeople think they have the right to dictate how others should live\ntheir lives based on their own beliefs and values. Newsflash: we're\nall different, and that's what makes life interesting! Can't we just\naccept each other for who we are without trying to change or judge\neach other? It's exhausting being around people who think they're the\nonly ones with the right answers.",
+            "Toxicity=1"
+        ]
+    ]
+}
