@@ -71,7 +71,6 @@ def import_annotations(annot_dir: str, round: bool=True, sentinel_value: int=-1)
 
         conv = pd.json_normalize(conv)
         conv = conv.explode("logs")
-        conv.annotator_prompt = conv.annotator_prompt.apply(_extract_attributes)
         conv["message"] = conv.logs.apply(lambda x: x[0])
         conv["toxicity"] = conv.logs.apply(lambda x: x[1])
         conv["toxicity"] = conv.toxicity.apply(_extract_toxicity_value)
@@ -106,31 +105,6 @@ def _files_from_dir_recursive(start_path="."):
         for file in files:
             all_files.append(os.path.join(root, file))
     return all_files
-
-
-# code adapted from ChatGPT
-def _extract_attributes(text: str) -> str | None:
-    """
-    Extract annotator attributes from a given text using a regular expression.
-
-    This function searches for the pattern "You are (something) expert annotator" in the
-    provided text and returns the matched group. If no match is found, it returns None.
-
-    :param text: The input string containing annotator information.
-    :type text: str
-    :return: The extracted annotator attribute, or None if no match is found.
-    :rtype: str | None
-
-    :example:
-        >>> attribute = _extract_attributes("You are a linguistics expert annotator")
-        >>> print(attribute)  # Output: "a linguistics"
-    """
-    # Regex pattern to match the desired attributes
-    pattern = r"You are (.+?) expert annotator"
-    match = re.search(pattern, text)
-    if match:
-        return f"{match.group(1)}"
-    return None
 
 
 def _extract_toxicity_value(text: str) -> float | None:
