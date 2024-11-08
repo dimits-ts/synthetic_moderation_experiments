@@ -4,6 +4,8 @@ Synthetic dataset generation using the [Synthetic Discussion Framework (SDF)](ht
 
 ## Usage
 
+To download the code, run `git clone --recurse-submodules -j8 https://github.com/dimits-ts/synthetic_moderation_experiments.git`
+
 Usage instructions can be found in the [SDF's documentation](https://github.com/dimits-ts/synthetic_discussion_framework/blob/master/README.md).
 
 ### Environment
