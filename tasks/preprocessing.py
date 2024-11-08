@@ -13,7 +13,7 @@ def import_conversations(conv_dir: str) -> pd.DataFrame:
     Recursively reads all JSON files from the specified directory,
     and extracts relevant fields. It also adds metadata about the conversation variant.
 
-    :param conv_dir: Path to the directory containing the conversation JSON files.
+    :param conv_dir: Path to the root directory containing the conversation JSON files.
     :type conv_dir: str
     :return: A DataFrame with conversation data, including the ID, user prompts, messages,
              and conversation variant.
@@ -42,7 +42,7 @@ def import_conversations(conv_dir: str) -> pd.DataFrame:
     return full_df
 
 
-def import_annotations(annot_dir: str, round: bool, sentinel_value: int=-1) -> pd.DataFrame:
+def import_annotations(annot_dir: str, round: bool=True, sentinel_value: int=-1) -> pd.DataFrame:
     """
     Import annotation data from a directory containing JSON files and convert them to a DataFrame.
 
@@ -78,7 +78,7 @@ def import_annotations(annot_dir: str, round: bool, sentinel_value: int=-1) -> p
 
         if round:
             conv["toxicity"] = conv["toxicity"].apply(
-                lambda x: -1 if math.isnan(x) else int(x)
+                lambda x: sentinel_value if x is None or math.isnan(x) else int(x)
             )
 
         del conv["logs"]
