@@ -11,7 +11,7 @@ MODEL_PATH="$PROJECT_ROOT_DIR/models/llama-3-8B-instruct.gguf"
 
 LOG_DIR="$PROJECT_ROOT_DIR/logs"
 CURRENT_DATE=$(date +'%Y-%m-%d')
-OUTPUT_DIR="$PROJECT_ROOT_DIR/data/generated_discussions_output/arguments"
+OUTPUT_DIR="$PROJECT_ROOT_DIR/data/generated_discussions_output/moderation_game"
 
 mkdir -p "$LOG_DIR"
 mkdir -p "$OUTPUT_DIR"
