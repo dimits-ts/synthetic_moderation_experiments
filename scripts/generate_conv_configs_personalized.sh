@@ -10,13 +10,13 @@ echo "Removing old generated files..."
 mkdir -p "$OUTPUT_DIR"
 rm "$OUTPUT_DIR"/* # scary
 
-python -u "$SDF_DIR/scripts/generate_conv_configs.py" \
+python -u "$SDF_DIR/generate_conv_configs.py" \
           --output_dir  "$OUTPUT_DIR"\
-          --persona_dir "$INPUT_DIR/personas" \
+          --persona_dir "$INPUT_DIR/personas/moderation_game" \
           --topics_dir "$INPUT_DIR/topics" \
           --configs_path "$INPUT_DIR/other_configs/standard_multi_user.json" \
-          --user_instruction_path "$INPUT_DIR/user_instructions/vanilla.txt" \
-          --mod_instruction_path "$INPUT_DIR/mod_instructions/no_instructions.txt" \
+          --user_instruction_path "$INPUT_DIR/user_instructions/moderation_game.txt" \
+          --mod_instruction_path "$INPUT_DIR/mod_instructions/moderation_game.txt" \
           --num_generated_files 30 \
           --num_users 5 \
           --include_mod
