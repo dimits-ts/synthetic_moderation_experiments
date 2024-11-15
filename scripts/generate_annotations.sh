@@ -6,7 +6,7 @@ SDF_DIR="$PROJECT_ROOT_DIR/synthetic_discussion_framework/src"
 
 OUTPUT_DIR="$PROJECT_ROOT_DIR/data/annotations_output"
 MODEL_PATH="$PROJECT_ROOT_DIR/models/llama-3-8B-instruct.gguf"
-CONV_INPUT_DIR="$PROJECT_ROOT_DIR/data/generated_discussions_output"
+CONV_INPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_output"
 ANNOTATOR_PROMPT_DIR="$PROJECT_ROOT_DIR/data/annotation_input/generated"
 
 LOG_DIR="$PROJECT_ROOT_DIR/logs"
