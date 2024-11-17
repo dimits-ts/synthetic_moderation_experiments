@@ -20,7 +20,7 @@ bash "$SDF_DIR/scripts/conversation_execute_all.sh" \
     --output_dir  "$OUTPUT_DIR" \
     --model_path "$MODEL_PATH" \
     --max_tokens 400 \
-    --ctx_width_tokens 3000 \
+    --ctx_width_tokens 4058 \
     --inference_threads 10 \
     --gpu_layers 9  \
     2>&1 | tee -a "$LOG_DIR/$CURRENT_DATE.txt"
