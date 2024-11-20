@@ -4,7 +4,7 @@ PROJECT_ROOT_DIR="$(dirname "$THIS_DIR")"
 SDF_DIR="$PROJECT_ROOT_DIR/synthetic_discussion_framework"
 
 INPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_input/modular_configurations"
-OUTPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_input/conv_data/generated"
+OUTPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_input/generated"
 
 echo "Removing old generated files..."
 mkdir -p "$OUTPUT_DIR"
