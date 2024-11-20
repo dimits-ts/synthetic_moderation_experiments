@@ -4,7 +4,7 @@ THIS_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PROJECT_ROOT_DIR="$(dirname "$THIS_DIR")"
 SDF_DIR="$PROJECT_ROOT_DIR/synthetic_discussion_framework/src"
 
-INPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_input/conv_data/generated"
+INPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_input/generated"
 OUTPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_output/collective_constitution"
 
 MODEL_PATH="$PROJECT_ROOT_DIR/models/llama-3-8B-instruct.gguf"
