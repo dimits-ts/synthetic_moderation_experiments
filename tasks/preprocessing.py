@@ -11,8 +11,20 @@ def import_and_format_conversations(conv_dir: str) -> pd.DataFrame:
     conv_df = _split_prompts(conv_df)
     conv_df = _add_moderator_exists(conv_df)
 
-    attribute_df = _split_sdbs(conv_df)
+    attribute_df = _split_sdbs(conv_df, prompt_col="user_prompt")
     combined_df = pd.concat([conv_df, attribute_df], axis=1)
+
+    return combined_df
+
+
+def import_and_format_annotations(
+    annot_dir: str, round: bool, sentinel_value: int
+) -> pd.DataFrame:
+    annot_df = import_annotations(annot_dir, round=round, sentinel_value=sentinel_value)
+    annot_df = annot_df[annot_df.toxicity != sentinel_value]
+
+    attribute_df = _split_sdbs(annot_df, prompt_col="annotator_prompt") #type: ignore
+    combined_df = pd.concat([annot_df, attribute_df], axis=1)
 
     return combined_df
 
@@ -157,8 +169,8 @@ def _sdb_portion(prompt: str) -> str:
     return prompt.split("Context:")[0]
 
 
-def _split_sdbs(df: pd.DataFrame) -> pd.DataFrame:
-    return df["user_prompt"].apply(_extract_sdb_attributes).apply(pd.Series) # type: ignore
+def _split_sdbs(df: pd.DataFrame, prompt_col: str) -> pd.DataFrame:
+    return df[prompt_col].apply(_extract_sdb_attributes).apply(pd.Series)  # type: ignore
 
 
 def _extract_sdb_attributes(prompt: str):
