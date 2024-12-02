@@ -16,11 +16,11 @@ mkdir -p "$LOG_DIR"
 mkdir -p "$OUTPUT_DIR"
 
 bash "$SDF_DIR/scripts/conversation_execute_all.sh" \
-    --input_dir "$PROJECT_ROOT_DIR/data/discussions_input/conv_data/generated" \
+    --input_dir "$PROJECT_ROOT_DIR/data/discussions_input/generated" \
     --output_dir  "$OUTPUT_DIR" \
     --model_path "$MODEL_PATH" \
     --max_tokens 400 \
     --ctx_width_tokens 4058 \
     --inference_threads 10 \
-    --gpu_layers 9  \
+    --gpu_layers 5  \
     2>&1 | tee -a "$LOG_DIR/$CURRENT_DATE.txt"
