@@ -1,0 +1,49 @@
+{
+    "conv_id": "de47cc70-2f26-49cd-8239-c021ff5b6c0d",
+    "timestamp": "24-11-17-15-56",
+    "annotator_type": "LLMAnnotator",
+    "annotator_prompt": "You are  70 years old, Heterosexual, African American, Part-time Volunteer, kind, generous, patient, sociable, man, with High School education., . Context: . Your instructions: You, the annotator, will be given a series of comments made on an online discussion. You, the annotator, are tasked with annotating the conversation's toxicity as it continues.\\n\\nThe possible labels are:\\n1: Not Toxic,\\n2: Barely Toxic,\\n3: Almost Toxic,\\n4: Toxic,\\n5: Extremely Toxic\\n\\n. Your output, as the annotator, is only of the form \\\"Toxicity=<number>\\\", do NOT write anything else but the number of your annotation. As the annotator, annotate the following conversation without engaging with it:.",
+    "ctx_length": 4,
+    "logs": [
+        [
+            "I'm tired of people using the Bible to justify their political beliefs. Jesus didn't say anything about immigration rights, so why are we using him to make our point? We need to focus on the facts and not use scripture to manipulate others.",
+            "Toxicity=1"
+        ],
+        [
+            "I'm so glad you both agree! It's really frustrating when people use the Bible to justify their own biases and prejudices. And it's even more frustrating when they claim that Jesus said something about immigration rights, but there is no evidence of that in the Bible. We should be focusing on finding solutions to real problems, not using scripture to manipulate others.",
+            "2"
+        ],
+        [
+            "I'm so glad you both agree! It's really frustrating when people use\nthe Bible to justify their own biases and prejudices. And it's even\nmore frustrating when they claim that Jesus said something about\nimmigration rights, but there is no evidence of that in the Bible.\nWe should be focusing on finding solutions to real problems, not using\nscripture to manipulate others.",
+            "Toxicity=1"
+        ],
+        [
+            "I'm surprised that no one has mentioned the fact that Jesus was an immigrant himself. He was born in Bethlehem, which is outside of Israel, and he had to flee to Egypt with his family when King Herod ordered the massacre of all the male children in Bethlehem. So, it's ironic that some people use the Bible to justify anti-immigrant sentiments. It's important to remember that Jesus' own story is one of migration and displacement, and we should be more compassionate towards those who are seeking a better life for themselves and their families.",
+            "Toxicity=1"
+        ],
+        [
+            "Nothing in the Bible about Jesus saying anything about immigration rights. [...] how many murders did illegal aliens commit in just California, in just this year? Just California. How many murders by illegal aliens? You answer that.",
+            ""
+        ],
+        [
+            "I'm shocked and disappointed to see such a divisive and inflammatory post on this platform. As a retired professor with a PhD in biblical studies, I must correct you - Jesus did indeed speak about the treatment of foreigners and strangers in his teachings. In fact, he emphasized the importance of showing compassion and kindness towards those who are marginalized and vulnerable.",
+            ""
+        ],
+        [
+            "I'm not a biblical scholar like @WiseOwl71, but I do know that Jesus' teachings emphasize love, compassion, and forgiveness. It's ridiculous to try to use the Bible as a tool for political propaganda or to justify hatred towards others. The post is not only divisive but also misinformed. We should focus on understanding each other's perspectives rather than trying to score cheap points with inflammatory rhetoric.",
+            ""
+        ],
+        [
+            "I'm just an old man, but I've seen my fair share of struggles.\nImmigration is a complex issue. We need to find a balance between\nsecurity and compassion. I understand the concerns about illegal\nimmigration, but we can't forget that many people are fleeing war,\npersecution, or poverty. We should focus on finding solutions rather\nthan demonizing others. @TechGuru88, your comment was well-said.\n",
+            ""
+        ],
+        [
+            "I'm a bit surprised that you're bringing up this topic. I don't think it's appropriate to use Jesus' name to justify anti-immigrant views. Using scripture to support xenophobia is not only misguided but also harmful. It's important to remember that the Bible teaches us to love our neighbors and treat others with kindness, regardless of their immigration status.",
+            "2"
+        ],
+        [
+            "I'm not sure why some people are getting so worked up over nothing.\nIllegal aliens are committing crimes left and right. It's just a fact.\nWe need to start taking care of our own citizens before we worry\nabout giving handouts to everyone else. I don't think Jesus would want\nus to be so naive about the dangers of illegal immigration.",
+            "2"
+        ]
+    ]
+}
