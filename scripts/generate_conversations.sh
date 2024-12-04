@@ -19,8 +19,8 @@ bash "$SDF_DIR/scripts/conversation_execute_all.sh" \
     --input_dir "$PROJECT_ROOT_DIR/data/discussions_input/generated" \
     --output_dir  "$OUTPUT_DIR" \
     --model_path "$MODEL_PATH" \
-    --max_tokens 400 \
-    --ctx_width_tokens 4058 \
+    --max_tokens 200 \
+    --ctx_width_tokens 1024 \
     --inference_threads 10 \
-    --gpu_layers 5  \
+    --gpu_layers 3  \
     2>&1 | tee -a "$LOG_DIR/$CURRENT_DATE.txt"
