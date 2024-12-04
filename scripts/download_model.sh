@@ -23,4 +23,10 @@ function download_from_huggingface() {
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 SRC_DIR="$(dirname "$SCRIPT_DIR")"
 
+# Create the "models" subdirectory, if it does not exist
+MODELS_DIR="$SRC_DIR/models"
+if [ ! -d "$MODELS_DIR" ]; then
+    mkdir -p "$MODELS_DIR"
+fi
+
 download_if_not_exists "$SRC_DIR/models/llama-3-8B-instruct.gguf" "https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf?download=true"
