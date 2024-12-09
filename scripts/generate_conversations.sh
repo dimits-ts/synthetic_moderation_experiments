@@ -8,6 +8,8 @@ INPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_input/generated"
 OUTPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_output/collective_constitution"
 
 MODEL_PATH="$PROJECT_ROOT_DIR/models/llama-3-8B-instruct.gguf"
+MODEL_TYPE="llama"  # Default model type, update as necessary
+MODEL_NAME="llama-3-8B-instruct"  # Default model name, update as necessary
 
 LOG_DIR="$PROJECT_ROOT_DIR/logs"
 CURRENT_DATE=$(date +'%Y-%m-%d')
@@ -16,11 +18,13 @@ mkdir -p "$LOG_DIR"
 mkdir -p "$OUTPUT_DIR"
 
 bash "$SDF_DIR/scripts/conversation_execute_all.sh" \
-    --input_dir "$PROJECT_ROOT_DIR/data/discussions_input/generated" \
-    --output_dir  "$OUTPUT_DIR" \
+    --input_dir "$INPUT_DIR" \
+    --output_dir "$OUTPUT_DIR" \
     --model_path "$MODEL_PATH" \
     --max_tokens 200 \
     --ctx_width_tokens 1024 \
     --inference_threads 10 \
-    --gpu_layers 3  \
+    --gpu_layers 3 \
+    --type "$MODEL_TYPE" \
+    --model_name "$MODEL_NAME" \
     2>&1 | tee -a "$LOG_DIR/$CURRENT_DATE.txt"
