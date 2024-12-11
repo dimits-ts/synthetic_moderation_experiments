@@ -7,9 +7,10 @@ SDF_DIR="$PROJECT_ROOT_DIR/synthetic_discussion_framework/src"
 INPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_input/generated"
 OUTPUT_DIR="$PROJECT_ROOT_DIR/data/discussions_output/collective_constitution"
 
-MODEL_PATH="$PROJECT_ROOT_DIR/models/llama-3-8B-instruct.gguf"
-MODEL_TYPE="llama"  # Default model type, update as necessary
-MODEL_NAME="llama-3-8B-instruct"  # Default model name, update as necessary
+MODEL_PATH="$PROJECT_ROOT_DIR/models/llama-3-70B-2bit-instruct.gguf"
+MODEL_TYPE="transformers"  # library to load the model with, update as necessary
+#MODEL_NAME="llama-3-8B-instruct"  # Default model name, update as necessary
+MODEL_NAME="lmstudio-community/Meta-Llama-3-70B-Instruct-GGUF" 
 
 LOG_DIR="$PROJECT_ROOT_DIR/logs"
 CURRENT_DATE=$(date +'%Y-%m-%d')
