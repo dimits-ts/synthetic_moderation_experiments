@@ -4,6 +4,7 @@ import math
 import os
 import json
 import re
+from typing import Optional
 
 
 def import_and_format_conversations(conv_dir: str) -> pd.DataFrame:
@@ -216,7 +217,7 @@ def _extract_sdb_attributes(prompt: str):
     return attributes
 
 
-def _extract_toxicity_value(text: str) -> float | None:
+def _extract_toxicity_value(text: str) -> Optional[float]:
     """
     Extract toxicity value from a given text using a regular expression.
 
