@@ -17,7 +17,7 @@ CURRENT_DATE=$(date +'%Y-%m-%d')
 mkdir -p "$LOG_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-bash "$SDF_DIR/scripts/conversation_execute_all.sh" \
+bash "__internal_conversation_execute_batch.sh" \
     --input_dir "$INPUT_DIR" \
     --output_dir "$OUTPUT_DIR" \
     --model_path "$MODEL_PATH" \
