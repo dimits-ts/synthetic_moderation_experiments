@@ -2,7 +2,7 @@
 
 THIS_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PROJECT_ROOT_DIR="$(dirname "$THIS_DIR")"
-SCRIPT_PATH="$PROJECT_ROOT_DIR/generate_conversations.py"
+SCRIPT_PATH="$PROJECT_ROOT_DIR/synthetic_discussion_framework/src/generate_conversations.py"
 
 usage() {
   echo "Usage: $0 --python_script_path <python script path> --input_dir <input_directory> --output_dir <output_directory> --model_path <model_file_path> --type <model_type> --model_name <model_name>"
