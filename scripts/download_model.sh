@@ -30,5 +30,4 @@ if [ ! -d "$MODELS_DIR" ]; then
 fi
 
 #download_if_not_exists "$SRC_DIR/models/llama-3-8B-instruct.gguf" "https://huggingface.co/QuantFactory/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct.Q4_K_M.gguf?download=true"
-download_if_not_exists "$SRC_DIR/models/llama-3-70B-2bit-instruct.gguf" "https://huggingface.co/lmstudio-community/Meta-Llama-3-70B-Instruct-GGUF/resolve/main/Meta-Llama-3-70B-Instruct-IQ2_XS.gguf?download=true"
-download_if_not_exists "$SRC_DIR/models/llama-3-70B-4bit-instruct.gguf" "https://huggingface.co/lmstudio-community/Meta-Llama-3-70B-Instruct-GGUF/resolve/main/Meta-Llama-3-70B-Instruct-Q4_K_M.gguf?download=true"
+download_if_not_exists "$SRC_DIR/models/llama-3.2-8B-instruct.gguf" "https://huggingface.co/Orenguteng/Llama-3.1-8B-Lexi-Uncensored-V2-GGUF/resolve/main/Llama-3.1-8B-Lexi-Uncensored_V2_F16.gguf?download=true"
