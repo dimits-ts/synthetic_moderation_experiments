@@ -18,7 +18,7 @@ generate_annotation_configs:
   paths:
     persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/personas" # annotator personas
     instruction_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/instructions/toxicity.txt"
-    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_output/generated"
+    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/generated"
 
   experiment_variables:
     history_ctx_len: 4  # How many previous comments the annotator will remember
