@@ -14,6 +14,17 @@ generate_conv_configs:
     include_mod: true # whether a moderator will be included in the experiments
 
 
+generate_annotation_configs:
+  paths:
+    persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/personas" # annotator personas
+    instruction_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/instructions/toxicity.txt"
+    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_output/generated"
+
+  experiment_variables:
+    history_ctx_len: 4  # How many previous comments the annotator will remember
+    include_mod_comments: false  # Whether to include moderator comments in the annotations
+
+
 generate_conversations:
   paths:
     input_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/generated"
