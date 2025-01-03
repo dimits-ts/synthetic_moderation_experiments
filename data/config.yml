@@ -1,0 +1,31 @@
+generate_conv_configs:
+  paths:
+    topics_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/topics"
+    persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
+    user_instructions_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/user_instructions/vanilla.txt"
+    mod_instructions_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/mod_instructions/no_instructions.txt" 
+    turn_taking_configs_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/turn_taking/standard_multi_user.json"
+    # everything in the directory will be **WIPED** before being re-populated. Make sure the directory is correct to avoid data loss
+    experiment_export_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/generated"
+  
+  experiment_variables:
+    num_generated_files: 30 # how many experiments will be generated
+    num_users: 5 # how many personas will be used in each experiment
+    include_mod: true # whether a moderator will be included in the experiments
+
+
+generate_conversations:
+  paths:
+    input_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/generated"
+    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_output/new"
+    model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
+    library_type: "transformers"  # Change to "llama_cpp" or "transformers"
+    model_name: "mistral-small"  # only used for record keeping
+
+  model_parameters:
+    general:
+      max_tokens: 1100
+      ctx_width_tokens: 4048
+    llama_cpp:
+      inference_threads: 10
+      gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
