@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.axes
 import seaborn as sns
+from typing import Optional
 
 from synthetic_discussion_framework.src.sdl.output_util import save_plot
 
@@ -50,7 +51,7 @@ def pvalue_heatmap(
     show_labels: bool = False,
     correlation_title: str = "",
     xlabel_text: str = "",
-    filename: str | None = None,
+    filename: Optional[str] = None,
     output_dir: str = "."
 ) -> None:
     """
