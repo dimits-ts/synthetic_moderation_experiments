@@ -15,7 +15,7 @@ mkdir -p "$LOG_DIR"
 mkdir -p "$ANNOTATOR_PROMPT_DIR"
 
 for ANNOTATOR_PROMPT_PATH in "$ANNOTATOR_PROMPT_DIR"/*; do
-    bash "$SDF_DIR/scripts/annotation_execute_all.sh" \
+    bash "__internal_annotation_execute_batch.sh" \
     --conv_input_dir "$CONV_INPUT_DIR" \
     --prompt_path "$ANNOTATOR_PROMPT_PATH" \
     --output_dir "$OUTPUT_DIR" \
