@@ -44,9 +44,9 @@ generate_conversations:
 
 generate_annotations:
   paths:
-    input_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/generated"
+    annotator_input_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/generated"
     output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_output/new"
-    convs_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_output/new"
+    conv_logs_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_output/new"
     model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
 
   model_parameters:
