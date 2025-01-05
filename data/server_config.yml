@@ -53,7 +53,7 @@ generate_annotations:
     general:
       library_type: "transformers"  # Change to "llama_cpp" or "transformers"
       model_name: "mistral-small"  # only used for record keeping
-      max_tokens: 1100
+      max_tokens: 1300
       ctx_width_tokens: 4048
     llama_cpp:
       inference_threads: 10
