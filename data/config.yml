@@ -40,3 +40,21 @@ generate_conversations:
     llama_cpp:
       inference_threads: 10
       gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
+
+
+generate_annotations:
+  paths:
+    input_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/generated"
+    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_output/new"
+    convs_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_output/new"
+    model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
+    library_type: "transformers"  # Change to "llama_cpp" or "transformers"
+    model_name: "mistral-small"  # only used for record keeping
+
+  model_parameters:
+    general:
+      max_tokens: 1100
+      ctx_width_tokens: 4048
+    llama_cpp:
+      inference_threads: 10
+      gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
