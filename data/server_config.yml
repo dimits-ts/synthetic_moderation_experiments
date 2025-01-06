@@ -11,7 +11,7 @@ generate_conv_configs:
   experiment_variables:
     num_generated_files: 30 # how many experiments will be generated
     num_users: 5 # how many personas will be used in each experiment
-    include_mod: true # whether a moderator will be included in the experiments
+    include_mod: false # whether a moderator will be included in the experiments
 
 
 generate_annotation_configs:
@@ -28,15 +28,16 @@ generate_annotation_configs:
 generate_conversations:
   paths:
     input_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/generated"
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/collective_constitution"
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/no_mod"
     model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
 
   model_parameters:
     general:
       library_type: "transformers"  # Change to "llama_cpp" or "transformers"
       model_name: "mistral-small"  # only used for record keeping
-      max_tokens: 1100
+      max_tokens: 1300
       ctx_width_tokens: 4048
+      
     llama_cpp:
       inference_threads: 10
       gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
