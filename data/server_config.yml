@@ -1,0 +1,61 @@
+generate_conv_configs:
+  paths:
+    topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/topics"
+    persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
+    user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/user_instructions/vanilla.txt"
+    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/mod_instructions/no_instructions.txt" 
+    turn_taking_configs_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/turn_taking/standard_multi_user.json"
+    # everything in the directory will be **WIPED** before being re-populated. Make sure the directory is correct to avoid data loss
+    experiment_export_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/generated"
+  
+  experiment_variables:
+    num_generated_files: 30 # how many experiments will be generated
+    num_users: 5 # how many personas will be used in each experiment
+    include_mod: false # whether a moderator will be included in the experiments
+
+
+generate_annotation_configs:
+  paths:
+    persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/modular_configurations/personas" # annotator personas
+    instruction_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/modular_configurations/instructions/toxicity.txt"
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/generated"
+
+  experiment_variables:
+    history_ctx_len: 4  # How many previous comments the annotator will remember
+    include_mod_comments: false  # Whether to include moderator comments in the annotations
+
+
+generate_conversations:
+  paths:
+    input_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/generated"
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/vanilla"
+    model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
+
+  model_parameters:
+    general:
+      library_type: "transformers"  # Change to "llama_cpp" or "transformers"
+      model_name: "mistral-small"  # only used for record keeping
+      max_tokens: 1300
+      ctx_width_tokens: 4048
+
+    llama_cpp:
+      inference_threads: 10
+      gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
+
+
+generate_annotations:
+  paths:
+    annotator_input_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/generated"
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/vanilla"
+    conv_logs_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/vanilla"
+    model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
+
+  model_parameters:
+    general:
+      library_type: "transformers"  # Change to "llama_cpp" or "transformers"
+      model_name: "mistral-small"  # only used for record keeping
+      max_tokens: 1300
+      ctx_width_tokens: 4048
+    llama_cpp:
+      inference_threads: 10
+      gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
