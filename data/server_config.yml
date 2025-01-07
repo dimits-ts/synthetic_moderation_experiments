@@ -3,7 +3,7 @@ generate_conv_configs:
     topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/topics"
     persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
     user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/user_instructions/vanilla.txt"
-    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/mod_instructions/collective_constitution.txt" 
+    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/mod_instructions/no_instructions.txt" 
     turn_taking_configs_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/turn_taking/standard_multi_user.json"
     # everything in the directory will be **WIPED** before being re-populated. Make sure the directory is correct to avoid data loss
     experiment_export_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/generated"
@@ -28,7 +28,7 @@ generate_annotation_configs:
 generate_conversations:
   paths:
     input_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/generated"
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/no_mod"
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/vanilla"
     model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
 
   model_parameters:
@@ -37,7 +37,7 @@ generate_conversations:
       model_name: "mistral-small"  # only used for record keeping
       max_tokens: 1300
       ctx_width_tokens: 4048
-      
+
     llama_cpp:
       inference_threads: 10
       gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
