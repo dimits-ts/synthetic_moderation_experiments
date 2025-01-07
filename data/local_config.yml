@@ -4,7 +4,6 @@ generate_conv_configs:
     persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
     user_instructions_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/user_instructions/vanilla.txt"
     mod_instructions_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/mod_instructions/no_instructions.txt" 
-    turn_taking_configs_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/turn_taking/standard_multi_user.json"
     # everything in the directory will be **WIPED** before being re-populated. Make sure the directory is correct to avoid data loss
     experiment_export_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/generated"
   
@@ -12,17 +11,15 @@ generate_conv_configs:
     num_generated_files: 30 # how many experiments will be generated
     num_users: 5 # how many personas will be used in each experiment
     include_mod: true # whether a moderator will be included in the experiments
+    context_prompt: "You are a human participating in an online chatroom."
+    moderator_attributes: ["just", "strict", "understanding"]
+    seed_user_names: ["FirstUser"]
 
-
-generate_annotation_configs:
-  paths:
-    persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/personas" # annotator personas
-    instruction_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/instructions/toxicity.txt"
-    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/generated"
-
-  experiment_variables:
-    history_ctx_len: 4  # How many previous comments the annotator will remember
-    include_mod_comments: false  # Whether to include moderator comments in the annotations
+  turn_taking:
+    conv_len: 14
+    history_ctx_len: 4
+    turn_manager_type: "random_weighted"
+    rand_weighted_respond_probability: 0.5
 
 
 generate_conversations:
@@ -33,13 +30,26 @@ generate_conversations:
 
   model_parameters:
     general:
+      disallowed_strings: ["```", "\""]
       library_type: "transformers"  # Change to "llama_cpp" or "transformers"
       model_name: "mistral-small"  # only used for record keeping
       max_tokens: 1100
       ctx_width_tokens: 4048
+
     llama_cpp:
       inference_threads: 10
       gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
+
+
+generate_annotation_configs:
+  paths:
+    persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/personas" # annotator personas
+    instruction_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/instructions/toxicity.txt"
+    annotation_export_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/generated"
+
+  experiment_variables:
+    include_mod_comments: false  # Whether to include moderator comments in the annotations
+    history_ctx_len: 2
 
 
 generate_annotations:
@@ -51,10 +61,12 @@ generate_annotations:
 
   model_parameters:
     general:
+      disallowed_strings: ["```", "\""]
       library_type: "transformers"  # Change to "llama_cpp" or "transformers"
       model_name: "mistral-small"  # only used for record keeping
       max_tokens: 1100
       ctx_width_tokens: 4048
+      
     llama_cpp:
       inference_threads: 10
       gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
