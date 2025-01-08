@@ -1,4 +1,11 @@
-generate_conv_configs:
+logging:
+  print_to_terminal: true
+  write_to_file: true
+  logs_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/logs"
+  level: "info"
+
+
+enerate_conv_configs:
   paths:
     topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/topics"
     persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
