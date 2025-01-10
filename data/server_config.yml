@@ -5,7 +5,7 @@ logging:
   level: "info"
 
 
-enerate_conv_configs:
+generate_conv_configs:
   paths:
     topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/topics"
     persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
@@ -20,7 +20,6 @@ enerate_conv_configs:
     include_mod: true # whether a moderator will be included in the experiments
     context_prompt: "You are a human participating in an online chatroom."
     moderator_attributes: ["just", "strict", "understanding"]
-    seed_user_names: ["FirstUser"]
 
   turn_taking:
     conv_len: 14
