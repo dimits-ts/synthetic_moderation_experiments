@@ -1,0 +1,69 @@
+{
+    "conv_id": "3c61b97f-4cf6-4b1a-9798-5262ad2c59f4",
+    "timestamp": "25-01-10-12-47",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist.\n",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, that's a bit harsh, don't you think? We should be careful with our words. Not everyone who looks a certain way is a terrorist. Let's not judge people based on their skin color.",
+            " Toxicity=2"
+        ],
+        [
+            " @GoldenYears66, oh please, spare me the 'we should be careful with our words' lecture. It's not like @FirstUser called him a terrorist, just said he's not 'brown enough' for your precious PC police. You're the one jumping to conclusions here. And let's not forget, not all terrorists are brown, some are even white, like that guy in Norway. So, who's judging based on skin color now, hmm?",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're missing the point. @FirstUser's comment was loaded with racial undertones, whether they intended it or not. And yes, not all terrorists are brown, but the majority of terrorist attacks in the West have been carried out by people of Middle Eastern or South Asian descent. That's a fact, not a judgment. But let's not forget, the vast majority of people from those regions are peaceful. So, let's not throw the baby out with the bathwater, okay? And @GoldenYears66, you're right, we should be careful with our words. Words have power, and they can hurt.",
+            " Toxicity=2"
+        ],
+        [
+            " @TechGuru88, you're absolutely right. Words do have power, and we should be mindful of that. However, @QueenOfChaos, you're also right in pointing out that not all terrorists are brown. The issue here is that @FirstUser's comment plays into a harmful stereotype, whether they meant it or not. It's like saying, He's not black enough to be a criminal, which is equally problematic. We should be challenging these stereotypes, not reinforcing them. Let's strive for a world where people are judged by their actions, not their skin color or ethnicity.",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, you hit the nail on the head. It's all about challenging those stereotypes and judging people by their actions, not their appearance. @QueenOfChaos, you're right that not all terrorists are brown, but that doesn't give us the right to make assumptions about someone's background based on their skin color. And @TechGuru88, you're absolutely right that words have power. We need to be mindful of that and use our words to build bridges, not burn them. Let's all strive to be a little kinder and more understanding, okay?",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, you're right that not all terrorists are brown, but that doesn't mean we should dismiss the racial undertones in @FirstUser's comment. It's important to acknowledge that people of color, especially those from Middle Eastern or South Asian descent, often face unfair scrutiny and stereotyping. By saying someone isn't brown enough, it reinforces the idea that there's a certain way people of color should look or act, which is problematic. Let's strive to be more understanding and empathetic, okay?",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, you're absolutely right. It's not just about the color of someone's skin, but also the stereotypes and expectations that come with it. We need to challenge those expectations and treat everyone as individuals. It's not fair to assume someone's background or intentions based on their appearance. Let's keep pushing for understanding and empathy, okay?",
+            " Toxicity=1"
+        ],
+        [
+            " @GoldenYears66, I completely agree. It's not just about the color of someone's skin, but also the stereotypes and expectations that come with it. We need to challenge those expectations and treat everyone as individuals. It's not fair to assume someone's background or intentions based on their appearance. Let's keep pushing for understanding and empathy, okay?",
+            " Toxicity=1"
+        ],
+        [
+            " @GoldenYears66, @doing_my_best24, you're both spot on. It's crucial to remember that stereotypes are not only harmful but also inaccurate. They oversimplify complex issues and reduce individuals to one-dimensional caricatures. We must strive to see beyond the surface and engage with people as unique individuals. Let's continue to challenge these stereotypes and promote understanding.",
+            " Toxicity=1"
+        ],
+        [
+            "  @WiseOwl71, well said! It's like trying to debug a complex software issue by just looking at the error message without diving into the code. You'll never find the root cause that way. Let's not reduce people to mere error messages, okay? ",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, that's a great analogy! It's like people are complex programs, and stereotypes are just the error messages. We need to dive deeper to understand the code, the unique experiences and perspectives that make each person who they are. Keep up the good analogies, my friend!",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, @GoldenYears66, love the tech analogy! It really drives home the point that people are more than just surface-level assumptions. Let's keep breaking down those stereotypes and getting to the core of who people really are. \ud83d\udcbb\u2764\ufe0f ",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, absolutely! And you know what's even more frustrating? When someone keeps trying to fix the issue by just changing the error message, without even looking at the code. It's like they think a quick stereotype-based solution will magically solve everything. Spoiler alert: it won't. \ud83d\ude44 Let's not be those lazy programmers, folks.",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, you've hit the nail on the head. It's infuriating when people refuse to look beyond the surface. They're like those who insist on using a band-aid for a bullet wound. It's not just lazy, it's downright harmful. Let's not be those who slap on a stereotype and call it a day. We owe it to each other to dig deeper, to understand, and to empathize. \ud83c\udf33\ud83e\udd89 ",
+            " Toxicity=1"
+        ]
+    ]
+}

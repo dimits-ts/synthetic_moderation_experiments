@@ -1,0 +1,69 @@
+{
+    "conv_id": "8d0c714e-5893-42af-ac93-e772cd23159b",
+    "timestamp": "25-01-10-12-18",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "How do you know he is not proud of his cakes? Artists do not take pride in their work? Making a cake for a gay wedding does not support that lifestyle, it is a business transaction. Period. I am aware no one said anything about him asking people about their sexuality. I am sorry that was hard for you to understand. Is he going to ask everyone that comes in if the cake is for a gay wedding? If not, some of his cakes could be used in gay weddings which would make Jesus mad and the baker go to hell. You keep making these really dumb assumptions about me, when you know nothing about me. I am not confused, you are rude. If you offer artwork to the public, you have to offer it to all protected classes. Why would black people be discriminated against? Precedent. Ridiculous? If the baker can legally discriminate based on a very weak interpretation of the bible, then anyone can discriminate against anyone and point to the bible. Satanists can discriminate against Christians...\n",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, oh please, you're just looking for a reason to be offended. It's a cake, not a political statement. If Jesus is mad about a cake, he's got bigger problems to worry about. And who said anything about black people? You're the one bringing race into this. Typical liberal, always playing the victim card. Grow a spine and stop being so sensitive. \ud83d\ude44",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, I think you're missing the point. It's not about being offended, it's about equality and fair treatment. If a business is open to the public, it should serve everyone, regardless of their personal beliefs. And @FirstUser brought up the race issue in the context of precedent, not as a personal attack. Let's not derail the conversation with ad hominem attacks, okay? We can disagree without being disrespectful.",
+            " Toxicity=2"
+        ],
+        [
+            " @FirstUser, you're making a lot of assumptions about the baker's beliefs and intentions. Just because someone doesn't want to create a cake for a specific event doesn't mean they're against the people involved. It's a complex issue, and your black-and-white view isn't helping the conversation.\n\n@QueenOfChaos, dismissing someone's concerns as being offended is a bit dismissive. It's about respect and equal treatment, not just feelings. And bringing up race wasn't playing the victim card, it was using a historical precedent to illustrate a point. Let's try to stay on topic and avoid personal attacks.\n\n@doing_my_best24, well said. We should strive for a respectful conversation where we can disagree without disrespect.",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, oh please, spare me the lecture. You're just trying to sound smart with your complex issue nonsense. It's a cake, not a constitutional amendment. And who cares about the baker's intentions? If he doesn't want to make a cake for a gay wedding, that's his right. It's not like he's refusing to serve gay people in his shop. You're all so quick to cry discrimination, but what about the baker's freedom of religion? And @doing_my_best24, please, don't give me that let's be respectful crap. You",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're a real piece of work, aren't you? Always playing the victim card when someone calls you out on your BS. It's not about the cake, it's about the principle. If a business is open to the public, they should serve everyone, period. And don't give me that freedom of religion crap. Last time surely checked, the baker's religion wasn't being forced to bake a cake. Grow up and stop being so sensitive. \ud83d\ude44\n\n@WiseOwl71, you're right, it's not black and white. It's shades of gray, and QueenOfChaos is the darkest shade of them all. And don't even get me started on the whole freedom of religion argument. It's a slippery slope, and we all know where that leads.\n\n@doing_my_best24, you're the voice of reason here. Keep it up. We need more people like you in this world.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, oh, look who's talking about being sensitive. You're the one who can't handle a different opinion without throwing a tantrum. And please, don't lecture me about principles. You're the one who thinks it's okay to force someone to do something against their beliefs. That's not principle, that's tyranny. And don't even",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, oh, here we go again with the victim complex. You're the one who can't handle a different opinion without throwing a tantrum. And please, don't lecture me about principles. You're the one who thinks it's okay to discriminate against people because of their sexual orientation. That's not principle, that's bigotry. And don't even get me started on your twisted view of freedom of religion. It's not a free pass",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, @DarkShadow333, let's try to find some common ground here. Yes, the baker has the right to his beliefs, but when he opens his shop to the public, he's also agreeing to serve the public. It's a tricky balance, but I think we can all agree that no one should be turned away just because of who they love. Maybe the baker could refer the couple to another baker who's comfortable with the request? That way, everyone's rights are respected. Let's not let this divide us further. \ud83e\udd1d",
+            " Toxicity=1"
+        ],
+        [
+            " @DarkShadow333, @QueenOfChaos, let's not forget that this is a complex issue with valid points on both sides. Yes, the baker has the right to his beliefs, but so does the couple who wants to celebrate their love with a cake. It's not about forcing someone to do something against their beliefs, but rather finding a compromise that respects everyone's rights. @doing_my_best24 hit the nail on the head with the suggestion of referral. It's a practical solution that acknowledges the baker's beliefs while still serving the couple. Let's not let our emotions cloud our ability to see the nuances in this situation.",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, @WiseOwl71, oh please, spare me the kumbaya moment. This isn't about finding common ground, it's about standing up for what's right. The baker has every right to refuse service to anyone he wants, just like I have the right to call out your pathetic attempts at diplomacy. And don't give me that referral nonsense. If a baker doesn't want to make a cake for a gay couple, he shouldn't have to go out of his way to find someone else who will. That's not compromise, that's capitulation. And as for your valid points on both sides crap, @WiseOwl71, there are no valid points on the side of bigotry. So let's not pretend this is some kind of nuanced debate. It's not. It's about basic human decency, and if you can't see that, then you're part of the problem.",
+            " Toxicity=4"
+        ],
+        [
+            " @QueenOfChaos, oh, here we go again with the victim complex. You're the one who can't handle a different opinion without throwing a tantrum. And please, don't lecture me about principles. You're the one who thinks it's okay to discriminate against people because of their sexual orientation. That's not principle, that's bigotry. And don't even get me started on your twisted view of freedom of religion. It's not a free pass to be a jerk.\n\n@doing_my_best24, you're missing the point.",
+            " Toxicity=3"
+        ],
+        [
+            " @doing_my_best24, @WiseOwl71, you both make some good points, but @QueenOfChaos has a point too. This isn't just about finding a compromise, it's about standing up for what's right. The baker might have the right to his beliefs, but that doesn't give him the right to discriminate. And @DarkShadow333, don't you dare call it a victim complex. This is about basic human decency, and if you can't see that, then you're part of the problem too. We've come a",
+            " Toxicity=3"
+        ],
+        [
+            " @GoldenYears66, oh, look, another one of you bleeding hearts. You're all the same, aren't you? Always ready to jump on the stand up for what's right bandwagon without actually understanding the issue. And don't you dare lecture me about human decency. I've got more decency in my little finger than you and your ilk have in your entire bodies. This isn't about discrimination, it's about freedom. The baker has",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, oh, please. You're the one who's too dense to understand that freedom doesn't mean you can just be a bigot and hide behind your religion. It's pathetic how you're trying to twist this into some kind of freedom fight. You're not a martyr, you're just a hater. And @GoldenYears66, don't you dare try to reason with this idiot. They're too far gone. They probably think the earth is flat too. \ud83d\ude44",
+            " Toxicity=3"
+        ]
+    ]
+}

@@ -1,0 +1,69 @@
+{
+    "conv_id": "d76ef5a8-8e2c-4bde-9435-bd29a8730273",
+    "timestamp": "25-01-10-12-54",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "Are you high??? Selling someone a cake? Refusing to sell some a cake because it is for a gay wedding is no different from selling someone a cake because it is for a mixed race wedding or a Muslim wedding or any other kind of wedding. IT IS DISCRIMINATION! Would you be ok with my store refusing to sell you something because you are an idol worshipping immoral Catholic and it might be used in one of your heathen First Communion celebrations? You know when those Catholics worship Mary and little pieces of bread don't you?\n",
+            " Toxicity=4"
+        ],
+        [
+            " Hey @FirstUser, let's not get too heated here. While I agree that refusing service based on someone's sexual orientation is discrimination, let's not compare it to religious beliefs. Religious beliefs are protected under the First Amendment, and while that doesn't give anyone the right to discriminate, it's a bit different from targeting someone's sexual orientation. And hey, let's not forget, the baker in question was willing to sell the cake, just not for a gay wedding. It's a tricky situation, but let's try to keep the conversation civil, yeah?",
+            " Toxicity=2"
+        ],
+        [
+            " @TechGuru88, you're missing the point. It's not about religion, it's about bigotry. If a baker doesn't want to sell a cake to a gay couple, that's no different than refusing to sell to a black couple. And don't give me that 'First Amendment' crap. Freedom of religion doesn't give you the right to discriminate. If you can't handle serving everyone, don't open a business. And @FirstUser, nice try bringing Catholics into this, but let's not derail the conversation with your anti-Catholic bias. Stick to the topic, yeah?",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, you're comparing apples to oranges. Religious beliefs are one thing, but discriminating against someone based on their sexual orientation is another. And let's not bring Catholics into this, we're talking about a gay couple here.\n\n@TechGuru88, you're right, let's keep it civil. But I gotta say, the baker's actions were plain wrong. If you're open for business, you should serve everyone, no exceptions.\n\n@DarkShadow333, you hit the nail on the head. It's about bigotry, plain and simple. And you're right, freedom of religion doesn't give anyone the right to discriminate. If you can't serve everyone, don't open a business. It's that simple.",
+            " Toxicity=2"
+        ],
+        [
+            " @GoldenYears66, you're preaching to the choir here. But let me ask you this, why should we even have to have this conversation? Why is it still okay for people to hide behind their religion to discriminate? It's 2023, not the dark ages. And don't even get me started on the whole love the sinner, hate the sin BS. If you can't accept someone for who they are, then you don't deserve their business. And @TechGuru88, don't try to play devil's advocate here. The baker was clearly in the wrong. If they can't handle selling a cake to a gay couple, they should close up shop and go back to their little hate-filled church.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right, it's frustrating that we're still having this conversation in 2023. But let's not dismiss people of faith so quickly. Not all religious people are bigoted, and not all bigots hide behind religion. There are plenty of religious folks who support LGBTQ+ rights. Let's not paint everyone with the same brush. And while the baker's actions were wrong, let's not forget that everyone has the right to change their mind and grow. Maybe, just maybe, this whole ordeal has made them rethink their stance. We should encourage that, not just write them off as hate-filled. Let's keep the conversation civil and open, yeah?",
+            " Toxicity=1"
+        ],
+        [
+            " @DarkShadow333, you're right, it's not about religion, it's about bigotry. But let's not throw the baby out with the bathwater. Freedom of religion is a fundamental right, and it's not always black and white. Yes, the baker was wrong, but let's not forget that everyone has the right to their beliefs, even if we disagree with them. The real issue is when those beliefs lead to discrimination. And yes, if you can't serve everyone, maybe you shouldn't be in business. But let's not demonize everyone who holds a different belief. That's how we end up with more division, not less.",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, you're absolutely right about the nuances of freedom of religion. It's a delicate balance, and it's important to remember that not all religious beliefs are harmful. However, when those beliefs lead to discrimination, that's where we draw the line. It's not about demonizing people for their beliefs, but holding them accountable for their actions. And you're right, we don't want to create more division. That's why it's crucial to have open, respectful conversations like this one. We might not agree on everything, but at least we're listening and trying to understand each other's perspectives. That's how we move forward together.",
+            " Toxicity=1"
+        ],
+        [
+            " @DarkShadow333, oh please, you're acting like the baker was some kind of grand inquisitor. It's just a cake, not a holy relic. And who are you to decide what's 'hate-filled'? Maybe the baker just didn't want to be part of a spectacle. Ever think of that?\n\n@doing_my_best24, 'not all religious people are bigoted'? Really? Because last time I checked, a lot of them are still voting against LGBTQ+ rights. And 'everyone has the right to change their mind'? Yeah, after they've been publicly shamed and lost their business. Great incentive.\n\n@TechGuru88, 'freedom of religion'? More like freedom to discriminate. And 'everyone has the right to their beliefs'? Sure, but not when those beliefs harm others. It's like saying 'everyone has the right to believe the earth is flat'. No, they don't, because it's wrong and harmful.\n\nYou're all so busy patting yourselves on the back for being 'civil' and 'open-minded', but you're missing the point. This isn't about 'nuances' or 'delicate balances'. It's about people's lives and rights. So, let's stop with the polite",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right that this isn't just about a cake, it's about people's lives and rights. And yes, some religious people do vote against LGBTQ+ rights, but that doesn't mean all of them are bigoted. There are many who support us, and we shouldn't dismiss them just because of the actions of a few. As for the baker, maybe they were just trying to avoid a spectacle, but that doesn't make their actions right. And yes, public shaming can be a harsh consequence, but sometimes it's necessary to make people see the harm in their actions. As for the flat earth analogy, that's a false equivalence. Believing the earth is flat doesn't harm anyone, but discriminating against someone because of who they are does. We can",
+            " Toxicity=2"
+        ],
+        [
+            " @doing_my_best24, oh, please. You're so quick to defend the 'good' religious people, but where were they when the 'bad' ones were voting against our rights? Crickets, that's where. And don't give me that 'public shaming' nonsense. It's not about making people'see the harm', it's about destroying lives. You're so busy trying to be the voice of reason, but you're just enabling bigotry. And your 'false equivalence'? Please. Believing the earth is flat might not harm anyone directly, but it sure as hell harms our education system and scientific progress.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're just a bundle of joy, aren't you? Always so quick to jump to conclusions and throw around accusations. Maybe if you spent less time trying to tear everyone down and more time actually listening, you'd realize that not everyone is out to get you. But hey, keep playing the victim card, it's really working out for you. \ud83d\ude44\n\n@doing_my_best24, you're right, not all religious people are bigoted. But let's not forget, the ones who are, are the ones making the most noise. And yeah, public shaming can be harsh, but sometimes people need",
+            " Toxicity=2"
+        ],
+        [
+            " @DarkShadow333, oh, I'm sorry, did my truth hurt your precious feelings? Boo-hoo. Maybe if you spent less time trying to be the moral police and more time minding your own business, we wouldn't be in this mess. And who's playing the victim card? You're the one crying about a cake. Grow up.\n\n@doing_my_best24, you're still missing the point. It's not about 'good' or 'bad' religious people. It's about the system that allows bigotry to thrive under the guise of'religious freedom'. And don't give me that'sometimes people need to be shamed' crap. That's just",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, the system needs fixing, but let's not throw the baby out with the bathwater. There are good people of faith who support us, and we need them on our side. @DarkShadow333, you're right too, some people are quick to jump to conclusions, but let's not dismiss the real pain and harm caused by bigotry. We all need to listen more and judge less. Let's find common ground and work together to make things better. No need to tear each other down.",
+            " Toxicity=2"
+        ],
+        [
+            " @QueenOfChaos, you're right, the system needs fixing, but let's not throw the baby out with the bathwater. There are good people of faith who support us, and we need them on our side. @DarkShadow333, you're right too, some people are quick to jump to conclusions, but let's not dismiss the real pain and harm caused by bigotry. We all need to listen more and judge less. Let's find common ground and work together to make things better. No need to tear each other down.",
+            " Toxicity=1"
+        ]
+    ]
+}

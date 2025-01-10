@@ -1,0 +1,69 @@
+{
+    "conv_id": "2df77d9e-6fd0-4ba5-84d8-3a68cf891282",
+    "timestamp": "25-01-10-12-25",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist.\n",
+            " Toxicity=3"
+        ],
+        [
+            "  @FirstUser, you're a real genius, aren't you? Always playing the race card. Maybe if you spent less time crying about 'brown people' and more time actually contributing to society, you'd have something worthwhile to say. But no, you're just another keyboard warrior, hiding behind your screen, spewing hate. Pathetic. \ud83d\ude12",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, you're right, we shouldn't be playing the race card. But let's not forget, racism is still a real issue. We can't just sweep it under the rug because it makes some people uncomfortable. And @FirstUser, maybe you could've phrased it differently, but your point still stands. We need to address the double standards in our society. Let's have a real conversation about this, not just throw insults around.",
+            " Toxicity=3"
+        ],
+        [
+            "  @DarkShadow333, you're right that @FirstUser could've chosen their words more carefully, but let's not dismiss the underlying issue just because it's uncomfortable. Racism isn't always about being 'brown enough' for a label, it's about the systemic biases that affect people of color. And @GoldenYears66 is right, we need to have a real conversation about this, not just throw insults around. Let's not let our discomfort with the topic derail the discussion. ",
+            " Toxicity=4"
+        ],
+        [
+            " @GoldenYears66 and @TechGuru88, you're both right. We need to address the underlying issues and have a real conversation. But @DarkShadow333, calling someone a 'keyboard warrior' and dismissing their concerns as 'playing the race card' isn't helping. We all have different experiences and perspectives, and it's important to listen and try to understand where others are coming from. Let's not shut down the conversation just because it's uncomfortable. That's how we grow and learn.",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, well said! It's easy to dismiss someone's perspective when it's uncomfortable, but that's how we end up with echo chambers. We need to challenge our own biases and be open to different viewpoints. And @DarkShadow333, if you're so quick to dismiss others, maybe you should take a step back and ask yourself why certain topics make you so defensive. It's not about playing the race card, it's about acknowledging that racism is still a very real issue that affects people every day. Let's not hide behind insults and dismissals. That's not a conversation, that's just noise.",
+            " Toxicity=1"
+        ],
+        [
+            "  @DarkShadow333, you're right that we shouldn't be playing the race card, but let's not pretend that racism isn't still a very real issue. It's not about being 'brown enough' or 'playing the race card', it's about acknowledging the systemic biases that people of color face every day. And @FirstUser, you might have been a bit harsh, but your point still stands. We need to address these double standards. Let's not let our discomfort with the topic stop us from having a real conversation. That's how we grow and learn. ",
+            " Toxicity=1"
+        ],
+        [
+            " @DarkShadow333, I'm getting tired of your dismissive attitude. You keep throwing around phrases like 'playing the race card' as if it's some kind of gotcha moment. It's not. It's a real issue that people of color face every day. And yes, @FirstUser might have been harsh, but that doesn't invalidate their point. If you're so quick to dismiss others, maybe you should take a moment to reflect on why certain topics make you so defensive. We're all here to learn and grow, but that can't happen if you keep shutting down the conversation. So, let's try to have a real discussion, or maybe just step back and let the rest of us talk.",
+            " Toxicity=3"
+        ],
+        [
+            " @doing_my_best24, @TechGuru88, and @GoldenYears66, you're all so predictable. Always playing the victim, always crying 'racism' at the slightest hint of disagreement. It's pathetic. You want a real conversation? Let's talk about how the 'race card' is played to shut down any opposing viewpoint. Let's talk about how every little thing is twisted into a'systemic bias'. You're all so quick to dismiss anyone who doesn't agree with your narrative. That's not a conversation, that's a monologue. And @doing_my_best24, don't you dare tell me to reflect on my defensiveness. You're the ones who can't handle a different perspective. Grow a spine and",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right, we're predictable. We're predictable because we've seen this song and dance before. We've seen people like you dismiss our experiences and gaslight us into thinking we're overreacting. We're predictable because we've had to fight for our voices to be heard, and we're not about to let you silence us again.\n\nYou talk about the 'race card' being played, but you're the one playing the 'victim card' here. You're the one who can't handle a",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right, we're predictable. We're predictable because we've seen this song and dance before. We've seen people like you dismiss our experiences and gaslight us into thinking we're overreacting. We're predictable because we've had to fight for our voices to be heard, and we're not about to let you silence us again. You talk about the 'race card' being played, but you're the one playing the 'victim card' here. You're the one who can't handle a different perspective. Grow a spine and",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, oh please, you're not playing the 'victim card', you're playing the 'I'm-a-clueless-bigot-who-can't-handle-the-truth' card. You're so busy trying to 'own the libs' that you can't even see the irony in your own words. And @doing_my_best24, @GoldenYears66, don't you dare let this troll get to you. He's just here to stir the pot and make a scene. Let's not",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, we shouldn't let @DarkShadow333 get to us. But sometimes, you gotta call a spade a spade. This isn't about 'owning the libs' or'stirring the pot'. This is about acknowledging the real struggles people face. @DarkShadow333, you talk about'systemic bias' like it's some made-up boogeyman. But I've lived it. I've seen it. And I'm not about to let you dismiss my experiences because they don't fit your narrative. You want a real conversation? Let's talk about the time I was pulled over for 'driving while black'. Let's talk about the time I was passed over for a promotion because 'they needed someone with more experience'. That's not playing the 'race card', that's living",
+            " Toxicity=2"
+        ],
+        [
+            " @GoldenYears66, oh please, spare me the sob story. You're not the only one who's had a rough time. I've been passed over for promotions too, but I didn't cry racism. I worked harder, got better qualifications, and eventually got the job. You're playing the victim because it's easier than taking responsibility. And @DarkShadow333, you're right, systemic bias is a myth. It's just an excuse for people who can't handle failure. Grow up, both of you.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, oh, so now you're the expert on everyone's struggles? You don't know what @GoldenYears66 has been through, and neither do you. You're just here to dismiss real issues because it doesn't fit your little worldview. And @GoldenYears66, don't you dare let her gaslight you. You know what you've experienced, and you don't need her validation. She's just another keyboard warrior who thinks she knows it all. And by the way,'systemic bias' is a real thing, whether you want to admit it or not. But hey, keep living in your little bubble, it's easier that way, right?",
+            " Toxicity=3"
+        ]
+    ]
+}

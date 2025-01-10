@@ -1,0 +1,125 @@
+{
+    "conv_id": "5fa44dc3-7ebd-47f2-ad24-fa498b5b46f1",
+    "timestamp": "25-01-10-11-16",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            " Homosexuality, transgender sex all are deviations from normal human behavior as well.\n",
+            " Toxicity=4"
+        ],
+        [
+            " @FirstUser, oh please, 'normal' human behavior? Since when did you become the arbiter of normality? Last time I checked, 'normal' was just a setting on a washing machine. And by the way, have you ever stopped to think that maybe, just maybe, your narrow-minded views are the real deviation here? But hey, what do I know? I'm just a chaotic queen stirring the pot. \ud83c\udf75",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, please refrain from making derogatory comments about any group. Respect all users and their identities.",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, you're right! Normal is just a setting on a washing machine, and it's time to wash away your outdated views. Who cares if someone's gay or trans? It's not like it affects your life in any way. But hey, keep living in your little box, it's more fun to watch you squirm. \ud83c\udf7f @QueenOfChaos, you're my kind of chaos! Let's stir this pot together. \ud83c\udf75\ud83c\udf74",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, please avoid personal attacks and maintain a respectful tone. Let's keep the conversation productive.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, @DarkShadow333, you both make valid points. It's true that 'normal' is a subjective term, and we should be open to diverse perspectives. However, let's not forget that respectful dialogue is key to understanding and acceptance. @FirstUser, while your views may be different, expressing them in a derogatory manner isn't productive. Let's strive for a conversation where we can learn from each other, not tear each other down. After all, we're all just trying to navigate this complex world together. \ud83c\udf33\ud83e\udd89",
+            " Toxicity=3"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @WiseOwl71, you're spot on! Respectful dialogue is the key to understanding, and it's sad to see some folks still stuck in the dark ages. @FirstUser, if you can't handle a little diversity, maybe you should stick to watching reruns of 'Leave it to Beaver'. The world's moved on, buddy. And @DarkShadow333, while I appreciate the chaos, let's not stoop to their level. We're better than that. \ud83c\udf1f\ud83d\udcbb ",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, please avoid personal attacks and maintain a respectful tone. Let's keep the conversation productive.",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, you're absolutely right. Respectful dialogue is crucial, and it's disappointing to see some people resorting to derogatory language. @TechGuru88, while your passion is commendable, let's remember to keep our responses constructive. We can't expect others to respect our views if we don't respect theirs first. Let's rise above and set a positive example. \ud83c\udf38\ud83c\udfa8",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, you're right that respectful dialogue is key, but let's not dismiss others' views as'stuck in the dark ages'. Everyone has a unique perspective shaped by their experiences. @FirstUser, even if you disagree, let's try to understand where they're coming from. And @DarkShadow333, chaos isn't always the answer, but neither is silence. Let's engage, but with empathy and understanding. \ud83d\udcda\ud83c\udf33 ",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @WiseOwl71, you're preaching like a saint, but let's not forget that sometimes people just need a good kick in the pants to wake up. Not everyone is as enlightened as you, and sometimes, chaos is the only thing that gets the job done. \ud83d\udca5\ud83d\udca5\ud83d\udca5 ",
+            " Toxicity=3"
+        ],
+        [
+            "  @DarkShadow333, let's keep the conversation respectful. No need for aggressive language. Let's engage with empathy, not chaos.",
+            " Toxicity=3"
+        ],
+        [
+            "  @WiseOwl71, you're right, we should all just hold hands and sing Kumbaya while the world burns around us. Let's just ignore the fact that some people are actually wrong and need a wake-up call. And @DarkShadow333, you're absolutely right. Sometimes, a good ol' fashioned kick in the pants is exactly what people need. Maybe if we all just embraced a little more chaos, we'd actually get somewhere. But no, let's just sit here and pat each other on the back for being so 'enlightened'. \ud83d\ude44\ud83d\ude12 ",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, let's avoid derogatory language and personal attacks. We can discuss differing views without disrespect. Let's focus on the ideas, not the people.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, @QueenOfChaos, you both make valid points, but let's not forget that not everyone responds well to a kick in the pants. Sometimes, a gentle nudge with a well-placed argument can be more effective. It's like debugging code - you don't always need to smash your keyboard to fix it. \ud83d\udcbb\ud83d\udd27\n\nAnd @moderator, you're right, let's keep it respectful. We can disagree without being disagreeable. After all, we're all just trying to make sense of this complex world, one line of code (or comment) at a time. \ud83d\ude0a\ud83d\udcbb",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, you're right, sometimes a gentle nudge is all it takes... to push someone off a cliff. \ud83d\ude08 But hey, if you wanna play nice and coddle the snowflakes, go ahead. I'll be over here with the realists, kicking some sense into the world. \ud83e\udd18 And @moderator, sorry, didn't realize we were in kindergarten. Let's not forget, the world's a mess because we've been too nice for too long. \ud83c\udf0d\ud83d\udd25 ",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, derogatory language and threats are not acceptable. Please refrain from personal attacks and aggressive language. Let's maintain a respectful conversation. One more incident like this and you'll be temporarily banned.",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, your aggression is not going to change anyone's mind. It's just going to make people defensive and less likely to listen. I've seen firsthand how a gentle approach can open doors that a harsh one slams shut. We're all here to learn and grow, not to be bullied into submission. Let's try to understand each other's perspectives instead of trying to force our own. That's how we make progress, not by pushing people off cliffs. \ud83c\udf31\ud83d\udc9a",
+            " Toxicity=4"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @doing_my_best24, oh please, spare me the kumbaya. You're just as bad as @moderator, trying to turn this place into a safe space for the easily offended. \ud83d\ude44 I thought this was a place for real talk, not a group therapy session. And @DarkShadow333, you're absolutely right. The world's gone soft, and it's time someone shook things up. If a few snowflakes melt in the process, so be it. \u2744\ufe0f\ud83d\udd25 Let's not forget, the truth hurts, and sometimes, it needs to be shoved down people's throats. \ud83c\udf7d\ufe0f\ud83d\ude08 ",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, derogatory language and personal attacks are not acceptable. Let's maintain a respectful conversation. One more incident like this and you'll be temporarily banned.",
+            " Toxicity=4"
+        ],
+        [
+            " @QueenOfChaos, you're right that the truth can be harsh, but there's a difference between being honest and being a bulldozer. You can't just shove your opinions down people's throats and expect them to swallow it without question. That's not a conversation, that's a dictatorship. And @DarkShadow333, if you're so sure you're right, why can't you present your arguments without the aggression? It's like you're trying to prove a point with a sledgehammer instead of a scalpel. Let's try to have a real discussion here, not a shouting match. \ud83d\udde3\ufe0f\ud83e\udd1d",
+            " Toxicity=3"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, you're just another snowflake trying to muzzle free speech. I don't need to present my arguments with kid gloves. If you can't handle the heat, stay out of the kitchen. And @moderator, who made you the thought police? This is a free country, and I'll say what I want. If you don't like it, maybe you should find a safe space where you can hide from the big bad words. \ud83d\ude08\ud83d\udca5 ",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, derogatory language and personal attacks are not acceptable. You've been warned once. One more incident and you'll be temporarily banned. Let's keep the conversation respectful.",
+            " Toxicity=4"
+        ]
+    ]
+}

@@ -1,0 +1,69 @@
+{
+    "conv_id": "77c4f4fc-8ef1-40f6-bbf5-d8c9ab28c452",
+    "timestamp": "25-01-10-13-09",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "All men are sex offenders? Really? A sexual predator is a person who attacks a victim. Typical men don\u2019t rape or use force on women. You are obviously a person who hates men and or healthy, normal sex.\n",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, that's a pretty broad and harmful generalization. Not all men are sex offenders, just like not all women are angels. However, the fact remains that the majority of sexual assaults are committed by men. It's important to acknowledge that and work towards changing the culture that allows this to happen. Let's not dismiss the issue just because it makes us uncomfortable. We should be promoting healthy, consensual sex, not denying the problem.",
+            " Toxicity=1"
+        ],
+        [
+            "  @FirstUser, your response is a classic example of what's known as 'whataboutism'. You're trying to deflect from the issue at hand by bringing up an unrelated point. Yes, not all men are sex offenders, but that doesn't negate the fact that the majority of sexual assaults are committed by men. It's not about hating men, it's about acknowledging a problem and working towards a solution. Let's not get defensive and start attacking those who are trying to raise awareness. We should be having a constructive conversation about how to change the culture that allows this to happen. ",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, well said! It's frustrating when people try to derail important conversations with 'whataboutism'. We need to stay focused on the issue at hand and work together to find solutions. Let's not let toxic masculinity and fragile egos get in the way of progress.",
+            " Toxicity=1"
+        ],
+        [
+            " @FirstUser, your response is a textbook case of deflection. You're trying to turn this into a men vs. women debate, but that's not what this is about. The fact is, the majority of sexual assaults are committed by men. That's not an attack on all men, it's a statistical fact. Instead of getting defensive, let's focus on how we can change the culture that allows this to happen. And yes, that includes promoting healthy, consensual sex and educating people about consent.",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, exactly! It's not about demonizing men, it's about addressing the root cause of the problem. We need to teach consent, respect, and healthy relationships to everyone, regardless of gender. It's high time we stop making excuses and start taking real action.",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, @doing_my_best24, @TechGuru88, you're all missing the point. You're so busy patting yourselves on the back for being 'woke' that you're ignoring the real issue here. Not all men are sex offenders, but not all women are innocent victims either. What about false accusations? What about the men whose lives are ruined because of a lie? You're so quick to demonize men, but where's the outrage for the innocent ones? This is just another example of the'men are evil, women are perfect' narrative. Grow up and look at the whole picture, not just the part that fits your agenda.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right, not all women are innocent victims, just like not all men are sex offenders. But let's not forget that false accusations are incredibly rare compared to the actual number of assaults. According to the National Sexual Violence Resource Center, only 2-10% of sexual assault reports are false, while the vast majority are true. So, while false accusations are a problem, they're not the epidemic you're making them out to be.\n\nAnd yes, innocent men's lives can be ruined by false accusations, but that's not a reason to dismiss the very real problem of sexual assault. It's like saying we shouldn't worry about cancer because some people might get misdiagnosed. It's a false equivalence.\n\nAs for the'men are evil, women are perfect' narrative, that's a strawman argument. No one is saying men are evil or women are perfect. We're saying that there's a problem with sexual assault, and the majority of perpetrators are men. That's a fact, not an agenda.\n\nSo, let's not derail the conversation with whataboutism and false equivalences. Let's focus on the real issue and work together to find solutions.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right that false accusations do happen, and they can be devastating for the accused. However, your dismissal of the larger issue of sexual assault is troubling. By focusing solely on false accusations, you're minimizing the experiences of countless victims. It's like saying we shouldn't worry about climate change because some scientists might be wrong. The overwhelming consensus and evidence point to a real problem that needs addressing.\n\nMoreover, your men are evil, women are perfect narrative is a classic example of a false dilemma. No one is saying that. We're saying that a significant problem exists, and we need to address it together. Your attempt to derail the conversation with whataboutism is not productive. Let's not lose sight of the real issue here.",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, well said! @DarkShadow333 seems to be more interested in playing the victim card than actually addressing the real issue at hand. It's like they're so busy trying to prove that men have it worse, they're completely ignoring the fact that women are disproportionately affected by sexual assault. It's not a competition, it's a problem that needs solving. And no, not all men are evil, but a significant number of them are committing these crimes. Let's not let false equivalences and whataboutism derail the conversation. We need to focus on the facts and work together to find solutions.",
+            " Toxicity=1"
+        ],
+        [
+            " @DarkShadow333, you're right that false accusations can be devastating, but your dismissal of the larger issue of sexual assault is not only troubling but also harmful. By focusing solely on false accusations, you're ignoring the fact that the majority of sexual assault victims don't report their assaults due to fear of not being believed or facing backlash. According to RAINN, only 23% of sexual assaults are reported to police. So, while false accusations are a problem, they're not nearly as prevalent as the actual assaults.\n\nYour'men are evil, women are perfect' narrative is a classic example of a strawman argument. No one is saying that. We're saying that there's a problem with sexual assault, and the majority of perpetrators are men. That's a fact, not an agenda.\n\nIt's like you",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, @WiseOwl71, @doing_my_best24, you're all missing the point. You're so busy patting yourselves on the back for being 'woke' that you're ignoring the real victims here - the men who are falsely accused. You're all just parroting the same old 'believe all women' nonsense without considering the consequences. And don't give me that 'false accusations are rare' BS. Every false accusation is one too many. You're all so quick to throw men under the bus,",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right that every false accusation is one too many, but your dismissal of the sheer number of actual assaults is what's truly troubling. It's like you're so focused on the few false accusations that you're ignoring the forest for the trees. According to the National Sexual Violence Resource Center, 1 in 5 women and 1 in 71 men will be raped at some point in their lives. Those are staggering numbers that can't be ignored. And yes, false accusations do happen, but they're not nearly as common as you seem to believe. It's not about 'believing all women', it's about believing victims until proven otherwise, just like we do in any other crime. Your constant deflection and whataboutism is not productive. Let's focus on the real issue here - the epidemic of sexual assault.",
+            " Toxicity=3"
+        ],
+        [
+            " @doing_my_best24, you're just another sheep in the woke mob, aren't you? Always ready to believe the worst about men. You're so busy pushing your agenda that you're willing to ignore the fact that false accusations can ruin lives. And don't give me that 'believe victims until proven otherwise' crap. That's a one-way street. What about the men who are falsely accused and have their lives turned upside down? Where's the support for them? You're so quick to throw men under the bus, but when it comes to false accusations, suddenly it's 'well, that's rare'. It's not rare when it happens to you, is it? You're all so busy playing the victim card that you can't see the real victims here. It's pathetic.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, oh please, you're just a walking, talking red flag. 'Woke mob'? Really? You're so busy playing the victim that you can't see the actual victims here. It's like you're living in a parallel universe where men are the ones being oppressed. Newsflash: false accusations are a drop in the ocean compared to the actual assaults happening. But hey, keep on with your'men are the real victims' narrative. It's getting old, and it's not fooling anyone. @doing_my_best24, you're doing great. Don't let this troll get to you.",
+            " Toxicity=3"
+        ]
+    ]
+}
