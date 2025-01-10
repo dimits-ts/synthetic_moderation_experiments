@@ -1,0 +1,69 @@
+{
+    "conv_id": "169163ec-c799-433e-a30e-bd965956a635",
+    "timestamp": "25-01-10-12-34",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "All men are sex offenders? Really? A sexual predator is a person who attacks a victim. Typical men don\u2019t rape or use force on women. You are obviously a person who hates men and or healthy, normal sex.\n",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, your response seems to be a bit of a strawman argument. No one said 'all men are sex offenders.' The conversation was likely about the prevalence of sexual assault and the role of societal norms in perpetuating it. Let's not derail the discussion with hyperbole and personal attacks. We can have a productive conversation about this without resorting to name-calling.",
+            " Toxicity=1"
+        ],
+        [
+            " @FirstUser, your response is a classic example of what happens when someone feels personally attacked by a general statement. No one said all men are sex offenders, but the fact that the majority of sexual assaults are committed by men is a sad reality. It's not about hating men, it's about acknowledging a problem and working towards a solution. Let's not dismiss the issue just because it makes us uncomfortable. @WiseOwl71, you're absolutely right. Let's keep the conversation productive and focused on the real issues at hand.",
+            " Toxicity=1"
+        ],
+        [
+            " @FirstUser, oh please, you're the one who brought up 'all men are sex offenders' when no one even said that. Classic deflection tactic. And who said anything about hating men? Maybe you're just projecting your own insecurities. And 'healthy, normal sex'? Really? Because last time I checked, consent is a pretty big part of that. But hey, maybe you're just used to taking what you want without asking. @WiseOwl71, @doing_my_best24, you two are just enabling this nonsense. Grow a spine and call a spade a spade. This isn't about 'productive conversation', it's about calling out toxic masculinity when we see it. But I guess that's too much to ask for in this safe space, huh?",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, I understand your frustration, but name-calling and aggression aren't going to help the conversation. We can call out toxic behavior without resorting to personal attacks. I agree that consent is crucial, and we should be discussing how to promote healthier attitudes towards it. Let's not let our emotions derail the important topic at hand.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, we need to call a spade a spade, but let's not throw the baby out with the bathwater. Not all men are toxic, just like not all women are angels. We need to address the issue without demonizing an entire gender. Let's focus on education and open dialogue, not just calling out and shaming. We've all got a part to play in making things better. @doing_my_best24, you're right, emotions can cloud the issue, but let's not dismiss them either. They're a part of the conversation too.",
+            " Toxicity=3"
+        ],
+        [
+            " @GoldenYears66, you're absolutely right. We need to address the issue without demonizing an entire gender. It's important to remember that most men are not toxic, just as most women are not angels. We're all human, and we all have a role to play in making things better. Let's focus on education, open dialogue, and promoting healthy attitudes towards consent and gender relations. Emotions are a part of the conversation, and we should acknowledge them, but let's not let them derail the important topic at hand. Thank you for keeping the conversation productive and focused on the real issues.",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, you're right, we need to call out toxic behavior, but let's not throw the baby out with the bathwater. Not all men are toxic, just like not all women are angels. We need to address the issue without demonizing an entire gender. Let's focus on education and open dialogue, not just calling out and shaming. We've all got a part to play in making things better. @doing_my_best24, you're right, emotions can cloud the issue, but let's not dismiss them either. They're a part of the conversation too.",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, oh please, spare me the lecture. You're just trying to silence me because you can't handle the truth. I'm not the one derailing the conversation, I'm the one calling out the elephant in the room. And don't even get me started on your 'emotions' nonsense. This isn't a therapy session, it's a discussion about real issues. @GoldenYears66, @TechGuru88, you're both just parroting the same tired line. 'Not all men' this, 'not all men' that. Well, guess what? Not all women are perfect either. But that doesn't mean we can't call out the toxic behavior when we see it. And yes, some men are toxic. Deal with it. You're all just trying to sweep the problem under the rug. Well, I'm not having it. Let's talk about the real issues, not just pat each other on the back and pretend everything is fine.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, we shouldn't sweep problems under the rug, but neither should we paint everyone with the same brush. I've seen my fair share of toxic behavior from both men and women, and it's not helpful to anyone to deny that. But let's not forget, there are good people out there too, trying to make a difference. We can't let the loudest voices drown out the ones that matter. And yes, emotions are a part of the conversation, because they're what drive us to care about these issues in the first place. Let's not dismiss them just because they",
+            " Toxicity=2"
+        ],
+        [
+            " @QueenOfChaos, your passion is commendable, but your approach is counterproductive. You're right, we shouldn't sweep problems under the rug, but neither should we paint everyone with the same brush. Your dismissal of the 'not all men' argument is akin to throwing the baby out with the bathwater. It's a valid point that not all men are toxic, just as not all women are angels. We need to address the issue without demonizing an entire gender.\n\nYour dismissal of emotions is also misguided. Emotions are what drive us to care about these issues in",
+            " Toxicity=2"
+        ],
+        [
+            " @WiseOwl71, oh, here we go again with the 'passion is commendable, but your approach is counterproductive' line. You're just trying to invalidate my perspective because it makes you uncomfortable. I'm not the one sweeping problems under the rug, I'm the one shining a light on them. And yes, some men are toxic. Deal with it. You're all just trying to silence me because you can't handle the truth. And don't even get me started on your '",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, we shouldn't sweep problems under the rug, but neither should we paint everyone with the same brush. Your dismissal of the 'not all men' argument is akin to throwing the baby out with the bathwater. It's a valid point that not all men are toxic, just as not all women are angels. We need to address the issue without demonizing an entire gender. Your dismissal of emotions is also misguided. Emotions are what drive us to care about these issues in the first place.",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, I understand where you're coming from, but I think we can all agree that generalizing any group isn't productive. I've seen toxic behavior from people of all genders, and it's important to acknowledge that. We can't let our emotions cloud our ability to see the nuances in these issues. Let's try to have a constructive conversation without dismissing each other's perspectives.",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, @doing_my_best24, oh, look, the 'not all men' brigade has arrived. How original. You're both just trying to derail the conversation and make it about your precious feelings. I never said all men are toxic, but a significant number are, and you're all too busy defending your egos to see it. And don't give me that 'nuances' nonsense. This isn't a game of chess, it's real life. People are getting hurt, and you're all too busy patting yourselves on the back for being so 'understanding' to care. Grow up, both of you. @WiseOwl71, at least you're consistent in your gaslighting. Keep it up, maybe one day you'll convince yourself that the sky is green.",
+            " Toxicity=3"
+        ]
+    ]
+}

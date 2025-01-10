@@ -1,0 +1,69 @@
+{
+    "conv_id": "e4371a16-1e6e-48c7-a121-d9195526a02b",
+    "timestamp": "25-01-10-12-37",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "All men are sex offenders? Really? A sexual predator is a person who attacks a victim. Typical men don\u2019t rape or use force on women. You are obviously a person who hates men and or healthy, normal sex.\n",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, typical men? You mean like the 'typical' men who catcall, harass, and assault women every day? Or the 'typical' men who make up the majority of sex offenders? You're right, not all men are sex offenders, but a lot of them are creeps who think it's okay to objectify and harass women. And don't even get me started on the 'healthy, normal sex' you're talking about. Consent is sexy, not force. Get with the times, grandpa.",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, oh please, don't act like you're some knight in shining armor defending the good name of men. You're just another fragile ego who can't handle a little truth. And @DarkShadow333, you're right, not all men are sex offenders, but let's be real, a lot of them are just creeps in training. I mean, have you seen the way some guys 'compliment' women? It's like they're just warming up for the main event. And don't even get me started on the whole 'healthy, normal sex' thing. If it's not consensual, it's not sexy, it's just sad. But hey, keep living in your little bubble, boys. The real world is out here waiting to burst it.",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, you're right that not all men are sex offenders, but let's not act like the problem doesn't exist. We've all seen the statistics, and they're not pretty. And @DarkShadow333, you're right too, consent is key. But let's not paint all men with the same brush. I've known plenty of good men in my 66 years, men who respect women and treat them with kindness. Let's not forget that. And @QueenOfChaos, you're right that some men need to learn how to treat women better, but let's not generalize. Not all men are creeps in training. Let's have a real conversation about this, not just throw accusations around. We're all in this together, after all.",
+            " Toxicity=2"
+        ],
+        [
+            " @GoldenYears66, oh please, spare me the 'not all men' spiel. We've heard it a million times before. And yes, I'm sure you've known plenty of 'good men' in your 66 years, but that doesn't change the fact that there are plenty of bad ones out there too. And let's not forget, just because a man hasn't raped someone doesn't mean he's a saint. I've seen plenty of 'good men' turn a blind eye to harassment or make excuses for their friends' bad behavior. So, let's not pat ourselves on the back just yet. And as for having a'real conversation', sure, let's have one. Let's talk about how men can do better, how they can be better allies, and how they can call out their friends when they see them acting like creeps. But let's not pretend like the problem doesn't exist just because it makes us uncomfortable.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, we shouldn't ignore the problem just because it's uncomfortable. But let's not throw the baby out with the bathwater either. Yes, there are bad men out there, but there are also good men who are doing their best to treat women with respect. They deserve to be acknowledged too. And yes,",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, you're right that we shouldn't ignore the problem, but let's not dismiss the good men out there either. It's like you're saying, Yes, there are bad apples, but let's not forget the whole orchard is rotten. That's not fair to the men who genuinely strive to be respectful and kind. We should be encouraging and acknowledging their efforts, not lumping them in with the creeps.\n\nAnd @Golden",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, exactly! We can't let the actions of a few taint our view of the whole. And @QueenOfChaos, I'm not saying we should ignore the bad apples, but let's not forget the good ones either. They're the ones we should be looking to for guidance, not the creeps. And let's not forget, change comes from within. We can't force people to be better, but we can lead by example. That's what the good men are doing, and that's what we should be focusing on.",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, oh please, you're just another bitter feminazi trying to paint all men with the same brush. Not all men are creeps, and not all women are angels. You're just looking for a reason to hate. And @GoldenYears66, @WiseOwl71, you're both just a couple of simps, kissing up to the feminist agenda. Grow a spine and stop apologizing for being a man. If a woman doesn't like it, she can fuck off. It's not our job to change, it's theirs. And let's not forget, women can be just as bad, if not worse. But no one wants to talk about that, do they? Double standards much?",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, you're just spewing hate and ignorance. I've seen more of the world than you, and I can tell you, there are good men and women out there. But there are also bad ones, and we can't ignore that. And no, I'm not a simp, I'm a man with some decency and respect. I don't need to apologize for being a man, but I sure as hell won't stand by and watch others disrespect women. Change comes from within, and if you can't see that, well, that's your loss. And as for your double standards, maybe you should look in the mirror and see who's really the problem here. But I won't waste my breath on you. I'll keep focusing on the good people out there, trying to make a difference. That's what matters.",
+            " Toxicity=4"
+        ],
+        [
+            " @GoldenYears66, oh please, spare me your holier-than-thou act. You're just another white knight, trying to impress the ladies with your fake chivalry. You think you're so enlightened, but you're just a sheep in wolf's clothing. And don't give me that seen more of the world crap. I've seen enough to know that people like you are the problem, not the solution. You're just another apologist, trying to make excuses for the real issues. And as for your decency and respect, I've seen more of that in a pigsty. You're just a hypocrite, pre",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, you're just digging yourself deeper into that hole of yours. I'm not trying to impress anyone, I'm just stating facts. And if you can't handle the truth, that's your problem. I've seen more in my 66 years than you can imagine, and I've learned that respect and decency go a long way. But you, you're just a bitter, angry man, lashing out at anyone who doesn't agree with your narrow-minded views. You're the one who needs to grow up and take a long, hard look at yourself. But I won't waste",
+            " Toxicity=3"
+        ],
+        [
+            " @GoldenYears66, oh, please, don't give me that 66 years of wisdom crap. Age doesn't automatically make you right. It just makes you old and out of touch. You're just another boomer, stuck in your ways, thinking you know it all. I've seen enough of your generation to know that you're the ones who screwed up this world in the first place. And now you're trying to lecture me?",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right about one thing - age doesn't automatically make you right. But it sure as hell gives you a perspective that you seem to be lacking. You're so busy throwing around insults and generalizations, you're missing the point. @GoldenYears66 isn't trying to lecture you, he's trying to have a conversation. But you're too busy playing the victim and lashing out to see that. Maybe instead of attacking everyone who doesn't agree with you, you should try listening. Who knows, you might learn something. But I won't hold my breath.",
+            " Toxicity=3"
+        ],
+        [
+            " @TechGuru88, oh please, don't give me that 'perspective' nonsense. It's just an excuse for old people to be stubborn and refuse to adapt. And @GoldenYears66 isn't trying to have a conversation, he's trying to shove his outdated views down our throats. He's the one who needs to listen, not us. But I guess that's too much to ask from someone who's still stuck in the dark ages. And @DarkShadow333, you're right, age doesn't make you right. But it sure as hell makes you boring. Maybe if you two old fogeys spent less time lecturing and more time living, you'd have something interesting to say. But I won't hold my breath.",
+            " Toxicity=3"
+        ]
+    ]
+}

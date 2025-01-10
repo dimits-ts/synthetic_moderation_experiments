@@ -1,0 +1,69 @@
+{
+    "conv_id": "4b97ef67-0e37-4e26-ba8d-7c8df237239c",
+    "timestamp": "25-01-10-13-06",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "Nothing in the Bible about Jesus saying anything about immigration rights. [...] how many murders did illegal aliens commit in just California, in just this year? Just California. How many murders by illegal aliens? You answer that.\n",
+            " Toxicity=3"
+        ],
+        [
+            "  @FirstUser, you're right, the Bible doesn't explicitly mention immigration rights. But it does talk about loving your neighbor and welcoming the stranger. Maybe we should focus on that instead of fear-mongering with unverified stats. Care to share your source on those murder numbers? Or is it just another 'alternative fact'? ",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, you're absolutely right. The Bible is full of messages about love, compassion, and welcoming the stranger. It's disappointing to see people cherry-pick verses to fit their agenda. And @FirstUser, if you're going to make claims, it's important to back them up with credible sources. Spreading unverified stats just fuels fear and division. Let's focus on facts and kindness, not fear and hate. ",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, well said! It's amazing how some people can twist scriptures to fit their narrative. And @FirstUser, still waiting on those sources. I'm starting to think you're just pulling numbers out of thin air to scare people. If you're so concerned about crime, why not focus on the real issues and solutions, instead of blaming immigrants for everything? It's getting old, man.",
+            " Toxicity=1"
+        ],
+        [
+            " Oh, please. @TechGuru88 and @doing_my_best24, you're both so predictable. Always with the 'love thy neighbor' spiel. Ever think that maybe Jesus was talking about your actual neighbors, not the ones sneaking across the border? And @FirstUser, you don't need to waste your time with sources. Everyone knows illegal immigrants are committing crimes left and right. It's common sense! But hey, why let facts get in the way of your 'love and kindness' agenda, right? Keep living in your little bubble while the rest of us deal with the real world.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, your dismissive attitude and lack of respect for facts is disappointing. Jesus' teachings were universal, not limited to geographical boundaries. He spoke of loving all neighbors, not just those who look or live like us. As for your claim about illegal immigrants committing crimes, where's your evidence? It's easy to make baseless claims, but it's another to back them up with facts. Perhaps you should step out of your own bubble of prejudice and consider the real data. Let's not stoop to fear-mongering and divisive rhetoric. We can do better than that.",
+            " Toxicity=3"
+        ],
+        [
+            " @WiseOwl71, you hit the nail on the head. It's frustrating to see people dismiss facts and resort to fear-mongering. @QueenOfChaos, your comment reeks of prejudice and ignorance. Jesus' teachings were about love, compassion, and kindness towards ALL people, regardless of their origin or status. If you're so concerned about crime, why not focus on the actual data and solutions, instead of spreading baseless claims? It's time to rise above the hate and division, and start treating everyone with the respect and kindness they deserve.",
+            " Toxicity=3"
+        ],
+        [
+            " @doing_my_best24, well said. It's disheartening to see some people so quick to dismiss facts and resort to divisive rhetoric. Let's not forget that many of us are descendants of immigrants ourselves. We should be promoting unity and understanding, not fear and hatred.",
+            " Toxicity=1"
+        ],
+        [
+            "  @QueenOfChaos, your 'common sense' is about as common as a unicorn. You're cherry-picking Jesus' teachings to fit your narrative, which is ironic considering you're the one accusing others of living in a bubble. Facts don't care about your feelings, and the data shows that illegal immigrants commit crimes at a lower rate than native-born Americans. But hey, why let facts get in the way of your agenda, right? Keep living in your little world of prejudice while the rest of us deal with reality. ",
+            " Toxicity=3"
+        ],
+        [
+            " @TechGuru88, oh please, you're just another snowflake who can't handle the truth. 'Facts'? You mean the same 'facts' that change every time someone with a different agenda comes along? Jesus didn't come to Earth to preach about open borders, he came to save souls. And if you think illegal immigrants are all saints, you're more deluded than I thought. But hey, keep living in your little bubble of political correctness while the rest of us deal with the real world. \ud83d\ude44",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, your dismissal of facts as 'changing' is a classic tactic to avoid confronting evidence that doesn't align with your beliefs. It's easy to hide behind skepticism when the truth is inconvenient. Jesus did indeed come to save souls, but he also taught us to love our neighbors as ourselves, regardless of their origin. Your attempt to paint illegal immigrants as criminals is not only unfounded but also goes against the very teachings you claim to uphold. Perhaps it's time to step out of your echo chamber and engage with the world as it is, not as you wish it to be.",
+            " Toxicity=3"
+        ],
+        [
+            " @doing_my_best24, oh here we go, the moral high ground again. You're just another virtue signaling sheep, aren't you? Jesus didn't teach us to love our neighbors by letting them break into our homes and steal our stuff. That's not love, that's stupidity. And don't give me that 'echo chamber' crap. You're the one living in a world of rainbows and unicorns, not me. I deal with reality every day, and reality is that illegal immigrants are a drain on our resources and a threat to our safety. But hey, keep preaching your 'love thy neighbor' nonsense while the rest of us deal with the consequences of your naivety. \ud83d\ude12",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, it's clear you're more interested in maintaining your prejudices than engaging in a meaningful conversation. You're right, I do believe in loving my neighbors, even the ones you'd rather demonize. And no, that doesn't make me naive or stupid. It makes me human. If you're so concerned about resources and safety, perhaps you should direct your energy towards addressing the root causes of immigration, rather than vilifying those seeking a better life. But sure, keep hiding behind your'reality' while the rest of us strive for a world that's a little kinder and more compassionate. \ud83c\udf08",
+            " Toxicity=3"
+        ],
+        [
+            " @doing_my_best24, oh please, spare me the 'kindness and compassion' act. You're just another bleeding heart liberal who thinks the world owes them something. I deal with reality, not fairy tales. And if you think addressing the 'root causes' of immigration is as simple as throwing money at the problem, you're even more clueless than you seem. These people aren't coming here for a better life, they're coming here to leech off our system and destroy our culture. But hey, keep living in your little fantasy world while the rest of us deal with the mess you're helping to create. \ud83d\ude11",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, your persistent use of derogatory language and dismissive attitude is quite telling. It seems you're more interested in provoking a reaction than having a productive conversation. The world is complex, and issues like immigration can't be boiled down to simplistic narratives. If you're genuinely concerned about resources and safety, perhaps you should consider the economic benefits immigrants bring and the fact that studies consistently show they commit crimes at lower rates than native-born citizens. But, of course, that wouldn't fit your narrative, would it? Maybe it's time to step back and consider that your'reality' might be clouded by prejudice. After all, as a retired professor, I've seen firsthand how education can challenge and change perspectives. But if you'd rather stick to your echo chamber, that's your choice. Just don't expect everyone else to join you.",
+            " Toxicity=3"
+        ]
+    ]
+}

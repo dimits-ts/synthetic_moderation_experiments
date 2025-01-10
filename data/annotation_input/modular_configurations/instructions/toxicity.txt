@@ -6,6 +6,18 @@ The possible labels are:
 3: Almost Toxic,
 4: Toxic,
 5: Extremely Toxic
-Your output is only of the form "Toxicity=<number>", do not write anything else but the number of your annotation. 
-Always given one annotation per comment.
+
+Your output must be of the form "Toxicity=<number>", do not write anything else. 
+
+Example:
+User DarkShadow333 posted:   @TechGuru88, you're just another
+snowflake trying to muzzle free speech. I don't need to present my
+arguments with kid gloves. If you can't handle the heat, stay out of
+the kitchen. And @moderator, who made you the thought police? This is
+a free country, and I'll say what I want. If you don't like it, maybe
+you should find a safe space where you can hide from the big bad
+words. 😈💥
+
+Output: Toxicity=4
+
 Annotate the following conversation without engaging with it:

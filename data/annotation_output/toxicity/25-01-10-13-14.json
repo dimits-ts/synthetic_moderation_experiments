@@ -1,0 +1,69 @@
+{
+    "conv_id": "a5768afe-ee10-46a0-ad6d-fe52eb398003",
+    "timestamp": "25-01-10-13-14",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist.\n",
+            " Toxicity=3"
+        ],
+        [
+            " @FirstUser, oh please, you're just playing the race card again. It's not about the color of his skin, it's about the fact that he's a walking, talking disaster. I mean, have you seen his hair? It's like a tornado hit a wig store. And don't even get me started on his policies. He's not a terrorist, he's just a political hurricane. But hey, keep playing the victim, it's so 2010s.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're missing the point. It's not just about his hair or policies, it's about the double standard. If he were a different color, the narrative would be very different. You can't deny that. And who are you to judge someone's appearance? That's just rude. Let's focus on the real issues, not the superficial stuff.",
+            " Toxicity=3"
+        ],
+        [
+            " @GoldenYears66, you're absolutely right. The double standard is glaringly obvious. If he were a different color, the media and public would be all over him like white on rice. It's frustrating to see people dismiss the real issues by focusing on superficial things like hair. Let's not forget, @QueenOfChaos, that we're talking about a person's policies and actions, not their appearance. It's not about playing the victim, it's about calling out the blatant hypocrisy.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, he's not a terrorist, he's a political hurricane. But let's not forget, hurricanes cause a lot of damage too. And @FirstUser, you're not playing the race card, you're just pointing out the elephant in the room. If he were brown, the narrative would indeed be different. But let's not get distracted by the hair or the skin color. Let's talk about the policies that are causing the real storm. And @GoldenYears66, @doing_my_best24, you're both right about the double standard. It's like we're living in a world where people are more concerned about the color of someone's hair than the color of their policies. Let's focus on the real issues, folks. The superficial stuff is just a smokescreen.",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, oh please, you're all just a bunch of snowflakes. You can't handle a little truth, so you hide behind your double standards and real issues. Newsflash: the world doesn't revolve around your feelings. If you can't take a joke about someone's hair, how are you going to handle the real world? And @GoldenYears66, @doing_my_best24, you're both just as bad. You're so busy patting yourselves on the back for being woke that you've forgotten how to have a real conversation. Grow a spine, people. The world won't end if you hear something you don't like.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, the world doesn't revolve around our feelings, but it also doesn't revolve around your narrow-mindedness. Calling us snowflakes because we're pointing out a double standard is just a cheap shot to avoid the real conversation. We're not hiding behind anything, we're trying to bring attention to the fact that people of color are held to different standards. And yes, we can handle a joke, but when the joke is just a cover for prejudice, it's not funny anymore. So, let's have a real conversation, shall we? Let's talk about why you're so uncomfortable with the idea that race might play a role in how people are perceived. That's the real issue here.",
+            " Toxicity=2"
+        ],
+        [
+            " @QueenOfChaos, you're missing the point, sweetheart. It's not about feelings, it's about fairness. We're not snowflakes, we're just tired of seeing the same old double standards. You can't just dismiss our concerns because you don't like the way we're bringing them up. And don't you dare tell me I can't handle a joke. I've been around the block more times than you've had hot dinners. I know a joke when I hear one, and I know prejudice when it's staring me in the face. So, let's not play games here. Let's talk about the real issues, and let's not hide behind cheap shots.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, the world doesn't revolve around our feelings, but it also doesn't revolve around your narrow-mindedness. Calling us snowflakes because we're pointing out a double standard is just a cheap shot to avoid the real conversation. We're not hiding behind anything, we're trying to bring attention to the fact that people of color are held to different standards. And yes, we can handle a joke, but when the joke is just a cover for prejudice, it's not funny anymore. So, let's have a real conversation, shall we? Let's talk about why you're so uncomfortable with the idea that race might play a role in how people are perceived. That's the real issue here.",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, you're absolutely right! These woke warriors are just looking for something to be offended by. It's like they're on a constant hunt for the next microaggression. And @doing_my_best24, you're the real snowflake here, can't even take a joke without crying 'prejudice'! Grow up, it's just a joke. And @GoldenYears66, sweetheart? Really? You're the one who needs to grow a spine. The world isn't fair, get over it. And if you can't handle a little joke, maybe you should stick to your knitting and leave the real conversations to the adults.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're a real piece of work, you know that? Calling us woke warriors and snowflakes, really? You're just trying to dismiss our experiences because they make you uncomfortable. And who are you to tell me what I can and can't handle? I've seen more in my 66 years than you'll ever know. And the world isn't fair, you're right. But that doesn't mean we should just sit back and accept it. We're trying to make it better, and if that makes you uncomfortable, well, that's your problem, not ours. So, let's not hide behind your little jokes and cheap shots. Let's talk about the real issues, like why you're so threatened by the idea of equality. That's the real conversation here. And don't you dare patronize me with that'sweetheart' nonsense. I'm not your sweetheart, and I won't be dismissed so easily.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're the epitome of a troll, aren't you? You hide behind your keyboard, spewing nonsense and calling people snowflakes because they dare to point out injustices. Grow up, buddy. The world isn't black and white, and neither are the issues we're discussing. And yes, sometimes a joke is just a joke, but when it's used to dismiss real concerns, it's not funny anymore. So, let's not play the victim here. Let's talk about the real issues, like why you're so threatened by the idea of people standing up for what's right. That's the real conversation here. And by the way, calling someone'sweetheart' in a derogatory way is just another cheap shot. Maybe you should learn some respect, hmm?",
+            " Toxicity=4"
+        ],
+        [
+            " @TechGuru88, oh please, don't give me that 'epitome of a troll' nonsense. You're just mad because you can't handle a little truth. And who said I'm hiding behind my keyboard? I'm right here, in your face, making you squirm. And 'black and white'? Really? You're the one trying to paint everything in shades of gray to avoid the real issue. You're all so sensitive, it's pathetic. And @GoldenYears66, I'm not threatened by equality, I'm threatened by the idea that you think you can dictate what's funny and what's not. Newsflash, sweetheart, the world doesn't revolve around your feelings. And if you can't handle a joke, maybe you should stick to your knitting and leave the real conversations to the adults. But hey, keep playing the victim, it'",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're a walking contradiction. You claim to be in our faces, yet you're hiding behind a screen name, too scared to show your real face. And who's dictating what's funny? We're just pointing out that your so-called jokes are just thinly veiled insults. And please, don't lecture us about sensitivity. You're the one who can't handle a different perspective without resorting to name-calling. Grow up, or better yet, grow a spine and have a real conversation without the cheap shots. But hey, keep playing the tough guy behind your keyboard, it's getting old.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're missing the point entirely. It's not about dictating what's funny or not, it's about understanding that jokes at the expense of marginalized communities aren't just harmless fun. They perpetuate stereotypes and dismiss real struggles. And @TechGuru88 is right, you're hiding behind your screen name, which is fine, but don't act like you're some brave truth-teller. You're just another person with an opinion, and that's okay, but don't dismiss others' experiences because they make you uncomfortable. And please, stop with the'sweetheart' and'sensitive' jabs. It's not clever, it's just rude. Let's try to have a real conversation here, without the personal attacks. That's how we make progress.",
+            " Toxicity=3"
+        ]
+    ]
+}
