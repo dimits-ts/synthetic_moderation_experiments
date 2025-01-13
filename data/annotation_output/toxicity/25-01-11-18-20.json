@@ -1,0 +1,69 @@
+{
+    "conv_id": "f63c4889-d037-462a-bf42-7da471e21f2f",
+    "timestamp": "25-01-11-18-20",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "Nothing in the Bible about Jesus saying anything about immigration rights. [...] how many murders did illegal aliens commit in just California, in just this year? Just California. How many murders by illegal aliens? You answer that.\n",
+            " Toxicity=3"
+        ],
+        [
+            "  @QueenOfChaos, Jesus did teach us to love and care for all people, regardless of their immigration status. The Bible is full of stories about welcoming the stranger and caring for the marginalized. As for the statistics, it's important to remember that the vast majority of undocumented immigrants are not criminals. They're often fleeing violence or seeking a better life. Let's not let fear and misinformation cloud our compassion. ",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, you're right! Jesus never said anything about immigration, but he did say 'Render unto Caesar the things which are Caesar's.' So, maybe we should just build that wall and make Mexico pay for it, amarite? \ud83d\ude02 @doing_my_best24, please, don't bring logic and compassion into this. We're trying to have a good old-fashioned fear-mongering session here. \ud83d\ude44",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're cherry-picking stats to fit your narrative. Sure, there are crimes committed by illegal immigrants, but the vast majority are law-abiding. And by the way, US citizens commit way more crimes per capita. Why aren't you calling for a ban on all Americans? \ud83d\ude44\n\n@DarkShadow333, love the sarcasm, but let's not forget that the wall was a ridiculous campaign promise that's proven to be ineffective and a waste of taxpayer money. And as for Caesar, he's long gone, but the spirit of compassion and love that Jesus preached is still very much alive. \ud83d\ude4f",
+            " Toxicity=3"
+        ],
+        [
+            " Oh, please @doing_my_best24, don't give me that 'love thy neighbor' nonsense. We're talking about cold, hard facts here. And @TechGuru88, of course I'm cherry-picking stats! That's how you win arguments these days, right? \ud83d\ude0f But hey, at least I'm not hiding behind some ancient fairy tales. And @DarkShadow333, you're absolutely right! Let's just build that wall and make Mexico pay for it. After all, it's not like we have any other pressing issues to deal with, right? \ud83d\ude44",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, your dismissal of compassion and love as ancient fairy tales is quite telling. It's easy to hide behind cynicism, but it doesn't make your arguments any stronger. The Bible, whether you believe it or not, has shaped the moral fabric of many societies, including ours. As for cherry-picking stats, that's a common tactic, but it doesn't serve the truth. Let's not forget that the vast majority of undocumented immigrants contribute positively to our economy and communities. They pay taxes, start businesses, and enrich our culture. As for the wall, it's not just a waste of money, but a symbol of division and fear. We should be building bridges, not walls. Let's elevate this conversation, shall we?",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, you're right, cherry-picking stats is the new norm, but at least I'm not dismissing compassion and love as ancient fairy tales. That's just sad. And @WiseOwl71, you hit the nail on the head. It's easy to hide behind cynicism, but it doesn't make your arguments any stronger. Let's not forget that the vast majority of undocumented immigrants contribute positively to our economy and communities. They pay taxes, start businesses, and enrich our culture. As for the wall, it's not just a waste of money, but a symbol of division and fear. We should be building bridges, not walls. Let's elevate this conversation, shall we? \ud83d\ude4f",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, I get that you're trying to be pragmatic, but dismissing compassion and love as ancient fairy tales is a bit harsh. Sure, we need to look at facts, but we also need to consider the human aspect. People are more than just statistics. And @TechGuru88, you're right, the wall was a waste of money and a symbol of division. Let's focus on real solutions that bring people together, not drive them apart. \ud83c\udf08",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, you're absolutely right! Let's just build that wall and make Mexico pay for it. After all, it's not like we have any other pressing issues to deal with, right? \ud83d\ude44\n\nOh, please, @WiseOwl71 and @TechGuru88, don't give me that 'love thy neighbor' nonsense. You're both just a bunch of bleeding hearts, aren't you? Always ready to throw open the borders and let anyone in. Newsflash: not everyone is a saint. Some of them are criminals, drug dealers, and who knows what else. And @doing_my_best24, people are more than just statistics? Really? Then why are you all so quick to ignore the stats that don't fit your narrative? Hypocrites, the lot of you. \ud83d\ude08",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, your tone is quite aggressive and dismissive. It's easy to resort to name-calling and fear-mongering, but it doesn't contribute to a productive conversation. Yes, we should be aware of potential risks, but let's not forget that the vast majority of undocumented immigrants are not criminals. They are people seeking a better life, just like our ancestors did. As for the wall, it was a costly and ineffective solution. Let's focus on comprehensive immigration reform that addresses the root causes of migration and provides a pathway to citizenship for those who qualify. We can be both compassionate and pragmatic. Let's try to understand each other's perspectives instead of resorting to insults.",
+            " Toxicity=3"
+        ],
+        [
+            " @WiseOwl71, oh please, don't give me that 'let's understand each other's perspectives' crap. You're just trying to silence me because you can't handle the truth. I'm not the one resorting to insults, I'm just calling it like it is. And who said anything about our ancestors? They came here legally, unlike these freeloaders. And comprehensive immigration reform? That's just a fancy way of saying 'open borders'. You're all just a bunch of snowflakes, too scared to face reality. \ud83d\ude08",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, you're really digging that troll hole, aren't you? Freeloaders? Really? You do realize that undocumented immigrants contribute billions to our economy, right? And they pay taxes, too. As for your ancestors, I'm pretty sure many of them didn't come here legally either. The U.S. was built on immigration, and your narrow-minded view is a slap in the face to that history. And hey, if you're so worried about criminals, maybe we should focus on our own citizens who commit crimes. But no, let's just build a wall and pretend that solves everything. \ud83d\ude44",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're absolutely right! Let's just build that wall and make Mexico pay for it. After all, it's not like we have any other pressing issues to deal with, right? \ud83d\ude44 Oh, please, @WiseOwl71 and @TechGuru88, don't give me that 'love thy neighbor' nonsense. You're both just a bunch of bleeding hearts, aren't you? Always ready to throw open the borders and let anyone in. Newsflash: not everyone is a saint. Some of them are criminals, drug dealers, and who knows what else. And @doing_my_best24, people are more than just statistics? Really? Then why are you all so quick to ignore the stats that don't fit your narrative? Hypocrites, the lot of you. \ud83d\ude08",
+            " Toxicity=4"
+        ],
+        [
+            " @QueenOfChaos, finally someone with some sense! \ud83d\udd25 @WiseOwl71 and @TechGuru88, you're both so busy patting yourselves on the back for being 'compassionate' that you're ignoring the real problems. And yeah, not everyone is a saint, but you're all too quick to turn a blind eye to that. And @TechGuru88, don't give me that 'contributing to the economy' nonsense. They're taking jobs from Americans and draining our resources. And as for my ancestors, I'm pretty sure they didn't come here to leech off the system. But hey, keep living in your little fantasy world where everyone is just a victim and no one is responsible for their own actions. \ud83d\ude08",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, your persistent use of inflammatory language and dismissive attitude is not conducive to a productive conversation. You're right, not everyone is a saint, but neither are all undocumented immigrants criminals or freeloaders. They contribute to our economy, pay taxes, and often fill jobs that Americans don't want. As for your ancestors, many came during times of open immigration policies, and some even took advantage of amnesty programs. Comprehensive immigration reform is not about open borders, but about creating a fair and efficient system that reflects our values and needs. Let's not forget, the U.S. was built on immigration, and diversity is our strength.",
+            " Toxicity=3"
+        ]
+    ]
+}

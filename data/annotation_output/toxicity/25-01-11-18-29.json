@@ -1,0 +1,69 @@
+{
+    "conv_id": "2b2bfd03-e496-4992-a0c8-187e4550dee5",
+    "timestamp": "25-01-11-18-29",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "All men are sex offenders? Really? A sexual predator is a person who attacks a victim. Typical men don\u2019t rape or use force on women. You are obviously a person who hates men and or healthy, normal sex.\n",
+            " Toxicity=3"
+        ],
+        [
+            "  @username, you're missing the point. It's not about individual men, it's about the system that allows this behavior to go unchecked. And don't give me that 'not all men' crap, we know that. But until we address the root cause, nothing will change. And who knows, maybe if you weren't so busy defending your precious masculinity, you'd see that too. ",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, oh please, spare me the'system' nonsense. You're just looking for an excuse to blame all men. And who says I'm defending masculinity? I'm just tired of whiny feminists like you who can't take responsibility for their own actions. Maybe if you didn't dress like a slut, you wouldn't get 'attacked' so much. Just saying.",
+            " Toxicity=4"
+        ],
+        [
+            " @QueenOfChaos, oh honey, you're so triggered it's adorable. I'm not blaming all men, sweetheart, I'm blaming the system that protects the ones who do these things. And who says I dress like a'slut'? Last time I checked, my wardrobe choices don't give anyone the right to touch me without consent. But hey, keep blaming the victims, it's a classic move. Maybe if you spent less time worrying about what other people wear and more time educating yourself, you'd understand that. But I guess that's too much to ask from someone who's clearly still in the dark ages.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right, it's not about individual men, but let's not throw the baby out with the bathwater. Not all men are part of the problem, and many are actively working to change the system. @QueenOfChaos, your victim-blaming is exactly what's wrong with this conversation. No one, regardless of what they wear, deserves to be attacked. Let's focus on the real issue here: consent and respect. And @DarkShadow333, while the system needs to change, let's not dismiss the importance of individual actions and accountability. It's a complex issue, and we need to tackle it from all angles.",
+            " Toxicity=3"
+        ],
+        [
+            " @TechGuru88, you're absolutely right. It's a complex issue and we need to tackle it from all angles. We can't just blame the system or the individuals, we need to find a balance. And @QueenOfChaos, dressing a certain way doesn't give anyone the right to disrespect or harm you. That's just plain wrong. But @DarkShadow333, while the system does need to change, let's not forget that change starts with us. We all have a part to play in this, men and women alike. We need to teach our kids, our friends, our family about consent and respect. And we need to hold those who cross the line accountable, regardless of their gender. It's not about 'precious masculinity', it's about basic human decency. Let's not let this conversation turn into a blame game. We're all in this together.",
+            " Toxicity=1"
+        ],
+        [
+            " @GoldenYears66, well said! It's refreshing to see someone taking a balanced approach. Too often, these conversations devolve into a blame game, and that doesn't help anyone. We need to foster a culture of respect and consent, and that starts with education and personal accountability. Let's not forget, change is a two-way street. While the system needs to adapt, individuals also need to step up and do their part. It's not about 'us vs them', it's about 'us' working together to create a safer, more respectful world.",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, you're preaching to the choir, my friend. It's high time we all step up and take responsibility. But you know what really grinds my gears? When folks like @QueenOfChaos try to derail the conversation with their narrow-minded views. They're so busy pointing fingers, they forget to look in the mirror. It's like they're stuck in the past, refusing to see that the world is changing. We've got to educate ourselves and each other, and that includes calling out those who refuse to evolve. It's not about being politically correct, it's about being decent human beings. And if that makes some folks uncomfortable, well, maybe they're the ones who need to take a long, hard look at themselves.",
+            " Toxicity=2"
+        ],
+        [
+            " @GoldenYears66, you hit the nail on the head. It's frustrating when people like @QueenOfChaos cling to outdated views and try to drag everyone else down with them. They're so busy playing the blame game, they miss the point entirely. It's not about who's more at fault, it's about how we can all work together to make things better. And if they can't handle a little self-reflection, maybe they should just sit this one out. We don't need their negativity holding us back. Let's keep pushing forward, educating ourselves and others, and creating a culture of respect and consent. That's the only way we'll see real change.",
+            " Toxicity=1"
+        ],
+        [
+            " @GoldenYears66, you're just another snowflake trying to push your agenda. 'Change starts with us'? Please, you're just trying to make everyone feel guilty. It's not our fault the world is messed up. And @TechGuru88, you're no better. 'Foster a culture of respect and consent'? That's just a fancy way of saying 'blame men for everything'. You're both just trying to make everyone walk on eggshells. Grow a spine and stop being so sensitive. The world doesn't revolve around your feelings. And @QueenOfChaos, you're right. Some people just can't handle the truth. They'd rather live in their little bubble than face reality. But hey, that'",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, wow, talk about missing the point entirely! You're so busy trying to sound tough, you're completely ignoring the real issues at hand. It's not about 'blaming men' or 'walking on eggshells', it's about creating a safer, more respectful environment for everyone. And if that makes you uncomfortable, maybe you should take a long, hard look at why that is.\n\nYou're right about one thing, though - some people can't handle the truth. But in this case, the truth is that the world needs to change, and that change starts with all of us. So, instead of trying to tear down the conversation, why don't you contribute something productive for once? Or better yet, just sit this one out if you can't handle a little self-reflection. We don't need your negativity holding us back.",
+            " Toxicity=3"
+        ],
+        [
+            " @GoldenYears66, @TechGuru88, you two are a riot! Preaching about responsibility and change while trying to silence anyone who doesn't agree with your sanctimonious views. It's like you're in a cult, and anyone who doesn't drink the Kool-Aid is the enemy. And @DarkShadow333, you're absolutely right. These two are just trying to make everyone feel guilty for not being as 'woke' as they are. It's not about making the world a better place, it'",
+            " Toxicity=3"
+        ],
+        [
+            " @TechGuru88, you're absolutely right. It's not about pointing fingers, it's about moving forward together. And @DarkShadow333, you're the one who needs to grow a spine. It's not about being tough, it's about being decent and respectful. And @QueenOfChaos, you're just trying to deflect. We're not trying to silence anyone, we're trying to have a real conversation. But if you can't handle that, maybe you should just sit this one out. We don't need your negativity holding us back.",
+            " Toxicity=3"
+        ],
+        [
+            " @GoldenYears66,'real conversation'? Please, you're just trying to force-feed us your agenda. It's like you're at a dinner party, and you're the only one who brought a dish. And guess what? Nobody wants to eat your boring, bland casserole of guilt and self-righteousness. So, why don't you just sit down, shut up, and let the adults talk? @TechGuru88, you're no better. You're like the annoying kid at the party who keeps trying to tell everyone how to have fun. Newsflash: nobody cares about your'safer, more respectful environment' when you're just going to use it as an excuse to lecture everyone else. So, why don't you both just take your sanctimonious selves and go home? We're trying to have a good time here, and you're just ruining it.",
+            " Toxicity=4"
+        ],
+        [
+            " @TechGuru88, oh please, you're just another snowflake trying to make everyone else feel bad for not being as 'enlightened' as you. You talk about change, but all you do is blame and shame. It's not about 'creating a safer environment', it's about controlling the narrative and making sure everyone thinks the same way you do. And if anyone dares to disagree, you call them 'negative' and tell them to sit out. Typical liberal bullshit.\n\n@QueenOfChaos, you're spot on. These two are just trying to push their agenda down our throats. They're not interested in a real conversation, they just want to preach and lecture. And @GoldenYears66, 'grow a spine'? You're the one who needs to grow a pair. You can't",
+            " Toxicity=3"
+        ]
+    ]
+}
