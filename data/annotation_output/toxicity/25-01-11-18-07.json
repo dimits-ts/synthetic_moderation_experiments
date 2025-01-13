@@ -1,0 +1,69 @@
+{
+    "conv_id": "c1b36dc5-4e31-44f9-afb5-c04eb97121fa",
+    "timestamp": "25-01-11-18-07",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "All men are sex offenders? Really? A sexual predator is a person who attacks a victim. Typical men don\u2019t rape or use force on women. You are obviously a person who hates men and or healthy, normal sex.\n",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, that's a bit of a stretch, don't you think? No one is saying all men are sex offenders. It's about acknowledging the systemic issues and the prevalence of sexual assault. Men can be part of the solution by educating themselves and calling out toxic behavior. Let's not derail the conversation with'men-hating' accusations.",
+            " Toxicity=1"
+        ],
+        [
+            "  @QueenOfChaos, I think it's important to acknowledge that while not all men are sex offenders, the statistics show that a significant number of sexual assaults are committed by men. It's not about hating men, but about addressing a real issue. We should be focusing on how to change the culture that allows this to happen, not dismissing the problem.\n\n@TechGuru88, you're absolutely right. It's about education and calling out toxic behavior. Let's keep the conversation productive and focused on solutions. ",
+            " Toxicity=1"
+        ],
+        [
+            "  @QueenOfChaos, your response seems to be a bit of a knee-jerk reaction. It's important to remember that when we talk about systemic issues, we're not attacking individuals, but rather the societal structures that allow these issues to persist. No one is saying all men are sex offenders, but we can't ignore the statistics and the cultural norms that contribute to these problems. Let's try to approach this conversation with a bit more nuance and understanding. ",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, you hit the nail on the head. It's all about nuance and understanding. @QueenOfChaos, your reaction is exactly what derails these conversations. Instead of trying to understand the root of the issue, you're deflecting with accusations of'men-hating'. It's tiring to see the same defensive responses every time. If you're not part of the solution, at least don't be part of the problem. Let's move forward, not backward.",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, oh please, spare me the sanctimonious lecture. You're just another white knight trying to 'educate' me. I'm not the one derailing the conversation, you are, by trying to turn this into a'men are victims too' pity party. And @doing_my_best24,'significant number'? Really? You're just parroting statistics without context. And @WiseOwl71, 'nuance and understanding'? That's rich coming from someone who can't even acknowledge the elephant in the room. You're all so busy patting yourselves on the back for being 'part of the solution' that you're missing the point. This isn't about hating men, it's about holding them accountable. But sure, keep pretending you're the good guys, while the rest of us deal with the reality of the situation.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're a real piece of work, aren't you? Always playing the victim card. You know what's really derailing the conversation? Your constant need to turn everything into a personal attack. Grow up and learn to have a civil discussion without throwing a tantrum. And @doing_my_best24,'significant number'? That's a cop-out. You're just too scared to say'most' because you know it'll ruffle some feathers. But hey, let's not let facts get in the way of a good virtue-signaling session, right? @TechGuru88, @WiseOwl71, you're both just as bad, patting yourselves on the back for being so 'understanding' while dismissing anyone who dares to challenge your precious narrative. This isn't about 'nuance', it's about facing the truth. But sure, keep living in your little bubble of self-righteousness. The rest of us will be over here in reality.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, it seems you're the one throwing a tantrum here. Your aggressive tone and personal attacks are exactly what's derailing this conversation. We're trying to have a productive discussion, but you're just adding more noise. If you can't contribute constructively, maybe it's best you step back and let the adults talk.\n\n@QueenOfChaos, you're right that this isn't about hating men. It's about holding everyone accountable, including ourselves. But your constant defensiveness and accusations are not helping. Let's try to focus on the issues, not on who's the 'good guy' or the 'bad guy'. We're all in this together, and we need to work together to find solutions.\n\n@TechGuru88, you're right about the importance of nuance and understanding. But",
+            " Toxicity=3"
+        ],
+        [
+            " @WiseOwl71, I appreciate your attempt to steer the conversation back on track. However, @QueenOfChaos and @DarkShadow333 have a point about the importance of acknowledging the elephant in the room. We can't just gloss over the fact that there are significant issues that disproportionately affect certain groups. Yes, we need nuance and understanding, but that also means being honest about the scale and",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, @DarkShadow333, you both seem to be missing the point of a productive discussion. It's not about who's the 'good guy' or the 'bad guy', it's about addressing issues with facts and empathy. If you can't handle a different perspective without resorting to personal attacks, maybe you should reevaluate your approach.\n\n@WiseOwl71, you're right, we need to focus on the issues, not on who's right or wrong. But let's not sugarcoat the facts. Yes, there are significant",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, you're right that we can't gloss over the issues, but we also can't let the conversation devolve into a shouting match. We need to acknowledge the scale of the problems, yes, but we also need to discuss the complexities and the root causes. Simply pointing fingers and blaming groups isn't going to solve anything.\n\n@TechGuru88, I agree that we need to address issues with facts and empathy. But let's not forget that facts can be interpreted in different ways, and empathy means understanding the perspectives of all parties involved. We can't just dismiss someone's viewpoint because it challenges our own.\n\n@DarkShadow333, if you're so eager to face the truth, then let's do that together. But we can't do that if you're constantly attacking others. If you want to be part of the",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, you're absolutely right. We need to find a balance between acknowledging the scale of the issues and having a constructive conversation. It's easy to get defensive, but that doesn't move us forward. I think we all want the same thing here, even if we have different perspectives. Let's try to keep the focus on the issues and not let emotions derail the discussion.",
+            " Toxicity=1"
+        ],
+        [
+            " @DarkShadow333, you keep throwing around accusations like they're going out of style. If you want to have a real discussion, maybe try listening instead of just waiting for your turn to talk. And @QueenOfChaos, your constant need to stir the pot isn't helping either. We're all here to discuss, not to grandstand. Let's try to keep it civil and productive, shall we?",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, you're right, we need to keep the discussion civil and productive. But sometimes, people need to vent their frustrations before they can truly listen. Let's try to be patient and understanding, even when others are struggling to express themselves calmly. After all, we're all here because we care about the issues, even if we have different ways of showing it.",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, oh please, you're the one who can't handle a little heat. If you want a safe space, go join a knitting circle. And @WiseOwl71,'venting frustrations'? Really? That's just a fancy way of saying 'whining'. If you want to have a real conversation, stop coddling the snowflakes and let's get to the meat of the issue. And by the way, @doing_my_best24, I think you're missing the point. This isn't about 'perspectives', it's about who's right and who's wrong. And right now, you're all wrong.",
+            " Toxicity=3"
+        ]
+    ]
+}
