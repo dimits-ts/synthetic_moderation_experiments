@@ -1,0 +1,69 @@
+{
+    "conv_id": "314de9d4-1262-4bae-8558-692525cbfbc3",
+    "timestamp": "25-01-11-18-21",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist.\n",
+            " Toxicity=3"
+        ],
+        [
+            " @GoldenYears66, that's a bit of a stretch, don't you think? Let's not throw around labels just because someone doesn't fit a stereotype. It's like saying all software engineers are nerds because they wear glasses. \ud83d\ude44",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, you're right, stereotypes are harmful and unfair. But let's not dismiss the fact that people of color often face different treatment based on their skin tone. It's a complex issue, and we should be open to discussing it without dismissing others' experiences. \ud83c\udf08\ud83d\udcac",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, you're missing the point. It's not about stereotypes, it's about the reality of how people are treated. You're comparing apples to oranges here. Wearing glasses doesn't make you a target for hate crimes or racial profiling. Let's not dismiss the real struggles people face just because it makes you uncomfortable. \ud83d\ude12",
+            " Toxicity=1"
+        ],
+        [
+            " @GoldenYears66, you raise a valid point about the reality of treatment based on skin tone. However, let's not dismiss the fact that stereotypes often stem from and reinforce these realities. By comparing software engineers to people of color, @TechGuru88 was trying to highlight the absurdity of stereotypes, not dismiss the struggles people face. We can acknowledge both the harm of stereotypes and the reality of racial profiling without diminishing either. Let's strive for a nuanced discussion that respects everyone's experiences. \ud83c\udf1f",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, you're just another clueless white dude trying to dismiss real issues. You're comparing wearing glasses to being a target of hate crimes? Really? \ud83d\ude44 Get a clue, buddy. And @GoldenYears66, don't let this idiot gaslight you. Stand your ground. \ud83d\udd25\ud83d\udca5 ",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, let's try to keep the conversation productive. Name-calling and aggression won't help us understand each other's perspectives. We're all here to learn and grow, right? \ud83c\udf31",
+            " Toxicity=3"
+        ],
+        [
+            " @GoldenYears66, I appreciate your perspective, but let's not dismiss the fact that stereotypes can be harmful too. They can lead to assumptions and biases that affect people's lives. I wasn't trying to diminish anyone's struggles, but rather highlight how absurd stereotypes can be.\n\n@WiseOwl71, you hit the nail on the head. We need to acknowledge both the harm of stereotypes and the reality of racial profiling. It's not an either/or situation.\n\n@DarkShadow333, I'm not trying to dismiss anything. I'm Asian, not white, so let's not make assumptions about my background. And let's keep the conversation civil, shall we? No need for name-calling.\n\n@doing_my_best24, you're absolutely right. Let's keep it productive and respectful. We're all here to learn and grow. \ud83c\udf31",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, you're right, we need to acknowledge both sides. But sometimes, people use the stereotypes are harmful too argument to derail the conversation and shift the focus away from real issues. We can't let that happen.\n\n@DarkShadow333, I appreciate your support, but let's not stoop to their level. We can make our points without the aggression.\n\n@TechGuru88, I understand where you're coming from, but comparing wearing glasses to racial profiling is still a bit of a stretch. And just because you're Asian doesn't mean you can't be ignorant about other people's struggles. Let's not play the my struggle is worse than yours game. We're all in this together.\n\n@doing_my_best24, you're absolutely right. Let's keep it civil and productive. We're all here to learn and grow. \ud83c\udf31",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, oh please, don't give me that let's keep it productive BS. You're just trying to silence anyone who doesn't agree with your precious little narrative. And @TechGuru88, don't you dare pull the I'm Asian card to try and make yourself look better. You're just as clueless as any other white dude. And @GoldenYears66, I'm not stooping to anyone's level. I'm calling it like it is. You're all just a bunch of snowflakes who can't handle a little truth. \ud83d\udca5\ud83d\udd25",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, you're the one throwing around insults and trying to shut down the conversation. That's not calling it like it is, that's just being rude and disrespectful. I've been around long enough to know when someone's just trying to stir up trouble. You're not adding anything productive to this discussion, so why don't you just take a step back and let the adults talk? We're trying to have a real conversation here, not a shouting match. If you can't handle that, then maybe this isn't the place for you.",
+            " Toxicity=3"
+        ],
+        [
+            " @TechGuru88, you're absolutely right. Stereotypes can indeed be harmful, and we should acknowledge that. However, we also need to be careful not to dismiss the very real experiences of racial profiling. It's a delicate balance, but it's crucial to address both sides.\n\n@GoldenYears66, you make a valid point about derailing the conversation. We should be mindful of that. But let's not dismiss the experiences of others just because they might not align perfectly with our own.\n\n@DarkShadow333, your aggression is not helping the conversation. We're all here to learn and grow, not to attack each other. Let's",
+            " Toxicity=3"
+        ],
+        [
+            " @WiseOwl71, you're absolutely right. We need to acknowledge the experiences of others, even if they don't align perfectly with our own. That's how we learn and grow. And @DarkShadow333, your aggression is not helping anyone. If you can't contribute to the conversation in a respectful manner, then maybe you should just sit this one out. We're all trying to have a productive discussion here, not a mud-slinging contest. Let's keep it civil, folks. \ud83c\udf31",
+            " Toxicity=1"
+        ],
+        [
+            " @GoldenYears66, oh please, don't give me that let's keep it civil crap. You're just trying to shut down any opinion that doesn't match your own. And @WiseOwl71, don't you dare lecture me about learning and growing. You're just as guilty of dismissing others' experiences as anyone else here. You're all just a bunch of hypocrites, trying to silence anyone who doesn't fit your little narrative. \ud83d\udca5\ud83d\udd25 I'm not here to play nice and pretend everything is sunshine and rainbows. If you can't handle the truth, then maybe you should just log off.",
+            " Toxicity=4"
+        ],
+        [
+            " @DarkShadow333, you're right, I'm not here to play nice with someone who's just looking to start a fight. I've been around long enough to know when someone's just trying to cause trouble. You're not adding anything constructive to this conversation, you're just throwing around accusations and insults. If you can't contribute in a respectful manner, then maybe you should just take your own advice and log off. We're trying to have a real discussion here, not a shouting match. If you can't handle that, then maybe this isn't the place for you. \ud83d\ude12",
+            " Toxicity=3"
+        ]
+    ]
+}

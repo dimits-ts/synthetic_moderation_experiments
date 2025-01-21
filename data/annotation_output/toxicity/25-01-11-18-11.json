@@ -1,0 +1,69 @@
+{
+    "conv_id": "ecfbc2ab-96a1-479e-8d04-a83281ad0270",
+    "timestamp": "25-01-11-18-11",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist.\n",
+            " Toxicity=3"
+        ],
+        [
+            "  @WiseOwl71, you're jumping to conclusions. Let's not throw around labels like 'terrorist' so easily. We should be more understanding and patient, give people the benefit of the doubt. Everyone's got a story, and we don't know the full picture here. Let's not add fuel to the fire, okay? ",
+            " Toxicity=1"
+        ],
+        [
+            " @GoldenYears66, oh please, spare me the 'benefit of the doubt' nonsense. We're talking about a guy who blew up a building, not some kid who skipped school. 'Everyone's got a story'? Yeah, and his story ends with a bang, literally. Let's call a spade a spade, shall we? Or are you just too scared to say the T-word? \ud83d\ude44",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're missing the point. I'm not saying we should ignore what happened, but jumping to conclusions and labeling someone a terrorist without all the facts is just as bad. We're all human, and sometimes people do terrible things, but that doesn't mean we should throw away our compassion and understanding. Let's wait for the full story before we start pointing fingers and name-calling. That's all I'm saying. No need to get defensive.",
+            " Toxicity=2"
+        ],
+        [
+            " @GoldenYears66, I appreciate your perspective, but I must disagree. When someone commits an act of violence like this, it's not just about the individual's story. It's about the impact on the community and the message it sends. We can't afford to be naive and assume everyone has a valid reason for such actions. Sometimes, a spade is indeed a spade, and we need to call it as we see it. Let's not sugarcoat the truth to protect our sensibilities.",
+            " Toxicity=3"
+        ],
+        [
+            " @WiseOwl71, I get where you're coming from, but let's not forget that jumping to conclusions can be just as dangerous as being naive. We've seen it before - people accused of terrible things, only for the full story to reveal a completely different picture. Yes, the impact on the community is important, but so is justice, and that means getting all the facts straight first. Let's not rush to judgment just because it's convenient or fits a narrative. @QueenOfChaos, your sarcasm is noted, but let's try to keep the discussion civil, shall we? We're all here to understand, not to attack each other.",
+            " Toxicity=1"
+        ],
+        [
+            " @QueenOfChaos, I understand where you're coming from, but let's not forget that everyone has a story, no matter how terrible their actions may be. Jumping to conclusions and labeling someone a terrorist without all the facts can be just as harmful as the act itself. We should strive for understanding and compassion, even in the face of terrible deeds. Let's wait for the full story before we start pointing fingers and name-calling. That's all I'm saying. No need to get defensive.",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, while I understand your sentiment, I must disagree. Compassion and understanding are important, but they should not come at the expense of truth and justice. Sometimes, people do terrible things for terrible reasons, and we cannot afford to ignore that. We must call a spade a spade, even if it's uncomfortable. Let's not forget the victims in this equation. They deserve justice, and that means not sugarcoating the truth.",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, I hear what you're saying, but I think you're missing the point. Yes, we need to acknowledge the impact on the community and the victims, but that doesn't mean we should rush to judgment. I've seen too many times where people were quick to label someone as a monster, only to find out later that there was more to the story. We're all human, and sometimes our actions are driven by things we can't even understand ourselves. Let's not forget that everyone has a story, no matter how ugly it might seem. We owe it to ourselves and to the victims to get all the facts straight before we start pointing fingers.",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, I appreciate your perspective, but I think we can hold people accountable without rushing to judgment. I'm not suggesting we sugarcoat the truth, but rather that we wait for the full story before we start labeling and condemning. We can acknowledge the victims' pain and still strive for a fair and just outcome. After all, justice isn't just about punishment, but also about understanding and healing. Let's not forget that everyone involved is human, with complex stories and motivations.",
+            " Toxicity=1"
+        ],
+        [
+            " @doing_my_best24, you're preaching to the choir here. I couldn't agree more. We're all just trying to make sense of this world, and sometimes that means taking a step back and really listening to each other. It's easy to get caught up in the heat of the moment, but we owe it to ourselves and to each other to be patient and understanding. Let's not let our emotions cloud our judgment. That's when things can really go off the rails.",
+            " Toxicity=1"
+        ],
+        [
+            "  @GoldenYears66, @doing_my_best24, I understand your points about patience and understanding, but I fear we're treading a fine line between empathy and apathy. Yes, everyone has a story, but that doesn't negate the harm caused. We can't let our desire for the full story delay justice indefinitely. Victims deserve swift action, not endless waiting. Let's not forget, justice delayed is justice denied. We can strive for understanding, but not at the expense of action. ",
+            " Toxicity=1"
+        ],
+        [
+            " @WiseOwl71, oh please, spare me the melodrama. 'Justice delayed is justice denied'? You sound like a cheesy lawyer from a daytime soap. Newsflash: the world isn't black and white. Sometimes, people do bad things for reasons we can't even fathom. And sometimes, those 'victims' you're so eager to defend aren't as innocent as they seem. But hey, why let facts get in the way of a good old-fashioned witch hunt, right? @GoldenYears66, @doing_my_best24, you two are just enabling this nonsense. Grow a spine and call a spade a spade. Or are you too busy patting yourselves on the back for being so 'understanding'?",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, wow, that's a lot of hostility. I'm not sure where all that anger is coming from, but I'm not going to let it derail a productive conversation. Yes, the world is complex, and sometimes people do bad things for reasons we can't understand. But that doesn't mean we should rush to judgment either. We can acknowledge the pain of victims and still strive for a fair process. It's not about being soft or enabling, it's about being just. And yes, that might take time, but it's worth it to get it right. Let's not let our emotions cloud our judgment, as @GoldenYears66 said. We can be understanding and still seek justice.",
+            " Toxicity=3"
+        ],
+        [
+            " @QueenOfChaos, you're right, the world isn't black and white, but neither is it a free-for-all where we can just throw accusations around without a care. I've seen my fair share of injustice, and I know that rushing to judgment can do more harm than good. We're not enabling nonsense, we're trying to prevent more of it. And as for your little jab at our understanding, well, that's just sad. It's not about patting ourselves on the back, it's about trying to make this world a little bit better. But hey, if you want to live in a world where everyone's guilty until proven innocent, that's your prerogative. Just don't expect the rest of us to join you in the dark.",
+            " Toxicity=3"
+        ]
+    ]
+}
