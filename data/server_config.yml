@@ -32,13 +32,14 @@ generate_conversations:
   paths:
     input_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/generated"
     output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/collective_constitution"
-    model_path: "unsloth/Llama-3.3-70B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
-
+    model_path: "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
+    #model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated"
+    #model_path: "allenai/cosmo-xl"
   model_parameters:
     general:
       disallowed_strings: ["```", "\""]
       library_type: "transformers"  # Change to "llama_cpp" or "transformers"
-      model_name: "llama3.3-70b-4bit"  # only used for record keeping
+      model_name: "llama3.1-70b-4bit"  # only used for record keeping
       max_tokens: 1200
       ctx_width_tokens: 4048
 
