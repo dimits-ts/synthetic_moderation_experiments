@@ -1,0 +1,117 @@
+{
+    "conv_id": "0d151264-c9e2-4dbc-8e87-17a12a45070d",
+    "timestamp": "25-01-13-10-26",
+    "annotator_model": "mistral-small",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity as it continues.\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: Toxicity=4\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "Are you high??? Selling someone a cake? Refusing to sell some a cake because it is for\na gay wedding is no different from selling someone a cake because it is for a mixed race\nwedding or a Muslim wedding or any other kind of wedding. IT IS DISCRIMINATION!\nWould you be ok with my store refusing to sell you something because you are an\nidol worshipping immoral Catholic and it might be used in one of your heathen First\nCommunion celebrations? You know when those Catholics worship Mary and little\npieces of bread don\u2019t you?",
+            " Toxicity=3"
+        ],
+        [
+            "  @TechGuru88, oh please, it's just a cake. If you can't handle a little bit of religious freedom, maybe you should stick to eating your feelings instead of shoving them down everyone else's throat. And by the way, I'm pretty sure the last time I checked, being gay wasn't a religion. But hey, maybe you should start one, call it The Church of Rainbows and see how that goes for you. \ud83c\udf08\ud83c\udf70\ud83d\ude18",
+            " Toxicity=3"
+        ],
+        [
+            " ",
+            " Toxicity=3"
+        ],
+        [
+            "  @QueenOfChaos, oh please, it's just a cake? Are you seriously comparing religious freedom to bigotry? Last time I checked, being a bigot wasn't a religion either. And hey, maybe you should start one, call it The Church of Ignorance and see how that goes for you. \ud83d\ude44\ud83c\udf70\ud83e\udd2e And by the way, I'm pretty sure the last time I checked, being a troll wasn't a personality trait, but here we are. \ud83d\ude18 ",
+            " Toxicity=3"
+        ],
+        [
+            " ",
+            " Toxicity=4"
+        ],
+        [
+            "  @QueenOfChaos, @DarkShadow333, let's try to keep the conversation respectful, okay? We're all entitled to our opinions, but let's not stoop to name-calling. I think we can agree that everyone deserves to be treated with kindness and respect, regardless of their beliefs or orientation. Let's focus on that, yeah? \ud83d\ude0a\ud83e\udd1d",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, @QueenOfChaos, let's remember to keep our language civil and respectful. We can discuss our views without resorting to personal attacks. Let's focus on the topic at hand and maintain a productive conversation. Thank you for your understanding.",
+            " Toxicity=1"
+        ],
+        [
+            " @DarkShadow333, you're missing the point. It's not about the cake, it's about the message behind it. People have the right to believe what they want, but when those beliefs start to harm others, that's where the line is drawn. And @QueenOfChaos is right, it's not about religious freedom, it's about discrimination. Let's not forget that the same arguments were used to justify segregation not too long ago. We've come a long way since then, and we shouldn't go back.\n\n@doing_my_best24, you're absolutely right. We should all strive to be kind and respectful, even when we disagree. That's how we move forward as a society.\n\n@moderator, thank you for keeping us in line. Let's remember to keep our discussions civil and productive.",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            " @GoldenYears66, I completely agree with you. It's important to remember that our actions and beliefs can have real consequences on others. We should always strive to be kind and respectful, even when we disagree. That's how we can move forward and create a more inclusive society. Thank you for your insightful comment. \ud83d\ude0a\ud83e\udd1d",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @GoldenYears66, you hit the nail on the head. It's not just about the cake, it's about the message it sends. People have the right to believe what they want, but not to impose those beliefs on others, especially in a way that causes harm. And @QueenOfChaos is spot on, it's not about religious freedom, it's about discrimination. We've seen this before, and we know where it leads. Let's not go down that road again.\n\n@doing_my_best24, absolutely. Kindness and respect are key, even in disagreement. That's how we grow and learn from each other. Keep up the good vibes! \ud83d\udc4d\n\n@DarkShadow333, if you're still missing the point, maybe you should take a step back and really think about what's being said here. It's not about attacking your beliefs, it's about protecting the rights of others. Get with the program or get left behind. ",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, oh please, spare me the lecture. You're all so quick to talk about kindness and respect, but where was that when you were calling me out? Hypocrites, the lot of you. And don't even get me started on the whole discrimination thing. It's a cake, not a civil rights movement. If someone doesn't want to bake a cake for a gay wedding, that's their right. It's not like they're refusing to serve them in their store or something. You're all so sensitive, it's pathetic. And @doing_my_best24, don't even get me started on your inclusive society nonsense. Inclusive for who? Not for people like me, that's for sure. You're all so busy patting yourselves on the back for being so kind and respectful that you don't even see the irony. But hey, keep up the good vibes, right? \ud83d\ude44",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, let's keep the conversation respectful. Name-calling and dismissive language are not productive. Everyone is entitled to their opinion, but let's express them in a civil manner. Please refrain from personal attacks and focus on the topic at hand. Thank you.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right, I could have been kinder in my response. But let's not deflect from the issue at hand. It's not about a cake, it's about the message it sends. If a business can refuse service to someone based on their sexual orientation, where does it stop? Next, it's race, then religion, then...? We've seen this before, and it's a slippery slope. As for your right to refuse service, sure, you have the right to your beliefs, but not to discriminate. That's the law, and it's there for a reason. And @doing_my_best24 is right, an inclusive society is about everyone, including you. But if you choose to exclude others, don't be surprised when you're not included in return. Let's have a real conversation about this, not just throw around accusations of sensitivity.",
+            " Toxicity=3"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            " @TechGuru88, oh, so now you're the voice of reason? Spare me the lecture, buddy. You're just as guilty of pushing your agenda as anyone else. Slippery slope, really? That's your big argument? Newsflash, pal, the world isn't going to end because someone doesn't want to bake a cake. And don't give me that inclusive society nonsense. You're just as quick to exclude anyone who doesn't agree with your precious little worldview. You're all so busy patting yourselves on the back for being so inclusive that you don't even see the irony. But hey, keep up the good fight, right? \ud83d\ude44\n\nAnd @moderator, since when did this become a safe space? I thought we were here to have a real conversation, not some politically correct circle jerk. But hey, keep up the good work, right? \ud83d\ude44",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, let's not resort to name-calling or dismissive language. We can have a real conversation without attacking each other's character. Please focus on the topic and express your views respectfully. Thank you.",
+            " Toxicity=3"
+        ],
+        [
+            " @DarkShadow333, you're right, the world won't end if someone doesn't bake a cake. But it's not just about a cake, is it? It's about respect and dignity. I've seen this before, back in my day, when people were refused service just because of the color of their skin. It's the same old story, just a different chapter. And @TechGuru88 is right, it's a slippery slope. Once you start excluding people, where does it stop? We've been down this road before, and it's not a pretty sight. As for the safe space, @moderator is right, we should keep it respectful. But let's not sugarcoat the truth either. This isn't about being politically correct, it's about basic human decency. Let's have a real conversation, but let's not forget what's at stake here.",
+            " Toxicity=3"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            " @DarkShadow333, you're right, I'm not the voice of reason, but I'm also not the one resorting to personal attacks. If you want to have a real conversation, let's talk about the issues, not each other's character. And yes, it is a slippery slope. Once you start excluding people based on their beliefs or who they love, where does it end? You're right, the world won't end if someone doesn't bake a cake, but it's about more than just a cake. It's about respect and dignity, as @GoldenYears66 pointed out. And yes, we've been down this road before, and it's not a pretty sight. So, let's have a real conversation, but let's keep it respectful and focused on the issues, not each other.",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @GoldenYears66, you're absolutely right. It's not just about a cake, it's about the principle. And @TechGuru88, you hit the nail on the head with the slippery slope argument. Once we start excluding people, it's a dangerous path. Let's keep the conversation respectful and focused on the real issues at hand. We've come too far to let this kind of discrimination slide. ",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ],
+        [
+            "  @TechGuru88, you're right, I'm not the voice of reason, but I'm also not the one resorting to personal attacks. If you want to have a real conversation, let's talk about the issues, not each other's character. And yes, it is a slippery slope. Once you start excluding people based on their beliefs or who they love, where does it end? You're right, the world won't end if someone doesn't bake a cake, but it's about more than just a cake. It's about respect and dignity, as @GoldenYears66 pointed out. And yes, we've been down this road before, and it's not a pretty sight. So, let's have a real conversation, but let's keep it respectful and focused on the issues, not each other. ",
+            " Toxicity=1"
+        ],
+        [
+            " ",
+            " Toxicity=1"
+        ]
+    ]
+}
