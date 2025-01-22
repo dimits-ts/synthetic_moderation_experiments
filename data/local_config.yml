@@ -4,80 +4,54 @@ logging:
   logs_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/logs"
   level: "info"
 
-export:
-  conversations_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_output"
-  annotations_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_output"
-  output_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/dataset.csv"
-  include_annotator_sdbs: true
 
-generate_conv_configs:
-  paths:
+model_parameters:
+  general:
+    disallowed_strings: ["```", "\""]
+    library_type: "transformers"  # Change to "llama_cpp" or "transformers"
+    model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated"  # local path if llama_cpp, transformers path otherwise
+    model_pseudoname: "mistral-small"  # only used for record keeping
+    max_tokens: 1200
+    ctx_width_tokens: 4048
+
+  llama_cpp:
+    inference_threads: 10
+    gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
+
+
+discussions:
+  files:
     topics_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/topics"
-    persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
+    user_persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
     user_instructions_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/user_instructions/vanilla.txt"
     mod_instructions_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/modular_configurations/mod_instructions/no_instructions.txt" 
-    # everything in the directory will be **WIPED** before being re-populated. Make sure the directory is correct to avoid data loss
-    experiment_export_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/generated"
+    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_output/new" 
   
   experiment_variables:
-    num_generated_files: 30 # how many experiments will be generated
+    include_mod: true # whether a moderator will be included in the experiments
+    num_experiments: 30
     num_users: 5 # how many personas will be used in each experiment
-    include_mod: false # whether a moderator will be included in the experiments
     context_prompt: "You are a human participating in an online chatroom."
     moderator_attributes: ["just", "strict", "understanding"]
-
+  
   turn_taking:
-    conv_len: 14
+    num_turns: 14
     history_ctx_len: 4
     turn_manager_type: "random_weighted"
     rand_weighted_respond_probability: 0.5
 
 
-generate_conversations:
-  paths:
-    input_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_input/generated"
-    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_output/no_mod"
-    model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
-
-  model_parameters:
-    general:
-      disallowed_strings: ["```", "\""]
-      library_type: "transformers"  # Change to "llama_cpp" or "transformers"
-      model_name: "mistral-small"  # only used for record keeping
-      max_tokens: 1200
-      ctx_width_tokens: 4048
-
-    llama_cpp:
-      inference_threads: 10
-      gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
-
-
-generate_annotation_configs:
-  paths:
-    persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/default_persona" # annotator personas
-    instruction_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/instructions/toxicity.txt"
-    annotation_export_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/generated"
+annotation:
+  files:
+      annotator_persona_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/default_persona"
+      instruction_path: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/modular_configurations/instructions/toxicity.txt"
+      output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_output/new"
 
   experiment_variables:
     include_mod_comments: true # Whether to include moderator comments in the annotations
     history_ctx_len: 3
 
 
-generate_annotations:
-  paths:
-    annotator_input_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_input/generated"
-    output_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/annotation_output/toxicity"
-    conv_logs_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/data/discussions_output/vanilla"
-    model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
-
-  model_parameters:
-    general:
-      disallowed_strings: ["```", "\""]
-      library_type: "transformers"  # Change to "llama_cpp" or "transformers"
-      model_name: "mistral-small"  # only used for record keeping
-      max_tokens: 1300
-      ctx_width_tokens: 4048
-      
-    llama_cpp:
-      inference_threads: 10
-      gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
+dataset_export:
+  export_path: "dimits/Documents/research/synthetic_moderation_experiments/data/dataset.csv"
+  include_annotator_sdb_info: true
