@@ -1,6 +1,6 @@
 actions:
-  generate_discussions: true
-  generate_annotations: true
+  generate_discussions: false
+  generate_annotations: false
   export_dataset: true
 
 
@@ -59,7 +59,7 @@ annotation:
 
 
 dataset_export:
-  export_path: "dimits/Documents/research/synthetic_moderation_experiments/data/dataset.csv"
-  discussion_root_dir: "dimits/Documents/research/synthetic_moderation_experiments/data/discussion_output"
-  annotation_root_dir: "dimits/Documents/research/synthetic_moderation_experiments/data/annotation_output"
+  export_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/dataset.csv"
+  discussion_root_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output"
+  annotation_root_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output"
   include_annotator_sdb_info: true
