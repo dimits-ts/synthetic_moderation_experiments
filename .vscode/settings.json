@@ -8,5 +8,17 @@
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": true,
-    "python.languageServer": "Jedi"
+    "python.languageServer": "Jedi",
+    "autoDocstring.docstringFormat": "sphinx",
+    "cSpell.words": [
+        "annot",
+        "pseudoname",
+        "sdbs"
+    ],
+    "autoDocstring.startOnNewLine": true,
+    "pylint.args": [
+        "--disable=C0415",
+        "--disable=E0401",
+        "--disable=W1203"
+    ]
 }
