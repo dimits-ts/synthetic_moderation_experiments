@@ -1,6 +1,6 @@
 actions:
   generate_discussions: false
-  generate_annotations: false
+  generate_annotations: true
   export_dataset: true
 
 
@@ -31,7 +31,7 @@ discussions:
     user_persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/personas"
     user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
     mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/no_instructions.txt" 
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/new" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/collective_constitution" 
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
