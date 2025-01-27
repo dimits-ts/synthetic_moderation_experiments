@@ -35,13 +35,13 @@ discussions:
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
-    num_experiments: 1
+    num_experiments: 15
     num_users: 5 # how many personas will be used in each experiment
     context_prompt: "You are a human participating in an online chatroom."
     moderator_attributes: ["just", "strict", "understanding"]
   
   turn_taking:
-    num_turns: 3
+    num_turns: 14
     history_ctx_len: 4
     turn_manager_type: "random_weighted"
     respond_probability: 0.5 # only applicable for random_weighted turn manager type 
