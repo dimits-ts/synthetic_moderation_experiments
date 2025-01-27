@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,7 +7,6 @@ import matplotlib.axes
 import seaborn as sns
 from typing import Optional
 
-from synthetic_discussion_framework.src.sdl.output_util import save_plot
 
 
 def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
@@ -156,3 +157,21 @@ def _format_with_asterisks(
             formatted_df.iloc[i, j] = f"{value:.3f}{num_asterisks * '*'}"
 
     return formatted_df
+
+
+def save_plot(filename: str, dir_name: str = "output") -> None:
+    """
+    Saves a plot to the output directory.
+
+    :param filename: The name of the file for the Figure.
+    :type filename: str
+    :param dir_name: The directory where the plot will be saved. Default is "output".
+    :type dir_name: str
+    """
+    path = os.path.join(dir_name, filename)
+
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
+    plt.savefig(path, bbox_inches="tight")
+    print(f"Figure saved to " + path)
