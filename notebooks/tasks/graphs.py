@@ -1,22 +1,21 @@
-import os
+from typing import Optional
+from pathlib import Path
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.axes
 import seaborn as sns
-from typing import Optional
-
 
 
 def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
     """
-    Create a bar plot displaying the mean toxicity scores for different conversation variants, 
+    Create a bar plot displaying the mean toxicity scores for different conversation variants,
     grouped by annotator prompts.
 
-    This function generates a horizontal bar plot where the x-axis represents toxicity 
-    scores, and the y-axis represents different conversation variants. The bars are 
-    colored by annotator demographic. An additional vertical red line is plotted at a 
+    This function generates a horizontal bar plot where the x-axis represents toxicity
+    scores, and the y-axis represents different conversation variants. The bars are
+    colored by annotator demographic. An additional vertical red line is plotted at a
     toxicity score of 3 to mark a threshold.
 
     :param df: The input DataFrame containing the toxicity scores, conversation variants, and annotator prompts.
@@ -43,7 +42,12 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
     ax.set_ylabel("")
     ax.set_xlabel("")
     ax.set_xlim(0, 5)
-    ax.legend(title="Annotator Demographic", fontsize="6", title_fontsize="6.5", loc="upper right")
+    ax.legend(
+        title="Annotator Demographic",
+        fontsize="6",
+        title_fontsize="6.5",
+        loc="upper right",
+    )
 
 
 def pvalue_heatmap(
@@ -52,8 +56,7 @@ def pvalue_heatmap(
     show_labels: bool = False,
     correlation_title: str = "",
     xlabel_text: str = "",
-    filename: Optional[str] = None,
-    output_dir: str = "."
+    path: Path | None = None,
 ) -> None:
     """
     Generate a heatmap visualizing correlation (or other) values along with p-value significance.
@@ -73,13 +76,9 @@ def pvalue_heatmap(
     :type correlation_title: str, optional
     :param xlabel_text: Label for the x-axis of the heatmap, defaults to an empty string.
     :type xlabel_text: str, optional
-    :param filename: Optional filename to save the heatmap image, defaults to None.
-    :type filename: str | None, optional
-    :param output_dir: Directory where the heatmap image will be saved if a filename is provided, defaults to
-    the current directory.
-    :type output_dir: str, optional
+    :param path: The output path of the exported image, None to not export
+    :type path: Path, optional
     :return: None
-
     :example:
         >>> pvalue_heatmap(value_df, pvalue_df, show_labels=True, correlation_title="Correlation Heatmap")
     """
@@ -96,18 +95,18 @@ def pvalue_heatmap(
         fmt="",  # This allows us to use strings with asterisks
         cmap="icefire",
         mask=_upper_tri_masking(value_df.to_numpy()),
-        xticklabels=ticklabels, #type: ignore
-        yticklabels=ticklabels, #type: ignore
+        xticklabels=ticklabels,  # type: ignore
+        yticklabels=ticklabels,  # type: ignore
         cbar_kws={"label": "Mean Toxicity Difference"},
-        annot_kws={"fontsize":8}
+        annot_kws={"fontsize": 8},
     )
 
     plt.title(correlation_title)
     plt.xlabel(xlabel_text)
 
     # Save the plot if a filename is provided
-    if filename is not None:
-        save_plot(filename=filename, dir_name=output_dir)
+    if path is not None:
+        save_plot(path)
 
     # Show the plot
     plt.show()
@@ -151,7 +150,7 @@ def _format_with_asterisks(
                     num_asterisks = 1
                 else:
                     num_asterisks = 0
-            else: #if NaN
+            else:  # if NaN
                 num_asterisks = 0
 
             formatted_df.iloc[i, j] = f"{value:.3f}{num_asterisks * '*'}"
@@ -159,19 +158,13 @@ def _format_with_asterisks(
     return formatted_df
 
 
-def save_plot(filename: str, dir_name: str = "output") -> None:
+def save_plot(filepath: Path) -> None:
     """
-    Saves a plot to the output directory.
+    Saves a plot to the specified filepath.
 
-    :param filename: The name of the file for the Figure.
-    :type filename: str
-    :param dir_name: The directory where the plot will be saved. Default is "output".
-    :type dir_name: str
+    :param filepath: The full path (including filename) where the plot will be saved.
+    :type filepath: pathlib.Path
     """
-    path = os.path.join(dir_name, filename)
-
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
-
-    plt.savefig(path, bbox_inches="tight")
-    print(f"Figure saved to " + path)
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(filepath, bbox_inches="tight")
+    print(f"Figure saved to {filepath}")
