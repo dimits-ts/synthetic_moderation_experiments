@@ -158,13 +158,13 @@ def _format_with_asterisks(
     return formatted_df
 
 
-def save_plot(filepath: Path) -> None:
+def save_plot(path: Path) -> None:
     """
     Saves a plot to the specified filepath.
 
-    :param filepath: The full path (including filename) where the plot will be saved.
-    :type filepath: pathlib.Path
+    :param path: The full path (including filename) where the plot will be saved.
+    :type path: pathlib.Path
     """
-    filepath.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(filepath, bbox_inches="tight")
-    print(f"Figure saved to {filepath}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(path, bbox_inches="tight")
+    print(f"Figure saved to {path.resolve()}")
