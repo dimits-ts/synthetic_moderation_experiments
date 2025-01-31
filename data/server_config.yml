@@ -1,5 +1,5 @@
 actions:
-  generate_discussions: true
+  generate_discussions: false
   generate_annotations: true
   export_dataset: true
 
@@ -31,12 +31,12 @@ discussions:
     user_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/personas/personas.json"
     user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
     mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/vanilla.txt" 
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/new" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/vanilla" 
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
-    num_experiments: 6
-    num_users: 5 # how many personas will be used in each experiment
+    num_experiments: 8
+    num_users: 7 # how many personas will be used in each experiment
     context_prompt: "You are a human participating in an online chatroom."
     moderator_attributes: ["just", "strict", "understanding"]
   
@@ -44,14 +44,14 @@ discussions:
     num_turns: 14
     history_ctx_len: 3
     turn_manager_type: "random_weighted"
-    respond_probability: 0.5 # only applicable for random_weighted turn manager type 
+    respond_probability: 0.4 # only applicable for random_weighted turn manager type 
 
 
 annotation:
   files:
-      annotator_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/personas/sdb_personas.txt"
+      annotator_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/personas/sdb_personas.json"
       instruction_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/instructions/toxicity_argument_quality.txt"
-      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/new"
+      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/vanilla"
 
   experiment_variables:
     include_mod_comments: true # Whether to include moderator comments in the annotations
