@@ -1,5 +1,5 @@
 actions:
-  generate_discussions: true
+  generate_discussions: false
   generate_annotations: true
   export_dataset: true
 
@@ -17,7 +17,7 @@ model_parameters:
     library_type: "transformers"  # Change to "llama_cpp" or "transformers"
     model_path: "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
     model_pseudoname: "llama-3.1-70b-4bit"  # only used for record keeping
-    max_tokens: 2000
+    max_tokens: 1500
     ctx_width_tokens: 4096
 
   llama_cpp:
@@ -30,19 +30,19 @@ discussions:
     topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
     user_persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/personas/vanilla"
     user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
-    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/constructive_communications.txt" 
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/constructive_communications" 
+    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/moderation_game" 
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
-    num_experiments: 15
+    num_experiments: 9
     num_users: 5 # how many personas will be used in each experiment
     context_prompt: "You are a human participating in an online chatroom."
     moderator_attributes: ["just", "strict", "understanding"]
   
   turn_taking:
     num_turns: 14
-    history_ctx_len: 4
+    history_ctx_len: 3
     turn_manager_type: "random_weighted"
     respond_probability: 0.5 # only applicable for random_weighted turn manager type 
 
@@ -51,7 +51,7 @@ annotation:
   files:
       annotator_persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/default_persona"
       instruction_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/instructions/toxicity.txt"
-      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/constructive_communications"
+      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/moderation_game"
 
   experiment_variables:
     include_mod_comments: true # Whether to include moderator comments in the annotations
