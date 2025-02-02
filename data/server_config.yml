@@ -1,79 +1,64 @@
+actions:
+  generate_discussions: true
+  generate_annotations: true
+  export_dataset: true
+
+
 logging:
   print_to_terminal: true
   write_to_file: true
   logs_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/logs"
-  level: "info"
+  level: "debug"
 
 
-generate_conv_configs:
-  paths:
-    topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/topics"
-    persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/personas"
-    user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/user_instructions/vanilla.txt"
-    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/modular_configurations/mod_instructions/collective_constitution.txt" 
-    # everything in the directory will be **WIPED** before being re-populated. Make sure the directory is correct to avoid data loss
-    experiment_export_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/generated"
+model_parameters:
+  general:
+    disallowed_strings: ["```", "\""]
+    library_type: "transformers"  # Change to "llama_cpp" or "transformers"
+    model_path: "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
+    model_pseudoname: "llama-3.1-70b-4bit"  # only used for record keeping
+    max_tokens: 1500
+    ctx_width_tokens: 4096
+
+  llama_cpp:
+    inference_threads: 10
+    gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
+
+
+discussions:
+  files:
+    topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
+    user_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/personas/personas.json"
+    user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
+    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/moderation_game" 
   
   experiment_variables:
-    num_generated_files: 30 # how many experiments will be generated
-    num_users: 5 # how many personas will be used in each experiment
     include_mod: true # whether a moderator will be included in the experiments
+    num_experiments: 6
+    num_users: 7 # how many personas will be used in each experiment
     context_prompt: "You are a human participating in an online chatroom."
     moderator_attributes: ["just", "strict", "understanding"]
-
+  
   turn_taking:
-    conv_len: 14
-    history_ctx_len: 4
+    num_turns: 14
+    history_ctx_len: 3
     turn_manager_type: "random_weighted"
-    rand_weighted_respond_probability: 0.5
+    respond_probability: 0.4 # only applicable for random_weighted turn manager type 
 
 
-generate_conversations:
-  paths:
-    input_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/generated"
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/collective_constitution"
-    model_path: "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
-    #model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated"
-    #model_path: "allenai/cosmo-xl"
-  model_parameters:
-    general:
-      disallowed_strings: ["```", "\""]
-      library_type: "transformers"  # Change to "llama_cpp" or "transformers"
-      model_name: "llama3.1-70b-4bit"  # only used for record keeping
-      max_tokens: 1200
-      ctx_width_tokens: 4048
-
-    llama_cpp:
-      inference_threads: 10
-      gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
-
-
-generate_annotation_configs:
-  paths:
-    persona_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/modular_configurations/default_persona" # annotator personas
-    instruction_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/modular_configurations/instructions/toxicity.txt"
-    annotation_export_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/generated"
+annotation:
+  files:
+      annotator_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/personas/sdb_personas.json"
+      instruction_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/instructions/toxicity_argument_quality.txt"
+      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/moderation_game"
 
   experiment_variables:
     include_mod_comments: true # Whether to include moderator comments in the annotations
     history_ctx_len: 3
 
 
-generate_annotations:
-  paths:
-    annotator_input_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/generated"
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/toxicity"
-    conv_logs_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/collective_constitution"
-    model_path: "byroneverson/Mistral-Small-Instruct-2409-abliterated" # local path if llama_cpp, transformers path otherwise
-
-  model_parameters:
-    general:
-      disallowed_strings: ["```", "\""]
-      library_type: "transformers"  # Change to "llama_cpp" or "transformers"
-      model_name: "mistral-small"  # only used for record keeping
-      max_tokens: 1300
-      ctx_width_tokens: 4048
-      
-    llama_cpp:
-      inference_threads: 10
-      gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
+dataset_export:
+  export_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/dataset.csv"
+  discussion_root_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output"
+  annotation_root_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output"
