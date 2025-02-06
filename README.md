@@ -1,32 +1,51 @@
-# Synthetic Moderation Experiments
+# Evaluating Online Moderation Strategies Through Synthetic Discussion Generation
 
-Synthetic dataset generation using the [Synthetic Discussion Framework (SDF)](https://github.com/dimits-ts/synthetic_discussion_framework). Experiments exploring the effect of various LLM moderation strategies in online conversations.
+Synthetic dataset generation using the [SynDisco](https://github.com/dimits-ts/synthetic_discussion_framework) library. Experiments exploring the effect of various LLM moderation strategies in online conversations.
+
 
 ## Usage
 
 To download the code, run `git clone --recurse-submodules -j8 https://github.com/dimits-ts/synthetic_moderation_experiments.git`
 
-Usage instructions can be found in the [SDF's documentation](https://github.com/dimits-ts/synthetic_discussion_framework/blob/master/README.md).
+
+### Running synthetic experiments
+
+To generate your own experiments first configure your master configuration file ([example](data/server_config.yml)).
+
+Then point the fields on the master configuration file, to this project's configurations (see **Project Structure**) or create your own! ([example discussion configurations](data/discussions_input/), [example annotation configurations](data/annotation_input/))
+
+Lastly, execute:
+```bash
+cd syntetic_discussions_framework/src
+python run.py --config_file "../../data/server_config.yml"
+```
+
+For more information, visit [SynDisco's documentation](https://github.com/dimits-ts/synthetic_discussion_framework/blob/master/README.md).
+
+### Running analysis on the exported dataset
+
+To run the code for analysis and graph generation, run [`notebooks/toxicity_analysis.ipynb`](notebooks/toxicity_analysis.ipynb)
+
 
 ### Environment
 
-We use the environment outlined in the [SDF's documentation](https://github.com/dimits-ts/synthetic_discussion_framework/blob/master/README.md)
+TODO
 
-### Setting up the LLM
-
-Run [`src/scripts/download_model.sh`](src/scripts/download_model.sh) in order to download the model used to run the framework in the correct directory (~5 GB of storage needed). By default, the model used is the `llama-3.8b-instruct.gguf`, but any model supported by the `llama_cpp` library may be used. A complete list of models can be found [here](https://github.com/ggerganov/llama.cpp).
 
 ## Project Structure
 
-* `data/`
-  * `data/annotation_input/` contains the configuration files for the annotation jobs
-  * `data/generated_discussions_input/` contains the configuration files for the synthetic conversation experiments
-  * `data/generated_discussions_output/` contains the logs (dataset) of the executed synthetic conversations
-  * `data/annotation_output/` contains the logs (dataset) of the executed synthetic annotation of the synthetic conversations
+* [`data/`](data/) input and output data of the experiments
+  * [`data/dataset.csv`](data/dataset.csv) the synthetic dataset (includes discussions and annotations)
+  * [`data/server_config.yml`](data/server_config.yml) the master configuration file
+  * [`data/annotation_input/`](data/annotation_output/) configuration files for the synthetic annotation jobs
+  * [`data/annotation_output/`](data/annotation_output/) annotation output (JSON format)
+  * [`data/discussions_input/`](data/discussions_input/) configuration files for the synthetic discussion jobs
+  * [`data/discussions_output/`](`data/discussions_output/`) logs of the executed synthetic discussions (JSON format)
 
-* `scripts/`
-  * `scripts/download_model.sh` downloads the specified model (see above) in the standard directory
-  * `scripts/*_personalized.sh` experiment-specific configurations of the analogous SDF scripts
+* [`notebooks/`](`notebooks/`) contains the notebook responsible for analyzing the experiments
+  * [`notebooks/toxicity_analysis.ipynb`](notebooks/toxicity_analysis.ipynb) dataset analysis
+  * [`notebooks/tasks/`](notebooks/tasks/) contains notebook-specific code
 
-* `models/` - auto-generated directory containing the LLMs
-* `logs/` - auto-generated directory containing execution logs
+* `synthetic_discussion_framework/` the [SynDisco](https://github.com/dimits-ts/synthetic_discussion_framework) framework
+
+* [`graphs/`](graphs/) exported graphs from [`notebooks/toxicity_analysis.ipynb`](notebooks/toxicity_analysis.ipynb)
