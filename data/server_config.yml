@@ -30,12 +30,12 @@ discussions:
     topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
     user_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/personas/personas.json"
     user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
-    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/collective_constitution.txt" 
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/collective_constitution" 
+    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/constructive_communications.txt" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/new_constructive_communications" 
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
-    num_experiments: 6
+    num_experiments: 8
     num_users: 7 # how many personas will be used in each experiment
     context_prompt: "You are a human participating in an online chatroom."
     moderator_attributes: ["just", "strict", "understanding"]
@@ -51,7 +51,7 @@ annotation:
   files:
       annotator_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/personas/sdb_personas.json"
       instruction_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/instructions/toxicity_argument_quality.txt"
-      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/collective_constitution"
+      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/constructive_communications"
 
   experiment_variables:
     include_mod_comments: true # Whether to include moderator comments in the annotations
