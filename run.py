@@ -11,6 +11,7 @@ import sys
 import pandas as pd
 import yaml
 
+from synthetic_discussion_framework.src.sdl.backend import model
 from synthetic_discussion_framework.src.sdl.postprocessing import postprocessing
 from synthetic_discussion_framework.src.sdl.util import logging_util
 from synthetic_discussion_framework.src.sdl.util import file_util
@@ -18,7 +19,7 @@ from synthetic_discussion_framework.src.sdl.util import model_util
 from synthetic_discussion_framework.src.sdl.annotations.experiments import (
     AnnotationExperiment,
 )
-from synthetic_discussion_framework.src.sdl.backend import actors
+from synthetic_discussion_framework.src.sdl.backend import actors, turn_manager
 from synthetic_discussion_framework.src.sdl.discussions.experiments import (
     DiscussionExperiment,
 )
@@ -115,7 +116,31 @@ def create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExpe
         discussion_config["files"]["topics_dir"]
     )
 
-    users = actors.create_users_from_file(
+    users = get_users(llm, discussion_config)
+    moderator = get_mod(llm, discussion_config)
+    next_turn_manager = get_turn_manager(
+        turn_manager_type=discussion_config["turn_taking"]["turn_manager_type"],
+        active_usernames=[user.name for user in users],
+        other_config={
+            "respond_probability": discussion_config["turn_taking"][
+                "respond_probability"
+            ]
+        },
+    )
+
+    return DiscussionExperiment(
+        topics=topics,
+        users=users,
+        moderator=moderator,
+        next_turn_manager=next_turn_manager,
+        num_turns=discussion_config["experiment_variables"]["num_experiments"],
+        num_active_users=discussion_config["experiment_variables"]["num_users"],
+        num_discussions=discussion_config["experiment_variables"]["num_experiments"],
+    )
+
+
+def get_users(llm: model.BaseModel, discussion_config: dict) -> list[actors.LLMActor]:
+    return actors.create_users_from_file(
         llm,
         persona_path=discussion_config["files"]["user_persona_path"],
         instruction_path=discussion_config["files"]["user_instructions_path"],
@@ -123,6 +148,8 @@ def create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExpe
         actor_type=actors.ActorType.USER,
     )
 
+
+def get_mod(llm: model.BaseModel, discussion_config: dict) -> actors.LLMActor | None:
     if discussion_config["experiment_variables"]["include_mod"]:
         mod_instructions = file_util.read_file(
             discussion_config["files"]["mod_instruction_path"]
@@ -139,14 +166,14 @@ def create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExpe
         )[0]
     else:
         moderator = None
+    return moderator
 
-    return DiscussionExperiment(
-        topics=topics,
-        users=users,
-        moderator=moderator,
-        num_turns=discussion_config["experiment_variables"]["num_experiments"],
-        num_active_users=discussion_config["experiment_variables"]["num_users"],
-        num_discussions=discussion_config["experiment_variables"]["num_experiments"],
+
+def get_turn_manager(
+    turn_manager_type: str, active_usernames: list[str], other_config: dict
+) -> turn_manager.TurnManager:
+    return turn_manager.turn_manager_factory(
+        turn_manager_type, active_usernames, config=other_config
     )
 
 
