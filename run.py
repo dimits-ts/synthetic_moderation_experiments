@@ -67,17 +67,17 @@ def main():
         )
         run_discussion_experiment(
             experiment=discussion_exp,
-            output_dir=yaml_data["discussions"]["files"]["output_dir"],
+            output_dir=Path(yaml_data["discussions"]["files"]["output_dir"]),
         )
 
     if generate_annotations:
         ann_exp = create_annotation_experiment(
-            llm=model_manager.get(), annotation_config=yaml_data["annotations"]
+            llm=model_manager.get(), annotation_config=yaml_data["annotation"]
         )
         run_annotation_experiment(
             ann_exp,
-            discussions_dir=yaml_data["discussions"]["files"]["output_dir"],
-            output_dir=yaml_data["annotation"]["output_dir"],
+            discussions_dir=Path(yaml_data["discussions"]["files"]["output_dir"]),
+            output_dir=Path(yaml_data["annotation"]["files"]["output_dir"]),
         )
 
     if export_dataset:
@@ -117,15 +117,15 @@ def create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExpe
 
     users = actors.create_users_from_file(
         llm,
-        persona_path=discussion_config["files"]["user_persona_path"],
-        instruction_path=discussion_config["files"]["user_instructions_path"],
+        persona_path=Path(discussion_config["files"]["user_persona_path"]),
+        instruction_path=Path(discussion_config["files"]["user_instructions_path"]),
         context=discussion_config["experiment_variables"]["context_prompt"],
         actor_type=actors.ActorType.USER,
     )
 
     if discussion_config["experiment_variables"]["include_mod"]:
         mod_instructions = file_util.read_file(
-            discussion_config["files"]["mod_instruction_path"]
+            discussion_config["files"]["mod_instructions_path"]
         )
         moderator = actors.create_users(
             llm,
@@ -161,8 +161,8 @@ def run_discussion_experiment(
 def create_annotation_experiment(llm, annotation_config: dict) -> AnnotationExperiment:
     annotators = actors.create_users_from_file(
         llm,
-        persona_path=annotation_config["files"]["annotator_persona_path"],
-        instruction_path=annotation_config["files"]["instruction_path"],
+        persona_path=Path(annotation_config["files"]["annotator_persona_path"]),
+        instruction_path=Path(annotation_config["files"]["instruction_path"]),
         context="You are a human annotator",
         actor_type=actors.ActorType.ANNOTATOR,
     )
