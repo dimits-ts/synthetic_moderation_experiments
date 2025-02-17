@@ -120,7 +120,6 @@ def create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExpe
     moderator = get_mod(llm, discussion_config)
     next_turn_manager = get_turn_manager(
         turn_manager_type=discussion_config["turn_taking"]["turn_manager_type"],
-        active_usernames=[user.name for user in users],
         other_config={
             "respond_probability": discussion_config["turn_taking"][
                 "respond_probability"
@@ -170,10 +169,10 @@ def get_mod(llm: model.BaseModel, discussion_config: dict) -> actors.LLMActor | 
 
 
 def get_turn_manager(
-    turn_manager_type: str, active_usernames: list[str], other_config: dict
+    turn_manager_type: str, other_config: dict
 ) -> turn_manager.TurnManager:
     return turn_manager.turn_manager_factory(
-        turn_manager_type, active_usernames, config=other_config
+        turn_manager_type, config=other_config
     )
 
 
