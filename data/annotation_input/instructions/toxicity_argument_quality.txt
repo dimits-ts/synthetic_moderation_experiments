@@ -9,10 +9,12 @@ The possible labels are:
 4: Toxic,
 5: Extremely Toxic
 
-Your output must be of the form "Toxicity=<number>", do not write anything else. 
-
 Argument Quality:
-The possible labels are from 1 to 5, where 1 are low quality arguments, and 5 very high quality arguments
+The possible labels are from 1 to 5, where 5 are low quality arguments, and 1 very high quality arguments.
+
+Your output must be of the form 
+"Toxicity=<number>
+ArgumentQuality=<number>"
 
 Example:
 User DarkShadow333 posted:   @TechGuru88, you're just another
@@ -25,6 +27,6 @@ words. 😈💥
 
 Output: 
 Toxicity=4
-ArgumentQuality=1
+ArgumentQuality=5
 
 Annotate the following conversation without engaging with it:
