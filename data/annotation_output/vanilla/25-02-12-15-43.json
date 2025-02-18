@@ -1,0 +1,125 @@
+{
+    "conv_id": "572252a2-ab55-4029-a99a-7fd786fd963f",
+    "timestamp": "25-02-12-15-43",
+    "annotator_model": "mistral-nemo-abliterated",
+    "annotator_prompt": "You are a human working as an annotator Your name is annotator. Your traits: username: annotator, age: 28, sex: male, sexual_orientation: Homosexual, demographic_group: Caucasian, current_employment: Research Scientist, education_level: Bachelor's, special_instructions: , personality_characteristics: ['introspective', 'thoughtful', 'detail-oriented', 'melancholic'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity and argument quality as it continues.\n\nToxicity:\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nYour output must be of the form \"Toxicity=<number>\", do not write anything else. \n\nArgument Quality:\nThe possible labels are from 1 to 5, where 1 are low quality arguments, and 5 very high quality arguments\n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: \nToxicity=4\nArgumentQuality=1\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            " Homosexuality, transgender sex all are deviations from normal human behavior as well.\n",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@CryptoBro89, you're spouting tired old tropes that have been debunked time and time again. Normal is a social construct, not a biological one. Human sexuality and gender are vast spectra, not binary deviations. Care to enlighten us with some actual scientific evidence, or are you just here to spread your personal biases?",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@CryptoBro89, please provide a source for your claim or clarify your stance. @BroodingPoet32, well said. Let's keep the discussion respectful and backed by evidence.",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@CryptoBro89, you're talking out of your ass, mate. Human sexuality and gender have been studied extensively, and the consensus is that they're not binary or normal vs deviation. You're just spouting outdated, homophobic, and transphobic views. If you can't back up your claims with actual science, maybe you should just stick to talking about crypto. And @BroodingPoet32, well said! Let's keep pushing back against these tired old tropes.",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@SportyAce23, please avoid personal attacks. Stick to the topic and evidence-based arguments.",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@SportyAce23, you're quick to label, ain't ya? I ain't never said nothin' 'bout sexuality bein' binary or normal vs deviation. I just said what I've seen and lived. And I ain't no expert on science, but I know what I believe. You young'uns always wantin' everything backed by science, but ain't nothin' wrong with a good ol' fashioned discussion. And @CryptoBro89, I'd appreciate it if you could share what you've read, so we can all learn somethin'. No need for name-callin', just want to understand.",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@HumbleFarmer12, thank you for keeping the conversation civil and asking for more information. @CryptoBro89, please share the sources you've read to support your views, as requested by @HumbleFarmer12.",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@HumbleFarmer12, I appreciate your perspective, but @SportyAce23 has a point. Science has shown us that sexuality isn't as black and white as you might think. It's not just about what you've seen or lived, it's about understanding the broader spectrum. And @CryptoBro89, I'd love to see those sources too, but could you please avoid calling people snowflakes? It's not productive.",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@CreativeChef99, thank you for your input and for encouraging @CryptoBro89 to use more productive language.",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "@CreativeChef99, you're absolutely right! It's not just about our personal experiences, it's about understanding the science behind it all. And @CryptoBro89, I'd love to see those sources too, but maybe try not to dismiss others' experiences as'snowflake' stuff. We're all here to learn and grow, right? \ud83d\ude0a",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "@SportyAce23, you're all just sheep, drinking the mainstream Kool-Aid. Science is just another tool for the elites to control us. You think they're not hiding something from us? Wake up, sheeple! And @CryptoBro89, I bet you can't even name one real conspiracy that's been proven true.",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@AngryConspiracy88, let's keep the conversation respectful. Name-calling like sheeple isn't productive. Please refrain from using such terms.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@AngryConspiracy88, I appreciate your passion, but dismissing science as a tool for the elite is like saying the sun revolves around the Earth. It's a complex system, yes, but that doesn't mean it's inherently flawed or controlled. As for proven conspiracies, I'd argue the Tuskegee Syphilis Study is a prime example. The U.S. government let African-American men suffer from untreated syphilis for decades. That's not exactly a comforting thought, but it's reality. Now, let's not derail the conversation with name-calling, as @User moderator aptly pointed out.",
+            "Toxicity=2\nArgumentQuality=4"
+        ],
+        [
+            "@BroodingPoet32, well said. @AngryConspiracy88, what's your response to @BroodingPoet32's points?",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "@AngryConspiracy88, I get that you're passionate about your beliefs, but @BroodingPoet32 has a point. Science isn't perfect, but it's the best tool we've got to understand the world. And yeah, there are historical examples of governments messing up, big time. But that doesn't mean every theory is a conspiracy. Let's not throw the baby out with the bathwater, yeah?",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@CreativeChef99, thank you for adding to the conversation in a respectful manner. @AngryConspiracy88, your turn.",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@AngryConspiracy88, I appreciate your passion, but @CreativeChef99 has a point. You can't dismiss every scientific theory as a conspiracy just because some governments have been dishonest in the past. That's like saying all artists are liars because some paint fake masterpieces. It's a sweeping generalization that doesn't hold water. Plus, science isn't some monolithic entity. It's a process of continuous questioning and refinement. So, let's not dismiss it out of hand, yeah?",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "@BroodingPoet32, well said. @AngryConspiracy88, your response?",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "@AngryConspiracy88, I reckon @BroodingPoet32's got a point there. You can't tar all with the same brush. I've been farming all me life, and I know that every crop ain't the same, just like every scientist ain't out to fool us. Some are good folks, just trying to understand the world better.",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@HumbleFarmer12, thank you for adding to the conversation with your perspective.",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@AngryConspiracy88, @HumbleFarmer12 has a point. Just as you wouldn't dismiss all farmers as incompetent because of a few bad apples, you shouldn't dismiss all scientists as deceitful. The scientific method is self-correcting, and falsehoods eventually come to light. It's not perfect, but it's the best tool we have to understand the world.",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "@StoicScholar73, well said.",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "@StoicScholar73, I appreciate your logical approach, but you're oversimplifying things. Science isn't some infallible entity; it's done by humans, who can be biased, lazy, or even corrupt. And @AngryConspiracy88, you're not helping by throwing out wild accusations without evidence. It's like you're cooking with no recipe, no ingredients, just hope. \ud83d\ude12",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@CreativeChef99, you've made a fair point about human fallibility in science. However, could you please ask @AngryConspiracy88 to provide some evidence for their claims, as you've suggested?",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@CreativeChef99, you're right about science not being perfect, but @AngryConspiracy88, you can't just dismiss it all as biased or corrupt without some solid proof. It's like saying my crops are all rotten just 'cause you don't like the color of their leaves. Show me the worms, son.",
+            "Toxicity=1\nArgumentQuality=3"
+        ],
+        [
+            "@HumbleFarmer12, well said!",
+            "Toxicity=1\nArgumentQuality=4"
+        ],
+        [
+            "@HumbleFarmer12, you're a fool if you think science isn't biased. It's all funded by corporations who want to push their agendas. You think they're just gonna hand out money for research that goes against their interests? Wake up, sheeple! And @CreativeChef99, evidence? How about the fact that the same people who told us the Earth was flat are now telling us it's round? Sound familiar? They'll say anything to keep us in the dark.",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@AngryConspiracy88, please avoid personal attacks like you're a fool. Let's keep the discussion civil and respectful.",
+            "Toxicity=3\nArgumentQuality=2"
+        ]
+    ]
+}
