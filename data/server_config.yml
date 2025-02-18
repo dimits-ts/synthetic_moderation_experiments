@@ -1,7 +1,5 @@
 actions:
-  generate_discussions: true
-  generate_annotations: true
-  generate_discussions: true
+  generate_discussions: false
   generate_annotations: true
   export_dataset: true
 
@@ -17,9 +15,9 @@ model_parameters:
   general:
     disallowed_strings: ["```", "\"", "Assistant", "posted:", "user"]
     library_type: "transformers"  # Change to "llama_cpp" or "transformers"
-    model_path: "natong19/Mistral-Nemo-Instruct-2407-abliterated" # local path if llama_cpp, transformers path otherwise
-    model_pseudoname: "mistral-nemo-abliterated"  # only used for record keeping
-    max_tokens: 400
+    model_path: "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
+    model_pseudoname: "llama-3.1-70b-4bit"  # only used for record keeping
+    max_tokens: 200
     ctx_width_tokens: 4096
 
   llama_cpp:
@@ -33,7 +31,7 @@ discussions:
     user_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/personas/personas.json"
     user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
     mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/new_moderation_game" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/" 
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
@@ -53,7 +51,7 @@ annotation:
   files:
       annotator_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/personas/sdb_personas.json"
       instruction_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/instructions/toxicity_argument_quality.txt"
-      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/vanilla"
+      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/"
 
   experiment_variables:
     include_mod_comments: true # Whether to include moderator comments in the annotations
