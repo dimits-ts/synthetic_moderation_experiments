@@ -1,6 +1,8 @@
 actions:
   generate_discussions: true
   generate_annotations: true
+  generate_discussions: true
+  generate_annotations: true
   export_dataset: true
 
 
@@ -41,7 +43,7 @@ discussions:
     moderator_attributes: ["just", "strict", "understanding"]
   
   turn_taking:
-    num_turns: 14
+    num_turns: 5
     history_ctx_len: 3
     turn_manager_type: "random_weighted"
     respond_probability: 0.4 # only applicable for random_weighted turn manager type 
