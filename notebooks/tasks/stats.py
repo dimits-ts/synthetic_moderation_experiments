@@ -1,17 +1,14 @@
+import itertools
 import numpy as np
 from rouge_score import rouge_scorer
-from tqdm.auto import tqdm
-import itertools
 
 
 def similarity(comments: list[str]) -> float:
     scorer = rouge_scorer.RougeScorer(["rougeL"])
-
     scores = []
-    for c1, c2 in tqdm(set(itertools.combinations(comments, 2))):
-        scores.append(scorer.score(c1, c2))
-    return float(np.mean(scores))
-
+    for c1, c2 in itertools.combinations(comments, 2):
+        scores.append(scorer.score(c1, c2)["rougeL"].fmeasure)
+    return float(np.mean(scores)) if scores else 0.
 
 # code from John Pavlopoulos https://github.com/ipavlopoulos/ndfu/blob/main/src/__init__.py
 def ndfu(input_data, histogram_input=True, normalised=True):
