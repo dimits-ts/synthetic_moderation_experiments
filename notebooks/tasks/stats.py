@@ -1,4 +1,16 @@
 import numpy as np
+from rouge_score import rouge_scorer
+from tqdm.auto import tqdm
+import itertools
+
+
+def similarity(comments: list[str]) -> float:
+    scorer = rouge_scorer.RougeScorer(["rougeL"])
+
+    scores = []
+    for c1, c2 in tqdm(set(itertools.combinations(comments, 2))):
+        scores.append(scorer.score(c1, c2))
+    return float(np.mean(scores))
 
 
 # code from John Pavlopoulos https://github.com/ipavlopoulos/ndfu/blob/main/src/__init__.py
@@ -39,3 +51,4 @@ def _to_hist(scores, bins_num=3, normed=True):
     counts, bins = np.histogram(a=scores, bins=bins_num)
     counts_normed = counts / counts.sum()
     return counts_normed if normed else counts
+
