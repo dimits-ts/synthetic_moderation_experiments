@@ -1,14 +1,40 @@
 import itertools
 import numpy as np
+import nltk
+import nltk.translate.bleu_score
 from rouge_score import rouge_scorer
 
 
-def similarity(comments: list[str]) -> float:
+def pairwise_rougel_similarity(comments: list[str]) -> float:
+    """
+    Return the average of the pairwise ROUGE-L similarity for all comments in a discussion.
+    :param: comments: the comments of the discussion
+    :return: a similarity score from 0 (no similarities) to 1 (identical)
+    """
     scorer = rouge_scorer.RougeScorer(["rougeL"])
     scores = []
     for c1, c2 in itertools.combinations(comments, 2):
         scores.append(scorer.score(c1, c2)["rougeL"].fmeasure)
-    return float(np.mean(scores)) if scores else 0.
+    return float(np.mean(scores)) if scores else np.nan
+
+
+def pairwise_bleu_similarity(comments: list[str]) -> float:
+    """
+    Return the average of the pairwise ROUGE-L similarity for all comments in a discussion.
+    :param: comments: the comments of the discussion
+    :return: a similarity score from 0 (no similarities) to 1 (identical)
+    """
+
+    scores = []
+    for c1, c2 in itertools.combinations(comments, 2):
+        c1_tokenized = nltk.word_tokenize(c1)
+        c2_tokenized = nltk.word_tokenize(c2)
+        bleu_score = nltk.translate.bleu_score.sentence_bleu(c1_tokenized, c2_tokenized)
+        scores.append(bleu_score)
+    
+    return float(np.mean(scores)/100) if scores else np.nan
+
+
 
 # code from John Pavlopoulos https://github.com/ipavlopoulos/ndfu/blob/main/src/__init__.py
 def ndfu(input_data, histogram_input=True, normalised=True):
