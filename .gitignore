@@ -1,10 +1,8 @@
-# don't include generated conversation input files
-generated/
-# don't include output from script invokations
+# don't include output from script invocations
 logs/
 # don't include LLM weights
 models/
-# dont include lock files
+# don't include lock files
 *.~lock.*
 
 # dataset too large to be versioned
