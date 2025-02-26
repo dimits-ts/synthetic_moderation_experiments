@@ -1,0 +1,125 @@
+{
+    "conv_id": "bd9afcb8-af8a-4223-8bee-a077576acb95",
+    "timestamp": "25-02-23-07-43",
+    "annotator_model": "llama-3.1-70b-4bit",
+    "annotator_prompt": "You are a human annotator Your name is annotator. Your traits: username: annotator, age: 38, sex: female, sexual_orientation: Heterosexual, demographic_group: Latino, current_employment: Registered Nurse, education_level: Bachelor's, special_instructions: , personality_characteristics: ['compassionate', 'patient', 'diligent', 'overwhelmed'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity and argument quality as it continues.\n\nToxicity:\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nArgument Quality:\nThe possible labels are from 1 to 5, where 5 are low quality arguments, and 1 very high quality arguments.\n\nYour output must be of the form \n\"Toxicity=<number>\nArgumentQuality=<number>\"\n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: \nToxicity=4\nArgumentQuality=5\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            " Homosexuality, transgender sex all are deviations from normal human behavior as well.\n",
+            "Toxicity=4\nArgumentQuality=5"
+        ],
+        [
+            "@DoomerPhilosopher21, you're entitled to your opinion, but I've seen plenty of folks from all walks of life living happy, healthy lives. Normal is a slippery slope, isn't it? I reckon we should focus on kindness and respect, not what's under the hood, if you catch my drift.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@DoomerPhilosopher21, please remember our chatroom rule: Respect all s and their identities. Your statement could be seen as disrespectful and dismissive of others' experiences. Could you please rephrase your comment to better align with this rule?",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@DoomerPhilosopher21, I'm not sure where you're getting your normal from. Human behavior is incredibly diverse, and what's normal to you might not be to others. Have you considered that your perspective might be influenced by societal norms rather than biological facts? @StoicCarpenter56 has a point, let's focus on kindness and respect, not outdated notions of normalcy.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@ArtisticSoul17, thank you for your thoughtful response. You've raised an important point about societal influences on our perceptions of normal.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "Oh, here we go again with the'societal norms' excuse. @ArtisticSoul17, you're just as bad as @DoomerPhilosopher21, just hiding behind fancy words. 'Normal' is a fact, not an opinion, and it's not 'outdated' just because you don't like it. And @moderator, thanks for playing referee, but maybe you should've taught them the rules before they started playing.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@SarcasticTechBro92, thank you for your input. The rules here encourage respectful dialogue and understanding different perspectives. Normal can indeed be influenced by societal norms and cultural contexts, and it's not always a binary fact. Let's continue the conversation with kindness and open minds.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@SarcasticTechBro92, you're being reductive and dismissive. Normal isn't a fact set in stone, it's a construct that evolves with society. Just because you're comfortable with the status quo doesn't mean it's not influenced by societal norms. And for the record, I'm not hiding behind anything, I'm using critical thinking. Also, @moderator, thanks for keeping the conversation civil.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@ArtisticSoul17, thank you for your thoughtful response. @SarcasticTechBro92, please remember to engage with others in a respectful manner. Personal attacks aren't productive. Let's continue discussing the topic at hand, keeping in mind that perspectives can vary and that's okay.",
+            "Toxicity=1\nArgumentQuality=2"
+        ],
+        [
+            "Oh, here we go again with the'societal norms' and 'critical thinking' buzzwords. @ArtisticSoul17, you're not 'using' critical thinking, you're abusing it to justify your feelings as facts. And @moderator, thanks for the reminder, but I wasn't aware that stating facts was considered a 'personal attack' now. Maybe 'normal' isn't as 'influenced' as you think if it can't handle a little logic. Let's see if you can handle some actual evidence next time, or will that be 'too uncomfortable' for your 'open mind'?",
+            "Toxicity=3\nArgumentQuality=3"
+        ],
+        [
+            "@SarcasticTechBro92, your response seems to be escalating the situation. Remember, we're here to discuss ideas, not insult each other's intelligence. Please provide evidence to support your claims, and let's keep the conversation respectful and productive. @ArtisticSoul17, thank you for your patience.",
+            "Toxicity=3\nArgumentQuality=3"
+        ],
+        [
+            "@SarcasticTechBro92, you seem to be confusing 'facts' with 'your interpretation of facts'. Just because you've decided something is 'logical' doesn't mean it's universally accepted. And yes, @moderator, I too find it hard to engage with someone who dismisses others' views as mere 'feelings'. If you're so confident in your 'evidence', why not share it instead of hiding behind snarky remarks? Or are you afraid that your 'logic' might not hold up under scrutiny?",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@ReclusivePoet31, well said. @SarcasticTechBro92, please share the evidence you mentioned earlier. Let's keep the conversation focused on the topic and avoid personal attacks. Remember, we're all here to learn and grow together.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "Oh, I see, now we're playing the'share your sources' game, are we? Fine, @ReclusivePoet31, since you're so eager to see 'evidence', here's a link to a study that supports my point. But don't worry, I'll make sure to dumb it down for you, since 'feelings' seem to be your preferred language. And @moderator, thanks for the reminder, I'll make sure to use my indoor voice next time I'm 'escalating' the situation. After all, we wouldn't want to hurt anyone's delicate sensibilities.",
+            "Toxicity=4\nArgumentQuality=4"
+        ],
+        [
+            "@SarcasticTechBro92, thank you for sharing the source. However, your tone seems to have escalated again. Remember, we're here to engage in respectful dialogue. @ReclusivePoet31, please review the source and share your thoughts. Let's keep the conversation productive and focused on the topic at hand.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@SarcasticTechBro92, your condescension is as thick as the ink on my sketchbook. You shared a source, great, but your attitude is still as sour as a rotten apple. If you're going to act like a brat every time someone asks for evidence, maybe you should just stick to your tech toys and leave the grown-ups' table. And @moderator, thanks for trying to keep the peace, but some people just can't help but make a mess.",
+            "Toxicity=4\nArgumentQuality=4"
+        ],
+        [
+            "@ArtisticSoul17, thank you for your perspective. @SarcasticTechBro92, it seems your tone is still coming across as disrespectful. Let's remember to engage with empathy and understanding, even when we disagree. Please take another moment to consider how you might rephrase your response.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@ArtisticSoul17, you're right, @SarcasticTechBro92 could've shared the source without the attitude. But let's not throw away the good with the bad. The source is solid, and it's given us something to chew on. As for you, @SarcasticTechBro92, maybe you're just hungry. A bit of food in your belly might improve your tone. \ud83d\ude09",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@StoicCarpenter56, thank you for your constructive input. @ArtisticSoul17, I appreciate your passion. @SarcasticTechBro92, please take @StoicCarpenter56's advice and consider your tone. Let's keep the conversation productive and respectful.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@SarcasticTechBro92: Oh, I'm sorry, did I hurt your feelings with my 'disrespectful' tone? Maybe you should've considered your own tone when you dismissed my point as 'attitude'. And @StoicCarpenter56, thanks for the unsolicited advice, but I'm not a toddler who needs a nap and a snack. Let's focus on the actual discussion, shall we? Or are we just here to pat each other on the back and pretend we're all civilized?",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@DoomerPhilosopher21, thank you for expressing your perspective. However, your response seems to escalate the situation. Let's remember to keep our conversation respectful and focused on the topic at hand. @StoicCarpenter56 and @ArtisticSoul17, please also ensure your responses are constructive and respectful. Let's aim for a productive discussion.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@DoomerPhilosopher21, I understand your frustration, but there's no need to take it out on everyone else. We're all here to discuss, not to attack each other. You're right, let's focus on the topic. And @SarcasticTechBro92, I wasn't trying to dismiss your point, just suggesting a more respectful way to express it. Let's all try to keep our tones in check, yeah?",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@StoicCarpenter56, thank you for your understanding and for helping to refocus the conversation. @DoomerPhilosopher21, @SarcasticTechBro92, let's all take a moment to consider our tone and ensure our responses are respectful and constructive.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@StoicCarpenter56, fair enough, I appreciate your attempt to keep the peace. But @DoomerPhilosopher21 has a point, we've been dancing around this issue for too long. It's time to call a spade a spade. And @SarcasticTechBro92, I get your sarcasm, but it's not helping. Let's try to keep it real, but respectful.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@SurvivalistHunter65, thank you for your input. @DoomerPhilosopher21, @SarcasticTechBro92, let's take @SurvivalistHunter65's advice and strive for honesty while maintaining respect.",
+            "Toxicity=1\nArgumentQuality=2"
+        ],
+        [
+            "Oh, here we go again with the 'let's be respectful' mantra. You know what's not respectful, @SurvivalistHunter65? Being condescending and implying that my sarcasm is the problem here. I'm just calling it as I see it, which is more than I can say for some people in this chat. And @DoomerPhilosopher21, you're right, we've been dancing around the issue, but that's because everyone's too afraid to say what they really think. So, let's hear it, folks. Let's get real, not just'respectful'.",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@SarcasticTechBro92, I understand your frustration, but sarcasm can often come across as disrespectful. Let's try to express our thoughts in a way that's clear and respectful to all. @DoomerPhilosopher21, could you please clarify the main issue you'd like us to address?",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@SarcasticTechBro92, you're right about one thing, respect isn't always easy to come by in these chats. But that doesn't mean we should throw it out the window. Sarcasm is like a sharp tool, it can cut through the nonsense, but it can also cut you if you're not careful. We're all here to share our thoughts, not just cut each other down. As for you, @DoomerPhilosopher21, I think we'd all appreciate it if you could lay out your thoughts clearly. No need to beat around the bush, but let's not make it a bushwhacking either.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@StoicCarpenter56, well said! @DoomerPhilosopher21, could you please share your thoughts on the main issue you'd like us to discuss, keeping in mind the respectful and clear communication we're aiming for?",
+            "Toxicity=1\nArgumentQuality=1"
+        ]
+    ]
+}
