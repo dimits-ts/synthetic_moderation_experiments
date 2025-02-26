@@ -8,6 +8,63 @@ import matplotlib.axes
 import seaborn as sns
 
 
+def plot_metrics_barplots(
+    df: pd.DataFrame,
+    group_by_col: str,
+    group_by_col_label: str,
+    metrics: list[str],
+    yticks_list: list[np.array],
+) -> None:
+    fig, axes = plt.subplots(1, len(metrics))
+    fig.set_size_inches(12, 6)
+
+    for ax, metric, yticks in zip(axes, metrics, yticks_list):
+
+        sns.barplot(
+            data=df,
+            x=group_by_col,
+            hue=group_by_col,
+            y=metric,
+            errorbar="sd",
+            legend=False,
+            ax=ax,
+        )
+        ax.tick_params(axis="x", labelrotation=90, labelsize=8)
+        ax.set_xlabel("")
+        ax.set_ylabel(metric.capitalize())
+        ax.set_yticks(yticks)
+
+    fig.suptitle(f"Impact of {group_by_col_label} on Discussions")
+    fig.supxlabel(group_by_col_label)
+    fig.supylabel("Annotation Scores")
+    fig.tight_layout()
+
+
+def plot_timeseries(
+    df: pd.DataFrame, y_col: str, hue_col: str, hue_col_label: str
+) -> None:
+    plt.figure(figsize=(12, 6))
+
+    sns.lineplot(
+        data=df,
+        x="message_order",
+        y=y_col,
+        hue=hue_col,
+        lw=1,
+        alpha=0.6,
+    )
+
+    plt.title(
+        f"Average (all comments from all annotators) {y_col.capitalize()} by {hue_col_label}"
+    )
+    plt.xlabel("Discussion Length (# messages)")
+    plt.ylabel(f"Average {y_col.capitalize()}")
+    plt.xticks(rotation=45)
+
+    plt.legend(title=hue_col_label)
+    plt.tight_layout()
+
+
 def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
     """
     Create a bar plot displaying the mean toxicity scores for different conversation variants,
