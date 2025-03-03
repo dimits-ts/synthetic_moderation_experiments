@@ -14,10 +14,9 @@ def posthoc_dunn_heatmap(
     val_col: str,
     group_col: str,
     show_labels: bool = True,
-    title: str = "",
-    xlabel_text: str = "",
     vmin: float | None = None,
     vmax: float | None = None,
+    ax: matplotlib.axes.Axes | None = None,
 ) -> None:
     """
     Generate a heatmap visualizing correlation (or other) values along with p-value significance.
@@ -33,7 +32,14 @@ def posthoc_dunn_heatmap(
     :type val_col: str
     :param group_col: The column containing the groups
     :type group_col: str
-    :return: None
+    :param show_labels: Whether to display axis labels on the heatmap, defaults to False.
+    :type show_labels: bool, optional
+    :param vmin: Minimum value for color mapping, if specified
+    :type vmin: float | None, optional
+    :param vmax: Maximum value for color mapping, if specified
+    :type vmax: float | None, optional
+    :param ax: The matplotlib axes object where the heatmap will be drawn
+    :type ax: matplotlib.axes.Axes | None, optional
     """
     pvalues = sp.posthoc_dunn(
         df, val_col="toxicity", group_col="conv_variant", p_adjust="holm"
@@ -45,6 +51,7 @@ def posthoc_dunn_heatmap(
         show_labels=show_labels,
         vmin=vmin,
         vmax=vmax,
+        ax=ax
     )
 
 
@@ -54,6 +61,7 @@ def _pvalue_heatmap(
     show_labels: bool,
     vmin: float | None,
     vmax: float | None,
+    ax: matplotlib.axes.Axes | None,
 ) -> None:
     """
     Generate a heatmap visualizing correlation (or other) values along with p-value significance.
@@ -69,7 +77,12 @@ def _pvalue_heatmap(
     :type pvalue_df: pd.DataFrame
     :param show_labels: Whether to display axis labels on the heatmap, defaults to False.
     :type show_labels: bool, optional
-    :return: None
+    :param vmin: Minimum value for color mapping, if specified
+    :type vmin: float | None, optional
+    :param vmax: Maximum value for color mapping, if specified
+    :type vmax: float | None, optional
+    :param ax: The matplotlib axes object where the heatmap will be drawn
+    :type ax: matplotlib.axes.Axes | None
     """
 
     # Format the value_df with asterisks based on pvalue_df
@@ -90,7 +103,8 @@ def _pvalue_heatmap(
         cbar_kws={"label": "Mean Difference"},
         annot_kws={"fontsize": 8},
         vmin=vmin,
-        vmax=vmax
+        vmax=vmax,
+        ax=ax
     )
 
 def _pairwise_diffs(df: pd.DataFrame, group_col: str, value_col: str) -> pd.DataFrame:
