@@ -1,11 +1,137 @@
-from typing import Optional
 from pathlib import Path
+import itertools
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.axes
 import seaborn as sns
+import scikit_posthocs as sp
+
+
+def posthoc_dunn_heatmap(
+    df: pd.DataFrame,
+    val_col: str,
+    group_col: str,
+    show_labels: bool = True,
+    title: str = "",
+    xlabel_text: str = "",
+    vmin: float | None = None,
+    vmax: float | None = None,
+) -> None:
+    """
+    Generate a heatmap visualizing correlation (or other) values along with p-value significance.
+
+    This function produces a heatmap where the lower triangle of the matrix contains
+    correlation values from `value_df`. These values are annotated with asterisks based
+    on the significance levels of corresponding p-values from `pvalue_df`.
+    The heatmap can be saved to a file if a filename is specified.
+
+    :param df: the data
+    :type df: pd.DataFrame
+    :param val_col: The column containing the quantity to be measured
+    :type val_col: str
+    :param group_col: The column containing the groups
+    :type group_col: str
+    :return: None
+    """
+    pvalues = sp.posthoc_dunn(
+        df, val_col="toxicity", group_col="conv_variant", p_adjust="holm"
+    )
+    diff_values = _pairwise_diffs(df, group_col=group_col, value_col=val_col)
+    _pvalue_heatmap(
+        value_df=diff_values,
+        pvalue_df=pvalues,
+        show_labels=show_labels,
+        vmin=vmin,
+        vmax=vmax,
+    )
+
+
+def _pvalue_heatmap(
+    value_df: pd.DataFrame,
+    pvalue_df: pd.DataFrame,
+    show_labels: bool,
+    vmin: float | None,
+    vmax: float | None,
+) -> None:
+    """
+    Generate a heatmap visualizing correlation (or other) values along with p-value significance.
+
+    This function produces a heatmap where the lower triangle of the matrix contains
+    correlation values from `value_df`. These values are annotated with asterisks based
+    on the significance levels of corresponding p-values from `pvalue_df`.
+    The heatmap can be saved to a file if a filename is specified.
+
+    :param value_df: DataFrame containing the correlation or other values to be visualized.
+    :type value_df: pd.DataFrame
+    :param pvalue_df: DataFrame containing p-values corresponding to the values in `value_df`.
+    :type pvalue_df: pd.DataFrame
+    :param show_labels: Whether to display axis labels on the heatmap, defaults to False.
+    :type show_labels: bool, optional
+    :return: None
+    """
+
+    # Format the value_df with asterisks based on pvalue_df
+    formatted_values = _format_with_asterisks(value_df, pvalue_df)
+
+    # Define tick labels
+    ticklabels = value_df.columns if show_labels else "auto"
+
+    # Create the heatmap
+    sns.heatmap(
+        np.tril(value_df),
+        annot=np.tril(formatted_values),
+        fmt="",  # This allows us to use strings with asterisks
+        cmap="icefire",
+        mask=_upper_tri_masking(value_df),
+        xticklabels=ticklabels,
+        yticklabels=ticklabels,
+        cbar_kws={"label": "Mean Difference"},
+        annot_kws={"fontsize": 8},
+        vmin=vmin,
+        vmax=vmax
+    )
+
+def _pairwise_diffs(df: pd.DataFrame, group_col: str, value_col: str) -> pd.DataFrame:
+    """
+    Calculate pairwise differences in mean values between groups and pivot the result into an MxM matrix.
+
+    :param df: The input DataFrame containing the data.
+    :type df: pd.DataFrame
+    :param group_col: The column to group by in order to calculate mean values.
+    :type group_col: str
+    :param value_col: The column name containing the values for which pairwise differences will be calculated.
+    :type value_col: str
+    :return: An MxM DataFrame with groups as rows and columns, and mean differences as values.
+    :rtype: pd.DataFrame
+    """
+    # Calculate mean values per group
+    group_means = df.groupby(group_col)[value_col].mean()
+
+    # Prepare a dictionary to collect results
+    results = {}
+
+    # Generate all possible pairs of groups
+    for (group1, mean1), (group2, mean2) in itertools.combinations(
+        group_means.items(), 2
+    ):
+        diff = mean1 - mean2
+        # Store differences in both directions for a symmetric matrix
+        results[(group1, group2)] = diff
+        results[(group2, group1)] = -diff
+
+    # Create a DataFrame with multi-index from the results dictionary
+    result_df = pd.DataFrame.from_dict(results, orient="index", columns=["mean_diff"])
+    result_df.index = pd.MultiIndex.from_tuples(
+        result_df.index, names=[f"{group_col}_1", f"{group_col}_2"]
+    )
+
+    # Pivot the DataFrame to create an MxM matrix
+    matrix_df = result_df.unstack(level=1).fillna(0)
+    matrix_df.columns = matrix_df.columns.droplevel(0)  # Remove the extra column level
+
+    return matrix_df
 
 
 def plot_metrics_barplots(
@@ -105,68 +231,6 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
         title_fontsize="6.5",
         loc="upper right",
     )
-
-
-def pvalue_heatmap(
-    value_df: pd.DataFrame,
-    pvalue_df: pd.DataFrame,
-    show_labels: bool = False,
-    correlation_title: str = "",
-    xlabel_text: str = "",
-    path: Path | None = None,
-) -> None:
-    """
-    Generate a heatmap visualizing correlation (or other) values along with p-value significance.
-
-    This function produces a heatmap where the lower triangle of the matrix contains
-    correlation values from `value_df`. These values are annotated with asterisks based
-    on the significance levels of corresponding p-values from `pvalue_df`.
-    The heatmap can be saved to a file if a filename is specified.
-
-    :param value_df: DataFrame containing the correlation or other values to be visualized.
-    :type value_df: pd.DataFrame
-    :param pvalue_df: DataFrame containing p-values corresponding to the values in `value_df`.
-    :type pvalue_df: pd.DataFrame
-    :param show_labels: Whether to display axis labels on the heatmap, defaults to False.
-    :type show_labels: bool, optional
-    :param correlation_title: Title for the heatmap, defaults to an empty string.
-    :type correlation_title: str, optional
-    :param xlabel_text: Label for the x-axis of the heatmap, defaults to an empty string.
-    :type xlabel_text: str, optional
-    :param path: The output path of the exported image, None to not export
-    :type path: Path, optional
-    :return: None
-    :example:
-        >>> pvalue_heatmap(value_df, pvalue_df, show_labels=True, correlation_title="Correlation Heatmap")
-    """
-    # Format the value_df with asterisks based on pvalue_df
-    formatted_values = _format_with_asterisks(value_df, pvalue_df)
-
-    # Define tick labels
-    ticklabels = value_df.columns if show_labels else "auto"
-
-    # Create the heatmap
-    sns.heatmap(
-        np.tril(value_df),
-        annot=np.tril(formatted_values),
-        fmt="",  # This allows us to use strings with asterisks
-        cmap="icefire",
-        mask=_upper_tri_masking(value_df.to_numpy()),
-        xticklabels=ticklabels,  # type: ignore
-        yticklabels=ticklabels,  # type: ignore
-        cbar_kws={"label": "Mean Toxicity Difference"},
-        annot_kws={"fontsize": 8},
-    )
-
-    plt.title(correlation_title)
-    plt.xlabel(xlabel_text)
-
-    # Save the plot if a filename is provided
-    if path is not None:
-        save_plot(path)
-
-    # Show the plot
-    plt.show()
 
 
 # code from https://stackoverflow.com/questions/47314754/how-to-get-triangle-upper-matrix-without-the-diagonal-using-numpy
