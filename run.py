@@ -25,9 +25,8 @@ from syndisco.discussions.experiments import DiscussionExperiment
 
 LICENSE = """
 SynDisco  Copyright (C) 2025 Dimitris Tsirmpas
-This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
-This is free software, and you are welcome to redistribute it
-under certain conditions; type `show c' for details.
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it under certain conditions.
 """
 
 logger = logging.getLogger(Path(__file__).name)
@@ -41,6 +40,7 @@ def main():
     tasks based on the actions specified in the configuration. Actions include
     generating synthetic discussions, creating annotations, and exporting the dataset.
     """
+    print(LICENSE)
     # Set up argument parser for config file path
     parser = argparse.ArgumentParser(description="Generate synthetic conversations")
     parser.add_argument(
