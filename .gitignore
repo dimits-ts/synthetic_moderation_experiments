@@ -4,6 +4,8 @@ logs/
 models/
 # don't include lock files
 *.~lock.*
+# don't include temp venv
+test-env/
 
 # dataset too large to be versioned
 *.csv
