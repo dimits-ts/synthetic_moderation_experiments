@@ -3,8 +3,6 @@ import re
 import pandas as pd
 import numpy as np
 
-from .stats import ndfu
-
 
 def format_dataset(df: pd.DataFrame, min_message_len: int) -> pd.DataFrame:
     df = df.astype(str)
@@ -26,12 +24,6 @@ def format_dataset(df: pd.DataFrame, min_message_len: int) -> pd.DataFrame:
     df["intent"] = df.user_prompt.apply(get_user_intent).astype(str)
     df.intent = np.where(df.is_moderator, "Moderator", df.intent).astype(str)
 
-    df["polarization"] = (
-        df.groupby(["conv_id", "message"])["toxicity"]
-        .transform(lambda x: ndfu(x, histogram_input=False))
-        .astype(float)
-    )
-
     df["not_intervened"] = (
         df.is_moderator & df.message.apply(lambda x: len(x.strip()) < min_message_len)
     ).astype(bool)
@@ -51,7 +43,7 @@ def format_dataset(df: pd.DataFrame, min_message_len: int) -> pd.DataFrame:
             "message",
         ]
         + list(annotations_df.columns)
-        + ["polarization", "not_intervened"],
+        + ["not_intervened"],
     ]
     return df
 

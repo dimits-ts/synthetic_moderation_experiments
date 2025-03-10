@@ -42,7 +42,7 @@ def posthoc_dunn_heatmap(
     :type ax: matplotlib.axes.Axes | None, optional
     """
     pvalues = sp.posthoc_dunn(
-        df, val_col="toxicity", group_col="conv_variant", p_adjust="holm"
+        df, val_col=val_col, group_col=group_col, p_adjust="holm"
     )
     diff_values = _pairwise_diffs(df, group_col=group_col, value_col=val_col)
     _pvalue_heatmap(
