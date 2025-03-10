@@ -14,7 +14,7 @@ logging:
 model_parameters:
   disallowed_strings: ["```", "\""]
   model_path: "unsloth/llama-3-8b-bnb-4bit" # local path if llama_cpp, transformers path otherwise
-  model_pseudoname: "llama-3.1-70b-4bit"  # only used for record keeping
+  model_pseudoname: "llama-3.1-8b-4bit"  # only used for record keeping
   max_tokens: 400
   ctx_width_tokens: 4096
 

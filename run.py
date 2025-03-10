@@ -62,37 +62,37 @@ def main():
     generate_annotations = yaml_data["actions"]["generate_annotations"]
     export_dataset = yaml_data["actions"]["export_dataset"]
 
-    setup_logging(logging_config=yaml_data["logging"])
-    validate_actions(
+    _setup_logging(logging_config=yaml_data["logging"])
+    _validate_actions(
         generate_discussions=generate_discussions,
         generate_annotations=generate_annotations,
         export_dataset=export_dataset,
     )
 
     if generate_discussions:
-        discussion_exp = create_discussion_experiment(
+        discussion_exp = _create_discussion_experiment(
             llm=model_manager.get(), discussion_config=yaml_data["discussions"]
         )
-        run_discussion_experiment(
+        _run_discussion_experiment(
             experiment=discussion_exp,
             output_dir=Path(yaml_data["discussions"]["files"]["output_dir"]),
         )
 
     if generate_annotations:
-        ann_exp = create_annotation_experiment(
+        ann_exp = _create_annotation_experiment(
             llm=model_manager.get(), annotation_config=yaml_data["annotation"]
         )
-        run_annotation_experiment(
+        _run_annotation_experiment(
             ann_exp,
             discussions_dir=Path(yaml_data["discussions"]["files"]["output_dir"]),
             output_dir=Path(yaml_data["annotation"]["files"]["output_dir"]),
         )
 
     if export_dataset:
-        dataset_to_csv(yaml_data["dataset_export"])
+        _dataset_to_csv(yaml_data["dataset_export"])
 
 
-def setup_logging(logging_config: dict) -> None:
+def _setup_logging(logging_config: dict) -> None:
     logging_util.logging_setup(
         print_to_terminal=logging_config["print_to_terminal"],
         write_to_file=logging_config["write_to_file"],
@@ -103,7 +103,7 @@ def setup_logging(logging_config: dict) -> None:
     )
 
 
-def validate_actions(
+def _validate_actions(
     generate_discussions, generate_annotations, export_dataset
 ) -> None:
     if not generate_discussions and not generate_annotations and not export_dataset:
@@ -118,14 +118,14 @@ def validate_actions(
             logger.warning("Dataset export to CSV disabled.")
 
 
-def create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExperiment:
+def _create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExperiment:
     topics = file_util.read_files_from_directory(
         discussion_config["files"]["topics_dir"]
     )
 
-    users = get_users(llm, discussion_config)
-    moderator = get_mod(llm, discussion_config)
-    next_turn_manager = get_turn_manager(
+    users = _get_users(llm, discussion_config)
+    moderator = _get_mod(llm, discussion_config)
+    next_turn_manager = _get_turn_manager(
         turn_manager_type=discussion_config["turn_taking"]["turn_manager_type"],
         other_config={
             "respond_probability": discussion_config["turn_taking"][
@@ -145,7 +145,7 @@ def create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExpe
     )
 
 
-def get_users(llm: model.BaseModel, discussion_config: dict) -> list[actors.LLMActor]:
+def _get_users(llm: model.BaseModel, discussion_config: dict) -> list[actors.LLMActor]:
     return actors.create_users_from_file(
         llm,
         persona_path=Path(discussion_config["files"]["user_persona_path"]),
@@ -155,7 +155,7 @@ def get_users(llm: model.BaseModel, discussion_config: dict) -> list[actors.LLMA
     )
 
 
-def get_mod(llm: model.BaseModel, discussion_config: dict) -> actors.LLMActor | None:
+def _get_mod(llm: model.BaseModel, discussion_config: dict) -> actors.LLMActor | None:
     if discussion_config["experiment_variables"]["include_mod"]:
         mod_instructions = file_util.read_file(
             discussion_config["files"]["mod_instructions_path"]
@@ -175,13 +175,13 @@ def get_mod(llm: model.BaseModel, discussion_config: dict) -> actors.LLMActor | 
     return moderator
 
 
-def get_turn_manager(
+def _get_turn_manager(
     turn_manager_type: str, other_config: dict
 ) -> turn_manager.TurnManager:
     return turn_manager.turn_manager_factory(turn_manager_type, config=other_config)
 
 
-def run_discussion_experiment(
+def _run_discussion_experiment(
     experiment: DiscussionExperiment, output_dir: Path
 ) -> None:
     logger.info("Starting synthetic discussion experiments...")
@@ -189,7 +189,7 @@ def run_discussion_experiment(
     logger.info("Finished synthetic discussion experiments.")
 
 
-def create_annotation_experiment(llm, annotation_config: dict) -> AnnotationExperiment:
+def _create_annotation_experiment(llm, annotation_config: dict) -> AnnotationExperiment:
     annotators = actors.create_users_from_file(
         llm,
         persona_path=Path(annotation_config["files"]["annotator_persona_path"]),
@@ -207,7 +207,7 @@ def create_annotation_experiment(llm, annotation_config: dict) -> AnnotationExpe
     )
 
 
-def run_annotation_experiment(
+def _run_annotation_experiment(
     annotation_experiment: AnnotationExperiment, discussions_dir: Path, output_dir: Path
 ) -> None:
     logger.info("Starting synthetic annotation...")
@@ -215,7 +215,7 @@ def run_annotation_experiment(
     logger.info("Finished synthetic annotation.")
 
 
-def dataset_to_csv(export_config) -> None:
+def _dataset_to_csv(export_config) -> None:
     conv_dir = Path(export_config["discussion_root_dir"])
     annot_dir = Path(export_config["annotation_root_dir"])
     export_path = Path(export_config["export_path"])
