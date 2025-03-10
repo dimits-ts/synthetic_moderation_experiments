@@ -12,19 +12,23 @@ import typing
 import pandas as pd
 import yaml
 
-from synthetic_discussion_framework.src.syndisco.backend import model
-from synthetic_discussion_framework.src.syndisco.postprocessing import postprocessing
-from synthetic_discussion_framework.src.syndisco.util import logging_util
-from synthetic_discussion_framework.src.syndisco.util import file_util
-from synthetic_discussion_framework.src.syndisco.util import model_util
-from synthetic_discussion_framework.src.syndisco.annotations.experiments import (
-    AnnotationExperiment,
-)
-from synthetic_discussion_framework.src.syndisco.backend import actors, turn_manager
-from synthetic_discussion_framework.src.syndisco.discussions.experiments import (
-    DiscussionExperiment,
-)
+from syndisco.backend import model
+from syndisco.postprocessing import postprocessing
+from syndisco.util import logging_util
+from syndisco.util import file_util
+from syndisco.util import model_util
+from syndisco.annotations.experiments import AnnotationExperiment
+from syndisco.backend import actors, turn_manager
+from syndisco.discussions.experiments import DiscussionExperiment
 
+
+
+LICENSE = """
+SynDisco  Copyright (C) 2025 Dimitris Tsirmpas
+This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+This is free software, and you are welcome to redistribute it
+under certain conditions; type `show c' for details.
+"""
 
 logger = logging.getLogger(Path(__file__).name)
 
