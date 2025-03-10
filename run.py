@@ -7,20 +7,21 @@ import argparse
 import logging
 from pathlib import Path
 import sys
+import typing
 
 import pandas as pd
 import yaml
 
-from synthetic_discussion_framework.src.sdl.backend import model
-from synthetic_discussion_framework.src.sdl.postprocessing import postprocessing
-from synthetic_discussion_framework.src.sdl.util import logging_util
-from synthetic_discussion_framework.src.sdl.util import file_util
-from synthetic_discussion_framework.src.sdl.util import model_util
-from synthetic_discussion_framework.src.sdl.annotations.experiments import (
+from synthetic_discussion_framework.src.syndisco.backend import model
+from synthetic_discussion_framework.src.syndisco.postprocessing import postprocessing
+from synthetic_discussion_framework.src.syndisco.util import logging_util
+from synthetic_discussion_framework.src.syndisco.util import file_util
+from synthetic_discussion_framework.src.syndisco.util import model_util
+from synthetic_discussion_framework.src.syndisco.annotations.experiments import (
     AnnotationExperiment,
 )
-from synthetic_discussion_framework.src.sdl.backend import actors, turn_manager
-from synthetic_discussion_framework.src.sdl.discussions.experiments import (
+from synthetic_discussion_framework.src.syndisco.backend import actors, turn_manager
+from synthetic_discussion_framework.src.syndisco.discussions.experiments import (
     DiscussionExperiment,
 )
 
@@ -49,7 +50,13 @@ def main():
     with open(args.config_file, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
 
-    model_manager = model_util.ModelManager(yaml_data=yaml_data)
+    model_config = yaml_data["model_parameters"]
+    model_manager = model_util.ModelManager(
+        model_path=model_config["model_path"],
+        model_pseudoname=model_config["model_pseudoname"],
+        max_new_tokens=model_config["max_tokens"],
+        disallowed_strings=model_config["disallowed_strings"],
+    )
 
     generate_discussions = yaml_data["actions"]["generate_discussions"]
     generate_annotations = yaml_data["actions"]["generate_annotations"]
@@ -171,9 +178,7 @@ def get_mod(llm: model.BaseModel, discussion_config: dict) -> actors.LLMActor | 
 def get_turn_manager(
     turn_manager_type: str, other_config: dict
 ) -> turn_manager.TurnManager:
-    return turn_manager.turn_manager_factory(
-        turn_manager_type, config=other_config
-    )
+    return turn_manager.turn_manager_factory(turn_manager_type, config=other_config)
 
 
 def run_discussion_experiment(
