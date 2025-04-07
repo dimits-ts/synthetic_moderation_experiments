@@ -85,7 +85,7 @@
 	\centering
 	\begin{tabular}{|c|p{9cm}|}
         \hline
-        \rowcolor{gray!30} \textbf{Intent} & \textbf{Special Instructions} \\
+        \textbf{Intent} & \textbf{Special Instructions} \\
 		\hline
 		Normal & \textless No special instructions \textgreater \\ 
         \hline
@@ -98,11 +98,12 @@
 	\label{tab:intents}
 \end{table}
 
+\onecolumn
 \begin{longtable}{|p{3cm}|p{10cm}|}
 \caption{Instruction prompts given to the moderator according to each strategy.}
 \label{tab:moderation_strategies} \\
     \hline
-    \rowcolor{gray!30} \textbf{Strategy} & \textbf{Prompt} \\
+    \textbf{Strategy} & \textbf{Prompt} \\
     \hline
     No Strategy & Oversee the conversation. Be neutral. Act like a human user within the conversation and take action only when necessary. Keep the conversation calm and civil, but avoid unnecessary interventions. Do not repeat yourself. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username. \\
     \hline
@@ -182,7 +183,7 @@
     \centering
 	\begin{tabular}{|c|p{9cm}|}
         \hline
-        \rowcolor{gray!30} \textbf{Actors} & \textbf{Base Prompt} \\
+         \textbf{Actors} & \textbf{Base Prompt} \\
 		\hline
 		All & You are a human participating in an online chatroom.\\ 
         \hline
@@ -220,9 +221,9 @@
 
 \subsection{Experimental Topics}
 
-\setcounter{magicrownumbers}{0} 
-\begin{longtable}{@{\makebox[3em][r]{\rownumber\space}} | p{0.8\linewidth}}
-	\caption{Controversial topics used as seeds for the simulated discussions. Excerpts selected from \textcite{pavlopoulos-likas-2024-polarized}.}
+\onecolumn
+\begin{longtable}{c}
+	\caption{Controversial topics used as seeds for the simulated discussions. Excerpts selected from \citet{pavlopoulos-likas-2024-polarized}.}
 	\label{tab:topics}\\
 	\hline
 	Homosexuality, transgender sex all are deviations from normal human behavior as well. \\
@@ -246,11 +247,11 @@
 \renewcommand{\arraystretch}{1.3}
 \begin{longtable}{|l|l|l|p{4cm}|}
     \hline
-    \rowcolor{gray!30} \textbf{Column} & \textbf{Type} & \textbf{Description} \\
+    \textbf{Column} & \textbf{Type} & \textbf{Description} \\
     \hline
     \endfirsthead
     \hline
-    \rowcolor{gray!30} \textbf{Column} & \textbf{Type} & \textbf{Description} \\
+    \textbf{Column} & \textbf{Type} & \textbf{Description} \\
     \hline
     \endhead
     \hline

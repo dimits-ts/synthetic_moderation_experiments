@@ -4,7 +4,7 @@
 
 We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality (we later discuss the deliberate vagueness of the term). Of course, since we want our \ac{LLM} moderators to guide the discussion towards this ideal state, our experiments would ideally feature both high toxicity and low argument quality by default. 
 
-The reason we pick toxicity is that \ac{LLM} annotations of toxicity are fairly reliably close to those of human would-be annotators \parencite{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}. Furthermore, toxicity is a frequently identified inhibitor of online/deliberative discussions \parencite{dekock2022disagree, XiaToxicity} (although this is not certain \parencite{Avalle2024PersistentIP}). Determining argument quality is a much more difficult task, since it is not quite clear what its definition entails \cite{korre2025evaluation}; not even human annotators typically agree on what constitutes a “good argument” \cite{argyle2023}. Even so, it is the subject of many works in the field of online moderation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}.
+The reason we pick toxicity is that \ac{LLM} annotations of toxicity are fairly reliably close to those of human would-be annotators \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}. Furthermore, toxicity is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). Determining argument quality is a much more difficult task, since it is not quite clear what its definition entails \cite{korre2025evaluation}; not even human annotators typically agree on what constitutes a “good argument” \cite{argyle2023}. Even so, it is the subject of many works in the field of online moderation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}.
 
 Given these objectives, we define two measures: \ac{LLM}-Annotated Toxicity ($m_1$) and \ac{LLM}-Annotated Argument Quality ($m_2$). These measures are defined in the \ac{LLM}-annotator agent instruction prompt (see Table \ref{tab:base_prompts} in the Appendix).
 
@@ -21,10 +21,10 @@ In this study, we test six different moderation/facilitation strategies ($s_1, \
 
     \item \textbf{Constitution rules}: A \emph{baseline strategy} where the \ac{LLM} moderator's prompt is adapted from guidelines elicited for the task of \ac{LLM} alignment \cite{collective_constitution}. We adapt these guidelines to fit them in the context of online discussions. This provides the moderator with a set of rules to uphold, without specifying how the moderator should act to achieve this.
     
-    \item \textbf{Moderation game}: Our own proposed \emph{experimental strategy}. Basic instructions formulated as a social game, where the moderator will try to maximize their scores by avoiding certain actions and arriving at specific outcomes. It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. This strategy was inspired by work we are doing to formulate moderation as a \ac{RL} task (though we do not use RL in the experiments of this paper), as well as the \ac{LLM} negotiation games presented by \textcite{abdelnabi2024cooperationcompetitionmaliciousnessllmstakeholders}.
+    \item \textbf{Moderation game}: Our own proposed \emph{experimental strategy}. Basic instructions formulated as a social game, where the moderator will try to maximize their scores by avoiding certain actions and arriving at specific outcomes. It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. This strategy was inspired by work we are doing to formulate moderation as a \ac{RL} task (though we do not use RL in the experiments of this paper), as well as the \ac{LLM} negotiation games presented by \citet{abdelnabi2024cooperationcompetitionmaliciousnessllmstakeholders}.
     
 
-    \item \textbf{Moderation guidelines}: A \emph{real-life strategy} based on guidelines given to human moderators of the “Regulation Room” platform \parencite{Cornell_eRulemaking2017}, provided by Cornell University. The Regulation Room was an online platform designed to facilitate public engagement with U.S. government policy decisions, and has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}. These guidelines were written for volunteer moderators for the purposes of policing an online deliberation platform, and are well known in literature.
+    \item \textbf{Moderation guidelines}: A \emph{real-life strategy} based on guidelines given to human moderators of the “Regulation Room” platform \citep{Cornell_eRulemaking2017}, provided by Cornell University. The Regulation Room was an online platform designed to facilitate public engagement with U.S. government policy decisions, and has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}. These guidelines were written for volunteer moderators for the purposes of policing an online deliberation platform, and are well known in literature.
 
     \item \textbf{Facilitation guidelines}: Similarly to the “Moderation  guidelines”, this \emph{real-life strategy} is based on the human facilitation guidelines of the MIT Center for Constructive Communications \cite{dimitra-guide, dimitra-book}. It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
 \end{enumerate}
@@ -73,7 +73,7 @@ The turn taking function, as defined in Section \ref{ssec:methodology:evaluating
     \textit{uniform}(U/\{u(i-1)\} & i \neq 1, i \text{ odd}, p=0.6 \\
     u(i-2) & i \neq 1, i \text{ odd}, p=0.4 
 \end{array} 
-\right. 
+\right.
 \end{equation}
 
 \noindent where $U$ is the current set of participants, $M$ the set of moderators (in our case a set with one element), and $p$ represents the probability of the option being selected.
@@ -101,7 +101,7 @@ The code for the analysis can be found in the data and analysis repository \anal
 \centering
     \begin{tabular}{|l|c|c|}
         \hline
-        \rowcolor{gray!30} \textbf{Model Name} & \textbf{Parameter Count} & \textbf{Quantization} \\
+        \textbf{Model Name} & \textbf{Parameter Count} & \textbf{Quantization} \\
         \hline
         LLaMa-3.1-70b & 70 billion & 4 bits \\
         Qwen-2.5 & 33 billion & 4 bits \\

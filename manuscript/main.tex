@@ -1,16 +1,29 @@
-\documentclass[hidelinks]{article}
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
 
-\usepackage[margin=1.2in]{geometry}
-\usepackage[table]{xcolor}
+\documentclass[11pt]{article}
+
+
+\usepackage[preprint]{acl}
+
+% style packages
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+
+
 \usepackage{graphicx}
-\usepackage{biblatex}
 \usepackage{longtable}
 \usepackage{array,etoolbox}
 \usepackage{hyperref}
 \usepackage{orcidlink}
 \usepackage{acronym}
 \usepackage{amsmath}
-\usepackage[T1]{fontenc}
 \usepackage{float}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
@@ -25,8 +38,6 @@
 % graphix commands
 \graphicspath{ {./resources}  }
 
-% biblatex commands
-\addbibresource{refs.bib}
 
 % links
 \newcommand{\projectlink}{\footnote{\url{https://github.com/dimits-ts/synthetic_discussion_framework}}}
@@ -62,8 +73,7 @@
 \input{sections/07-conclusions}
 \input{sections/08-acknowledgements}
 
-\printbibliography
-
+\bibliography{refs}
 \input{sections/99-appendix}
 
 \end{document}
