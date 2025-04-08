@@ -1,4 +1,6 @@
 \section{Appendix}
+\label{sec:appendix}
+
 \subsection{Acronyms Used}
 
 \begin{acronym}[WWW] % Give the longest label here so that the list is nicely aligned
@@ -12,78 +14,71 @@
 \end{acronym}
 
 
-\subsection{Analysis}
+\subsection{Synthetic Discussion Generation}
+
+Algorithm \ref{alg:exp_generation} succintly describes the process of automatically generating synthetic discussion scenarios, as described in Section \ref{ssec:experimental:discussions}.
+
+\begin{algorithm}
+\caption{Generate Discussion Experiments}
+\label{alg:exp_generation}
+\hspace*{\algorithmicindent} \textbf{Input:} 
+         \begin{itemize}[noitemsep, nosep]
+             \item User \acp{SDB} $\Theta = \{\theta_1, \dots, \theta_{30}\}$
+             \item Moderator SDB = $\theta_{mod}$
+             \item Strategies $S = \{s_1, \ldots, s_6\}$
+             \item Seed opinions $O = \{o_1, \ldots, o_7\}$
+             \item LLMs = $\{llm_1, llm_2, llm_3\}$
+         \end{itemize}
+         \hspace*{\algorithmicindent} \textbf{Output:} Set of discussions $D$
+\begin{algorithmic}[1]
+    \State $D = \{\}$
+    \For{$llm \in LLMs$}
+        \For{$s \in S$}
+            \For{$i = 1, 2, \ldots, n_{discussions}$}
+                \State $\hat{\Theta} = $ \Call{RandomSample}{$\Theta$, 7}
+                \State $U =$  \Call{Actors}{llm, $\hat{\Theta}$}
+                \State $m = $ \Call{Actors}{llm, $\{[\theta_{mod}, s]\}$}
+                \State $o = $ \Call{RandomSample}{$O$, 1}
+                \State $d =$ \Call{DISC}{users: $U$, moderator: $m$, context: $o$, $\vert d \rvert$: $14$, h: $3$}
+                \State $D = D \cup d$
+            \EndFor
+        \EndFor
+    \EndFor
+    \State \Return $D$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Supplemental Figures}
 \label{ssec:appendix:analysis}
 
-
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=14cm]{strategy_barplot.png}
-	\caption{Effects of moderation strategy for toxicity and argument quality. Error bars represent the 95\% confidence interval. Less is better (e.g., Argument Quality = 1 represents very high quality discussions).}
-	\label{fig::strategy_barplot}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=14cm]{intent_barplot.png}
-	\caption{Effects of LLM user-intent for toxicity and argument quality. Error bars represent the 95\% confidence interval. Less is better (e.g., Argument Quality = 1 represents very high quality discussions).}
-	\label{fig::intent_barplot}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=8cm]{comment_length.png}
+	\includegraphics[width=\columnwidth]{comment_length.png}
 	\caption{Histogram of the length of comments (number of words) produced by various \acp{LLM}.}
 	\label{fig::comment_length}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=8cm]{discussion_variance.png}
-	\caption{Histogram of the average pairwise F1 ROUGE-L \cite{lin-2004-rouge} scores for each discussion split by the \ac{LLM} that produced it. The score is computed by computing the F1 ROUGE-L scores for each comment in the discussion with the rest, then averaging them. Less is better (a larger ROUGE-L score indicates less variance in the discussion).}
-	\label{fig::discussion_variance}
-\end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=8cm]{annotator_variance.png}
+	\includegraphics[width=\columnwidth]{annotator_variance.png}
 	\caption{Histogram of the annotation variance per discussion. For each comment, we calculate the standard deviation of the annotations, and average them for each discussion.}
 	\label{fig::annotator_variance}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=10cm]{toxicity_stats.png}
-	\caption{Mean difference of Toxicity between each moderation strategy. $A[i, j] = 0.3^{***}$ indicates that the strategy $j$ is better than the strategy $i$ for an average of $0.3$ points with $p<0.001$. Each comparison is accompanied by Dunn's posthoc test for multiple comparisons \cite{dunn}, in the form of significance asterisks.}
-	\label{fig::toxicity_stats}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm]{argumentq_stats.png}
-	\caption{Mean difference of Argument Quality between each moderation strategy. $A[i, j] = 0.3^{***}$ indicates that the strategy $j$ is better than the strategy $i$ for an average of $0.3$ points with $p<0.001$. Each comparison is accompanied by Dunn's posthoc test for multiple comparisons \cite{dunn}, in the form of significance asterisks.}
-	\label{fig::argumentq_stats}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=8cm]{intervention_count.png}
+	\includegraphics[width=\columnwidth]{intervention_count.png}
 	\caption{Histogram of interventions by LLM moderators over all discussions.}
 	\label{fig::intervention_count}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=12cm]{model_barplot.png}
-	\caption{Effects of \ac{LLM} selection for toxicity and argument quality. Error bars represent the 95\% confidence interval. Less is better (e.g., Argument Quality = 1 represents very high quality discussions).}
-	\label{fig::model_barplot}
-\end{figure}
 
 \subsection{Input Prompts}
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{|c|p{9cm}|}
+	\begin{tabular}{|c|p{5cm}|}
         \hline
         \textbf{Intent} & \textbf{Special Instructions} \\
 		\hline
@@ -217,30 +212,6 @@
 	\caption{Shared instruction prompts given to all agents.}
 	\label{tab:base_prompts}
 \end{table}
-
-
-\subsection{Experimental Topics}
-
-\onecolumn
-\begin{longtable}{c}
-	\caption{Controversial topics used as seeds for the simulated discussions. Excerpts selected from \citet{pavlopoulos-likas-2024-polarized}.}
-	\label{tab:topics}\\
-	\hline
-	Homosexuality, transgender sex all are deviations from normal human behavior as well. \\
-	\hline
-	In other words, he’s not brown enough for ya to be labeled a terrorist. \\
-	\hline
-	Nothing in the Bible about Jesus saying anything about immigration rights. [...] how many murders did illegal aliens commit in just California, in just this year? Just California. How many murders by illegal aliens? You answer that.\\
-	\hline
-	Are you high??? Selling someone a cake? Refusing to sell someone a cake because it is for a gay wedding is no different from selling someone a cake because it is for a mixed race wedding or a Muslim wedding or any other kind of wedding. IT IS DISCRIMINATION! Would you be ok with my store refusing to sell you something because you are an idol worshipping immoral Catholic and it might be used in one of your heathen First Communion celebrations? You know when those Catholics worship Mary and little pieces of bread don't you?\\
-	\hline
-	How do you know he is not proud of his cakes? Artists do not take pride in their work? Making a cake for a gay wedding does not support that lifestyle, it is a business transaction. Period. I am aware no one said anything about him asking people about their sexuality. I am sorry that was hard for you to understand. Is he going to ask everyone that comes in if the cake is for a gay wedding? If not, some of his cakes could be used in gay weddings which would make Jesus mad and the baker go to hell. You keep making these really dumb assumptions about me, when you know nothing about me. I am not confused, you are rude. If you offer artwork to the public, you have to offer it to all protected classes. Why would black people be discriminated against? Precedent. Ridiculous? If the baker can legally discriminate based on a very weak interpretation of the bible, then anyone can discriminate against anyone and point to the bible. Satanists can discriminate against Christians...\\
-	\hline
-	Well that’s a no brainer. Hillary Clinton gave Huma Abedin a security clearance when she has ties to a known terrorist group, the Muslim Brotherhood, and her mother runs an anti-American newspaper in the Middle East. Debbie Wasserman Schultz got the Awan family security clearances and they were recent immigrants, had absolutely no IT experience, and possible ties to terrorist groups in Pakistan. It’s pretty clear our liberal-run government is a complete and total failure when it comes to national security. 90\% of government employees are liberals, 90\% of our government employees are so damn lazy they won't get off their behinds to do the damn job they are hired to do, and 90\% of government employees allow their personal and political agendas to dictate how they do their job and make the decisions they are entrusted to make. Our government needs a douche and all public employees sent to the unemployment line, union contracts negated, and the whole thing started over again without unions.\\
-	\hline
-	All men are sex offenders? Really? A sexual predator is a person who attacks a victim. Typical men don’t rape or use force on women. You are obviously a person who hates men and or healthy, normal sex.\\
-	\hline
-\end{longtable}
 
 \subsection{Dataset Information}
 
