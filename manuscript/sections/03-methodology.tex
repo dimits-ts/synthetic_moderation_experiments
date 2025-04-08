@@ -31,7 +31,10 @@ We first need to define a turn-taking function $u: D  \times \{1, 2, \ldots\} \r
 In our case, all comments are synthetic, hence, a comment $c$ in a discussion $d^s \in D^s$, at the $i$-th turn is defined recursively as:
 
 \begin{equation}
-    c(d^s, i) = LLM([c(d^s, j)]^{i-1}_{j=max(1, i-h)}; \phi(u(d, i), s))
+\begin{split}
+    c(d^s, i) = & LLM([c(d^s, j)]^{i-1}_{j=max(1, i-h)};\\
+    &\phi(u(d, i), s))
+\end{split}
 \end{equation}
 
 \noindent where $[\cdot]$ is string concatenation and $h$ is the context length of the \ac{LLM} user-agent (how many past comments they can “remember”). $\phi$ is a function which enables \ac{LLM} user-agents to leverage their unique characteristics in order to formulate a response. In the case that the user is a moderator, it also provides them with an actionable prompt according to the given moderation strategy. $\phi$ is defined as:

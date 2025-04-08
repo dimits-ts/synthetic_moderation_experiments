@@ -28,13 +28,10 @@
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{acronym}
+\usepackage{enumitem}
 
 % table commands
 \renewcommand{\arraystretch}{1.2}
-\preto\tabular{\setcounter{magicrownumbers}{0}}
-\newcounter{magicrownumbers}
-\newcommand\rownumber{\stepcounter{magicrownumbers}\arabic{magicrownumbers}}
-
 % graphix commands
 \graphicspath{ {./resources}  }
 
