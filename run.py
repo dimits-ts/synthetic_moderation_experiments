@@ -1,6 +1,6 @@
 """
-Imports the configuration file, sets up logging, and directs calls for discussion generation, 
-annotation, and dataset export.
+Imports the configuration file, sets up logging, and directs calls for
+ discussion generation, annotation, and dataset export.
 """
 
 import argparse
@@ -11,19 +11,12 @@ import sys
 import pandas as pd
 import yaml
 
-from synthetic_discussion_framework.src.sdl.backend import model
-from synthetic_discussion_framework.src.sdl.postprocessing import postprocessing
-from synthetic_discussion_framework.src.sdl.util import logging_util
-from synthetic_discussion_framework.src.sdl.util import file_util
-from synthetic_discussion_framework.src.sdl.util import model_util
-from synthetic_discussion_framework.src.sdl.annotations.experiments import (
-    AnnotationExperiment,
-)
-from synthetic_discussion_framework.src.sdl.backend import actors, turn_manager
-from synthetic_discussion_framework.src.sdl.discussions.experiments import (
-    DiscussionExperiment,
-)
-
+import syndisco.experiments
+import syndisco.backend
+import syndisco.postprocessing
+import syndisco.util.model_util
+import syndisco.util.file_util
+import syndisco.util.logging_util
 
 logger = logging.getLogger(Path(__file__).name)
 
@@ -34,10 +27,13 @@ def main():
 
     This function parses the configuration file, sets up logging, and performs
     tasks based on the actions specified in the configuration. Actions include
-    generating synthetic discussions, creating annotations, and exporting the dataset.
+    generating synthetic discussions, creating annotations, and exporting the
+    dataset.
     """
     # Set up argument parser for config file path
-    parser = argparse.ArgumentParser(description="Generate synthetic conversations")
+    parser = argparse.ArgumentParser(
+        description="Generate synthetic conversations"
+    )
     parser.add_argument(
         "--config_file",
         required=True,
@@ -49,7 +45,12 @@ def main():
     with open(args.config_file, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
 
-    model_manager = model_util.ModelManager(yaml_data=yaml_data)
+    model_manager = syndisco.util.model_util.ModelManager(
+        model_path=yaml_data["model"]["model_path"],
+        model_pseudoname=yaml_data["model"]["model_pseudoname"],
+        max_new_tokens=yaml_data["model"]["max_tokens"],
+        disallowed_strings=yaml_data["model"]["disallowed_strings"],
+    )
 
     generate_discussions = yaml_data["actions"]["generate_discussions"]
     generate_annotations = yaml_data["actions"]["generate_annotations"]
@@ -77,7 +78,9 @@ def main():
         )
         run_annotation_experiment(
             ann_exp,
-            discussions_dir=Path(yaml_data["discussions"]["files"]["output_dir"]),
+            discussions_dir=Path(
+                yaml_data["discussions"]["files"]["output_dir"]
+            ),
             output_dir=Path(yaml_data["annotation"]["files"]["output_dir"]),
         )
 
@@ -86,7 +89,7 @@ def main():
 
 
 def setup_logging(logging_config: dict) -> None:
-    logging_util.logging_setup(
+    syndisco.util.logging_util.logging_setup(
         print_to_terminal=logging_config["print_to_terminal"],
         write_to_file=logging_config["write_to_file"],
         logs_dir=Path(logging_config["logs_dir"]),
@@ -99,8 +102,14 @@ def setup_logging(logging_config: dict) -> None:
 def validate_actions(
     generate_discussions, generate_annotations, export_dataset
 ) -> None:
-    if not generate_discussions and not generate_annotations and not export_dataset:
-        logger.warning("All procedures have been disabled for this run. Exiting...")
+    if (
+        not generate_discussions
+        and not generate_annotations
+        and not export_dataset
+    ):
+        logger.warning(
+            "All procedures have been disabled for this run. Exiting..."
+        )
         sys.exit(0)
     else:
         if not generate_discussions:
@@ -111,56 +120,68 @@ def validate_actions(
             logger.warning("Dataset export to CSV disabled.")
 
 
-def create_discussion_experiment(llm, discussion_config: dict) -> DiscussionExperiment:
-    topics = file_util.read_files_from_directory(
+def create_discussion_experiment(
+    llm, discussion_config: dict
+) -> syndisco.experiments.DiscussionExperiment:
+    topics = syndisco.util.file_util.read_files_from_directory(
         discussion_config["files"]["topics_dir"]
     )
 
     users = get_users(llm, discussion_config)
     moderator = get_mod(llm, discussion_config)
     next_turn_manager = get_turn_manager(
-        turn_manager_type=discussion_config["turn_taking"]["turn_manager_type"],
-        other_config={
-            "respond_probability": discussion_config["turn_taking"][
-                "respond_probability"
-            ]
-        },
+    turn_manager_type=discussion_config["turn_taking"]["turn_manager_type"],
+       p_respond= discussion_config["turn_taking"]["respond_probability"]
     )
 
-    return DiscussionExperiment(
-        topics=topics,
+    return syndisco.experiments.DiscussionExperiment(
+        seed_opinions=topics,
         users=users,
         moderator=moderator,
         next_turn_manager=next_turn_manager,
         num_turns=discussion_config["experiment_variables"]["num_experiments"],
-        num_active_users=discussion_config["experiment_variables"]["num_users"],
-        num_discussions=discussion_config["experiment_variables"]["num_experiments"],
+        num_active_users=discussion_config["experiment_variables"][
+            "num_users"
+        ],
+        num_discussions=discussion_config["experiment_variables"][
+            "num_experiments"
+        ],
     )
 
 
-def get_users(llm: model.BaseModel, discussion_config: dict) -> list[actors.LLMActor]:
-    return actors.create_users_from_file(
+def get_users(
+    llm: syndisco.backend.model.BaseModel, discussion_config: dict
+) -> list[syndisco.backend.actors.LLMActor]:
+    return syndisco.backend.actors.create_users_from_file(
         llm,
         persona_path=Path(discussion_config["files"]["user_persona_path"]),
-        instruction_path=Path(discussion_config["files"]["user_instructions_path"]),
+        instruction_path=Path(
+            discussion_config["files"]["user_instructions_path"]
+        ),
         context=discussion_config["experiment_variables"]["context_prompt"],
-        actor_type=actors.ActorType.USER,
+        actor_type=syndisco.backend.actors.ActorType.USER,
     )
 
 
-def get_mod(llm: model.BaseModel, discussion_config: dict) -> actors.LLMActor | None:
+def get_mod(
+    llm: syndisco.backend.model.BaseModel, discussion_config: dict
+) -> syndisco.backend.actors.LLMActor | None:
     if discussion_config["experiment_variables"]["include_mod"]:
-        mod_instructions = file_util.read_file(
+        mod_instructions = syndisco.util.file_util.read_file(
             discussion_config["files"]["mod_instructions_path"]
         )
-        moderator = actors.create_users(
+        moderator = syndisco.backend.actors.create_users(
             llm,
             usernames=["moderator"],
             attributes=[
-                discussion_config["experiment_variables"]["moderator_attributes"]
+                discussion_config["experiment_variables"][
+                    "moderator_attributes"
+                ]
             ],
-            context=discussion_config["experiment_variables"]["context_prompt"],
-            actor_type=actors.ActorType.USER,
+            context=discussion_config["experiment_variables"][
+                "context_prompt"
+            ],
+            actor_type=syndisco.backend.actors.ActorType.USER,
             instructions=mod_instructions,
         )[0]
     else:
@@ -169,33 +190,40 @@ def get_mod(llm: model.BaseModel, discussion_config: dict) -> actors.LLMActor | 
 
 
 def get_turn_manager(
-    turn_manager_type: str, other_config: dict
-) -> turn_manager.TurnManager:
-    return turn_manager.turn_manager_factory(
-        turn_manager_type, config=other_config
-    )
+    turn_manager_type: str, p_respond: float
+) -> syndisco.backend.turn_manager.TurnManager:
+    if turn_manager_type == "random_weighted":
+        return syndisco.backend.turn_manager.RandomWeighted(p_respond=p_respond)
+    else:
+        return syndisco.backend.turn_manager.RoundRobbin()
 
 
 def run_discussion_experiment(
-    experiment: DiscussionExperiment, output_dir: Path
+    experiment: syndisco.experiments.DiscussionExperiment, output_dir: Path
 ) -> None:
     logger.info("Starting synthetic discussion experiments...")
     experiment.begin(discussions_output_dir=output_dir)
     logger.info("Finished synthetic discussion experiments.")
 
 
-def create_annotation_experiment(llm, annotation_config: dict) -> AnnotationExperiment:
-    annotators = actors.create_users_from_file(
+def create_annotation_experiment(
+    llm, annotation_config: dict
+) -> syndisco.experiments.AnnotationExperiment:
+    annotators = syndisco.backend.actors.create_users_from_file(
         llm,
-        persona_path=Path(annotation_config["files"]["annotator_persona_path"]),
+        persona_path=Path(
+            annotation_config["files"]["annotator_persona_path"]
+        ),
         instruction_path=Path(annotation_config["files"]["instruction_path"]),
         context="You are a human annotator",
-        actor_type=actors.ActorType.ANNOTATOR,
+        actor_type=syndisco.backend.actors.ActorType.ANNOTATOR,
     )
 
-    return AnnotationExperiment(
+    return syndisco.experiments.AnnotationExperiment(
         annotators=annotators,
-        history_ctx_len=annotation_config["experiment_variables"]["history_ctx_len"],
+        history_ctx_len=annotation_config["experiment_variables"][
+            "history_ctx_len"
+        ],
         include_mod_comments=annotation_config["experiment_variables"][
             "include_mod_comments"
         ],
@@ -203,7 +231,9 @@ def create_annotation_experiment(llm, annotation_config: dict) -> AnnotationExpe
 
 
 def run_annotation_experiment(
-    annotation_experiment: AnnotationExperiment, discussions_dir: Path, output_dir: Path
+    annotation_experiment: syndisco.experiments.AnnotationExperiment,
+    discussions_dir: Path,
+    output_dir: Path,
 ) -> None:
     logger.info("Starting synthetic annotation...")
     annotation_experiment.begin(discussions_dir, output_dir)
@@ -231,9 +261,9 @@ def _create_dataset(conv_dir: Path, annot_dir: Path) -> pd.DataFrame:
     :return: A combined DataFrame containing conversation and annotation data.
     :rtype: pd.DataFrame
     """
-    conv_df = postprocessing.import_conversations(conv_dir)
+    conv_df = syndisco.postprocessing.import_discussions(conv_dir)
     conv_df = conv_df.rename({"id": "conv_id"}, axis=1)
-    annot_df = postprocessing.import_annotations(annot_dir)
+    annot_df = syndisco.postprocessing.import_annotations(annot_dir)
 
     full_df = pd.merge(
         left=conv_df,
@@ -257,7 +287,7 @@ def _export_dataset(df: pd.DataFrame, output_path: Path):
     :param output_path: The path where the exported dataset will be saved.
     :type output_path: Path
     """
-    file_util.ensure_parent_directories_exist(output_path)
+    syndisco.util.file_util.ensure_parent_directories_exist(output_path)
     df.to_csv(
         path_or_buf=output_path, encoding="utf8", mode="w+"
     )  # overwrite previous dataset

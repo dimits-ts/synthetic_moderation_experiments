@@ -1,5 +1,5 @@
 actions:
-  generate_discussions: false
+  generate_discussions: true
   generate_annotations: true
   export_dataset: true
 
@@ -7,41 +7,35 @@ actions:
 logging:
   print_to_terminal: true
   write_to_file: true
-  logs_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/logs"
+  logs_dir: "./media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/logs"
   level: "debug"
 
 
-model_parameters:
-  general:
-    disallowed_strings: ["```", "\"", "Assistant", "posted:", "user"]
-    library_type: "transformers"  # Change to "llama_cpp" or "transformers"
-    model_path: "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
-    model_pseudoname: "llama-3.1-70b-4bit"  # only used for record keeping
-    max_tokens: 200
-    ctx_width_tokens: 4096
-
-  llama_cpp:
-    inference_threads: 10
-    gpu_layers: 9999999  # You can adjust this number based on your GPU capacity
+model:
+  disallowed_strings: ["```", "\""]
+  model_path: "unsloth/Qwen2.5-32B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
+  model_pseudoname: "qwen-34b-instruct-bnb-4bit"  # only used for record keeping
+  max_tokens: 1500
+  ctx_width_tokens: 4096
 
 
 discussions:
   files:
-    topics_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
-    user_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/personas/personas.json"
-    user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
-    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output/" 
+    topics_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
+    user_persona_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/personas/personas.json"
+    user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
+    mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/mod_instructions/vanilla.txt" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_output/test" 
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
-    num_experiments: 8
+    num_experiments: 1
     num_users: 7 # how many personas will be used in each experiment
     context_prompt: "You are a human participating in an online chatroom."
     moderator_attributes: ["just", "strict", "understanding"]
   
   turn_taking:
-    num_turns: 5
+    num_turns: 4
     history_ctx_len: 3
     turn_manager_type: "random_weighted"
     respond_probability: 0.4 # only applicable for random_weighted turn manager type 
@@ -49,9 +43,9 @@ discussions:
 
 annotation:
   files:
-      annotator_persona_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/personas/sdb_personas.json"
-      instruction_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_input/instructions/toxicity_argument_quality.txt"
-      output_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output/"
+      annotator_persona_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/annotation_input/personas/sdb_personas.json"
+      instruction_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/annotation_input/instructions/toxicity_argument_quality.txt"
+      output_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/data/annotation_output/test"
 
   experiment_variables:
     include_mod_comments: true # Whether to include moderator comments in the annotations
@@ -59,6 +53,6 @@ annotation:
 
 
 dataset_export:
-  export_path: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/dataset.csv"
-  discussion_root_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/discussions_output"
-  annotation_root_dir: "/media/SSD_2TB/dtsirmpas_data/llm_mediators/synthetic_moderation_experiments/data/annotation_output"
+  export_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/dataset.csv"
+  discussion_root_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_output"
+  annotation_root_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/annotation_output"
