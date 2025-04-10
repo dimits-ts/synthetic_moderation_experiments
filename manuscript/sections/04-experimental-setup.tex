@@ -1,44 +1,26 @@
-\section{Experimental Setup}
+\section{Configuring Interaction Dynamics}
 
-\subsection{Discussion Objectives Selection}
+\subsection{Model}
 
-We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality (we later discuss the deliberate vagueness of the term). Of course, since we want our \ac{LLM} moderators to guide the discussion towards this ideal state, our experiments would ideally feature both high toxicity and low argument quality by default. 
+We use three open-source models from different families of \acp{LLM} for the \ac{LLM} user-agents and moderators (Table \ref{tab:models}). We use a well-established model (LLaMa-3.1-70b), a relatively smaller model (Qwen-2.5), as well as an abliterated model (Mistral Nemo Abliterated)\footnote{Abliteration is a technique used to modify \acp{LLM} by removing their built-in refusal mechanisms, allowing them to respond to all types of prompts without censorship.}. The intuition behind using an abliterated model is to circumvent model alignment, which occasionally prevents the \ac{LLM} user agent from responding as a human would \cite{Park2023GenerativeAI}. %We use the LLaMa-3.1-70b model exclusively for the synthetic annotation of the dataset, since it has been proven reliable for toxicity annotation \cite{koh-etal-2024-llms}. 
 
-The reason we pick toxicity is that \ac{LLM} annotations of toxicity are fairly reliably close to those of human would-be annotators \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}. Furthermore, toxicity is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). Determining argument quality is a much more difficult task, since it is not quite clear what its definition entails \cite{korre2025evaluation}; not even human annotators typically agree on what constitutes a “good argument” \cite{argyle2023}. Even so, it is the subject of many works in the field of online moderation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}.
+\begin{table}[ht]
+\centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Model Name} & \textbf{\#Parameters} & \textbf{Quant.} \\
+        \hline
+        LLaMa-3.1-70b & 70 billion & 4 bits \\
+        Qwen-2.5 & 33 billion & 4 bits \\
+        Mistral Nemo (abl.) & 22 billion & 16 bits\\
+        \hline
+    \end{tabular}
+\caption{Summary of models used for synthetic discussion generation. The Mistral Nemo model is an “abliterated” variant, guiding its outputs away from alignment procedures.}
+\label{tab:models}
+\end{table}
 
-Given these objectives, we define two measures: \ac{LLM}-Annotated Toxicity ($m_1$) and \ac{LLM}-Annotated Argument Quality ($m_2$). These measures are defined in the \ac{LLM}-annotator agent instruction prompt (see Table \ref{tab:base_prompts} in the Appendix).
-
-
-\subsection{LLM Moderator Configurations}
-\label{ssec:setup:strategies}
-
-In this study, we test six different moderation/facilitation strategies ($s_1, \ldots, s_6$). The prompts used for each moderation strategy can be found in Table \ref{tab:moderation_strategies} of the Appendix. We distinguish between two types of strategies; \emph{“baseline strategies”} which represent approaches not informed by literature on moderation, and \emph{“real-life”} strategies which are used by human moderators. We include a \emph{baseline} where no moderator is present, as well as our own \emph{experimental} strategy.
-
-\begin{enumerate}
-    \item \textbf{No moderator}: A \emph{baseline} where no moderator is present.
-
-    \item \textbf{Moderator without strategy}: A \emph{baseline strategy} where a \ac{LLM} moderator is active, but is provided only with basic instructions, without any guidelines on how, what, or when to moderate.
-
-    \item \textbf{Constitution rules}: A \emph{baseline strategy} where the \ac{LLM} moderator's prompt is adapted from guidelines elicited for the task of \ac{LLM} alignment \cite{collective_constitution}. We adapt these guidelines to fit them in the context of online discussions. This provides the moderator with a set of rules to uphold, without specifying how the moderator should act to achieve this.
-    
-    \item \textbf{Moderation game}: Our own proposed \emph{experimental strategy}. Basic instructions formulated as a social game, where the moderator will try to maximize their scores by avoiding certain actions and arriving at specific outcomes. It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. This strategy was inspired by work we are doing to formulate moderation as a \ac{RL} task (though we do not use RL in the experiments of this paper), as well as the \ac{LLM} negotiation games presented by \citet{abdelnabi2024cooperationcompetitionmaliciousnessllmstakeholders}.
-    
-
-    \item \textbf{Moderation guidelines}: A \emph{real-life strategy} based on guidelines given to human moderators of the “Regulation Room” platform \citep{Cornell_eRulemaking2017}, provided by Cornell University. The Regulation Room was an online platform designed to facilitate public engagement with U.S. government policy decisions, and has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}. These guidelines were written for volunteer moderators for the purposes of policing an online deliberation platform, and are well known in literature.
-
-    \item \textbf{Facilitation guidelines}: Similarly to the “Moderation  guidelines”, this \emph{real-life strategy} is based on the human facilitation guidelines of the MIT Center for Constructive Communications \cite{dimitra-guide, dimitra-book}. It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
-\end{enumerate}
-
-
-
-\subsection{Synthetic Discussions}
-\label{ssec:experimental:discussions}
-
-We create 30 \ac{LLM} user “personas”,  each one supplied with a unique \ac{SDB}, personality, and “intent” ($\theta_1, \ldots, \theta_{30}$). These personas were automatically generated by prompting a GPT-4 model to generate $30$ \acp{SDB} \cite{openai2024gpt4technicalreport}. The “intent” is a parameter which gives each user a “reason” to participate in the discussion; for example, a user may want to participate because they want to help their community, while another because they want to sabotage the discussion and rile up other users. In our experiments, each intent is mapped to special instructions given to that user (Table \ref{tab:intents}). We thus create three types of users: users with no intent, trolls, and community-focused users.
-
-All \ac{LLM} agents actively participating in the discussion (users and moderators) are given the same “Context” prompt. Additionally, all \ac{LLM} user-agents are given the same instructions prompt. These “base prompts” can be found in Table \ref{tab:base_prompts}. An overview of how the experiments are generated can be seen in Algorithm \ref{alg:exp_generation} (Appendix \ref{sec:appendix}). Each discussion is run according to Equation \ref{eq:strategy_comparison} in Section \ref{ssec:setup:strategies}. 
-
-The turn taking function, as defined in Section \ref{ssec:methodology:evaluating}, can be seen in Equation \ref{eq:turn_taking} (assuming $M \neq \emptyset$). This function attempts to model the dynamics of real-life online discussions, where users come and go, but also may engage in lengthy discussions. While complete replication of discussions (same users, same topic, same setup) is viable using synthetic user-agents and a controlled setup, we posit that synthetic experiments should focus on modeling real-life dynamics.
+\subsection{Turn taking}
+We investigate two turn taking functions: The Round Robin algorithm, which gets each user to talk in a predetermined, unchanging order, and an algorithm which allows users to respond to a previous comment with a set probability (Equation \ref{eq:turn_taking}).
 
 \small
 \begin{equation}
@@ -57,36 +39,8 @@ The turn taking function, as defined in Section \ref{ssec:methodology:evaluating
 \noindent where $U$ is the current set of participants, $M$ the set of moderators (in our case a set with one element), and $p$ represents the probability of the option being selected.
 
 
-\subsection{Synthetic Annotation}
+\subsection{Prompting}
 
-In order to annotate the generated discussions, we create $10$ \ac{LLM} annotator-agents, each with unique \ac{SDB} information, in the same manner as the \ac{LLM} user-agents used in the synthetic discussions. Unlike the latter, the annotator-agents are not provided with usernames (so they don't overlap with participant names), nor intents. The annotators all get the same instruction prompt (see Table \ref{tab:base_prompts}).
+We designate “roles” for each of the user-agents in the discussions. A role is a parameter which gives each user a “reason” to participate in the discussion; for example, a user may want to participate because they want to help their community, while another because they want to sabotage the discussion and rile up other users. In our experiments, each role is mapped to special instructions given to that user (see Addendum Table \ref{tab:intents}). We create three types of users: users with no special role, trolls, and community-focused users.
 
-In many annotation tasks involving humans, a data-point is annotated only by a subset of annotators. This is usually caused by human annotation being expensive and hard to scale. Since \acp{LLM} are comparatively cheaper and more easily scalable, we choose not to sample annotator-agents.
-
-
-\subsection{SynDisco}
-
-We develop our own open-source, purpose-built, lightweight, synthetic discussion framework called “SynDisco”. SynDisco provides three main essential functions: (1) Managing of synthetic discussions, (2) synthetic annotation of these discussions, and (3) mass generation of randomized discussion and annotation tasks. It features built-in fault tolerance (automated recovery upon errors and intermittent saving) and file logging, since experiments consisting of hundreds of synthetic discussions may take days to run on a server. To use the framework, please visit the project's repository\projectlink.
-
-\subsection{Technical Details}
-\label{ssec:experimental:technical}
-
-In this study, we use three open-source models from different families of \acp{LLM} for the \ac{LLM} user-agents and moderators (Table \ref{tab:models}). We use a well-established model (LLaMa-3.1-70b), a relatively smaller model (Qwen-2.5), as well as an abliterated model (Mistral Nemo Abliterated)\footnote{Abliteration is a technique used to modify \acp{LLM} by removing their built-in refusal mechanisms, allowing them to respond to all types of prompts without censorship.}. The intuition behind using an abliterated model is to circumvent model alignment, which occasionally prevents the \ac{LLM} user agent from responding as a human would \cite{Park2023GenerativeAI}. We use the LLaMa-3.1-70b model exclusively for the synthetic annotation of the dataset, since it has been proven reliable for toxicity annotation \cite{koh-etal-2024-llms}. 
-
-The code for the analysis can be found in the data and analysis repository \analysislink.
-
-\begin{table}[ht]
-\centering
-    \begin{tabular}{|l|c|c|}
-        \hline
-        \textbf{Model Name} & \textbf{\#Parameters} & \textbf{Quant.} \\
-        \hline
-        LLaMa-3.1-70b & 70 billion & 4 bits \\
-        Qwen-2.5 & 33 billion & 4 bits \\
-        Mistral Nemo (abl.) & 22 billion & 16 bits\\
-        \hline
-    \end{tabular}
-\caption{Summary of models used for synthetic discussion generation. The Mistral Nemo model is an "abliterated" variant, guiding its outputs away from alignment procedures.}
-\label{tab:models}
-\end{table}
-
+We also create 30 \ac{LLM} user “personas”,  each one supplied with a unique \ac{SDB}, personality. These personas were automatically generated by prompting a GPT-4 model to generate $30$ \acp{SDB} \cite{openai2024gpt4technicalreport}.

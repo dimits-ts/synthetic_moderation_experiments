@@ -4,51 +4,43 @@
 \section{Methodology}
 \label{sec:methodology}
 
-\subsection{Evaluating Moderation Strategies}
-\label{ssec:methodology:evaluating}
+\subsection{Defining Synthetic Discussions}
 
-Let $U$ be the set of users participating in discussions and $M$ the set of moderators, where $M \cap U = \emptyset$. We define a conversation $d$ of $\lvert d \rvert$ comments\footnote{Also referred to as “dialogue turns” in some publications.} $c(d, i)$ as an ordered set 
+Let $U$ be the set of users participating in discussions and $M$ the set of moderators, where $M \cap U = \emptyset$. We define a conversation $d$ of $\lvert d \rvert$ comments\footnote{Also referred to as “dialogue turns” in some publications.} $c(d, i)$ as an ordered set:
 \begin{equation}
     d = \{c(d, 1), c(d, 2), \ldots, c(d, \lvert d \rvert)\}
 \end{equation}
 
-Then we can define the set of discussions that took place with the moderators in $M$ following strategy $s$ as $D^{s} = \{d^s_1, d^s_2, \ldots, d^s_{\lvert D^s \rvert}\}$. We can intuitively claim that a moderation strategy $s$ is \textit{overall} better than $s'$ for a measure $m$ if:
 
-\begin{equation}
-\label{eq:strategy_comparison}
-    \frac{1}{\lvert D^{s} \rvert} {\sum_{d^{s} \in D^{s}} m(d^{s})} > \frac{1}{\lvert D^{s'} \rvert} {\sum_{d^{s'} \in D^{s'}} m(d^{s'})}
-\end{equation}
+Next, we define a turn-taking function $u: D  \times \mathbb{N} \rightarrow U \cup M$ mapping a comment in the $i$-th turn of a discussion $d \in D$ to an arbitrary user in $U$, or moderator in $M$. In real discussions, $u$ is not strictly defined, since which user responds to each comment can not be reliably determined. However, in a synthetic environment $u$ can be made deterministic (see the function formulation at Equation \ref{eq:turn_taking} in Section \ref{ssec:experimental:discussions} for an example).
 
-\noindent This formula assumes the moderator follows a static strategy, in contrast to the dynamic strategies usually employed by human moderators. It also assumes that higher values of $m$ correspond to discussions of higher quality. While some measures may be computable only given the whole discussion (“discussion-level measures”), many measures are defined on the level of individual comments (“comment-level measures”). Common measures of the latter type are toxicity, satisfaction (in the context of sentiment analysis), etc. It is often possible to obtain a discussion-level measure from the comment-level through averaging (e.g., average toxicity, average satisfaction).
-
-In practice, we check if Equation \ref{eq:strategy_comparison} holds in the presence of randomness and limited samples. In that case, we utilize a statistical test to determine whether strategy $s$ is better than $s'$ with a statistically significant difference. 
-
-
-\subsection{Defining Synthetic Discussions}
-
-We first need to define a turn-taking function $u: D  \times \{1, 2, \ldots\} \rightarrow U \cup M$ mapping a comment in the $i$-th turn of a discussion $d \in D$ to an arbitrary user in $U$, or moderator in $M$. In real discussions, $u$ is not strictly defined, since which user responds to each comment can not be reliably determined. However, in a synthetic environment $u$ can be made deterministic (see the function formulation at Equation \ref{eq:turn_taking} in Section \ref{ssec:experimental:discussions} for an example).
-
-In our case, all comments are synthetic, hence, a comment $c$ in a discussion $d^s \in D^s$, at the $i$-th turn is defined recursively as:
+In our case, all comments are synthetic, hence, a comment $c$ in a discussion $d \in D$, at the $i$-th turn is defined recursively as:
 
 \begin{equation}
 \begin{split}
-    c(d^s, i) = & LLM([c(d^s, j)]^{i-1}_{j=max(1, i-h)};\\
-    &\phi(u(d, i), s))
+    c(d, i) = & LLM([c(d, j)]^{i-1}_{j=max(1, i-h)};\\
+    &\phi(u(d, i)))
 \end{split}
 \end{equation}
 
-\noindent where $[\cdot]$ is string concatenation and $h$ is the context length of the \ac{LLM} user-agent (how many past comments they can “remember”). $\phi$ is a function which enables \ac{LLM} user-agents to leverage their unique characteristics in order to formulate a response. In the case that the user is a moderator, it also provides them with an actionable prompt according to the given moderation strategy. $\phi$ is defined as:
+\noindent where $[\cdot]$ is string concatenation and $h$ is the context length of the \ac{LLM} user-agent (how many past comments they can “remember”) and $\phi: U \times M \rightarrow s$ is a function mapping a user $u$ to their instruction prompt $s$.
 
+Our methodology thus assumes that the contents of any synthetic discussion are dependent on the following parameters:
+\begin{itemize}[noitemsep]
+    \item The underlying model ($LLM(\cdot)$)
+    \item The turn-taking function $u$
+    \item The prompting function $\phi$
+\end{itemize}
+
+
+\subsection{Gauging Diversity}
+\label{ssec:methodology:evaluating}
+
+One simple metric that distinguishes between LLM generated and human texts, is the one presented in \citet{ulmer2024}. In their work, the authors use average pairwise F1 ROUGE-L scores \cite{lin-2004-rouge} to gauge diversity in synthetic discussions. This is built on the observation that a common shortcoming of completely synthetic discussions is word repetition; either because the discussion does not meaningfully advance, or because the discussion collapses (and the models keep repeating the same words/phrases). The score is computed by computing the individual F1 ROUGE-L scores for each comment in the discussion with all the rest, then averaging them. A larger ROUGE-L score indicates less variance in the discussion. The equation itself can be written as:
+
+\small
 \begin{equation}
-\label{eq:phi}
-    \phi(u(d, i), s) = \left\{
-\begin{array}{ll}
-      \theta_{u(d, i)} & u(d, i) \in U \\
-      {[\theta_{u(d, i)}, s]} & u(d, i) \in M \\ % braces to prevent compiler hanging https://www.overleaf.com/learn/latex/Errors/Illegal_unit_of_measure_(pt_inserted)
-\end{array} 
-\right. 
+\label{eq:variety}
+    div(d) = \frac{1}{N(N-1)} \sum_{i=1}^N \sum_{j=1, j \neq i}^N F1(c(i, d), c(j, d))
 \end{equation}
-
-\noindent where $\theta_{u(d, i)}$ is a string representing any participant-specific parameter not tied to the underlying \ac{LLM} (e.g., the specific \ac{SDB} affecting the prompting instructions). 
-
-Having obtained the synthetic comments, we can evaluate different moderation strategies by following Equation \ref{eq:strategy_comparison}.
+\normalsize

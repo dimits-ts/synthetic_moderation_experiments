@@ -29,6 +29,7 @@
 \usepackage[noend]{algpseudocode}
 \usepackage{acronym}
 \usepackage{enumitem}
+\usepackage{amsfonts}
 
 % table commands
 \renewcommand{\arraystretch}{1.2}
@@ -39,8 +40,8 @@
 % links
 \newcommand{\projectlink}{\footnote{\url{https://github.com/dimits-ts/synthetic_discussion_framework}}}
 \newcommand{\analysislink}{\footnote{\url{https://github.com/dimits-ts/synthetic_moderation_experiments}}}
-\newcommand{\datasetlink}{\footnote{\url{https://github.com/dimits-ts/synthetic_moderation_experiments/blob/master/data/dataset.zip}}}
-\newcommand{\textWarning}[1]{\begin{center}\textcolor{orange}{\textbf{#1}}\end{center}}
+\newcommand{\datasetlink}{\footnote{\url{https://paperswithcode.com/dataset/vmd}}}
+\newcommand{\textWarning}[1]{\begin{center}\textcolor{red}{\textbf{#1}}\end{center}}
 
 % math
 \DeclareMathOperator*{\argmax}{argmax} % thin space, limits underneath in displays
@@ -50,7 +51,7 @@
     Dimitris Tsirmpas \orcidlink{0000-0002-5675-3939}, Ion Androutsopoulos \orcidlink{0009-0000-2969-0509}, John Pavlopoulos \orcidlink{0000-0001-9188-7425} \\
     Dept.\ of Informatics, Athens University of Economics and Business, Greece and \\
     Archimedes, Athena Research Center, Greece \\
-    \texttt{\{annis,ion,dim.tsirmpas\}@aueb.gr}
+    \texttt{\{dim.tsirmpas,ion,annis\}@aueb.gr}
 }
 \date{February 2025}
 
@@ -58,17 +59,19 @@
 
 \maketitle
 
-\textWarning{Content warning: This paper contains samples of harmful text, including violent, toxic, controversial, and potentially illegal statements.}
+%\textWarning{Content warning: This paper contains samples of harmful text, including violent, toxic, controversial, and potentially illegal statements.}
 
-\input{sections/abstract}
+\input{sections/00-abstract}
 \input{sections/01-introduction}
 \input{sections/02-related-work}
 \input{sections/03-methodology}
 \input{sections/04-experimental-setup}
 \input{sections/05-results}
-\input{sections/06-data}
-\input{sections/07-conclusions}
-\input{sections/08-acknowledgements}
+\input{sections/06-software}
+\input{sections/07-data}
+\input{sections/08-conclusions}
+\input{sections/09-future-work}
+\input{sections/10-acknowledgements}
 
 \bibliography{refs}
 \appendix
