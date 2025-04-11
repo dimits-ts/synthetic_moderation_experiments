@@ -1,6 +1,31 @@
-\section{Configuring Interaction Dynamics}
+\section{Experimental Setup}
 
-\subsection{Model}
+\subsection{Moderation Strategies}
+\label{ssec:setup:strategies}
+
+We test six different moderation/facilitation strategies. The prompts used for each moderation strategy can be found in Table \ref{tab:moderation_strategies} of the Appendix. We distinguish between two types of strategies; \emph{“baseline strategies”} which represent approaches not informed by literature on moderation, and \emph{“real-life”} strategies which are used by human moderators. We also test our own \emph{experimental} strategy.
+
+\begin{enumerate}[noitemsep]
+    \item \textbf{No moderator}: A \emph{baseline} where no moderator is present.
+
+    \item \textbf{Moderator without strategy}: A \emph{baseline strategy} where a \ac{LLM} moderator is active, but is provided only with basic instructions, without any guidelines on how, what, or when to moderate.
+
+    \item \textbf{Rules without instructions}: A \emph{baseline} where the \ac{LLM} moderator's prompt is adapted from guidelines elicited for the task of \ac{LLM} alignment \cite{collective_constitution}. This provides the moderator with a set of rules to uphold, without specifying how.
+    
+    \item \textbf{RL formulation}: Our own proposed \emph{experimental} strategy inspired by the experiments of \citet{abdelnabi_negotiations}. Basic instructions formulated as a social game, where the moderator tries to maximize their scores by avoiding certain actions and arriving at specific outcomes. It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. %This strategy was inspired by work we are doing to formulate moderation as a \ac{RL} task (though we do not use \ac{RL} in the experiments of this paper), as well as the \ac{LLM} negotiation games presented by \citet{abdelnabi_negotiations}.
+
+    \item \textbf{Moderation guidelines}: A \emph{real-life} strategy based on guidelines given to human moderators of the “Regulation Room” platform \citep{Cornell_eRulemaking2017}, provided by Cornell University. The Regulation Room was an online platform designed to facilitate public engagement with U.S. government policy decisions, and has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
+
+    \item \textbf{Facilitation guidelines}: Similarly to the “Moderation  guidelines”, this \emph{real-life strategy} is based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
+\end{enumerate}
+
+
+\subsection{Evaluation Metrics}
+
+We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality we pick toxicity because \ac{LLM} toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate} and toxicity is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). Determining argument quality is a much more difficult task, since it is not quite clear what its definition entails \cite{korre2025evaluation}; not even human annotators typically agree on what constitutes a “good argument” \cite{argyle2023}. Even so, it is the subject of many works in the field of online moderation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}. More details on synthetic annotation can be found in Section \ref{ssec:appendix:annotation}.
+
+
+\subsection{Models}
 
 We use three open-source models from different families of \acp{LLM} for the \ac{LLM} user-agents and moderators (Table \ref{tab:models}). We use a well-established model (LLaMa-3.1-70b), a relatively smaller model (Qwen-2.5), as well as an abliterated model (Mistral Nemo Abliterated)\footnote{Abliteration is a technique used to modify \acp{LLM} by removing their built-in refusal mechanisms, allowing them to respond to all types of prompts without censorship.}. The intuition behind using an abliterated model is to circumvent model alignment, which occasionally prevents the \ac{LLM} user agent from responding as a human would \cite{Park2023GenerativeAI}. %We use the LLaMa-3.1-70b model exclusively for the synthetic annotation of the dataset, since it has been proven reliable for toxicity annotation \cite{koh-etal-2024-llms}. 
 
@@ -10,7 +35,7 @@ We use three open-source models from different families of \acp{LLM} for the \ac
         \hline
         \textbf{Model Name} & \textbf{\#Parameters} & \textbf{Quant.} \\
         \hline
-        LLaMa-3.1-70b & 70 billion & 4 bits \\
+        LLaMa-3.1 & 70 billion & 4 bits \\
         Qwen-2.5 & 33 billion & 4 bits \\
         Mistral Nemo (abl.) & 22 billion & 16 bits\\
         \hline
@@ -19,8 +44,11 @@ We use three open-source models from different families of \acp{LLM} for the \ac
 \label{tab:models}
 \end{table}
 
+
 \subsection{Turn taking}
-We investigate two turn taking functions: The Round Robin algorithm, which gets each user to talk in a predetermined, unchanging order, and an algorithm which allows users to respond to a previous comment with a set probability (Equation \ref{eq:turn_taking}).
+\label{ssec:experimental:turn}
+
+We investigate three turn taking functions: The Round Robin algorithm, which gets each user to talk in a predetermined, unchanging order, random selection, and an algorithm which allows users to respond to a previous comment with a set probability (Equation \ref{eq:turn_taking}).
 
 \small
 \begin{equation}
@@ -44,3 +72,38 @@ We investigate two turn taking functions: The Round Robin algorithm, which gets 
 We designate “roles” for each of the user-agents in the discussions. A role is a parameter which gives each user a “reason” to participate in the discussion; for example, a user may want to participate because they want to help their community, while another because they want to sabotage the discussion and rile up other users. In our experiments, each role is mapped to special instructions given to that user (see Addendum Table \ref{tab:intents}). We create three types of users: users with no special role, trolls, and community-focused users.
 
 We also create 30 \ac{LLM} user “personas”,  each one supplied with a unique \ac{SDB}, personality. These personas were automatically generated by prompting a GPT-4 model to generate $30$ \acp{SDB} \cite{openai2024gpt4technicalreport}.
+
+
+\subsection{Setup}
+
+An overview of how the experiments are generated can be seen in Algorithm \ref{alg:exp_generation}. Each discussion is run according to Equation \ref{eq:comment} in Section \ref{ssec:methodology:discussions}. 
+
+\begin{algorithm}
+\caption{Synthetic discussion generation}
+\label{alg:exp_generation}
+\hspace*{\algorithmicindent} \textbf{Input:} 
+         \begin{itemize}[noitemsep, nosep]
+             \item User \acp{SDB} $\Theta = \{\theta_1, \dots, \theta_{30}\}$
+             \item Moderator \ac{SDB} = $\theta_{mod}$
+             \item Mod. strategies $S = \{s_1, \ldots, s_6\}$
+             \item Seed opinions $O = \{o_1, \ldots, o_7\}$
+             \item \acp{LLM} = $\{llm_1, llm_2, llm_3\}$
+         \end{itemize}
+         \hspace*{\algorithmicindent} \textbf{Output:} Set of discussions $D$
+\begin{algorithmic}[1]
+    \State $D = \{\}$
+    \For{$llm \in LLMs$}
+        \For{$s \in S$}
+            \For{$i = 1, 2, \ldots, n_{discussions}$}
+                \State $\hat{\Theta} = $ \Call{RandomSample}{$\Theta$, 7}
+                \State $U =$  \Call{Actors}{llm, $\hat{\Theta}$}
+                \State $m = $ \Call{Actors}{llm, $\{[\theta_{mod}, s]\}$}
+                \State $o = $ \Call{RandomSample}{$O$, 1}
+                \State $d =$ \{users: $U$, moderator: $m$, context: $o$, $\vert d \rvert$: $14$, h: $3$\}
+                \State $D = D \cup d$
+            \EndFor
+        \EndFor
+    \EndFor
+    \State \Return $D$
+\end{algorithmic}
+\end{algorithm}

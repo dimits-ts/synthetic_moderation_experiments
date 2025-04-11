@@ -3,6 +3,19 @@
 
 \section{Results}
 
+\subsection{Main findings}
+
+Figure \ref{fig::toxicity_aq_stats} shows the mean difference in toxicity and argument quality between each moderation strategy. Discussions where a moderator is absent feature overall significantly increased toxicity and decreased argument quality. Some strategies seem to have both statistically (Kruskal-Wallis $p=0$ for both measures) and qualitatively significant impact on discussions. Our proposed \ac{RL}-inspired strategy (see Section \ref{ssec:setup:strategies}) significantly outperforms all baselines, as well as all other established strategies, by a smaller margin. This is more evident when looking at toxicity. In fact, contrary to our expectations, the strategies based on widely used guidelines do not seem to outperform the baselines (apart from the moderator being absent).
+
+\begin{figure*}[t]
+    \includegraphics[width=0.48\linewidth]{toxicity_stats.png} \hfill
+    \includegraphics[width=0.48\linewidth]{argumentq_stats.png}
+	\centering
+	\caption{Mean difference of Toxicity (left) and Argument Quality (right) between each moderation strategy. $A[i, j] = 0.3^{***}$ indicates that the strategy $j$ is better than the strategy $i$ for an average of $0.3$ points with $p<0.001$. Each comparison is accompanied by Dunn's posthoc test for multiple comparisons \cite{dunn}, in the form of significance asterisks.}
+	\label{fig::toxicity_aq_stats}
+\end{figure*}
+
+
 \subsection{Ablation study}
 
 \subsubsection{Models}
@@ -17,7 +30,7 @@ Figure \ref{fig::discussion_variance} demonstrates that the Qwen-2.5 model featu
 \end{figure}
 
 
-\subsection{Observations on LLM agent behavior}
+\subsection{Observations}
 
 \subsubsection{LLM moderators}
 

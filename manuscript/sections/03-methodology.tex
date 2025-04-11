@@ -4,7 +4,8 @@
 \section{Methodology}
 \label{sec:methodology}
 
-\subsection{Defining Synthetic Discussions}
+\subsection{Defining synthetic discussions}
+\label{ssec:methodology:discussions}
 
 Let $U$ be the set of users participating in discussions and $M$ the set of moderators, where $M \cap U = \emptyset$. We define a conversation $d$ of $\lvert d \rvert$ comments\footnote{Also referred to as “dialogue turns” in some publications.} $c(d, i)$ as an ordered set:
 \begin{equation}
@@ -12,11 +13,12 @@ Let $U$ be the set of users participating in discussions and $M$ the set of mode
 \end{equation}
 
 
-Next, we define a turn-taking function $u: D  \times \mathbb{N} \rightarrow U \cup M$ mapping a comment in the $i$-th turn of a discussion $d \in D$ to an arbitrary user in $U$, or moderator in $M$. In real discussions, $u$ is not strictly defined, since which user responds to each comment can not be reliably determined. However, in a synthetic environment $u$ can be made deterministic (see the function formulation at Equation \ref{eq:turn_taking} in Section \ref{ssec:experimental:discussions} for an example).
+Next, we define a turn-taking function $u: D  \times \mathbb{N} \rightarrow U \cup M$ mapping a comment in the $i$-th turn of a discussion $d \in D$ to an arbitrary user in $U$, or moderator in $M$. In real discussions, $u$ is not strictly defined, since which user responds to each comment can not be reliably determined. However, in a synthetic environment, $u$ can be made deterministic (see Section \ref{ssec:experimental:turn}).
 
 In our case, all comments are synthetic, hence, a comment $c$ in a discussion $d \in D$, at the $i$-th turn is defined recursively as:
 
 \begin{equation}
+\label{eq:comment}
 \begin{split}
     c(d, i) = & LLM([c(d, j)]^{i-1}_{j=max(1, i-h)};\\
     &\phi(u(d, i)))
@@ -33,8 +35,23 @@ Our methodology thus assumes that the contents of any synthetic discussion are d
 \end{itemize}
 
 
-\subsection{Gauging Diversity}
-\label{ssec:methodology:evaluating}
+\subsection{Evaluating moderation strategies}
+\label{ssec:methodology:strategies}
+
+Let $D^{s} = \{d^s_1, d^s_2, \ldots, d^s_{\lvert D^s \rvert}\}$  the set of discussions that took place with the moderators following strategy $s$. We can intuitively claim that a moderation strategy $s$ is \textit{overall} better than $s'$ for a measure $m$ if:
+
+\begin{equation}
+\label{eq:strategy_comparison}
+    \frac{1}{\lvert D^{s} \rvert} {\sum_{d^{s} \in D^{s}} m(d^{s})} > \frac{1}{\lvert D^{s'} \rvert} {\sum_{d^{s'} \in D^{s'}} m(d^{s'})}
+\end{equation}
+
+This formula assumes the moderator follows a static strategy, in contrast to the dynamic strategies usually employed by human moderators. It also assumes that higher values of $m$ correspond to discussions of higher quality. While some measures may be computable only given the whole discussion (“discussion-level measures”), many measures are defined on the level of individual comments (“comment-level measures”). It is often possible to obtain a discussion-level measure from the comment-level through averaging (e.g., average toxicity, average satisfaction).
+
+In practice, we check if Equation \ref{eq:strategy_comparison} holds in the presence of randomness and limited samples.
+
+
+\subsection{Evaluating diversity}
+\label{ssec:methodology:diversity}
 
 One simple metric that distinguishes between LLM generated and human texts, is the one presented in \citet{ulmer2024}. In their work, the authors use average pairwise F1 ROUGE-L scores \cite{lin-2004-rouge} to gauge diversity in synthetic discussions. This is built on the observation that a common shortcoming of completely synthetic discussions is word repetition; either because the discussion does not meaningfully advance, or because the discussion collapses (and the models keep repeating the same words/phrases). The score is computed by computing the individual F1 ROUGE-L scores for each comment in the discussion with all the rest, then averaging them. A larger ROUGE-L score indicates less variance in the discussion. The equation itself can be written as:
 
