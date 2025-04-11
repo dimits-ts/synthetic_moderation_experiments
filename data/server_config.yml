@@ -22,10 +22,10 @@ model:
 discussions:
   files:
     topics_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
-    user_persona_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/personas/no_sdb_personas.json"
+    user_persona_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/personas/no_roles_personas.json"
     user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
     mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_output/ablation/prompts/no_sdb" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_output/ablation/prompts/no_roles" 
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
