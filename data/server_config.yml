@@ -22,10 +22,10 @@ model:
 discussions:
   files:
     topics_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
-    user_persona_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/personas/personas.json"
+    user_persona_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/personas/no_sdb_personas.json"
     user_instructions_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
     mod_instructions_path: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
-    output_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_output/ablation/turn_taking/random" 
+    output_dir: "/media/SSD_2TB/dtsirmpas_data/projects/synthetic_moderation_experiments/data/discussions_output/ablation/prompts/no_sdb" 
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
@@ -38,7 +38,7 @@ discussions:
     num_turns: 18
     history_ctx_len: 3
     turn_manager_type: "random_weighted"
-    respond_probability: 0.0001 # only applicable for random_weighted turn manager type 
+    respond_probability: 0.4 # only applicable for random_weighted turn manager type 
 
 
 annotation:
