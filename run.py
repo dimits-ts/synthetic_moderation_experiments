@@ -130,8 +130,10 @@ def create_discussion_experiment(
     users = get_users(llm, discussion_config)
     moderator = get_mod(llm, discussion_config)
     next_turn_manager = get_turn_manager(
-    turn_manager_type=discussion_config["turn_taking"]["turn_manager_type"],
-       p_respond= discussion_config["turn_taking"]["respond_probability"]
+        turn_manager_type=discussion_config["turn_taking"][
+            "turn_manager_type"
+        ],
+        p_respond=discussion_config["turn_taking"]["respond_probability"],
     )
 
     return syndisco.experiments.DiscussionExperiment(
@@ -139,7 +141,7 @@ def create_discussion_experiment(
         users=users,
         moderator=moderator,
         next_turn_manager=next_turn_manager,
-        num_turns=discussion_config["experiment_variables"]["num_experiments"],
+        num_turns=discussion_config["turn_taking"]["num_turns"],
         num_active_users=discussion_config["experiment_variables"][
             "num_users"
         ],
@@ -193,9 +195,11 @@ def get_turn_manager(
     turn_manager_type: str, p_respond: float
 ) -> syndisco.backend.turn_manager.TurnManager:
     if turn_manager_type == "random_weighted":
-        return syndisco.backend.turn_manager.RandomWeighted(p_respond=p_respond)
+        return syndisco.backend.turn_manager.RandomWeighted(
+            p_respond=p_respond
+        )
     else:
-        return syndisco.backend.turn_manager.RoundRobbin()
+        return syndisco.backend.turn_manager.RoundRobin()
 
 
 def run_discussion_experiment(
