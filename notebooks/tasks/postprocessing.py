@@ -57,22 +57,11 @@ def get_ablation_df() -> pd.DataFrame:
         # each factor is a value in that dimension
         df_id = dataset_path.stem.replace("abl_", "")
         feature, factor = df_id.split("_")
-        abl_df["ablation_feature"] = feature
-        abl_df["ablation_factor"] = factor
+        abl_df[feature] = factor
 
         datasets.append(abl_df)
 
     df = pd.concat(datasets, ignore_index=True)
-    df = df.loc[
-        :,
-        [
-            "conv_id",
-            "message_id",
-            "message",
-            "ablation_feature",
-            "ablation_factor",
-        ],
-    ]
     return df
 
 
@@ -86,8 +75,6 @@ def _human_forum_post(
 
     df = df.copy()
     df.columns = ["conv_id", "message_id", "message"]
-    df["ablation_feature"] = "all"
-    df["ablation_factor"] = "human"
     df.conv_id = df.conv_id.astype(str)
     return df
 
