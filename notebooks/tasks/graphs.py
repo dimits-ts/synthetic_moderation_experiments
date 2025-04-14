@@ -1,6 +1,8 @@
 from pathlib import Path
 import itertools
+import multiprocessing
 
+from tqdm.auto import tqdm
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -368,17 +370,32 @@ def _format_with_asterisks(
 
 
 # ======== rougel similarity ========
+
+
 def _rougel_similarity(df: pd.DataFrame, feature_col: str) -> pd.DataFrame:
+    # Group messages by conversation and feature_col
     similarity_df = (
         df.groupby(["conv_id", feature_col])["message"]
         .apply(lambda messages: messages.tolist())
         .reset_index()
     )
-    similarity_df.columns = ["conv_id", "model", "messages"]
-    similarity_df = similarity_df[similarity_df.model != "hardcoded"]
-    similarity_df["rougel_similarity"] = similarity_df.messages.progress_apply(
-        stats.pairwise_rougel_similarity
-    )
+
+    similarity_df = similarity_df.rename({"message": "messages"}, axis=1)
+
+    # run concurrently
+    messages_list = similarity_df["messages"].tolist()
+    # 1 thread if no cpu_count found, else leave 1 core for system
+    with multiprocessing.Pool(multiprocessing.cpu_count() - 1 or 1) as pool:
+        rougel_similarities = list(
+            tqdm(
+                pool.imap(stats.pairwise_rougel_similarity, messages_list),
+                total=len(messages_list),
+                desc="Computing ROUGE-L similarities",
+            )
+        )
+
+    similarity_df["rougel_similarity"] = rougel_similarities
+
     return similarity_df
 
 
