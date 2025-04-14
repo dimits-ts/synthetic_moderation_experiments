@@ -8,8 +8,8 @@ from . import constants
 
 
 def main_dataset() -> pd.DataFrame:
-    shutil.unpack_archive("../data/dataset.zip", "../data")
-    full_df = pd.read_csv("../data/dataset.csv", encoding="utf8")
+    shutil.unpack_archive("../data/datasets/main.zip", "../data/datasets")
+    full_df = pd.read_csv("../data/datasets/dataset.csv", encoding="utf8")
 
     full_df.conv_variant = full_df.conv_variant.map(
         constants.MODERATION_STRATEGY_MAP
