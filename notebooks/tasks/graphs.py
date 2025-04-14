@@ -9,6 +9,37 @@ import seaborn as sns
 import scikit_posthocs as sp
 
 
+def save_plot(path: Path) -> None:
+    """
+    Saves a plot to the specified filepath.
+
+    :param path: The full path (including filename)
+        where the plot will be saved.
+    :type path: pathlib.Path
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(path, bbox_inches="tight")
+    print(f"Figure saved to {path.resolve()}")
+
+
+def comment_len_plot(df: pd.DataFrame, feature_col: str) -> None:
+    len_df = df.copy()
+    len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
+    len_df = len_df.loc[
+        (len_df.comment_length > 0) & (len_df.comment_length < 600),
+        ["message_id", "comment_length", feature_col],
+    ]
+    sns.displot(
+        len_df,
+        x="comment_length",
+        hue=feature_col,
+        stat="density",
+        kde=True,
+        common_norm=False,  # normalize observation counts by feature_col
+    )
+    plt.xlabel("Comment Length (#words)")
+
+
 def posthoc_dunn_heatmap(
     df: pd.DataFrame,
     val_col: str,
@@ -320,16 +351,3 @@ def _format_with_asterisks(
             formatted_df.iloc[i, j] = f"{value:.3f}{num_asterisks * '*'}"
 
     return formatted_df
-
-
-def save_plot(path: Path) -> None:
-    """
-    Saves a plot to the specified filepath.
-
-    :param path: The full path (including filename)
-        where the plot will be saved.
-    :type path: pathlib.Path
-    """
-    path.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(path, bbox_inches="tight")
-    print(f"Figure saved to {path.resolve()}")
