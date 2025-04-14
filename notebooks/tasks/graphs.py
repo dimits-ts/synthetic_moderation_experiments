@@ -8,6 +8,8 @@ import matplotlib.axes
 import seaborn as sns
 import scikit_posthocs as sp
 
+from . import stats
+
 
 def save_plot(path: Path) -> None:
     """
@@ -38,6 +40,12 @@ def comment_len_plot(df: pd.DataFrame, feature_col: str) -> None:
         common_norm=False,  # normalize observation counts by feature_col
     )
     plt.xlabel("Comment Length (#words)")
+
+
+def similarity_plot(df: pd.DataFrame, feature_col: str) -> None:
+    df = _preprocess_rougel_input(df)
+    sim_df = _rougel_similarity(df, feature_col)
+    _rougel_plot(sim_df, feature_col)
 
 
 def posthoc_dunn_heatmap(
@@ -351,3 +359,42 @@ def _format_with_asterisks(
             formatted_df.iloc[i, j] = f"{value:.3f}{num_asterisks * '*'}"
 
     return formatted_df
+
+
+def _rougel_similarity(df: pd.DataFrame, feature_col: str) -> pd.DataFrame:
+    similarity_df = (
+        df.groupby(["conv_id", feature_col])["message"]
+        .apply(lambda messages: messages.tolist())
+        .reset_index()
+    )
+    similarity_df.columns = ["conv_id", "model", "messages"]
+    similarity_df = similarity_df[similarity_df.model != "hardcoded"]
+    similarity_df["rougel_similarity"] = similarity_df.messages.progress_apply(
+        stats.pairwise_rougel_similarity
+    )
+    return similarity_df
+
+
+def _preprocess_rougel_input(df: pd.DataFrame) -> pd.DataFrame:
+    message_df = df.copy()
+    message_df = message_df.drop_duplicates(subset=["conv_id", "message_id"])
+    # @ tokens crash bleu scorer
+    message_df.message = message_df.message.apply(
+        lambda msg: " ".join(
+            word for word in msg.split() if not word.startswith("@")
+        )
+    )
+    return message_df
+
+
+def _rougel_plot(df: pd.DataFrame, feature_col: str):
+    sns.displot(
+        df,
+        x="rougel_similarity",
+        hue=feature_col,
+        stat="density",
+        kde=True,
+        common_norm=False,  # normalize observation counts by feature_col
+    )
+    plt.xlabel("ROUGE Similarity")
+    plt.ylabel("Density")
