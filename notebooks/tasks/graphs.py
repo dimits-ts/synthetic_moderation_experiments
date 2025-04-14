@@ -42,6 +42,51 @@ def comment_len_plot(df: pd.DataFrame, feature_col: str) -> None:
     plt.xlabel("Comment Length (#words)")
 
 
+def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
+    """
+    Create a bar plot displaying the mean toxicity scores for different
+    conversation variants, grouped by annotator prompts.
+
+    This function generates a horizontal bar plot where the x-axis
+    represents toxicity
+    scores, and the y-axis represents different conversation variants.
+    The bars are colored by annotator demographic.
+    An additional vertical red line is plotted at a
+    toxicity score of 3 to mark a threshold.
+
+    :param df: The input DataFrame containing the toxicity scores,
+        conversation variants, and annotator prompts.
+    :type df: pd.DataFrame
+    :param ax: The matplotlib axes object where the bar plot will be drawn.
+    :type ax: matplotlib.axes.Axes
+    :return: None
+
+    :example:
+        >>> fig, example_ax = plt.subplots()
+        >>> toxicity_barplot(df, example_ax)
+        >>> plt.show()
+    """
+
+    sns.barplot(
+        data=df,
+        y="conv_variant",
+        x="toxicity",
+        hue="annotator_prompt",
+        estimator=np.mean,
+        ax=ax,
+    )
+    ax.axvline(x=3, color="r")
+    ax.set_ylabel("")
+    ax.set_xlabel("")
+    ax.set_xlim(0, 5)
+    ax.legend(
+        title="Annotator Demographic",
+        fontsize="6",
+        title_fontsize="6.5",
+        loc="upper right",
+    )
+
+
 def similarity_plot(df: pd.DataFrame, feature_col: str) -> None:
     df = _preprocess_rougel_input(df)
     sim_df = _rougel_similarity(df, feature_col)
@@ -95,6 +140,67 @@ def posthoc_dunn_heatmap(
         vmax=vmax,
         ax=ax,
     )
+
+
+def plot_metrics_barplots(
+    df: pd.DataFrame,
+    group_by_col: str,
+    group_by_col_label: str,
+    metrics: list[str],
+    yticks_list: list[np.array],
+) -> None:
+    fig, axes = plt.subplots(1, len(metrics))
+    fig.set_size_inches(12, 6)
+
+    for ax, metric, yticks in zip(axes, metrics, yticks_list):
+
+        sns.barplot(
+            data=df,
+            x=group_by_col,
+            hue=group_by_col,
+            y=metric,
+            errorbar="sd",
+            legend=False,
+            ax=ax,
+        )
+        ax.tick_params(axis="x", labelrotation=90, labelsize=8)
+        ax.set_xlabel("")
+        ax.set_ylabel(metric.capitalize())
+        ax.set_yticks(yticks)
+
+    fig.suptitle(f"Impact of {group_by_col_label} on Discussions")
+    fig.supxlabel(group_by_col_label)
+    fig.supylabel("Annotation Scores")
+    fig.tight_layout()
+
+
+def plot_timeseries(
+    df: pd.DataFrame, y_col: str, hue_col: str, hue_col_label: str
+) -> None:
+    plt.figure(figsize=(12, 6))
+
+    sns.lineplot(
+        data=df,
+        x="message_order",
+        y=y_col,
+        hue=hue_col,
+        lw=1,
+        alpha=0.6,
+    )
+
+    plt.title(
+        "Average (all comments from all annotators)"
+        f"{y_col.capitalize()} by {hue_col_label}"
+    )
+    plt.xlabel("Discussion Length (# messages)")
+    plt.ylabel(f"Average {y_col.capitalize()}")
+    plt.xticks(rotation=45)
+
+    plt.legend(title=hue_col_label)
+    plt.tight_layout()
+
+
+# ======== posthoc_dunn_heatmap ========
 
 
 def _pvalue_heatmap(
@@ -205,107 +311,7 @@ def _pairwise_diffs(
     return matrix_df
 
 
-def plot_metrics_barplots(
-    df: pd.DataFrame,
-    group_by_col: str,
-    group_by_col_label: str,
-    metrics: list[str],
-    yticks_list: list[np.array],
-) -> None:
-    fig, axes = plt.subplots(1, len(metrics))
-    fig.set_size_inches(12, 6)
-
-    for ax, metric, yticks in zip(axes, metrics, yticks_list):
-
-        sns.barplot(
-            data=df,
-            x=group_by_col,
-            hue=group_by_col,
-            y=metric,
-            errorbar="sd",
-            legend=False,
-            ax=ax,
-        )
-        ax.tick_params(axis="x", labelrotation=90, labelsize=8)
-        ax.set_xlabel("")
-        ax.set_ylabel(metric.capitalize())
-        ax.set_yticks(yticks)
-
-    fig.suptitle(f"Impact of {group_by_col_label} on Discussions")
-    fig.supxlabel(group_by_col_label)
-    fig.supylabel("Annotation Scores")
-    fig.tight_layout()
-
-
-def plot_timeseries(
-    df: pd.DataFrame, y_col: str, hue_col: str, hue_col_label: str
-) -> None:
-    plt.figure(figsize=(12, 6))
-
-    sns.lineplot(
-        data=df,
-        x="message_order",
-        y=y_col,
-        hue=hue_col,
-        lw=1,
-        alpha=0.6,
-    )
-
-    plt.title(
-        "Average (all comments from all annotators)"
-        f"{y_col.capitalize()} by {hue_col_label}"
-    )
-    plt.xlabel("Discussion Length (# messages)")
-    plt.ylabel(f"Average {y_col.capitalize()}")
-    plt.xticks(rotation=45)
-
-    plt.legend(title=hue_col_label)
-    plt.tight_layout()
-
-
-def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
-    """
-    Create a bar plot displaying the mean toxicity scores for different
-    conversation variants, grouped by annotator prompts.
-
-    This function generates a horizontal bar plot where the x-axis
-    represents toxicity
-    scores, and the y-axis represents different conversation variants.
-    The bars are colored by annotator demographic.
-    An additional vertical red line is plotted at a
-    toxicity score of 3 to mark a threshold.
-
-    :param df: The input DataFrame containing the toxicity scores,
-        conversation variants, and annotator prompts.
-    :type df: pd.DataFrame
-    :param ax: The matplotlib axes object where the bar plot will be drawn.
-    :type ax: matplotlib.axes.Axes
-    :return: None
-
-    :example:
-        >>> fig, example_ax = plt.subplots()
-        >>> toxicity_barplot(df, example_ax)
-        >>> plt.show()
-    """
-
-    sns.barplot(
-        data=df,
-        y="conv_variant",
-        x="toxicity",
-        hue="annotator_prompt",
-        estimator=np.mean,
-        ax=ax,
-    )
-    ax.axvline(x=3, color="r")
-    ax.set_ylabel("")
-    ax.set_xlabel("")
-    ax.set_xlim(0, 5)
-    ax.legend(
-        title="Annotator Demographic",
-        fontsize="6",
-        title_fontsize="6.5",
-        loc="upper right",
-    )
+# ======== toxicity bar plot ========
 
 
 # code from https://stackoverflow.com/questions/47314754/
@@ -361,6 +367,7 @@ def _format_with_asterisks(
     return formatted_df
 
 
+# ======== rougel similarity ========
 def _rougel_similarity(df: pd.DataFrame, feature_col: str) -> pd.DataFrame:
     similarity_df = (
         df.groupby(["conv_id", feature_col])["message"]
