@@ -19,10 +19,12 @@ def posthoc_dunn_heatmap(
     ax: matplotlib.axes.Axes | None = None,
 ) -> None:
     """
-    Generate a heatmap visualizing correlation (or other) values along with p-value significance.
+    Generate a heatmap visualizing correlation (or other) values along with
+    p-value significance.
 
-    This function produces a heatmap where the lower triangle of the matrix contains
-    correlation values from `value_df`. These values are annotated with asterisks based
+    This function produces a heatmap where the lower triangle of the matrix
+    contains correlation values from `value_df`.
+    These values are annotated with asterisks based
     on the significance levels of corresponding p-values from `pvalue_df`.
     The heatmap can be saved to a file if a filename is specified.
 
@@ -32,7 +34,8 @@ def posthoc_dunn_heatmap(
     :type val_col: str
     :param group_col: The column containing the groups
     :type group_col: str
-    :param show_labels: Whether to display axis labels on the heatmap, defaults to False.
+    :param show_labels: Whether to display axis labels on the heatmap,
+        defaults to False.
     :type show_labels: bool, optional
     :param vmin: Minimum value for color mapping, if specified
     :type vmin: float | None, optional
@@ -51,7 +54,7 @@ def posthoc_dunn_heatmap(
         show_labels=show_labels,
         vmin=vmin,
         vmax=vmax,
-        ax=ax
+        ax=ax,
     )
 
 
@@ -64,18 +67,23 @@ def _pvalue_heatmap(
     ax: matplotlib.axes.Axes | None,
 ) -> None:
     """
-    Generate a heatmap visualizing correlation (or other) values along with p-value significance.
+    Generate a heatmap visualizing correlation (or other) values along with
+     p-value significance.
 
-    This function produces a heatmap where the lower triangle of the matrix contains
-    correlation values from `value_df`. These values are annotated with asterisks based
+    This function produces a heatmap where the lower triangle of the matrix
+    contains correlation values from `value_df`.
+    These values are annotated with asterisks based
     on the significance levels of corresponding p-values from `pvalue_df`.
     The heatmap can be saved to a file if a filename is specified.
 
-    :param value_df: DataFrame containing the correlation or other values to be visualized.
+    :param value_df: DataFrame containing the correlation or other values to
+        be visualized.
     :type value_df: pd.DataFrame
-    :param pvalue_df: DataFrame containing p-values corresponding to the values in `value_df`.
+    :param pvalue_df: DataFrame containing p-values corresponding to the
+        values in `value_df`.
     :type pvalue_df: pd.DataFrame
-    :param show_labels: Whether to display axis labels on the heatmap, defaults to False.
+    :param show_labels: Whether to display axis labels on the heatmap,
+        defaults to False.
     :type show_labels: bool, optional
     :param vmin: Minimum value for color mapping, if specified
     :type vmin: float | None, optional
@@ -104,20 +112,26 @@ def _pvalue_heatmap(
         annot_kws={"fontsize": 8},
         vmin=vmin,
         vmax=vmax,
-        ax=ax
+        ax=ax,
     )
 
-def _pairwise_diffs(df: pd.DataFrame, group_col: str, value_col: str) -> pd.DataFrame:
+
+def _pairwise_diffs(
+    df: pd.DataFrame, group_col: str, value_col: str
+) -> pd.DataFrame:
     """
-    Calculate pairwise differences in mean values between groups and pivot the result into an MxM matrix.
+    Calculate pairwise differences in mean values between groups and pivot the
+    result into an MxM matrix.
 
     :param df: The input DataFrame containing the data.
     :type df: pd.DataFrame
     :param group_col: The column to group by in order to calculate mean values.
     :type group_col: str
-    :param value_col: The column name containing the values for which pairwise differences will be calculated.
+    :param value_col: The column name containing the values for which pairwise
+        differences will be calculated.
     :type value_col: str
-    :return: An MxM DataFrame with groups as rows and columns, and mean differences as values.
+    :return: An MxM DataFrame with groups as rows and columns,
+        and mean differences as values.
     :rtype: pd.DataFrame
     """
     # Calculate mean values per group
@@ -136,14 +150,18 @@ def _pairwise_diffs(df: pd.DataFrame, group_col: str, value_col: str) -> pd.Data
         results[(group2, group1)] = -diff
 
     # Create a DataFrame with multi-index from the results dictionary
-    result_df = pd.DataFrame.from_dict(results, orient="index", columns=["mean_diff"])
+    result_df = pd.DataFrame.from_dict(
+        results, orient="index", columns=["mean_diff"]
+    )
     result_df.index = pd.MultiIndex.from_tuples(
         result_df.index, names=[f"{group_col}_1", f"{group_col}_2"]
     )
 
     # Pivot the DataFrame to create an MxM matrix
     matrix_df = result_df.unstack(level=1).fillna(0)
-    matrix_df.columns = matrix_df.columns.droplevel(0)  # Remove the extra column level
+    matrix_df.columns = matrix_df.columns.droplevel(
+        0
+    )  # Remove the extra column level
 
     return matrix_df
 
@@ -195,7 +213,8 @@ def plot_timeseries(
     )
 
     plt.title(
-        f"Average (all comments from all annotators) {y_col.capitalize()} by {hue_col_label}"
+        "Average (all comments from all annotators)"
+        f"{y_col.capitalize()} by {hue_col_label}"
     )
     plt.xlabel("Discussion Length (# messages)")
     plt.ylabel(f"Average {y_col.capitalize()}")
@@ -207,15 +226,18 @@ def plot_timeseries(
 
 def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
     """
-    Create a bar plot displaying the mean toxicity scores for different conversation variants,
-    grouped by annotator prompts.
+    Create a bar plot displaying the mean toxicity scores for different
+    conversation variants, grouped by annotator prompts.
 
-    This function generates a horizontal bar plot where the x-axis represents toxicity
-    scores, and the y-axis represents different conversation variants. The bars are
-    colored by annotator demographic. An additional vertical red line is plotted at a
+    This function generates a horizontal bar plot where the x-axis
+    represents toxicity
+    scores, and the y-axis represents different conversation variants.
+    The bars are colored by annotator demographic.
+    An additional vertical red line is plotted at a
     toxicity score of 3 to mark a threshold.
 
-    :param df: The input DataFrame containing the toxicity scores, conversation variants, and annotator prompts.
+    :param df: The input DataFrame containing the toxicity scores,
+        conversation variants, and annotator prompts.
     :type df: pd.DataFrame
     :param ax: The matplotlib axes object where the bar plot will be drawn.
     :type ax: matplotlib.axes.Axes
@@ -247,9 +269,12 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
     )
 
 
-# code from https://stackoverflow.com/questions/47314754/how-to-get-triangle-upper-matrix-without-the-diagonal-using-numpy
+# code from https://stackoverflow.com/questions/47314754/
+# how-to-get-triangle-upper-matrix-without-the-diagonal-using-numpy
 def _upper_tri_masking(array: np.ndarray) -> np.ndarray:
-    """Generate a mask for the upper triangular of a NxN matrix, without the main diagonal
+    """
+    Generate a mask for the upper triangular of a NxN matrix,
+    without the main diagonal
 
     :param array: the NxN matrix
     :type array: np.array
@@ -265,7 +290,9 @@ def _upper_tri_masking(array: np.ndarray) -> np.ndarray:
 def _format_with_asterisks(
     value_df: pd.DataFrame, pvalue_df: pd.DataFrame
 ) -> pd.DataFrame:
-    """Format the values in the value_df with asterisks based on p-value significance levels
+    """
+    Format the values in the value_df with asterisks based on p-value
+    significance levels
 
     :param value_df: DataFrame containing the values to display
     :param pvalue_df: DataFrame containing the p-values
@@ -276,7 +303,9 @@ def _format_with_asterisks(
         for j in range(value_df.shape[1]):
             value = value_df.iloc[i, j]
             pvalue = pvalue_df.iloc[i, j]
-            if pd.notnull(pvalue):  # Only apply formatting if pvalue is not NaN
+            if pd.notnull(
+                pvalue
+            ):  # Only apply formatting if pvalue is not NaN
                 if pvalue < 0.001:
                     num_asterisks = 3
                 elif pvalue < 0.01:
@@ -297,7 +326,8 @@ def save_plot(path: Path) -> None:
     """
     Saves a plot to the specified filepath.
 
-    :param path: The full path (including filename) where the plot will be saved.
+    :param path: The full path (including filename)
+        where the plot will be saved.
     :type path: pathlib.Path
     """
     path.parent.mkdir(parents=True, exist_ok=True)
