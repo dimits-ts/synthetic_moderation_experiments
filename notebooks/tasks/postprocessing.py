@@ -7,6 +7,9 @@ import numpy as np
 from . import constants
 
 
+CLEAN_HTML_PATTERN = re.compile("<.*?>")
+
+
 def get_main_dataset() -> pd.DataFrame:
     shutil.unpack_archive("../data/datasets/main.zip", "../data/datasets")
     full_df = pd.read_csv("../data/datasets/dataset.csv", encoding="utf8")
@@ -76,7 +79,15 @@ def _human_forum_post(
     df = df.copy()
     df.columns = ["conv_id", "message_id", "message"]
     df.conv_id = df.conv_id.astype(str)
+    df.message = df.message.astype(str)
+    df.message = df.message.apply(_rem_html_tags)
     return df
+
+
+# https://stackoverflow.com/a/12982689
+def _rem_html_tags(raw_html: str) -> str:
+    cleantext = re.sub(CLEAN_HTML_PATTERN, "", raw_html)
+    return cleantext
 
 
 def _format_main_dataset(
