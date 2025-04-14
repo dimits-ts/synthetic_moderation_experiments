@@ -7,7 +7,7 @@ import numpy as np
 from . import constants
 
 
-def main_dataset() -> pd.DataFrame:
+def get_main_dataset() -> pd.DataFrame:
     shutil.unpack_archive("../data/datasets/main.zip", "../data/datasets")
     full_df = pd.read_csv("../data/datasets/dataset.csv", encoding="utf8")
 
@@ -18,6 +18,50 @@ def main_dataset() -> pd.DataFrame:
     full_df = _format_main_dataset(full_df, min_message_len=3)
     full_df = full_df.rename(constants.METRIC_MAP, axis=1)
     return full_df
+
+
+def get_human_df():
+    human_df_dict = pd.read_excel(
+        constants.DATASET_DIR / "human.xlsx", sheet_name=list(range(1, 11))
+    )
+
+    human_df_ls = []
+    for i in [1, 2, 3, 4, 5, 6, 8]:
+        human_df = _human_forum_post(
+            human_df_dict[i], post_id_idx=1, comment_id_idx=0, comment_idx=5
+        )
+        human_df_ls.append(human_df)
+
+    for i in [7]:
+        human_df = _human_forum_post(
+            human_df_dict[i], post_id_idx=1, comment_id_idx=0, comment_idx=6
+        )
+        human_df_ls.append(human_df)
+
+    for i in [8, 9]:
+        human_df = _human_forum_post(
+            human_df_dict[i], post_id_idx=2, comment_id_idx=0, comment_idx=5
+        )
+        human_df_ls.append(human_df)
+
+    human_df = pd.concat(human_df_ls, ignore_index=True)
+    return human_df
+
+
+def _human_forum_post(
+    df, post_id_idx: int, comment_id_idx: int, comment_idx: int
+) -> pd.DataFrame:
+    df = df.iloc[
+        :,
+        [post_id_idx, comment_id_idx, comment_idx],
+    ]
+
+    df = df.copy()
+    df.columns = ["conv_id", "message_id", "message"]
+    df["ablation_feature"] = "all"
+    df["ablation_factor"] = "human"
+    df.conv_id = df.conv_id.astype(str)
+    return df
 
 
 def _format_main_dataset(
