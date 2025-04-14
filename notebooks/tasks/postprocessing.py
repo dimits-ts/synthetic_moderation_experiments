@@ -48,6 +48,34 @@ def get_human_df():
     return human_df
 
 
+def get_ablation_df() -> pd.DataFrame:
+    datasets = []
+    for dataset_path in constants.DATASET_DIR.rglob("abl_*.csv"):
+        abl_df = pd.read_csv(dataset_path)
+
+        # each ablation feature is a dimension,
+        # each factor is a value in that dimension
+        df_id = dataset_path.stem.replace("abl_", "")
+        feature, factor = df_id.split("_")
+        abl_df["ablation_feature"] = feature
+        abl_df["ablation_factor"] = factor
+
+        datasets.append(abl_df)
+
+    df = pd.concat(datasets, ignore_index=True)
+    df = df.loc[
+        :,
+        [
+            "conv_id",
+            "message_id",
+            "message",
+            "ablation_feature",
+            "ablation_factor",
+        ],
+    ]
+    return df
+
+
 def _human_forum_post(
     df, post_id_idx: int, comment_id_idx: int, comment_idx: int
 ) -> pd.DataFrame:
