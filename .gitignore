@@ -1,12 +1,14 @@
 # don't include output from script invocations
+# don't include output from script invocations
 logs/
 # don't include LLM weights
 models/
 # don't include lock files
+# don't include lock files
 *.~lock.*
 
 # dataset too large to be versioned
-*.csv
+main.csv
 
 .idea/
 

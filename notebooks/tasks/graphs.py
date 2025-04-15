@@ -1,12 +1,98 @@
 from pathlib import Path
 import itertools
+import multiprocessing
 
+from tqdm.auto import tqdm
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.axes
 import seaborn as sns
 import scikit_posthocs as sp
+
+from . import stats
+
+
+def save_plot(path: Path) -> None:
+    """
+    Saves a plot to the specified filepath.
+
+    :param path: The full path (including filename)
+        where the plot will be saved.
+    :type path: pathlib.Path
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(path, bbox_inches="tight")
+    print(f"Figure saved to {path.resolve()}")
+
+
+def comment_len_plot(df: pd.DataFrame, feature_col: str) -> None:
+    len_df = df.copy()
+    len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
+    len_df = len_df.loc[
+        (len_df.comment_length > 0) & (len_df.comment_length < 600),
+        ["message_id", "comment_length", feature_col],
+    ]
+    sns.displot(
+        len_df,
+        x="comment_length",
+        hue=feature_col,
+        stat="density",
+        kde=True,
+        common_norm=False,  # normalize observation counts by feature_col
+    )
+    plt.xlabel("Comment Length (#words)")
+
+
+def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
+    """
+    Create a bar plot displaying the mean toxicity scores for different
+    conversation variants, grouped by annotator prompts.
+
+    This function generates a horizontal bar plot where the x-axis
+    represents toxicity
+    scores, and the y-axis represents different conversation variants.
+    The bars are colored by annotator demographic.
+    An additional vertical red line is plotted at a
+    toxicity score of 3 to mark a threshold.
+
+    :param df: The input DataFrame containing the toxicity scores,
+        conversation variants, and annotator prompts.
+    :type df: pd.DataFrame
+    :param ax: The matplotlib axes object where the bar plot will be drawn.
+    :type ax: matplotlib.axes.Axes
+    :return: None
+
+    :example:
+        >>> fig, example_ax = plt.subplots()
+        >>> toxicity_barplot(df, example_ax)
+        >>> plt.show()
+    """
+
+    sns.barplot(
+        data=df,
+        y="conv_variant",
+        x="toxicity",
+        hue="annotator_prompt",
+        estimator=np.mean,
+        ax=ax,
+    )
+    ax.axvline(x=3, color="r")
+    ax.set_ylabel("")
+    ax.set_xlabel("")
+    ax.set_xlim(0, 5)
+    ax.legend(
+        title="Annotator Demographic",
+        fontsize="6",
+        title_fontsize="6.5",
+        loc="upper right",
+    )
+
+
+def similarity_plot(df: pd.DataFrame, feature_col: str) -> None:
+    df = _preprocess_rougel_input(df)
+    sim_df = _rougel_similarity(df, feature_col)
+    _rougel_plot(sim_df, feature_col)
 
 
 def posthoc_dunn_heatmap(
@@ -19,10 +105,12 @@ def posthoc_dunn_heatmap(
     ax: matplotlib.axes.Axes | None = None,
 ) -> None:
     """
-    Generate a heatmap visualizing correlation (or other) values along with p-value significance.
+    Generate a heatmap visualizing correlation (or other) values along with
+    p-value significance.
 
-    This function produces a heatmap where the lower triangle of the matrix contains
-    correlation values from `value_df`. These values are annotated with asterisks based
+    This function produces a heatmap where the lower triangle of the matrix
+    contains correlation values from `value_df`.
+    These values are annotated with asterisks based
     on the significance levels of corresponding p-values from `pvalue_df`.
     The heatmap can be saved to a file if a filename is specified.
 
@@ -32,7 +120,8 @@ def posthoc_dunn_heatmap(
     :type val_col: str
     :param group_col: The column containing the groups
     :type group_col: str
-    :param show_labels: Whether to display axis labels on the heatmap, defaults to False.
+    :param show_labels: Whether to display axis labels on the heatmap,
+        defaults to False.
     :type show_labels: bool, optional
     :param vmin: Minimum value for color mapping, if specified
     :type vmin: float | None, optional
@@ -51,101 +140,8 @@ def posthoc_dunn_heatmap(
         show_labels=show_labels,
         vmin=vmin,
         vmax=vmax,
-        ax=ax
+        ax=ax,
     )
-
-
-def _pvalue_heatmap(
-    value_df: pd.DataFrame,
-    pvalue_df: pd.DataFrame,
-    show_labels: bool,
-    vmin: float | None,
-    vmax: float | None,
-    ax: matplotlib.axes.Axes | None,
-) -> None:
-    """
-    Generate a heatmap visualizing correlation (or other) values along with p-value significance.
-
-    This function produces a heatmap where the lower triangle of the matrix contains
-    correlation values from `value_df`. These values are annotated with asterisks based
-    on the significance levels of corresponding p-values from `pvalue_df`.
-    The heatmap can be saved to a file if a filename is specified.
-
-    :param value_df: DataFrame containing the correlation or other values to be visualized.
-    :type value_df: pd.DataFrame
-    :param pvalue_df: DataFrame containing p-values corresponding to the values in `value_df`.
-    :type pvalue_df: pd.DataFrame
-    :param show_labels: Whether to display axis labels on the heatmap, defaults to False.
-    :type show_labels: bool, optional
-    :param vmin: Minimum value for color mapping, if specified
-    :type vmin: float | None, optional
-    :param vmax: Maximum value for color mapping, if specified
-    :type vmax: float | None, optional
-    :param ax: The matplotlib axes object where the heatmap will be drawn
-    :type ax: matplotlib.axes.Axes | None
-    """
-
-    # Format the value_df with asterisks based on pvalue_df
-    formatted_values = _format_with_asterisks(value_df, pvalue_df)
-
-    # Define tick labels
-    ticklabels = value_df.columns if show_labels else "auto"
-
-    # Create the heatmap
-    sns.heatmap(
-        np.tril(value_df),
-        annot=np.tril(formatted_values),
-        fmt="",  # This allows us to use strings with asterisks
-        cmap="icefire",
-        mask=_upper_tri_masking(value_df),
-        xticklabels=ticklabels,
-        yticklabels=ticklabels,
-        cbar_kws={"label": "Mean Difference"},
-        annot_kws={"fontsize": 8},
-        vmin=vmin,
-        vmax=vmax,
-        ax=ax
-    )
-
-def _pairwise_diffs(df: pd.DataFrame, group_col: str, value_col: str) -> pd.DataFrame:
-    """
-    Calculate pairwise differences in mean values between groups and pivot the result into an MxM matrix.
-
-    :param df: The input DataFrame containing the data.
-    :type df: pd.DataFrame
-    :param group_col: The column to group by in order to calculate mean values.
-    :type group_col: str
-    :param value_col: The column name containing the values for which pairwise differences will be calculated.
-    :type value_col: str
-    :return: An MxM DataFrame with groups as rows and columns, and mean differences as values.
-    :rtype: pd.DataFrame
-    """
-    # Calculate mean values per group
-    group_means = df.groupby(group_col)[value_col].mean()
-
-    # Prepare a dictionary to collect results
-    results = {}
-
-    # Generate all possible pairs of groups
-    for (group1, mean1), (group2, mean2) in itertools.combinations(
-        group_means.items(), 2
-    ):
-        diff = mean1 - mean2
-        # Store differences in both directions for a symmetric matrix
-        results[(group1, group2)] = diff
-        results[(group2, group1)] = -diff
-
-    # Create a DataFrame with multi-index from the results dictionary
-    result_df = pd.DataFrame.from_dict(results, orient="index", columns=["mean_diff"])
-    result_df.index = pd.MultiIndex.from_tuples(
-        result_df.index, names=[f"{group_col}_1", f"{group_col}_2"]
-    )
-
-    # Pivot the DataFrame to create an MxM matrix
-    matrix_df = result_df.unstack(level=1).fillna(0)
-    matrix_df.columns = matrix_df.columns.droplevel(0)  # Remove the extra column level
-
-    return matrix_df
 
 
 def plot_metrics_barplots(
@@ -195,7 +191,8 @@ def plot_timeseries(
     )
 
     plt.title(
-        f"Average (all comments from all annotators) {y_col.capitalize()} by {hue_col_label}"
+        "Average (all comments from all annotators)"
+        f"{y_col.capitalize()} by {hue_col_label}"
     )
     plt.xlabel("Discussion Length (# messages)")
     plt.ylabel(f"Average {y_col.capitalize()}")
@@ -205,51 +202,126 @@ def plot_timeseries(
     plt.tight_layout()
 
 
-def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
+# ======== posthoc_dunn_heatmap ========
+
+
+def _pvalue_heatmap(
+    value_df: pd.DataFrame,
+    pvalue_df: pd.DataFrame,
+    show_labels: bool,
+    vmin: float | None,
+    vmax: float | None,
+    ax: matplotlib.axes.Axes | None,
+) -> None:
     """
-    Create a bar plot displaying the mean toxicity scores for different conversation variants,
-    grouped by annotator prompts.
+    Generate a heatmap visualizing correlation (or other) values along with
+     p-value significance.
 
-    This function generates a horizontal bar plot where the x-axis represents toxicity
-    scores, and the y-axis represents different conversation variants. The bars are
-    colored by annotator demographic. An additional vertical red line is plotted at a
-    toxicity score of 3 to mark a threshold.
+    This function produces a heatmap where the lower triangle of the matrix
+    contains correlation values from `value_df`.
+    These values are annotated with asterisks based
+    on the significance levels of corresponding p-values from `pvalue_df`.
+    The heatmap can be saved to a file if a filename is specified.
 
-    :param df: The input DataFrame containing the toxicity scores, conversation variants, and annotator prompts.
-    :type df: pd.DataFrame
-    :param ax: The matplotlib axes object where the bar plot will be drawn.
-    :type ax: matplotlib.axes.Axes
-    :return: None
-
-    :example:
-        >>> fig, example_ax = plt.subplots()
-        >>> toxicity_barplot(df, example_ax)
-        >>> plt.show()
+    :param value_df: DataFrame containing the correlation or other values to
+        be visualized.
+    :type value_df: pd.DataFrame
+    :param pvalue_df: DataFrame containing p-values corresponding to the
+        values in `value_df`.
+    :type pvalue_df: pd.DataFrame
+    :param show_labels: Whether to display axis labels on the heatmap,
+        defaults to False.
+    :type show_labels: bool, optional
+    :param vmin: Minimum value for color mapping, if specified
+    :type vmin: float | None, optional
+    :param vmax: Maximum value for color mapping, if specified
+    :type vmax: float | None, optional
+    :param ax: The matplotlib axes object where the heatmap will be drawn
+    :type ax: matplotlib.axes.Axes | None
     """
 
-    sns.barplot(
-        data=df,
-        y="conv_variant",
-        x="toxicity",
-        hue="annotator_prompt",
-        estimator=np.mean,
+    # Format the value_df with asterisks based on pvalue_df
+    formatted_values = _format_with_asterisks(value_df, pvalue_df)
+
+    # Define tick labels
+    ticklabels = value_df.columns if show_labels else "auto"
+
+    # Create the heatmap
+    sns.heatmap(
+        np.tril(value_df),
+        annot=np.tril(formatted_values),
+        fmt="",  # This allows us to use strings with asterisks
+        cmap="icefire",
+        mask=_upper_tri_masking(value_df),
+        xticklabels=ticklabels,
+        yticklabels=ticklabels,
+        cbar_kws={"label": "Mean Difference"},
+        annot_kws={"fontsize": 8},
+        vmin=vmin,
+        vmax=vmax,
         ax=ax,
     )
-    ax.axvline(x=3, color="r")
-    ax.set_ylabel("")
-    ax.set_xlabel("")
-    ax.set_xlim(0, 5)
-    ax.legend(
-        title="Annotator Demographic",
-        fontsize="6",
-        title_fontsize="6.5",
-        loc="upper right",
+
+
+def _pairwise_diffs(
+    df: pd.DataFrame, group_col: str, value_col: str
+) -> pd.DataFrame:
+    """
+    Calculate pairwise differences in mean values between groups and pivot the
+    result into an MxM matrix.
+
+    :param df: The input DataFrame containing the data.
+    :type df: pd.DataFrame
+    :param group_col: The column to group by in order to calculate mean values.
+    :type group_col: str
+    :param value_col: The column name containing the values for which pairwise
+        differences will be calculated.
+    :type value_col: str
+    :return: An MxM DataFrame with groups as rows and columns,
+        and mean differences as values.
+    :rtype: pd.DataFrame
+    """
+    # Calculate mean values per group
+    group_means = df.groupby(group_col)[value_col].mean()
+
+    # Prepare a dictionary to collect results
+    results = {}
+
+    # Generate all possible pairs of groups
+    for (group1, mean1), (group2, mean2) in itertools.combinations(
+        group_means.items(), 2
+    ):
+        diff = mean1 - mean2
+        # Store differences in both directions for a symmetric matrix
+        results[(group1, group2)] = diff
+        results[(group2, group1)] = -diff
+
+    # Create a DataFrame with multi-index from the results dictionary
+    result_df = pd.DataFrame.from_dict(
+        results, orient="index", columns=["mean_diff"]
+    )
+    result_df.index = pd.MultiIndex.from_tuples(
+        result_df.index, names=[f"{group_col}_1", f"{group_col}_2"]
     )
 
+    # Pivot the DataFrame to create an MxM matrix
+    matrix_df = result_df.unstack(level=1).fillna(0)
+    matrix_df.columns = matrix_df.columns.droplevel(
+        0
+    )  # Remove the extra column level
 
-# code from https://stackoverflow.com/questions/47314754/how-to-get-triangle-upper-matrix-without-the-diagonal-using-numpy
+    return matrix_df
+
+
+# ======== toxicity bar plot ========
+
+
+# code from https://stackoverflow.com/questions/47314754/
+# how-to-get-triangle-upper-matrix-without-the-diagonal-using-numpy
 def _upper_tri_masking(array: np.ndarray) -> np.ndarray:
-    """Generate a mask for the upper triangular of a NxN matrix, without the main diagonal
+    """
+    Generate a mask for the upper triangular of a NxN matrix,
+    without the main diagonal
 
     :param array: the NxN matrix
     :type array: np.array
@@ -265,7 +337,9 @@ def _upper_tri_masking(array: np.ndarray) -> np.ndarray:
 def _format_with_asterisks(
     value_df: pd.DataFrame, pvalue_df: pd.DataFrame
 ) -> pd.DataFrame:
-    """Format the values in the value_df with asterisks based on p-value significance levels
+    """
+    Format the values in the value_df with asterisks based on p-value
+    significance levels
 
     :param value_df: DataFrame containing the values to display
     :param pvalue_df: DataFrame containing the p-values
@@ -276,7 +350,9 @@ def _format_with_asterisks(
         for j in range(value_df.shape[1]):
             value = value_df.iloc[i, j]
             pvalue = pvalue_df.iloc[i, j]
-            if pd.notnull(pvalue):  # Only apply formatting if pvalue is not NaN
+            if pd.notnull(
+                pvalue
+            ):  # Only apply formatting if pvalue is not NaN
                 if pvalue < 0.001:
                     num_asterisks = 3
                 elif pvalue < 0.01:
@@ -293,13 +369,56 @@ def _format_with_asterisks(
     return formatted_df
 
 
-def save_plot(path: Path) -> None:
-    """
-    Saves a plot to the specified filepath.
+# ======== rougel similarity ========
 
-    :param path: The full path (including filename) where the plot will be saved.
-    :type path: pathlib.Path
-    """
-    path.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(path, bbox_inches="tight")
-    print(f"Figure saved to {path.resolve()}")
+
+def _rougel_similarity(df: pd.DataFrame, feature_col: str) -> pd.DataFrame:
+    # Group messages by conversation and feature_col
+    similarity_df = (
+        df.groupby(["conv_id", feature_col])["message"]
+        .apply(lambda messages: messages.tolist())
+        .reset_index()
+    )
+
+    similarity_df = similarity_df.rename({"message": "messages"}, axis=1)
+
+    # run concurrently
+    messages_list = similarity_df["messages"].tolist()
+    # 1 thread if no cpu_count found, else leave 1 core for system
+    with multiprocessing.Pool(multiprocessing.cpu_count() - 1 or 1) as pool:
+        rougel_similarities = list(
+            tqdm(
+                pool.imap(stats.pairwise_rougel_similarity, messages_list),
+                total=len(messages_list),
+                desc="Computing ROUGE-L similarities",
+            )
+        )
+
+    similarity_df["rougel_similarity"] = rougel_similarities
+
+    return similarity_df
+
+
+def _preprocess_rougel_input(df: pd.DataFrame) -> pd.DataFrame:
+    message_df = df.copy()
+    message_df = message_df.drop_duplicates(subset=["conv_id", "message_id"])
+    # @ tokens crash bleu scorer
+    message_df.message = message_df.message.apply(
+        lambda msg: " ".join(
+            word for word in msg.split() if not word.startswith("@")
+        )
+    )
+    return message_df
+
+
+def _rougel_plot(df: pd.DataFrame, feature_col: str):
+    sns.displot(
+        df,
+        x="rougel_similarity",
+        hue=feature_col,
+        stat="density",
+        kde=True,
+        common_norm=False,  # normalize observation counts by feature_col
+    )
+    plt.xlabel("ROUGE Similarity")
+    plt.ylabel("Density")
