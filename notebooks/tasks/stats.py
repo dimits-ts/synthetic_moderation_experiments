@@ -4,6 +4,7 @@ import multiprocessing
 from tqdm.auto import tqdm
 import numpy as np
 import pandas as pd
+import scipy.stats
 from rouge_score import rouge_scorer
 
 
@@ -30,7 +31,7 @@ def rougel_similarity(comments: list[str]) -> list[float]:
 
 def _compute_pairwise_rougel(comments: list[str]) -> float:
     """
-    Return the average of the pairwise ROUGE-L similarity for all comments 
+    Return the average of the pairwise ROUGE-L similarity for all comments
     in a discussion.
     :param: comments: the comments of the discussion
     :return: a similarity score from 0 (no similarities) to 1 (identical)
@@ -57,3 +58,23 @@ def discussion_var(
         val_col
     ].agg("mean")
     return discussion_var_df
+
+
+def mean_comp_test(
+    df: pd.DataFrame, feature_col: str, score_col: str
+) -> float:
+    """
+    Return the p-value of a means comparison test comparing a
+    scores across a given dimension.
+    :param: df: the dataframe containing the comments and model information
+    :param: feature_col: the column containing the dimension across which the 
+        difference in means is investigated
+    :param score_col: the column containing the scores to be compared
+    :return: the p-value given by the test
+    """
+    groups = [
+        df.loc[df[feature_col] == factor, [score_col]]
+        for factor in df[feature_col].unique()
+    ]
+
+    return scipy.stats.kruskal(*groups, nan_policy="omit").pvalue[0]
