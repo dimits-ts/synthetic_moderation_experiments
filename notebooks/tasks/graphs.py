@@ -1,16 +1,12 @@
 from pathlib import Path
 import itertools
-import multiprocessing
 
-from tqdm.auto import tqdm
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.axes
 import seaborn as sns
 import scikit_posthocs as sp
-
-from . import stats
 
 
 def save_plot(path: Path) -> None:
@@ -89,10 +85,16 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
     )
 
 
-def similarity_plot(df: pd.DataFrame, feature_col: str) -> None:
-    df = _preprocess_rougel_input(df)
-    sim_df = _rougel_similarity(df, feature_col)
-    _rougel_plot(sim_df, feature_col)
+def rougel_plot(rougel_sim: pd.Series, feature: pd.Series):
+    sns.displot(
+        x=rougel_sim,
+        hue=feature,
+        stat="density",
+        kde=True,
+        common_norm=False,  # normalize observation counts by feature_col
+    )
+    plt.xlabel("ROUGE Similarity")
+    plt.ylabel("Density")
 
 
 def posthoc_dunn_heatmap(
@@ -367,58 +369,3 @@ def _format_with_asterisks(
             formatted_df.iloc[i, j] = f"{value:.3f}{num_asterisks * '*'}"
 
     return formatted_df
-
-
-# ======== rougel similarity ========
-
-
-def _rougel_similarity(df: pd.DataFrame, feature_col: str) -> pd.DataFrame:
-    # Group messages by conversation and feature_col
-    similarity_df = (
-        df.groupby(["conv_id", feature_col])["message"]
-        .apply(lambda messages: messages.tolist())
-        .reset_index()
-    )
-
-    similarity_df = similarity_df.rename({"message": "messages"}, axis=1)
-
-    # run concurrently
-    messages_list = similarity_df["messages"].tolist()
-    # 1 thread if no cpu_count found, else leave 1 core for system
-    with multiprocessing.Pool(multiprocessing.cpu_count() - 1 or 1) as pool:
-        rougel_similarities = list(
-            tqdm(
-                pool.imap(stats.pairwise_rougel_similarity, messages_list),
-                total=len(messages_list),
-                desc="Computing ROUGE-L similarities",
-            )
-        )
-
-    similarity_df["rougel_similarity"] = rougel_similarities
-
-    return similarity_df
-
-
-def _preprocess_rougel_input(df: pd.DataFrame) -> pd.DataFrame:
-    message_df = df.copy()
-    message_df = message_df.drop_duplicates(subset=["conv_id", "message_id"])
-    # @ tokens crash bleu scorer
-    message_df.message = message_df.message.apply(
-        lambda msg: " ".join(
-            word for word in msg.split() if not word.startswith("@")
-        )
-    )
-    return message_df
-
-
-def _rougel_plot(df: pd.DataFrame, feature_col: str):
-    sns.displot(
-        df,
-        x="rougel_similarity",
-        hue=feature_col,
-        stat="density",
-        kde=True,
-        common_norm=False,  # normalize observation counts by feature_col
-    )
-    plt.xlabel("ROUGE Similarity")
-    plt.ylabel("Density")
