@@ -12,7 +12,7 @@ CLEAN_HTML_PATTERN = re.compile("<.*?>")
 
 def get_main_dataset() -> pd.DataFrame:
     shutil.unpack_archive("../data/datasets/main.zip", "../data/datasets")
-    full_df = pd.read_csv("../data/datasets/dataset.csv", encoding="utf8")
+    full_df = pd.read_csv("../data/datasets/main.csv", encoding="utf8")
 
     full_df.conv_variant = full_df.conv_variant.map(
         constants.MODERATION_STRATEGY_MAP
