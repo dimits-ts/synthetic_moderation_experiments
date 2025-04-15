@@ -29,20 +29,6 @@ def rougel_similarity(comments: list[str]) -> list[float]:
     return rougel_similarities
 
 
-def _compute_pairwise_rougel(comments: list[str]) -> float:
-    """
-    Return the average of the pairwise ROUGE-L similarity for all comments
-    in a discussion.
-    :param: comments: the comments of the discussion
-    :return: a similarity score from 0 (no similarities) to 1 (identical)
-    """
-    scorer = rouge_scorer.RougeScorer(["rougeL"])
-    scores = []
-    for c1, c2 in itertools.combinations(comments, 2):
-        scores.append(scorer.score(c1.lower(), c2.lower())["rougeL"].fmeasure)
-    return float(np.mean(scores)) if scores else np.nan
-
-
 def discussion_var(
     df: pd.DataFrame,
     discussion_key_col: str,
@@ -67,7 +53,7 @@ def mean_comp_test(
     Return the p-value of a means comparison test comparing a
     scores across a given dimension.
     :param: df: the dataframe containing the comments and model information
-    :param: feature_col: the column containing the dimension across which the 
+    :param: feature_col: the column containing the dimension across which the
         difference in means is investigated
     :param score_col: the column containing the scores to be compared
     :return: the p-value given by the test
@@ -77,4 +63,18 @@ def mean_comp_test(
         for factor in df[feature_col].unique()
     ]
 
-    return scipy.stats.kruskal(*groups, nan_policy="omit").pvalue[0]
+    return scipy.stats.f_oneway(*groups).pvalue[0]
+
+
+def _compute_pairwise_rougel(comments: list[str]) -> float:
+    """
+    Return the average of the pairwise ROUGE-L similarity for all comments
+    in a discussion.
+    :param: comments: the comments of the discussion
+    :return: a similarity score from 0 (no similarities) to 1 (identical)
+    """
+    scorer = rouge_scorer.RougeScorer(["rougeL"])
+    scores = []
+    for c1, c2 in itertools.combinations(comments, 2):
+        scores.append(scorer.score(c1.lower(), c2.lower())["rougeL"].fmeasure)
+    return float(np.mean(scores)) if scores else np.nan

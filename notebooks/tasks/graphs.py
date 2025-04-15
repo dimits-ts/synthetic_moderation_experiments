@@ -132,7 +132,7 @@ def posthoc_dunn_heatmap(
     :param ax: The matplotlib axes object where the heatmap will be drawn
     :type ax: matplotlib.axes.Axes | None, optional
     """
-    pvalues = sp.posthoc_dunn(
+    pvalues = sp.posthoc_ttest(
         df, val_col=val_col, group_col=group_col, p_adjust="holm"
     )
     diff_values = _pairwise_diffs(df, group_col=group_col, value_col=val_col)
