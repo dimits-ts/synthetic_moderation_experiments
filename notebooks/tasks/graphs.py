@@ -90,7 +90,7 @@ def rougel_plot(df: pd.DataFrame, rougel_col: str, feature_col: str) -> None:
         kde=True,
         common_norm=False,  # normalize observation counts by feature_col
     )
-    plt.xlabel("ROUGE Similarity")
+    plt.xlabel("Diversity")
     plt.ylabel("Density")
 
 
