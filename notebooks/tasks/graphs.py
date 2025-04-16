@@ -25,15 +25,18 @@ def save_plot(path: Path) -> None:
 def comment_len_plot(
     df: pd.DataFrame, length_col: str, feature_col: str
 ) -> None:
-    sns.displot(
+    ax = sns.displot(
         df,
         x=length_col,
         hue=feature_col,
         stat="density",
-        kde=True,
+        kde=False,
+        multiple="layer",
         common_norm=False,  # normalize observation counts by feature_col
     )
     plt.xlabel("Comment Length (#words)")
+    # move legend inside plot
+    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
 
 
 def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
@@ -82,19 +85,22 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
 
 
 def rougel_plot(df: pd.DataFrame, rougel_col: str, feature_col: str) -> None:
-    sns.displot(
+    ax = sns.displot(
         data=df,
         x=rougel_col,
         hue=feature_col,
         stat="density",
-        kde=True,
+        multiple="layer",
+        kde=False,
         common_norm=False,  # normalize observation counts by feature_col
     )
     plt.xlabel("Diversity")
     plt.ylabel("Density")
+    # move legend inside plot
+    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
 
 
-def posthoc_dunn_heatmap(
+def posthoc_heatmap(
     df: pd.DataFrame,
     val_col: str,
     group_col: str,
