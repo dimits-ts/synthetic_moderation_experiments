@@ -22,16 +22,12 @@ def save_plot(path: Path) -> None:
     print(f"Figure saved to {path.resolve()}")
 
 
-def comment_len_plot(df: pd.DataFrame, feature_col: str) -> None:
-    len_df = df.copy()
-    len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
-    len_df = len_df.loc[
-        (len_df.comment_length > 0) & (len_df.comment_length < 600),
-        ["message_id", "comment_length", feature_col],
-    ]
+def comment_len_plot(
+    df: pd.DataFrame, length_col: str, feature_col: str
+) -> None:
     sns.displot(
-        len_df,
-        x="comment_length",
+        df,
+        x=length_col,
         hue=feature_col,
         stat="density",
         kde=True,
@@ -85,10 +81,11 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
     )
 
 
-def rougel_plot(rougel_sim: pd.Series, feature: pd.Series):
+def rougel_plot(df: pd.DataFrame, rougel_col: str, feature_col: str) -> None:
     sns.displot(
-        x=rougel_sim,
-        hue=feature,
+        data=df,
+        x=rougel_col,
+        hue=feature_col,
         stat="density",
         kde=True,
         common_norm=False,  # normalize observation counts by feature_col
