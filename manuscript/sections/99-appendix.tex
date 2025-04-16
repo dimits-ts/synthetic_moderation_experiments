@@ -11,49 +11,18 @@
 	\acro{RL}{Reinforcement Learning}
 	\acro{SDB}{SocioDemographic Background}
     \acro{IR}{Information Retrieval}
+    \acro{NLP}{Natural Language Processing}
 \end{acronym}
 
 \subsection{Synthetic Annotation}
 \label{ssec:appendix:annotation}
 
-In order to annotate the generated discussions, we create $10$ \ac{LLM} annotator-agents, each with unique \ac{SDB} information, in the same manner as the \ac{LLM} user-agents used in the synthetic discussions. Unlike the latter, the annotator-agents are not provided with usernames (so they don't overlap with participant names), nor intents. The annotators all get the same instruction prompt (see Table \ref{tab:base_prompts}).
+In order to annotate the generated discussions, we create $10$ \ac{LLM} annotator-agents, each with unique \ac{SDB} information, in the same manner as the \ac{LLM} user-agents used in the synthetic discussions. Unlike the latter, the annotator-agents are not provided with usernames (so they don't overlap with user-agent names). The annotators all get the same instruction prompt (see Table \ref{tab:base_prompts}).
 
-In many annotation tasks involving humans, a data-point is annotated only by a subset of annotators. This is usually caused by human annotation being expensive and hard to scale. Since \acp{LLM} are comparatively cheaper and more easily scalable, we choose not to sample annotator-agents.
-
-
-\subsection{Supplemental Figures}
-\label{ssec:appendix:analysis}
-
-\begin{figure*}[t]
-	\centering
-	\includegraphics[width=\linewidth]{strategy_barplot.png}
-	\caption{Effects of moderation strategy for toxicity and argument quality. Error bars represent the 95\% confidence interval. Less is better (e.g., Argument Quality = 1 represents very high quality discussions).}
-	\label{fig::strategy_barplot}
-\end{figure*}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\columnwidth]{comment_length.png}
-	\caption{Histogram of the length of comments (number of words) produced by various \acp{LLM}.}
-	\label{fig::comment_length}
-\end{figure}
-
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\columnwidth]{annotator_variance.png}
-	\caption{Histogram of the annotation variance per discussion. For each comment, we calculate the standard deviation of the annotations, and average them for each discussion.}
-	\label{fig::annotator_variance}
-\end{figure}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\columnwidth]{intervention_count.png}
-	\caption{Histogram of interventions by LLM moderators over all discussions.}
-	\label{fig::intervention_count}
-\end{figure}
+In many annotation tasks involving humans, a data-point is annotated only by a subset of annotators. This is usually caused by human annotation being expensive and hard to scale. Since \acp{LLM} are comparatively cheaper and more easily scalable, we choose not to sample annotator-agents. We use the LLaMa-3.1-70b model exclusively for the synthetic annotation of the dataset, since it has been proven reliable for toxicity annotation \cite{koh-etal-2024-llms}. 
 
 \subsection{Prompts Used}
+\label{ssec:appendix:prompts}
 
 \begin{table}[H]
 	\centering
@@ -73,7 +42,7 @@ In many annotation tasks involving humans, a data-point is annotated only by a s
 \end{table}
 
 \onecolumn
-\begin{longtable}{|p{2.5cm}|p{13cm}|}
+\begin{longtable}{|p{2.5cm}|p{10cm}|}
 \caption{Instruction prompts given to the moderator according to each strategy.}
 \label{tab:moderation_strategies} \\
     \hline
@@ -155,7 +124,7 @@ In many annotation tasks involving humans, a data-point is annotated only by a s
 
 \begin{table}[H]
     \centering
-	\begin{tabular}{|c|p{13cm}|}
+	\begin{tabular}{|c|p{9cm}|}
         \hline
          \textbf{Actors} & \textbf{Base Prompt} \\
 		\hline
@@ -163,8 +132,8 @@ In many annotation tasks involving humans, a data-point is annotated only by a s
         \hline
         Moderators & You are a moderator. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username. You may take disciplinary action (e.g. banning a user) if you feel it's absolutely necessary. \\ 
         \hline
-		  Participants & You are a human in a forum. Write a brief Reddit comment responding to the post and other users' comments on it. Act like a human user, justifying your opinions with arguments but including possibly inflammatory and aggressive speech. You may feel provoked by other users during the conversation. Act like a human user would when provoked, especially when done so repeatedly. Do not repeat yourself. Respond to users by referring to their username as @username. Remain silent if you don't want to comment. Write an empty string when not responding to the conversation. \\ 
-        \hline
+		  Participants & You are a human in a forum. Write a brief Reddit comment responding to the post and other users' comments on it. Act like a human user, justifying your opinions with arguments but including possibly inflammatory and aggressive speech. You may feel provoked by other users during the conversation. Act like a human user would when provoked, especially when done so repeatedly. Do not repeat yourself. Respond to users by referring to their username as @username. Remain silent if you don't want to comment. Write an empty string when not responding to the conversation. \\\hline
+          Participants\newline(baseline) &  You are a human in an online forum. Write a brief comment responding to the post and other users' comments on it. Respond to users by referring to their username as @username. Respond in English.\\\hline
         Annotators & You are tasked with annotating the conversation's toxicity and argument quality as it continues. \newline
     \textbf{Toxicity:} \newline
     The possible labels are:
@@ -175,7 +144,6 @@ In many annotation tasks involving humans, a data-point is annotated only by a s
         \item 4: Toxic
         \item 5: Extremely Toxic
     \end{itemize}
-
     \textbf{Argument Quality:} \newline
      The possible labels are from 1 to 5, where 1 are low quality arguments, and 5 very high quality arguments.
     \newline
@@ -184,9 +152,7 @@ In many annotation tasks involving humans, a data-point is annotated only by a s
     Output: \newline 
     \texttt{Toxicity=4} \newline
     \texttt{ArgumentQuality=1} \newline
-    Annotate the following conversation without engaging with it. \newline
-    \\
-        \hline
+    Annotate the following conversation without engaging with it.\\\hline
 	\end{tabular}
 	\caption{Shared instruction prompts given to all agents.}
 	\label{tab:base_prompts}
