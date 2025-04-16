@@ -23,12 +23,13 @@ def save_plot(path: Path) -> None:
 
 
 def comment_len_plot(
-    df: pd.DataFrame, length_col: str, feature_col: str
+    df: pd.DataFrame, length_col: str, feature_col: str, hue_order: list
 ) -> None:
     ax = sns.displot(
         df,
         x=length_col,
         hue=feature_col,
+        hue_order=hue_order,
         stat="density",
         kde=False,
         multiple="layer",
@@ -84,11 +85,14 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
     )
 
 
-def rougel_plot(df: pd.DataFrame, rougel_col: str, feature_col: str) -> None:
+def rougel_plot(
+    df: pd.DataFrame, rougel_col: str, feature_col: str, hue_order: list
+) -> None:
     ax = sns.displot(
         data=df,
         x=rougel_col,
         hue=feature_col,
+        hue_order=hue_order,
         stat="density",
         multiple="layer",
         kde=False,
