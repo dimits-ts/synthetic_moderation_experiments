@@ -7,9 +7,11 @@ import argparse
 import logging
 from pathlib import Path
 import sys
+import gc
 
 import pandas as pd
 import yaml
+import torch
 
 import syndisco.experiments
 import syndisco.backend
@@ -45,11 +47,18 @@ def main():
     with open(args.config_file, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
 
-    model_manager = syndisco.util.model_util.ModelManager(
-        model_path=yaml_data["model"]["model_path"],
-        model_pseudoname=yaml_data["model"]["model_pseudoname"],
-        max_new_tokens=yaml_data["model"]["max_tokens"],
-        disallowed_strings=yaml_data["model"]["disallowed_strings"],
+    disc_model_manager = syndisco.util.model_util.ModelManager(
+        model_path=yaml_data["discussion_model"]["model_path"],
+        model_pseudoname=yaml_data["discussion_model"]["model_pseudoname"],
+        max_new_tokens=yaml_data["discussion_model"]["max_tokens"],
+        disallowed_strings=yaml_data["discussion_model"]["disallowed_strings"],
+    )
+
+    annot_model_manager = syndisco.util.model_util.ModelManager(
+        model_path=yaml_data["annotation_model"]["model_path"],
+        model_pseudoname=yaml_data["annotation_model"]["model_pseudoname"],
+        max_new_tokens=yaml_data["annotation_model"]["max_tokens"],
+        disallowed_strings=yaml_data["annotation_model"]["disallowed_strings"],
     )
 
     generate_discussions = yaml_data["actions"]["generate_discussions"]
@@ -65,16 +74,23 @@ def main():
 
     if generate_discussions:
         discussion_exp = create_discussion_experiment(
-            llm=model_manager.get(), discussion_config=yaml_data["discussions"]
+            llm=disc_model_manager.get(),
+            discussion_config=yaml_data["discussions"],
         )
         run_discussion_experiment(
             experiment=discussion_exp,
             output_dir=Path(yaml_data["discussions"]["files"]["output_dir"]),
         )
 
+        # free up VRAM
+        del disc_model_manager
+        gc.collect()
+        torch.cuda.empty_cache()
+
     if generate_annotations:
         ann_exp = create_annotation_experiment(
-            llm=model_manager.get(), annotation_config=yaml_data["annotation"]
+            llm=annot_model_manager.get(),
+            annotation_config=yaml_data["annotation"],
         )
         run_annotation_experiment(
             ann_exp,

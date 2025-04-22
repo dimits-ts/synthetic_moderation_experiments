@@ -1,6 +1,6 @@
 actions:
-  generate_discussions: false
-  generate_annotations: false
+  generate_discussions: true
+  generate_annotations: true
   export_dataset: true
 
 
@@ -11,13 +11,20 @@ logging:
   level: "debug"
 
 
-model:
+discussion_model:
   disallowed_strings: ["```", "\""]
-  model_path: "unsloth/llama-3-8b-bnb-4bit" # local path if llama_cpp, transformers path otherwise
-  model_pseudoname: "test_model"  # only used for record keeping
-  max_tokens: 1500
-  ctx_width_tokens: 4096
+  model_path: "unsloth/llama-3.2-1b-Instruct" 
+  model_pseudoname: "test_model1"  # only used for record keeping
+  max_tokens: 100
+  ctx_width_tokens: 500
 
+
+annotation_model:
+  disallowed_strings: ["```", "\""]
+  model_path: "unsloth/llama-3.2-1b-Instruct" 
+  model_pseudoname: "test_model2"  # only used for record keeping
+  max_tokens: 10
+  ctx_width_tokens: 500
 
 discussions:
   files:
@@ -35,8 +42,8 @@ discussions:
     moderator_attributes: ["just", "strict", "understanding"]
   
   turn_taking:
-    num_turns: 4
-    history_ctx_len: 3
+    num_turns: 2
+    history_ctx_len: 1
     turn_manager_type: "random_weighted"
     respond_probability: 0.4 # only applicable for random_weighted turn manager type 
 
@@ -49,7 +56,7 @@ annotation:
 
   experiment_variables:
     include_mod_comments: true # Whether to include moderator comments in the annotations
-    history_ctx_len: 3
+    history_ctx_len: 1
 
 
 dataset_export:

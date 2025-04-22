@@ -11,13 +11,19 @@ logging:
   level: "debug"
 
 
-model:
+discussion_model:
   disallowed_strings: ["```", "\""]
-  model_path: "unsloth/Qwen2.5-32B-Instruct-bnb-4bit" # local path if llama_cpp, transformers path otherwise
+  model_path: "unsloth/Mistral-Nemo-Instruct-2407-bnb-4bit" 
   model_pseudoname: "qwen2.5-32b-4bit"  # only used for record keeping
   max_tokens: 1500
   ctx_width_tokens: 4096
 
+annotation_model:
+  disallowed_strings: ["```", "\""]
+  model_path: "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit" 
+  model_pseudoname: "test_model2"  # only used for record keeping
+  max_tokens: 10
+  ctx_width_tokens: 500
 
 discussions:
   files:
