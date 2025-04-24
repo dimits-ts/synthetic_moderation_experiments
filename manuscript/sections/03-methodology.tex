@@ -35,33 +35,31 @@ Our methodology thus assumes that the contents of any synthetic discussion are d
 \end{itemize}
 
 
-\subsection{Evaluating moderation strategies}
-\label{ssec:methodology:strategies}
+%\subsection{Evaluating moderation strategies}
+%\label{ssec:methodology:strategies}
 
-Let $D^{s} = \{d^s_1, d^s_2, \ldots, d^s_{\lvert D^s \rvert}\}$  the set of discussions that took place with the moderators following strategy $s$. We can intuitively claim that a moderation strategy $s$ is \textit{overall} better than $s'$ for a measure $m$ if:
+%Let $D^{s} = \{d^s_1, d^s_2, \ldots, d^s_{\lvert D^s \rvert}\}$  the set of discussions that took place with the moderators following strategy $s$. We can intuitively claim that a moderation strategy $s$ is \textit{overall} better than $s'$ for a measure $m$ if:
 
-\begin{equation}
-\label{eq:strategy_comparison}
-    \frac{1}{\lvert D^{s} \rvert} {\sum_{d^{s} \in D^{s}} m(d^{s})} > \frac{1}{\lvert D^{s'} \rvert} {\sum_{d^{s'} \in D^{s'}} m(d^{s'})}
-\end{equation}
+%\begin{equation}
+%\label{eq:strategy_comparison}
+%    \frac{1}{\lvert D^{s} \rvert} {\sum_{d^{s} \in D^{s}} m(d^{s})} > \frac{1}{\lvert D^{s'} \rvert} {\sum_{d^{s'} \in D^{s'}} m(d^{s'})}
+%\end{equation}
 
-This formula assumes the moderator follows a static strategy, in contrast to the dynamic strategies usually employed by human moderators. It also assumes that higher values of $m$ correspond to discussions of higher quality. While some measures may be computable only given the whole discussion (“discussion-level measures”), many measures are defined on the level of individual comments (“comment-level measures”). It is often possible to obtain a discussion-level measure from the comment-level through averaging (e.g., average toxicity, average satisfaction).
-
-In practice, we check if Equation \ref{eq:strategy_comparison} holds in the presence of randomness and limited samples.
+%\noindent Assuming a larger $m$ score is better. In the case that $m$ can only be computed on the level of comments, we can average the scores across a discussion to get a discussion-level metric (e.g., average toxicity). In practice, we check whether Equation \ref{eq:strategy_comparison} holds in the presence of randomness and limited samples.
 
 
-\subsection{Discussion Realism Metrics}
+\subsection{Evaluating Synthetic Discussions}
 \label{ssec:methodology:diversity}
 
-\citet{ulmer2024} use average pairwise F1 ROUGE-L scores \cite{lin-2004-rouge} to gauge diversity in synthetic discussions. This metric is based on the observation that completely synthetic discussions frequently lead to the user-agents repeating the same words/phrases. By cross-comparing the comments generated in a discussion, we can obtain a \textit{Diversity} metric like so:
+As discussed in Section \ref{ssec:related:discussions}, it may not be methodologically sound to attempt approximating realism as the goal of our synthetic discussions. Therefore, we use the “\textit{Diversity}” metric introduced by \citet{ulmer2024}:
 
 \small
 \begin{equation}
 \label{eq:variety}
-    div(d) = \frac{1}{N(N-1)} \sum_{i=1}^N \sum_{j=1, j \neq i}^N \textit{RLF1}(c(i, d), c(j, d))
+    div(d) = 1- \frac{1}{N(N-1)} \sum_{i=1}^N \sum_{j=1, j \neq i}^N \textit{RLF1}(c(i, d), c(j, d))
 \end{equation}
 \normalsize
 
 \noindent where \textit{RLF1} is the ROUGE-L F1 score \cite{lin-2004-rouge}.
 
-We can compare the Diversity distribution of synthetic discussions to sampled human ones. This gives us an intuition on how close these synthetic discussions are to real-life discussions, regardless of the discussed topic.
+We can compare the \textit{Diversity} distribution of synthetic discussions to sampled human ones. This gives us an intuition on how close these synthetic discussions are to real-life discussions in terms of variety of contents. This formulation also renders the metric invariant to the discussed topics.

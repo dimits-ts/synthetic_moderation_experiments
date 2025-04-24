@@ -15,14 +15,14 @@ Furthermore, as demonstrated by Figure \ref{fig::intervention_count}, \ac{LLM} m
     \includegraphics[width=0.48\linewidth]{toxicity_stats.png} \hfill
     \includegraphics[width=0.48\linewidth]{argumentq_stats.png}
 	\centering
-	\caption{Mean difference of Toxicity (left) and Argument Quality (right) between each moderation strategy. $A[i, j] = 0.3^{***}$ indicates that the strategy $j$ is better than the strategy $i$ for an average of $0.3$ points with $p<0.001$. Each comparison is accompanied by Dunn's posthoc test for multiple comparisons \cite{dunn}, in the form of significance asterisks.}
+	\caption{Mean difference of Toxicity (left) and Argument Quality (right) between each moderation strategy. $A[i, j] = 0.3^{***}$ indicates that the strategy $j$ is better than the strategy $i$ for an average of $0.3$ points with $p<0.001$. Each comparison is accompanied by pairwise student-t tests, in the form of significance asterisks.}
 	\label{fig::toxicity_aq_stats}
 \end{figure*}
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\columnwidth]{intervention_count.png}
-	\caption{Histogram of interventions by LLM moderators over all discussions.}
+	\caption{Histogram of interventions by LLM moderators over all discussions. The maximum number of interventions is $14$.}
 	\label{fig::intervention_count}
 \end{figure}
 
@@ -79,7 +79,7 @@ We run discussions where user-agents are not assigned (1) \acp{SDB}, (2) roles, 
 
 Figure \ref{fig::diversity} demonstrates that, while our approach (using roles, \acp{SDB} and the improved instruction prompt) is not enough to create identical discussions with human ones, removing any of its aspects leads to a significant divergence. This divergence is similar to the one observed when changing the turn taking function, and can similarly not be attributed to differences in comment length (Figure \ref{fig::comment_length}).
 
-Finally, we test whether user-agents assigned with the “Troll” role goad other user-agents into displaying toxic behavior. We find that discussions which involved trolls cause a statistically and qualitatively significant rise in toxicity in the comments of the rest of the user-agents (Student-T test $p<.000$, see Figure \ref{fig::goad}).
+Finally, we test whether user-agents assigned with the “Troll” role goad other user-agents into displaying toxic behavior. We find that discussions which involved trolls cause a statistically and qualitatively significant rise in toxicity in the comments of the rest of the user-agents (Student-T test $p<.000$, see Figure \ref{fig::goad}). This was to be expected, since we explicitly set this behavior in our instruction prompt.
 
 \begin{figure}
     \includegraphics[width=\columnwidth]{toxicity_troll_comparison.png} 
