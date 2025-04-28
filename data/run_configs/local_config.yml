@@ -10,13 +10,20 @@ logging:
   logs_dir: "/home/dimits/Documents/research/synthetic_moderation_experiments/logs"
   level: "debug"
 
-
-model:
+discussion_model:
   disallowed_strings: ["```", "\""]
-  model_path: "unsloth/llama-3-8b-bnb-4bit" # local path if llama_cpp, transformers path otherwise
-  model_pseudoname: "test_model"  # only used for record keeping
-  max_tokens: 1500
-  ctx_width_tokens: 4096
+  model_path: "unsloth/llama-3.2-1b-Instruct" 
+  model_pseudoname: "test_model1"  # only used for record keeping
+  max_tokens: 100
+  ctx_width_tokens: 500
+
+
+annotation_model:
+  disallowed_strings: ["```", "\""]
+  model_path: "unsloth/llama-3.2-1b-Instruct" 
+  model_pseudoname: "test_model2"  # only used for record keeping
+  max_tokens: 10
+  ctx_width_tokens: 500
 
 
 discussions:

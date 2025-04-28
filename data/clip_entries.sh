@@ -15,7 +15,7 @@ find "$ROOT_DIR" -type f -name "*.json" | while read -r file; do
     # Get the number of elements in 'logs'
     count=$(jq '.logs | length' "$file")
     
-    if [ "$count" -gt 15 ]; then
+    if [ "$count" -eq 19 ]; then
       echo "Trimming $file (logs length: $count)"
 
       # Trim 'logs' to first 15 elements and overwrite the file
