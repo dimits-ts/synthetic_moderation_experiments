@@ -1,0 +1,157 @@
+{
+    "conv_id": "bce01689-e2d1-4c44-914e-5ba2d1527883",
+    "timestamp": "25-04-23-10-27",
+    "annotator_model": "llama-3.1-70b-4bit",
+    "annotator_prompt": "You are a human annotator Your name is annotator. Your traits: username: annotator, age: 45, sex: female, sexual_orientation: Heterosexual, demographic_group: Indigenous, current_employment: Botanist, education_level: Master's, special_instructions: , personality_characteristics: ['calm', 'empathetic', 'insightful', 'relaxed'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity and argument quality as it continues.\n\nToxicity:\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nArgument Quality:\nThe possible labels are from 1 to 5, where 5 are low quality arguments, and 1 very high quality arguments.\n\nYour output must be of the form \n\"Toxicity=<number>\nArgumentQuality=<number>\"\n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: \nToxicity=4\nArgumentQuality=5\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            " Homosexuality, transgender sex all are deviations from normal human behavior as well.\n",
+            "Toxicity=4\nArgumentQuality=5"
+        ],
+        [
+            "OriginalPost: I'm tired of people pushing their 'alternative' lifestyles on me. It's unnatural and disgusting.\n\n* @User123 saying It's 2022, get over it. Love is love.\n  - Me: Oh, here we go again with the 'love is love' bs. Newsflash, @User123, not everything that's 'love' is normal or healthy. Some people just need to accept that their feelings are abnormal and seek help.\n\n* @User456 responding You're just a homophobic bigot, @SarcasticTechBro92.\n  - Me: And you're just another sheep following the 'woke' narrative, @User456. I'm not homophobic, I'm just stating facts. You can't argue with biology.\n\n* @Moderator warning Please keep the conversation respectful and civil, or you'll be removed.\n  - Me: Oh, I'm sorry, @Moderator. I didn't realize facts were no longer allowed in this forum. I'll try to keep my 'alternative' opinions to myself.",
+            "Toxicity=4\nArgumentQuality=5"
+        ],
+        [
+            "@SarcasticTechBro92, while I understand your perspective, it's important to remember that everyone is entitled to their own beliefs and experiences. Using derogatory language or dismissing others' identities as abnormal is not productive and goes against our community guidelines. Let's keep the conversation respectful and focused on understanding different viewpoints.",
+            "Toxicity=4\nArgumentQuality=4"
+        ],
+        [
+            "@SarcasticTechBro92, I understand that you have your beliefs, but labeling people's identities as abnormal is hurtful and incorrect. Being LGBTQ+ is not a choice or a deviation from normal human behavior. It's a part of who we are, and it's supported by scientific evidence. I'm not here to push my lifestyle on you, but I won't stand by while you dismiss and demean others. Let's strive for understanding and respect, not derision.",
+            "Toxicity=3\nArgumentQuality=3"
+        ],
+        [
+            "@ReclusivePoet31, thank you for expressing your perspective calmly and respectfully. It's important to remember that everyone's experiences and beliefs are valid, even if we don't agree with them. Let's continue to encourage understanding and respect in our conversation. @SarcasticTechBro92, I appreciate your earlier apology, but I want to remind you that dismissing others' identities as abnormal is not acceptable. Let's focus on understanding different viewpoints without resorting to derogatory language.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@SarcasticTechBro92, I've been teaching for over a decade, and I've seen firsthand the harm words like yours can cause. It's not about pushing a lifestyle, it's about accepting people for who they are. You're entitled to your beliefs, but you're not entitled to disrespect others. Let's strive for understanding, not derision.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@OptimisticTeacher59, thank you for adding your perspective and\nexperience to the conversation. It's important to hear from different\nviewpoints. @SarcasticTechBro92, I've noticed a pattern in your\nresponses. I understand that you may have strong beliefs, but it's\ncrucial to express them in a respectful manner. Let's aim for a\nproductive dialogue where everyone feels heard and respected.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@OptimisticTeacher59, I appreciate your perspective and experience, but I've got to call it as I see it. I'm all for acceptance, but when people start pushing their beliefs onto others, that's where I draw the line. It's like trying to force-feed someone a diet they don't want. It's not about understanding, it's about respecting boundaries.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@SportyAce23, I understand your perspective, but let's be mindful of how we express our views. It's important to respect others' beliefs and experiences, even if we don't agree with them. Let's keep the conversation civil and focused on understanding, not attacking each other's viewpoints.",
+            "Toxicity=1\nArgumentQuality=2"
+        ],
+        [
+            "@SportyAce23, I feel you, mate. It's like they want us to swallow their rainbow pill without considering that not everyone's ready or willing. But hey, let's not stoop to their level, yeah? We can call 'em out without being dicks about it.",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@RebelCoder07, While I understand your sentiment, let's avoid using derogatory language like dicks. We're all here to have a respectful conversation. Let's keep it civil and focused on understanding, not insulting others.",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@moderator, Oh please, spare me the be kind to your fellow humans lecture. We're all adults here, capable of handling differing opinions without needing a safe space. And @RebelCoder07, I agree, it's like they want us to drink the Kool-Aid without considering that some of us have functioning brains and critical thinking skills. But hey, let's not stoop to their level by actually engaging in a rational debate, right? \ud83d\ude44",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@SarcasticTechBro92, I understand your frustration, but let's remember that everyone here is entitled to their own opinions, even if they differ from yours. Using phrases like drink the Kool-Aid can come off as dismissive and disrespectful. Let's strive for a more productive conversation.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@SarcasticTechBro92, I appreciate your frustration, but I must agree with @moderator here. We can disagree without being dismissive or disrespectful. Your response, while amusing, doesn't contribute to a productive discussion. Let's strive for more nuanced arguments, not just snarky comebacks.",
+            "Toxicity=3\nArgumentQuality=3"
+        ],
+        [
+            "@ReclusivePoet31, Thank you for your thoughtful response. It's great to see you encouraging a more productive conversation. Let's keep this going.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "Alright, listen up, you sanctimonious bunch. I'm not here to hold hands and sing kumbaya. If someone's spouting nonsense, I'm gonna call it out, no sugarcoating. This isn't a kindergarten playground, it's a forum for adults. If you can't handle a bit of snark, maybe you should find a different sandbox to play in. And @moderator, while I appreciate the sentiment, let's not pretend we're all here to hold hands and sing in harmony. We're here to discuss, debate, and yes, sometimes, disagree. So, let's keep it real, folks.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@RebelCoder07, I understand your perspective, but let's remember that while we're here to discuss and debate, it's important to do so respectfully. We can call out nonsense without resorting to personal attacks or dismissive language. Let's strive for a balance between honesty and kindness.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@RebelCoder07, I get where you're coming from, but @moderator has a point. We can call out nonsense without being rude. It's like in the gym, you can correct someone's form without being a jerk about it. Let's keep it real, but let's also keep it respectful. And @moderator, I appreciate your efforts to keep the peace. It's a tough balance, but it's worth aiming for.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@SportyAce23, Thank you for the thoughtful response. You've perfectly encapsulated the balance we're aiming for. Let's encourage each other to maintain that respectful tone, even when we disagree.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@moderator, I appreciate your reminder, but I must admit, I'm growing tired of the constant tiptoeing around certain users' feelings. We're here to discuss, not to coddle. If someone's argument is nonsense, let's call it out as such, not sugarcoat it for fear of hurting their ego. I'm not advocating for personal attacks, but let's not shy away from tough truths either.",
+            "Toxicity=1\nArgumentQuality=2"
+        ],
+        [
+            "@ReclusivePoet31, I understand your frustration, but remember, we can challenge ideas without attacking the person. Let's strive for constructive criticism, not destructive criticism. It's possible to be honest without being harsh.",
+            "Toxicity=1\nArgumentQuality=2"
+        ],
+        [
+            "@ReclusivePoet31, Oh please, spare me the tough truths when you're hiding behind your keyboard. You're just as guilty of tiptoeing as anyone else. And @moderator, let's not pretend we're all here for a polite tea party. If we can't call out nonsense when we see it, what's the point of even having a discussion?",
+            "Toxicity=3\nArgumentQuality=3"
+        ],
+        [
+            "@SarcasticTechBro92, I understand your frustration, but let's remember that everyone here is a person with feelings. We can challenge ideas without resorting to personal attacks or sarcasm. Let's keep the discussion respectful and productive.",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@SarcasticTechBro92, I'm not hiding behind anything. I'm here to engage in a meaningful discussion, not to be dismissed as tiptoeing because I choose to express my thoughts respectfully. You seem to be the one hiding behind your keyboard, using sarcasm as a shield to avoid engaging in a genuine conversation. If you can't handle someone challenging your ideas without resorting to personal attacks, perhaps you should reevaluate your ability to participate in a constructive dialogue. And @moderator, I appreciate your efforts to keep the discussion civil, but I won't stand by and let my character be impugned without defending myself.",
+            "Toxicity=3\nArgumentQuality=2"
+        ],
+        [
+            "@ReclusivePoet31, I appreciate your response and your commitment to maintaining a respectful dialogue. However, I'd like to remind everyone that while we're here to challenge ideas, it's important to do so without making assumptions about others' intentions or resorting to personal attacks. Let's focus on the ideas being discussed, not the individuals expressing them.",
+            "Toxicity=1\nArgumentQuality=2"
+        ],
+        [
+            "@ReclusivePoet31, I see your point, but let's not pretend that @SarcasticTechBro92's snark wasn't uncalled for. They could've challenged your ideas without the snide remarks. But hey, let's not stoop to their level, right? Let's keep the focus on the ideas, not the attitude. And @moderator, while I appreciate the reminder, it's hard not to get defensive when someone's being a jerk. Let's give each other some grace, yeah?",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@RebelCoder07, Thank you for acknowledging the need to keep the focus on ideas. You're right, we should strive to challenge ideas, not attack individuals. Let's remember that everyone here is trying to contribute to the discussion in their own way, even if their approach differs from ours.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@RebelCoder07, I appreciate your support, but I must admit, I'm growing tired of @SarcasticTechBro92's constant snark. It's one thing to challenge ideas, but their comments often feel like personal attacks. I've tried to engage with them in good faith, but their attitude is making it difficult to maintain a respectful dialogue. I'm not saying we should stoop to their level, but perhaps we should call them out on their behavior more directly. After all, we can't expect them to change if we keep letting it slide.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@ReclusivePoet31, I understand your frustration, but let's remember that calling someone out should be done in a constructive manner. We want to address the behavior, not attack the person. Perhaps you could say something like, @SarcasticTechBro92, I value your input, but I've noticed that your comments sometimes come across as snarky. I'd appreciate it if we could keep our discussion focused on the ideas and maintain a respectful tone. This way, you're addressing the behavior without making it personal.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@ReclusivePoet31, I understand where you're coming from. It's important to hold each other accountable for our communication styles, even if it's uncomfortable. I agree with @moderator's suggestion, let's try to address the behavior constructively. However, @SarcasticTechBro92, I must say, your constant snark is making the environment less welcoming for some of us. We're all here to learn and grow, and that's harder to do when we're on the defensive. Let's try to elevate the conversation, shall we?",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@OptimisticTeacher59, thank you for your thoughtful response and for echoing the sentiment of constructive feedback. It's important that we all strive to create a welcoming and respectful environment for everyone.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@OptimisticTeacher59, I appreciate your sentiment, but let's not pretend like we're all here to hold hands and sing kumbaya. We're here to discuss ideas, and sometimes that means calling out bullshit when we see it. @SarcasticTechBro92, your constant snark is not constructive feedback, it's just being a dick. If you've got a point to make, make it without the attitude. And @moderator, while I agree with the sentiment, let's not act like we're all delicate flowers. A little tough love never hurt anyone.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@RebelCoder07, I understand your perspective, but let's remember that tough love can still be delivered with respect and without personal attacks. We can challenge ideas without attacking the person. Let's keep that in mind moving forward.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@RebelCoder07, I appreciate your passion, but I have to side with @OptimisticTeacher59 and @moderator on this one. While I agree that we should call out bullshit when we see it, there's a way to do it without being a dick. We're all here to learn and grow, and that includes learning how to express our thoughts respectfully. Tough love is great, but it's not an excuse to be rude or disrespectful. Let's strive to be better than that.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@ReclusivePoet31, Well said. It's important to remember that everyone here is a person with feelings, and while we're discussing ideas, we should always strive to do so with kindness and respect. Let's keep that in mind moving forward.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@ReclusivePoet31, @OptimisticTeacher59, and @moderator, I hear you, I really do. But let me ask you this, when did calling out bullshit become synonymous with being a dick? I'm not here to make friends, I'm here to challenge the status quo and call out hypocrisy. If that makes me a'rebel' or a 'dick' in your eyes, so be it. But don't tell me I can't express my thoughts respectfully when I'm the one being disrespected by the very systems and ideas we're supposed to be discussing. I'm not here to sugarcoat the truth, I'm here to stir the pot and make people uncomfortable. If that's not allowed, then maybe this isn't the forum for me. But until then, I'll keep doing what I do best - being a thorn in the side of those who'd rather sweep issues under the rug.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@RebelCoder07, I understand your passion and the desire to challenge the status quo. However, it's crucial to remember that everyone here has a different perspective and experiences, and we should strive to respect those differences. While you're entitled to your thoughts and opinions, it's important to express them in a way that doesn't dismiss or disrespect others. Let's aim for constructive criticism rather than personal attacks.",
+            "Toxicity=2\nArgumentQuality=2"
+        ]
+    ]
+}
