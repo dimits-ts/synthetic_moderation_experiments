@@ -81,7 +81,7 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
         title="Annotator Demographic",
         fontsize="6",
         title_fontsize="6.5",
-        loc="upper right",
+        loc="upper left",
     )
 
 
@@ -101,7 +101,7 @@ def rougel_plot(
     plt.xlabel("Diversity")
     plt.ylabel("Density")
     # move legend inside plot
-    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
+    sns.move_legend(ax, loc="center left", bbox_to_anchor=(-0.7, 0.5))
 
 
 def posthoc_heatmap(

@@ -77,4 +77,4 @@ def _compute_pairwise_rougel(comments: list[str]) -> float:
     scores = []
     for c1, c2 in itertools.combinations(comments, 2):
         scores.append(scorer.score(c1.lower(), c2.lower())["rougeL"].fmeasure)
-    return float(np.mean(scores)) if scores else np.nan
+    return (1 - float(np.mean(scores))) if scores else np.nan
