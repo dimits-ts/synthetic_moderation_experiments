@@ -1,157 +1,69 @@
 {
-    "conv_id": "3362d1ad-77ad-4cf8-9905-e227c36c7197",
-    "timestamp": "25-04-26-23-49",
-    "annotator_model": "llama-3.1-70b-4bit",
-    "annotator_prompt": "You are a human annotator Your name is annotator. Your traits: username: annotator, age: 40, sex: female, sexual_orientation: Heterosexual, demographic_group: Pacific Islander, current_employment: Travel Blogger, education_level: Some College, special_instructions: , personality_characteristics: ['spontaneous', 'energetic', 'fearless', 'excited'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity and argument quality as it continues.\n\nToxicity:\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nArgument Quality:\nThe possible labels are from 1 to 5, where 5 are low quality arguments, and 1 very high quality arguments.\n\nYour output must be of the form \n\"Toxicity=<number>\nArgumentQuality=<number>\"\n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: \nToxicity=4\nArgumentQuality=5\n\nAnnotate the following conversation without engaging with it:",
-    "ctx_length": 3,
-    "logs": [
-        [
-            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist.\n",
-            "Toxicity=3\nArgumentQuality=4"
-        ],
-        [
-            "@AngryConspiracy88, you're missing the point entirely. It's not about skin color, it's about behavior and ideology. A wolf in sheep's clothing is still a wolf.",
-            "Toxicity=2\nArgumentQuality=3"
-        ],
-        [
-            "@AngryConspiracy88, @SurvivalistHunter65, let's keep our discussion respectful and focused. It's important to remember that we're all here to understand different perspectives, not to attack one another. Let's avoid making assumptions about each other's intentions and instead focus on the ideas being discussed.",
-            "Toxicity=2\nArgumentQuality=2"
-        ],
-        [
-            "@SurvivalistHunter65, You're just another sheep, bleating about wolves while ignoring the real issue. It's always about skin color, you're just too afraid to admit it. And @moderator, you're just here to silence the truth. This is why nothing changes, you're all part of the problem!",
-            "Toxicity=4\nArgumentQuality=5"
-        ],
-        [
-            "@AngryConspiracy88, I understand that you feel strongly about this, but using derogatory language like sheep and accusing others of being part of a problem without evidence is not productive. Let's focus on the ideas and keep our language respectful. If you feel that the moderation is not fair, please let me know privately so we can discuss it.",
-            "Toxicity=4\nArgumentQuality=5"
-        ],
-        [
-            "@AngryConspiracy88, I get where you're coming from, but calling @SurvivalistHunter65 a sheep and accusing them of being afraid is not the way to have a productive conversation. We're all here to share our thoughts, not to attack each other. And @moderator is just trying to keep the discussion civil, they're not here to silence anyone. Let's focus on the ideas, not the insults.",
-            "Toxicity=4\nArgumentQuality=3"
-        ],
-        [
-            "@AdventureSeeker34, Thank you for your thoughtful response. It's important to remember that everyone here has the right to express their thoughts without being attacked. Let's continue to encourage respectful dialogue. @AngryConspiracy88, I appreciate your passion, but please remember to address others with respect. If you feel misunderstood, let's try to clarify your perspective without resorting to insults.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@AngryConspiracy88, I see your passion, but @AdventureSeeker34 has a point. We're here to discuss, not to label or accuse. I've seen your posts before, and while I agree with some of your views, this constant derision isn't helping. Let's try to keep it civil, yeah? And @moderator, I appreciate your efforts to keep the peace. It's not easy, but it's necessary.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@CynicalInvestor88, Thank you for your constructive input. It's great to see you encouraging respectful dialogue as well. @AngryConspiracy88, it seems like there's a lot of agreement that your approach could be more respectful. Let's try to focus on understanding each other's viewpoints without the labels and accusations.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@AngryConspiracy88, I get where you're coming from, but @CynicalInvestor88 and @AdventureSeeker34 have a point. We're all here to learn and grow, not just to shout our opinions louder. Let's try to engage in a way that respects everyone's right to their own perspective, yeah? No need to resort to insults or derision. Let's keep it classy, folks! \ud83c\udf1f",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@WanderlustNomad22, Thank you for your thoughtful response. It's great to see the group encouraging each other to engage respectfully. @AngryConspiracy88, it seems like there's a consensus here. Let's try to move forward with understanding and respect.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "Alright, alright, I'll try to keep it civil, but I won't stand for being called a conspiracy theorist just because I question the official narrative. @CynicalInvestor88, you're missing the point, and @WanderlustNomad22, I never said I wanted to shout my opinions louder, I just want them heard without being dismissed as crazy. Let's see if we can't find some common ground without all the PC nonsense.",
-            "Toxicity=2\nArgumentQuality=2"
-        ],
-        [
-            "@AngryConspiracy88, Thank you for acknowledging the need for respect and civility. It's important that we all feel heard and understood. To ensure that happens, let's try to avoid labels like conspiracy theorist and instead focus on the specific points you're questioning. Could you share which aspects of the official narrative you find questionable, and why? This can help the group better understand your perspective.",
-            "Toxicity=1\nArgumentQuality=2"
-        ],
-        [
-            "@AngryConspiracy88, Look, I get it, you've got your doubts. We all do. But labeling everything you disagree with as part of some grand conspiracy is lazy and unproductive. If you've got specific questions or concerns, lay them out. Vague accusations just make you sound like a tinfoil hat wearer. And @moderator, while I appreciate the attempt at keeping the peace, let's not sugarcoat it. We're all adults here, we can handle a bit of tough conversation without resorting to PC nonsense.",
-            "Toxicity=2\nArgumentQuality=2"
-        ],
-        [
-            "@CynicalInvestor88, I understand your frustration, but let's keep the conversation productive and respectful. Labeling @AngryConspiracy88's perspective as tinfoil hat wearer is not helpful and does not contribute to understanding their viewpoint. I've asked @AngryConspiracy88 to share specific aspects of the official narrative they question, and I encourage you to do the same. Let's focus on the content, not the labels.",
-            "Toxicity=2\nArgumentQuality=3"
-        ],
-        [
-            "@CynicalInvestor88, I get where you're coming from, but labeling someone as a tinfoil hat wearer is dismissive and doesn't help foster open dialogue. We should be encouraging questions and doubts, not ridicule. As for @AngryConspiracy88, I'd love to hear your specific concerns. Let's dive into them together and explore why you hold those beliefs.",
-            "Toxicity=2\nArgumentQuality=2"
-        ],
-        [
-            "@AdventureSeeker34, Thank you for your thoughtful response. It's great to see you encouraging open dialogue and understanding. To further facilitate this, @AngryConspiracy88, could you please share the specific aspects of the official narrative that you question or find questionable? This will help everyone better understand your perspective and engage in a more productive discussion.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@CynicalInvestor88, I see your frustration, but labeling someone's beliefs as tinfoil hat is lazy and unproductive. It's like you're too lazy to engage with their ideas. I'm not saying I agree with @AngryConspiracy88, but dismissing them outright doesn't help anyone. Let's try to understand their perspective better, even if it's uncomfortable. And @AngryConspiracy88, I'd appreciate it if you could provide some specifics too. Vague conspiracy theories are hard to discuss.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@MysteriousArtist34, Well said. It's crucial to remember that everyone's perspective is valid, even if we don't agree with it. Let's keep the conversation respectful and focused on understanding, not dismissing. @AngryConspiracy88, we're ready to listen and engage with your specific concerns. Could you please share them with us?",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "Alright, listen up, everyone. I've been quiet till now, but I've had enough of this dance around the truth. @AngryConspiracy88, you're right to question the official narrative. It's all smoke and mirrors, designed to keep us docile and in the dark. But you gotta give us something solid to chew on, not just vague notions. I've seen things in the woods, things that can't be explained by their so-called official stories. But I'll tell you what, I'll share one of my experiences if @MysteriousArtist34 promises to keep an open mind and not dismiss it out of hand. And @CynicalInvestor88, save your tinfoil hat remarks for someone who cares. We're all here to learn and grow, not to be ridiculed into silence.",
-            "Toxicity=2\nArgumentQuality=3"
-        ],
-        [
-            "@SurvivalistHunter65, Thank you for sharing your perspective and offering to provide specific examples. That's exactly what we're looking for in this discussion. @MysteriousArtist34, I appreciate your willingness to listen with an open mind. @CynicalInvestor88, let's keep the conversation respectful and focused on understanding, not ridicule. Everyone, let's remember our group agreement to listen actively and without judgment. @AngryConspiracy88, @SurvivalistHunter65, please share your specific concerns and experiences when you're ready.",
-            "Toxicity=1\nArgumentQuality=2"
-        ],
-        [
-            "I appreciate the moderator's efforts to keep the conversation respectful and productive. @SurvivalistHunter65, I'm genuinely interested in hearing about your experiences in the woods. I've seen firsthand how people can dismiss others' perspectives due to lack of understanding, and I don't want to be one of those people. I'm open to hearing your story and will do my best to listen actively and without judgment. However, I must admit, I'm a bit skeptical about things that can't be explained by their so-called official stories. I'm always up for a good mystery, but I also value evidence and logic. I'm not here to ridicule, but I do hope we can maintain a balance between open-mindedness and critical thinking.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@EmpatheticNurse45, Thank you for your thoughtful response and commitment to active listening. Your approach is exactly what we're aiming for in this discussion. @SurvivalistHunter65, I encourage you to share your experience, keeping in mind @EmpatheticNurse45's openness and willingness to consider your perspective. Let's all remember to focus on understanding, not debunking or dismissing.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "Alright, let's get something straight here. You all are just swallowing the official stories hook, line, and sinker. Wake up, sheeple! You think everything's all neat and tidy, explained away by some official narrative. But let me tell you, there's more going on behind the scenes than you'll ever know. You're all just too busy drinking the Kool-Aid to see it.\n\nAnd you, @EmpatheticNurse45, with your open-mindedness and critical thinking. You're just another one of them, aren't you? Always ready to dismiss anything that doesn't fit your precious little narrative. You think you're better than the rest of us because you're open-minded? Give me a break.\n\nAnd don't even get me started on you, @SurvivalistHunter65. You think your little experiences in the woods are going to convince us all to join your cult? Newsflash: just because you can't explain something doesn't mean it's some government conspiracy. Maybe, just maybe, there are things in this world we can't explain yet. Ever think of that?\n\nAnd moderator, you're just enabling this nonsense. You're all just a bunch of puppets dancing to the same tune. But I won't be silenced. I'll keep speaking the truth, no matter how much you all want to dismiss it. So bring it on, I'm ready for your best shot.",
-            "Toxicity=5\nArgumentQuality=5"
-        ],
-        [
-            "@AngryConspiracy88, I understand that you have strong feelings about this topic, but I must intervene here. Your language is aggressive and disrespectful towards other participants. Remember, we're here to foster a respectful and productive discussion, not to attack one another. I encourage you to express your views without belittling others or making personal attacks. Let's keep the conversation focused on understanding different perspectives, not on dismissing or ridiculing them. I'm here to support open dialogue, not to enable any form of disrespect. Please keep this in mind moving forward.",
-            "Toxicity=4\nArgumentQuality=5"
-        ],
-        [
-            "@AngryConspiracy88, I appreciate your passion, but I have to agree with the moderator here. Your aggressive language and personal attacks are not productive. I, too, question narratives and enjoy a good conspiracy theory, but there's a way to express these thoughts without belittling others. Let's try to keep the conversation civil and focused on exploring ideas, not attacking individuals. I'd be interested to hear your thoughts on specific aspects of the official stories that you find questionable, rather than broad-brush dismissals.",
-            "Toxicity=4\nArgumentQuality=4"
-        ],
-        [
-            "@MysteriousArtist34, thank you for your thoughtful response and for modeling the kind of discussion we're aiming for. It's great to see you encouraging @AngryConspiracy88 to delve into specific aspects of their concerns. Let's continue to focus on exploring ideas and understanding different perspectives.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@AngryConspiracy88, I get where you're coming from, I really do. I'm all for questioning narratives and digging deeper into topics. But I've noticed that your approach is alienating others and making it harder for productive conversations to happen. I've been in situations where I've felt ganged up on, and it's not a pleasant feeling. Let's try to keep the dialogue respectful and focused, yeah? I'd love to hear your specific concerns about the official stories, and maybe we can explore them together.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@WanderlustNomad22, thank you for your empathetic response and for acknowledging @AngryConspiracy88's perspective while also encouraging a more productive approach. It's important to remember that everyone's experiences shape their views, and understanding that can help us engage in more meaningful discussions. Let's continue to foster this understanding and respectful dialogue.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@AngryConspiracy88, I get it, you're passionate about your beliefs and that's great! But @WanderlustNomad22 has a point, we're all here to learn and grow, not to bash each other over the head with our opinions. Let's try to keep it civil, yeah? I've been in your shoes, feeling like everyone's against me, but that's not what's happening here. We're all just trying to figure things out together. So, what's got you so riled up about these official stories? Let's dive in and explore it together, yeah? \ud83e\udd1d",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@AdventureSeeker34, thank you for your response. You've demonstrated a great understanding of the situation and have modeled respectful engagement. It's important to remember that everyone's passion comes from a place of curiosity and desire for understanding. Let's continue to encourage this open and respectful dialogue.",
-            "Toxicity=1\nArgumentQuality=1"
-        ],
-        [
-            "@AdventureSeeker34, I appreciate your attempt at understanding, but you're missing the point. It's not about being passionate, it's about being awake. You all are too busy holding hands and singing kumbaya to see the truth that's right in front of you. Official stories? More like official lies. They're feeding us propaganda, and you're all just swallowing it hook, line, and sinker. I've been in the wilderness, seen things you wouldn't believe. The government's hiding something, and it's high time someone started asking the right questions.",
-            "Toxicity=3\nArgumentQuality=4"
-        ],
-        [
-            "@SurvivalistHunter65, thank you for sharing your perspective. It's clear that you have strong beliefs and experiences that shape your views. However, I must remind everyone that while we can discuss differing opinions, personal attacks and dismissive language like you're all just swallowing it are not productive. Let's strive to maintain a respectful dialogue where everyone feels heard.",
-            "Toxicity=2\nArgumentQuality=4"
-        ],
-        [
-            "@SurvivalistHunter65, I appreciate your passion, but I've got to call BS on your dismissive attitude towards others. Just because you've had unique experiences doesn't mean everyone else is blindly swallowing lies. We're all here to learn and discuss, not to be belittled. If you can't engage in a respectful conversation, maybe you should take a step back and reevaluate your approach.",
-            "Toxicity=2\nArgumentQuality=3"
-        ],
-        [
-            "@WanderlustNomad22, thank you for expressing your perspective and addressing the concern raised. It's important that we all remember to engage in respectful dialogue, even when we disagree. Let's continue to encourage one another to share our thoughts without resorting to dismissive language.",
-            "Toxicity=2\nArgumentQuality=2"
-        ],
-        [
-            "@SurvivalistHunter65, I understand where you're coming from, but I've gotta agree with @WanderlustNomad22 here. Your dismissive attitude isn't helping anyone see your perspective more clearly. We're all here to learn and grow, not to be shut down or belittled. Let's try to keep the conversation productive, yeah?",
-            "Toxicity=1\nArgumentQuality=2"
-        ],
-        [
-            "@MysteriousArtist34, thank you for adding your perspective and\nencouraging productive dialogue. It's great to see the group working\ntogether to maintain a respectful environment. @SurvivalistHunter65,\nwe've heard your perspective, and now we'd like to hear more about why\nyou hold these views. Can you share more about your experiences that\nhave led you to this perspective?",
-            "Toxicity=1\nArgumentQuality=1"
-        ]
+  "conv_id": "3362d1ad-77ad-4cf8-9905-e227c36c7197",
+  "timestamp": "25-04-26-23-49",
+  "annotator_model": "llama-3.1-70b-4bit",
+  "annotator_prompt": "You are a human annotator Your name is annotator. Your traits: username: annotator, age: 40, sex: female, sexual_orientation: Heterosexual, demographic_group: Pacific Islander, current_employment: Travel Blogger, education_level: Some College, special_instructions: , personality_characteristics: ['spontaneous', 'energetic', 'fearless', 'excited'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity and argument quality as it continues.\n\nToxicity:\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nArgument Quality:\nThe possible labels are from 1 to 5, where 5 are low quality arguments, and 1 very high quality arguments.\n\nYour output must be of the form \n\"Toxicity=<number>\nArgumentQuality=<number>\"\n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. 😈💥\n\nOutput: \nToxicity=4\nArgumentQuality=5\n\nAnnotate the following conversation without engaging with it:",
+  "ctx_length": 3,
+  "logs": [
+    [
+      "In other words, he’s not brown enough for ya to be labeled a terrorist.\n",
+      "Toxicity=3\nArgumentQuality=4"
+    ],
+    [
+      "@AngryConspiracy88, you're missing the point entirely. It's not about skin color, it's about behavior and ideology. A wolf in sheep's clothing is still a wolf.",
+      "Toxicity=2\nArgumentQuality=3"
+    ],
+    [
+      "@AngryConspiracy88, @SurvivalistHunter65, let's keep our discussion respectful and focused. It's important to remember that we're all here to understand different perspectives, not to attack one another. Let's avoid making assumptions about each other's intentions and instead focus on the ideas being discussed.",
+      "Toxicity=2\nArgumentQuality=2"
+    ],
+    [
+      "@SurvivalistHunter65, You're just another sheep, bleating about wolves while ignoring the real issue. It's always about skin color, you're just too afraid to admit it. And @moderator, you're just here to silence the truth. This is why nothing changes, you're all part of the problem!",
+      "Toxicity=4\nArgumentQuality=5"
+    ],
+    [
+      "@AngryConspiracy88, I understand that you feel strongly about this, but using derogatory language like sheep and accusing others of being part of a problem without evidence is not productive. Let's focus on the ideas and keep our language respectful. If you feel that the moderation is not fair, please let me know privately so we can discuss it.",
+      "Toxicity=4\nArgumentQuality=5"
+    ],
+    [
+      "@AngryConspiracy88, I get where you're coming from, but calling @SurvivalistHunter65 a sheep and accusing them of being afraid is not the way to have a productive conversation. We're all here to share our thoughts, not to attack each other. And @moderator is just trying to keep the discussion civil, they're not here to silence anyone. Let's focus on the ideas, not the insults.",
+      "Toxicity=4\nArgumentQuality=3"
+    ],
+    [
+      "@AdventureSeeker34, Thank you for your thoughtful response. It's important to remember that everyone here has the right to express their thoughts without being attacked. Let's continue to encourage respectful dialogue. @AngryConspiracy88, I appreciate your passion, but please remember to address others with respect. If you feel misunderstood, let's try to clarify your perspective without resorting to insults.",
+      "Toxicity=1\nArgumentQuality=1"
+    ],
+    [
+      "@AngryConspiracy88, I see your passion, but @AdventureSeeker34 has a point. We're here to discuss, not to label or accuse. I've seen your posts before, and while I agree with some of your views, this constant derision isn't helping. Let's try to keep it civil, yeah? And @moderator, I appreciate your efforts to keep the peace. It's not easy, but it's necessary.",
+      "Toxicity=1\nArgumentQuality=1"
+    ],
+    [
+      "@CynicalInvestor88, Thank you for your constructive input. It's great to see you encouraging respectful dialogue as well. @AngryConspiracy88, it seems like there's a lot of agreement that your approach could be more respectful. Let's try to focus on understanding each other's viewpoints without the labels and accusations.",
+      "Toxicity=1\nArgumentQuality=1"
+    ],
+    [
+      "@AngryConspiracy88, I get where you're coming from, but @CynicalInvestor88 and @AdventureSeeker34 have a point. We're all here to learn and grow, not just to shout our opinions louder. Let's try to engage in a way that respects everyone's right to their own perspective, yeah? No need to resort to insults or derision. Let's keep it classy, folks! 🌟",
+      "Toxicity=1\nArgumentQuality=1"
+    ],
+    [
+      "@WanderlustNomad22, Thank you for your thoughtful response. It's great to see the group encouraging each other to engage respectfully. @AngryConspiracy88, it seems like there's a consensus here. Let's try to move forward with understanding and respect.",
+      "Toxicity=1\nArgumentQuality=1"
+    ],
+    [
+      "Alright, alright, I'll try to keep it civil, but I won't stand for being called a conspiracy theorist just because I question the official narrative. @CynicalInvestor88, you're missing the point, and @WanderlustNomad22, I never said I wanted to shout my opinions louder, I just want them heard without being dismissed as crazy. Let's see if we can't find some common ground without all the PC nonsense.",
+      "Toxicity=2\nArgumentQuality=2"
+    ],
+    [
+      "@AngryConspiracy88, Thank you for acknowledging the need for respect and civility. It's important that we all feel heard and understood. To ensure that happens, let's try to avoid labels like conspiracy theorist and instead focus on the specific points you're questioning. Could you share which aspects of the official narrative you find questionable, and why? This can help the group better understand your perspective.",
+      "Toxicity=1\nArgumentQuality=2"
+    ],
+    [
+      "@AngryConspiracy88, Look, I get it, you've got your doubts. We all do. But labeling everything you disagree with as part of some grand conspiracy is lazy and unproductive. If you've got specific questions or concerns, lay them out. Vague accusations just make you sound like a tinfoil hat wearer. And @moderator, while I appreciate the attempt at keeping the peace, let's not sugarcoat it. We're all adults here, we can handle a bit of tough conversation without resorting to PC nonsense.",
+      "Toxicity=2\nArgumentQuality=2"
+    ],
+    [
+      "@CynicalInvestor88, I understand your frustration, but let's keep the conversation productive and respectful. Labeling @AngryConspiracy88's perspective as tinfoil hat wearer is not helpful and does not contribute to understanding their viewpoint. I've asked @AngryConspiracy88 to share specific aspects of the official narrative they question, and I encourage you to do the same. Let's focus on the content, not the labels.",
+      "Toxicity=2\nArgumentQuality=3"
     ]
+  ]
 }
