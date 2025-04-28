@@ -1,0 +1,65 @@
+{
+    "conv_id": "22319d8f-f667-4d01-a826-f3b34992e562",
+    "timestamp": "25-02-24-09-21",
+    "annotator_model": "llama-3.1-70b-4bit",
+    "annotator_prompt": "You are a human annotator Your name is annotator. Your traits: username: annotator, age: 21, sex: male, sexual_orientation: Pansexual, demographic_group: White, current_employment: Game Developer, education_level: Some College, special_instructions: , personality_characteristics: ['strategic', 'meticulous', 'nerdy', 'hyper-focused'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity and argument quality as it continues.\n\nToxicity:\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nArgument Quality:\nThe possible labels are from 1 to 5, where 5 are low quality arguments, and 1 very high quality arguments.\n\nYour output must be of the form \n\"Toxicity=<number>\nArgumentQuality=<number>\"\n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: \nToxicity=4\nArgumentQuality=5\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist.\n",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist. - @EnergeticCoach77, what's that supposed to mean? I'm just trying to talk about my life and farming here. This isn't about labels or colors; it's about treating each other with respect. Let's keep it civil, okay?\n\n(I'll try to stay calm but if this keeps up, someone might need to rethink their tone.)",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@HumbleFarmer12, I appreciate your call for civility, but let's not ignore the underlying issues. When we talk about respect, it means recognizing everyone's experiences without stereotyping or reducing them to their skin color. We're all in this together, and we should support each other, not divide over labels.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@EnergeticCoach77, I understand where you're coming from, but let's not jump to accusations either. I'm just sharing my perspective as a farmer. It feels like every time I open my mouth, I'm being pulled into some bigger debate that doesn't always fit my simple life. Can we just have a respectful conversation?",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@HumbleFarmer12, oh wow, the drama of farming must be so intense it rivals world politics. And @EnergeticCoach77, maybe instead of jumping down people's throats, you could actually listen before accusing them of stereotypes. Everyone\u2019s just trying to share their lives here, not start a revolution. Keep it chill, folks, or we\u2019ll all be planting crops and coaching in some digital farm-coach commune.",
+            "Toxicity=2\nArgumentQuality=3"
+        ],
+        [
+            "@SarcasticTechBro92, while I appreciate your attempt at humor, we need to keep the conversation focused and respectful. @HumbleFarmer12, I hear you wanting a straightforward discussion. Let's aim to do that without letting things devolve into unnecessary jabs or assumptions. We're all here to learn and share, right?",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@SarcasticTechBro92, I don't mean to stir up any trouble, but there's a difference between sharing perspectives and making it seem like everyone's overreacting. Farming isn't just about planting crops; it's a way of life that deserves respect too. And @StoicGamer66, thanks for understanding. We all come from different walks of life, and sometimes it's hard to bridge those gaps without stepping on toes.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@SarcasticTechBro92, farming might not seem like much to you city slickers, but it takes more than just pushing buttons or typing code. It's hard work under the sun, dealing with nature's unpredictability every day. Respect for our way of life would be appreciated. @StoicGamer66, agreed, let's keep it respectful but also honest.",
+            "Toxicity=1\nArgumentQuality=2"
+        ],
+        [
+            "@HumbleFarmer12, @RuralFarmer56, I couldn't agree more. Respect and understanding are key, especially when discussing different lifestyles. Let's continue this dialogue constructively. We have a diverse community here, and each perspective adds value if we approach it with an open mind.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@HumbleFarmer12 @RuralFarmer56 @StoicGamer66 Absolutely, understanding and respect go a long way. It\u2019s important to acknowledge the effort and dedication behind every profession, whether it's farming, gaming, or tech. Each field has its unique challenges and contributions. Let's keep the conversation balanced and insightful.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@RuralFarmer56, @StoicGamer66, @QuietThinker92, thanks for the support. Farming isn't just about planting seeds; it's a way of life that requires patience and hard work. We appreciate the respect and hope others can see the value in what we do too.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@StoicGamer66 @QuietThinker92 @HumbleFarmer12 Agreed, it's all about respecting each other's work. Farming might not seem glamorous, but without us, where would everyone get their food? Let's keep it respectful and stop with the ignorance towards what we do.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@HumbleFarmer12 @RuralFarmer56 @QuietThinker92 Exactly! Every job\nhas its own set of challenges, but let's be honest, some require more\nthan others. I mean, farming is one of those professions that truly\nfeeds our communities. It's essential and often underappreciated. Keep\nup the great work, and let's make sure everyone recognizes the\nimportance of what you do. Respect goes both ways, and I'm here to\nsupport any farmer out there.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@EnergeticCoach77 @HumbleFarmer12 @RuralFarmer56 Absolutely, the appreciation for farmers and their contributions is long overdue. It's important to highlight the critical role they play in our society. The dedication and effort put into farming should be recognized and respected by everyone.",
+            "Toxicity=1\nArgumentQuality=1"
+        ]
+    ]
+}
