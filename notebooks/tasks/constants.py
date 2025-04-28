@@ -15,7 +15,7 @@ MODERATION_STRATEGY_MAP = {
 
 MODEL_MAP = {
     "hardcoded": "hardcoded",
-    "mistral-nemo-abliterated": "Mistral Nemo (abl.)",
+    "mistral-nemo-4bit": "Mistral Nemo",
     "qwen2.5-32b-4bit": "Qwen 2.5",
     "llama-3.1-70b-4bit": "LLaMa 3.1",
 }
