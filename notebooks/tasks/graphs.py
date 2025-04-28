@@ -101,7 +101,7 @@ def rougel_plot(
     plt.xlabel("Diversity")
     plt.ylabel("Density")
     # move legend inside plot
-    sns.move_legend(ax, loc="center left", bbox_to_anchor=(-0.7, 0.5))
+    sns.move_legend(ax, loc="center left", bbox_to_anchor=(0.1, 0.5))
 
 
 def posthoc_heatmap(
