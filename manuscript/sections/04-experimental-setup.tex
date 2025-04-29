@@ -1,28 +1,24 @@
 \section{Experimental Setup}
+\label{sec:experimental}
 
 \subsection{Moderation Strategies}
-\label{ssec:setup:strategies}
+\label{ssec:experimental:strategies}
 
 We test six different moderation/facilitation strategies. The prompts used for each moderation strategy can be found in Appendix \ref{sssec:appendix:moderation_strategies} of the Appendix. We distinguish between two types of strategies; \emph{“baseline strategies”} which represent approaches not informed by literature on moderation, and \emph{“real-life”} strategies which are used by human moderators. We also test our own \emph{experimental} strategy.
 
 \begin{enumerate}[noitemsep]
     \item \textbf{No moderator}: A \emph{baseline} where no moderator is present.
 
-    \item \textbf{Moderator without strategy}: A \emph{baseline strategy} where a \ac{LLM} moderator is active, but is provided only with basic instructions.
+    \item \textbf{No Instructions}: A \emph{baseline strategy} where a \ac{LLM} moderator is active, but is provided only with basic instructions.
 
-    \item \textbf{Rules without instructions}: A \emph{baseline} where the \ac{LLM} moderator's prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the moderator with a set of rules to uphold, without specifying how to uphold them.
+    \item \textbf{Rules Only}: A \emph{baseline} where the \ac{LLM} moderator's prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the moderator with a set of rules to uphold, without specifying how to uphold them.
     
-    \item \textbf{RL formulation}: Our own proposed \emph{experimental} strategy inspired by the experiments of \citet{abdelnabi_negotiations}. Basic instructions formulated as a social game, where the moderator tries to maximize their scores by avoiding certain actions and arriving at specific outcomes. It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. 
+    \item \textbf{Moderation Game}: Our own proposed \emph{experimental} strategy inspired by the experiments of \citet{abdelnabi_negotiations}. Basic instructions formulated as a social game, where the moderator tries to maximize their scores by avoiding certain actions and arriving at specific outcomes. It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. 
 
     \item \textbf{Moderation guidelines}: A \emph{real-life} strategy based on guidelines given to human moderators of the “Regulation Room” platform \citep{Cornell_eRulemaking2017}, provided by Cornell University. The Regulation Room was an online platform designed to facilitate public engagement with U.S. government policy decisions, and has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
 
     \item \textbf{Facilitation guidelines}: A \emph{real-life strategy} based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
 \end{enumerate}
-
-
-\subsection{Discussion Quality Metrics}
-
-We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality. We mostly focus on toxicity because \ac{LLM} toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate} and it is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). Determining argument quality is a much more difficult task, since it is not quite clear what its definition entails \cite{korre2025evaluation}; not even human annotators typically agree on what constitutes a “good argument” \cite{argyle2023}. Even so, it is the subject of many works in the field of online moderation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}. More details on synthetic annotation can be found in Appendix \ref{ssec:appendix:annotation}.
 
 
 \subsection{Turn taking}
@@ -50,7 +46,12 @@ We use a simple algorithm which allows users to respond to a previous comment wi
 \subsection{Prompting}
 \label{ssec:experimental:prompts}
 
-We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix ~\ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport}. The instruction prompts (Appendix ~\ref{sssec:appendix:actors}) were crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions.
+We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix \ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport}. The instruction prompts (Appendix \ref{sssec:appendix:actors}) were crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions.
+
+
+\subsection{Discussion Quality Metrics}
+
+We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality. We mostly focus on toxicity because \ac{LLM} toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate} and it is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). Determining argument quality is a much more difficult task, since it is not quite clear what its definition entails \cite{korre2025evaluation}; not even human annotators typically agree on what constitutes a “good argument” \cite{argyle2023}. Even so, it is the subject of many works in the field of online moderation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}. More details on synthetic annotation can be found in Appendix \ref{ssec:appendix:annotation}.
 
 
 \subsection{Models}
