@@ -6,10 +6,10 @@ DATASET_DIR = Path("../data/datasets")
 
 MODERATION_STRATEGY_MAP = {
     "vanilla": "No Instructions",
-    "moderation_game": "Moderation Game",
+    "moderation_game": "Mod. Game",
     "no_moderator": "No Moderator",
-    "erulemaking": "Human Mod. Guidelines",
-    "constructive_communications": "Human Fac. Guidelines",
+    "erulemaking": "Mod. Guidelines",
+    "constructive_communications": "Fac. Guidelines",
     "collective_constitution": "Rules Only",
 }
 
