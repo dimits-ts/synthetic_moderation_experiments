@@ -48,6 +48,8 @@ We use a simple algorithm which allows users to respond to a previous comment wi
 
 We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix \ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport}. The instruction prompts (Appendix \ref{sssec:appendix:actors}) were crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions.
 
+We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been proven to be inherently left-leaning \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}, and research on the field has predominantly occupied Western (and in particular U.S.) politics. In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs without our intervention.
+
 
 \subsection{Discussion Quality Metrics}
 
