@@ -11,8 +11,15 @@ CLEAN_HTML_PATTERN = re.compile("<.*?>")
 
 
 def get_main_dataset() -> pd.DataFrame:
-    shutil.unpack_archive("../data/datasets/main/main.zip", "../data/datasets")
-    full_df = pd.read_csv("../data/datasets/main/dataset.csv", encoding="utf8")
+    shutil.unpack_archive(
+        constants.DATASET_DIR / "main" / "main.zip",
+        constants.DATASET_DIR / "main",
+    )
+    full_df = pd.read_csv(
+        # I have no idea wtf happened here to necessitate this
+        constants.DATASET_DIR / "main" / "data" / "datasets" / "dataset.csv",
+        encoding="utf8",
+    )
     full_df = format_dataset(full_df, min_message_len=1)
     return full_df
 
@@ -66,7 +73,8 @@ def format_dataset(df: pd.DataFrame, min_message_len: int) -> pd.DataFrame:
 
 def get_human_df():
     human_df_dict = pd.read_excel(
-        constants.DATASET_DIR / "main" / "human.xlsx", sheet_name=list(range(1, 11))
+        constants.DATASET_DIR / "main" / "human.xlsx",
+        sheet_name=list(range(1, 11)),
     )
 
     human_df_ls = []
@@ -94,7 +102,8 @@ def get_human_df():
 
 def get_ablation_df() -> pd.DataFrame:
     datasets = []
-    for dataset_path in (constants.DATASET_DIR / "discussion_ablation"):
+    dataset_dir = constants.DATASET_DIR / "discussion_ablation"
+    for dataset_path in dataset_dir.rglob("*.csv"):
         abl_df = pd.read_csv(dataset_path)
 
         # each ablation feature is a dimension,
