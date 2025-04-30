@@ -215,9 +215,10 @@ def trolls_boxplot(df: pd.DataFrame, title: str, val_col: str) -> None:
     sns.boxplot(
         data=df, x="trolls_exist", y=val_col, hue="trolls_exist"
     )
-    plt.title(title)
+    plt.title(title, fontsize=18)
     plt.ylabel("Average " + val_col)
     plt.xlabel("Trolls in the discussion")
+    plt.ylim(0.8, 5.2)
     plt.legend("", frameon=False)
 
 
