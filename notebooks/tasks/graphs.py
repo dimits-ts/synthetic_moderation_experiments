@@ -8,6 +8,8 @@ import matplotlib.axes
 import seaborn as sns
 import scikit_posthocs as sp
 
+from . import stats
+
 
 def save_plot(path: Path) -> None:
     """
@@ -247,7 +249,22 @@ def disagreement_plot(
     plt.xlim(0, 1)
     plt.xlabel("nDFU")
     sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
-    
+
+
+def polarization_plot(df, metric_col: str):
+    ndfu_df = stats.polarization_df(df, metric_col)
+    ax = sns.boxplot(
+        ndfu_df,
+        y="polarization",
+        x=metric_col,
+        hue=metric_col,
+        palette="flare",
+    )
+    ax.set_title(f"Annotator Polarization vs. {metric_col}")
+    ax.set_xlabel(metric_col)
+    ax.set_ylabel("nDFU")
+    ax.legend(title=metric_col, loc="upper left")
+
 
 # ======== posthoc_dunn_heatmap ========
 

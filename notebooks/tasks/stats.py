@@ -44,6 +44,16 @@ def discussion_var(
     return comment_var_df
 
 
+def polarization_df(df: pd.DataFrame, metric_col: str):
+    ndfu_df = df
+    ndfu_df["polarization"] = (
+        ndfu_df.groupby(["conv_id", "message"])[metric_col]
+        .transform(lambda x: ndfu(x))
+        .astype(float)
+    )
+    return ndfu_df
+
+
 def mean_comp_test(
     df: pd.DataFrame, feature_col: str, score_col: str
 ) -> float:
@@ -64,25 +74,11 @@ def mean_comp_test(
     return scipy.stats.f_oneway(*groups).pvalue[0]
 
 
-def _compute_pairwise_rougel(comments: list[str]) -> float:
-    """
-    Return the average of the pairwise ROUGE-L similarity for all comments
-    in a discussion.
-    :param: comments: the comments of the discussion
-    :return: a similarity score from 0 (no similarities) to 1 (identical)
-    """
-    scorer = rouge_scorer.RougeScorer(["rougeL"])
-    scores = []
-    for c1, c2 in itertools.combinations(comments, 2):
-        scores.append(scorer.score(c1.lower(), c2.lower())["rougeL"].fmeasure)
-    return (1 - float(np.mean(scores))) if scores else np.nan
-
-
-# code adapted from John Pavlopoulos https://github.com/ipavlopoulos/ndfu/blob/main/src/__init__.py
+# code adapted from John Pavlopoulos 
+# https://github.com/ipavlopoulos/ndfu/blob/main/src/__init__.py
 def ndfu(input_data: Iterable[float], num_bins: int = 5) -> float:
     """The normalized Distance From Unimodality measure
     :param: input_data: a list of annotations, not necessarily discrete
-    :param: histogram_input: False to compute rel. frequencies (ratings as input)
     :raises ValueError: if input_data is empty
     :return: the nDFU score
     """
@@ -103,6 +99,20 @@ def ndfu(input_data: Iterable[float], num_bins: int = 5) -> float:
 
     # return normalized dfu
     return max_diff / max_value
+
+
+def _compute_pairwise_rougel(comments: list[str]) -> float:
+    """
+    Return the average of the pairwise ROUGE-L similarity for all comments
+    in a discussion.
+    :param: comments: the comments of the discussion
+    :return: a similarity score from 0 (no similarities) to 1 (identical)
+    """
+    scorer = rouge_scorer.RougeScorer(["rougeL"])
+    scores = []
+    for c1, c2 in itertools.combinations(comments, 2):
+        scores.append(scorer.score(c1.lower(), c2.lower())["rougeL"].fmeasure)
+    return (1 - float(np.mean(scores))) if scores else np.nan
 
 
 def _to_hist(
