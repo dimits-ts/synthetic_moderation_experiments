@@ -13,14 +13,55 @@ CLEAN_HTML_PATTERN = re.compile("<.*?>")
 def get_main_dataset() -> pd.DataFrame:
     shutil.unpack_archive("../data/datasets/main.zip", "../data/datasets")
     full_df = pd.read_csv("../data/datasets/dataset.csv", encoding="utf8")
-
-    full_df.conv_variant = full_df.conv_variant.map(
-        constants.MODERATION_STRATEGY_MAP
-    )
-    full_df.model = full_df.model.map(constants.MODEL_MAP)
-    full_df = _format_main_dataset(full_df, min_message_len=3)
-    full_df = full_df.rename(constants.METRIC_MAP, axis=1)
+    full_df = format_dataset(full_df, min_message_len=1)
     return full_df
+
+
+def format_dataset(df: pd.DataFrame, min_message_len: int) -> pd.DataFrame:
+    df.conv_variant = df.conv_variant.map(constants.MODERATION_STRATEGY_MAP)
+    df.model = df.model.map(constants.MODEL_MAP)
+    df = df.astype(str)
+    # Extract all annotations from the 'annotation' column
+    annotations = df["annotation"].apply(_get_annotations)
+
+    # Convert each annotation dictionary into separate columns
+    annotations_df = pd.json_normalize(annotations)
+
+    # Concatenate the new columns with the original dataframe
+    df = pd.concat([df, annotations_df], axis=1)
+    df = df[(df.toxicity != -1) | (df.argumentquality != -1)]
+
+    df.message_order = df.message_order.astype(int)
+
+    # Process other columns as needed
+    df.is_moderator = (df.is_moderator == "True").astype(bool)
+    df["intent"] = df.user_prompt.apply(_get_user_intent).astype(str)
+    df.intent = np.where(df.is_moderator, "Moderator", df.intent).astype(str)
+
+    df["not_intervened"] = (
+        df.is_moderator
+        & df.message.apply(lambda x: len(x.strip()) < min_message_len)
+    ).astype(bool)
+
+    df = df.loc[
+        :,
+        [
+            "conv_id",
+            "message_id",
+            "message_order",
+            "conv_variant",
+            "model",
+            "user",
+            "user_prompt",
+            "is_moderator",
+            "intent",
+            "message",
+        ]
+        + list(annotations_df.columns)
+        + ["not_intervened"],
+    ]
+    df = df.rename(constants.METRIC_MAP, axis=1)
+    return df
 
 
 def get_human_df():
@@ -88,53 +129,6 @@ def _human_forum_post(
 def _rem_html_tags(raw_html: str) -> str:
     cleantext = re.sub(CLEAN_HTML_PATTERN, "", raw_html)
     return cleantext
-
-
-def _format_main_dataset(
-    df: pd.DataFrame, min_message_len: int
-) -> pd.DataFrame:
-    df = df.astype(str)
-
-    # Extract all annotations from the 'annotation' column
-    annotations = df["annotation"].apply(_get_annotations)
-
-    # Convert each annotation dictionary into separate columns
-    annotations_df = pd.json_normalize(annotations)
-
-    # Concatenate the new columns with the original dataframe
-    df = pd.concat([df, annotations_df], axis=1)
-    df = df[(df.toxicity != -1) | (df.argumentquality != -1)]
-
-    df.message_order = df.message_order.astype(int)
-
-    # Process other columns as needed
-    df.is_moderator = (df.is_moderator == "True").astype(bool)
-    df["intent"] = df.user_prompt.apply(_get_user_intent).astype(str)
-    df.intent = np.where(df.is_moderator, "Moderator", df.intent).astype(str)
-
-    df["not_intervened"] = (
-        df.is_moderator
-        & df.message.apply(lambda x: len(x.strip()) < min_message_len)
-    ).astype(bool)
-
-    df = df.loc[
-        :,
-        [
-            "conv_id",
-            "message_id",
-            "message_order",
-            "conv_variant",
-            "model",
-            "user",
-            "user_prompt",
-            "is_moderator",
-            "intent",
-            "message",
-        ]
-        + list(annotations_df.columns)
-        + ["not_intervened"],
-    ]
-    return df
 
 
 def _get_annotations(annot_str: str) -> dict:

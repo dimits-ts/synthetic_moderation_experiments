@@ -211,6 +211,16 @@ def plot_timeseries(
     plt.tight_layout()
 
 
+def trolls_boxplot(df: pd.DataFrame, title: str, val_col: str) -> None:
+    sns.boxplot(
+        data=df, x="trolls_exist", y=val_col, hue="trolls_exist"
+    )
+    plt.title(title)
+    plt.ylabel("Average " + val_col)
+    plt.xlabel("Trolls in the discussion")
+    plt.legend("", frameon=False)
+
+
 # ======== posthoc_dunn_heatmap ========
 
 
