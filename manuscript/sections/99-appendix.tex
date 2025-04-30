@@ -18,14 +18,64 @@
 \subsection{Synthetic Annotation}
 \label{ssec:appendix:annotation}
 
-In order to annotate the generated discussions, we create $10$ \ac{LLM} annotator-agents, each with unique \ac{SDB} information, in the same manner as the \ac{LLM} user-agents used in the synthetic discussions. Unlike the latter, the annotator-agents are not provided with usernames (so they don't overlap with user-agent names). The annotators all get the same instruction prompt (see Appendix ~\ref{sssec:appendix:actors}).
+\subsubsection{Annotation Procedure}
 
-In many annotation tasks involving humans, a data-point is annotated only by a subset of annotators. This is usually caused by human annotation being expensive and hard to scale. Since \acp{LLM} are comparatively cheaper and more easily scalable, we choose not to sample annotator-agents. We use the LLaMa-3.1-70b model exclusively for the synthetic annotation of the dataset, since it has been proven reliable for toxicity annotation \cite{koh-etal-2024-llms}. 
+In order to annotate the generated discussions, we create $10$ \ac{LLM} annotator-agents, each with unique \ac{SDB} information, in the same manner as the \ac{LLM} user-agents used in the synthetic discussions. Unlike the latter, the annotator-agents are not provided with usernames (so they don't overlap with user-agent names). The annotators all get the same instruction prompt (see Appendix~\ref{sssec:appendix:actors}).
+
+In many annotation tasks involving humans, a datapoint is annotated only by a subset of annotators. This is usually caused by human annotation being expensive and hard to scale. Since \acp{LLM} are comparatively cheaper and more easily scalable, we choose not to sample annotator-agents. We use the LLaMa-3.1-70b model exclusively for the synthetic annotation of the dataset, since it has been proven reliable for toxicity annotation \cite{koh-etal-2024-llms}. 
+
+
+\subsubsection{Validating the LLM annotations}
+
+Analyzing (Fig.~\ref{fig:sdb_annot}). TODO.
+
+
+\begin{figure*}[t]
+    \includegraphics[width=0.45\linewidth]{sdb_toxicity.png} \hfill
+    \includegraphics[width=0.45\linewidth]{sdb_aq.png}
+	\centering
+	\caption{Distribution plot of inter-annotator polarization (nDFU) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model.}
+    \label{fig:sdb_annot}
+\end{figure*}
+
+\begin{figure*}[t]
+    \includegraphics[width=0.45\linewidth]{ndfu_toxicity.png} \hfill
+    \includegraphics[width=0.45\linewidth]{ndfu_aq.png}
+	\centering
+	\caption{Inter-annotator polarization (nDFU) of each synthetic comment for all synthetic discussions, by annotation level.}
+    \label{fig:ndfu_annot}
+\end{figure*}
+
 
 \subsection{Prompts Used}
 \label{ssec:appendix:prompts}
-   
 
+\subsubsection{SocioDemographic Prompting}
+\label{sssec:appendix:sdbs}
+
+Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In the ablation study, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (Appendix~\ref{sssec:appendix:roles}).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+    \toprule
+    Name & Type \\
+    \midrule
+    Username & string \\
+    Age & integer \\
+    Sex & string \\
+    Education Level & string \\
+    Sexual Orientation & string \\
+    Demographic Group & string \\
+    Current Employment & string \\
+    Special Instructions & string \\
+    Personality Characteristics & list of strings \\
+    \bottomrule
+\end{tabular}
+\caption{\ac{SDB} information provided to the synthetic participants.}
+\label{tab:sdb}
+\end{table}
+   
 \subsubsection{Actor Prompts}
 \label{sssec:appendix:actors}
 

@@ -46,9 +46,9 @@ We use a simple algorithm which allows users to respond to a previous comment wi
 \subsection{Prompting}
 \label{ssec:experimental:prompts}
 
-We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix \ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport}. The instruction prompts (Appendix \ref{sssec:appendix:actors}) were crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions.
+We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix \ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Our user instruction prompt (Appendix \ref{sssec:appendix:actors}) was crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions. 
 
-We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been proven to be inherently left-leaning \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}, and research on the field has predominantly occupied Western (and in particular U.S.) politics. In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs without our intervention.
+Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport} (Appendix~\ref{sssec:appendix:sdbs}). We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been proven to be inherently left-leaning \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}, and research in the field has predominantly occupied Western (and in particular U.S.) politics. In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs without our intervention.
 
 
 \subsection{Discussion Quality Metrics}
@@ -64,7 +64,7 @@ We use three open-source models from different families of models for the synthe
 
 \subsection{Setup}
 
-An overview of how the experiments are generated can be seen in Algorithm \ref{alg:exp_generation}. Each discussion is run according to Equation \ref{eq:comment} in Section \ref{ssec:methodology:discussions}. We use two Quadro RTX 6000 GPUs for both generation and annotation. The execution script can be found in the project's repository\analysislink.
+An overview of how the experiments are generated can be seen in Algorithm \ref{alg:exp_generation}. Each discussion is run according to Eq. \ref{eq:comment} in Section \ref{ssec:methodology:discussions}. We use two Quadro RTX 6000 GPUs for both generation and annotation. The execution script can be found in the project's repository\analysislink.
 
 \begin{algorithm}
 \caption{Synthetic discussion generation}

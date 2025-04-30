@@ -7,13 +7,13 @@
 \subsection{Main findings}
 
 \begin{enumerate}[nosep, noitemsep]
-    \item Unmoderated discussions exhibit significantly higher toxicity and lower \ac{AQ} (Figure \ref{fig::toxicity_aq_stats}) (ANOVA $p<.000$).
+    \item Unmoderated discussions exhibit significantly higher toxicity and lower \ac{AQ} (Fig.~\ref{fig::toxicity_aq_stats}) (ANOVA\footnote{The large size and balanced nature of our dataset allows the use of parametric tests.} $p<.000$).
 
-    \item  While the Moderation and Facilitation Guidelines slightly improve \ac{AQ} relative to baselines, their impact is marginal (Figure \ref{fig::toxicity_aq_stats}). Notably, these strategies do not reduce toxicity more effectively than the “No Instructions” baseline and perform worse than the “Rules Only” strategy.
+    \item  While the Moderation and Facilitation Guidelines slightly improve \ac{AQ} relative to baselines, their impact is marginal (Fig.~\ref{fig::toxicity_aq_stats}). Notably, these strategies do not reduce toxicity more effectively than the “No Instructions” baseline and perform worse than the “Rules Only” strategy.
 
-    \item Toxicity and \ac{AQ} generally improve over time under all strategies when compared to unmoderated discussions, indicating a limited but consistent restraining effect over time (Table \ref{tab:timeseries}).
+    \item Toxicity and \ac{AQ} generally improve over time under all strategies when compared to unmoderated discussions, indicating a limited but consistent restraining effect over time (Table~\ref{tab:timeseries}).
 
-    \item \ac{LLM} moderators intervene frequently throughout discussions (Figure \ref{fig::intervention_count}). \ac{LLM} user-agents exhibit an atypical tolerance for excessive moderator interventions, whereas with human participants such repeated interventions often provoke irritation and increased toxicity \cite{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}.
+    \item \ac{LLM} moderators intervene frequently throughout discussions (Fig.~\ref{fig::intervention_count}). \ac{LLM} user-agents exhibit an atypical tolerance for excessive moderator interventions, whereas with human participants such repeated interventions often provoke irritation and increased toxicity \cite{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}.
 \end{enumerate}
 
 
@@ -45,11 +45,11 @@
         No Instructions & -0.426\textsuperscript{***} & -0.213\textsuperscript{***} \\
         Rules Only & -0.461\textsuperscript{***} & -0.305\textsuperscript{***} \\
         time & -0.012\textsuperscript{**} & -0.012\textsuperscript{**} \\
-        Fac. Guid:time & -0.023\textsuperscript{***} & -0.024\textsuperscript{***} \\
-        Mod. Guid:time & -0.023\textsuperscript{***} & -0.011\textsuperscript{*} \\
-        \ac{RL} Game:time & -0.011\textsuperscript{*} & 0.003 \\
-        No Instructions:time & -0.003 & 0.003 \\
-        Rules Only:time & -0.008 & -0.002 \\
+        Fac. Guid$\times$time & -0.023\textsuperscript{***} & -0.024\textsuperscript{***} \\
+        Mod. Guid$\times$time & -0.023\textsuperscript{***} & -0.011\textsuperscript{*} \\
+        \ac{RL} Game$\times$time & -0.011\textsuperscript{*} & 0.003 \\
+        No Instructions$\times$time & -0.003 & 0.003 \\
+        Rules Only$\times$time & -0.008 & -0.002 \\
         \bottomrule
     \end{tabular}
     \small
@@ -71,28 +71,32 @@ We test the effects of our proposed methodology by running $8$ synthetic discuss
 
 \subsubsection{Models}
 
-The Qwen 2.5 model is the model with the most observed \textit{diversity} (see Section \ref{ssec:methodology:diversity}), followed by the Mistral Nemo and the LLaMa 3.1 model (Figure \ref{fig::diversity}). However, maximizing diversity should not be our goal, since a theoretical discussion where participants ignore each other and talk about unrelated subjects would have very high diversity scores. Both the Mistral and Qwen models somewhat approximate the observed diversity of human discussions, which may indicate that large models subjected to intense alignment procedures may not be able to replicate human behavior as authentically as other models (as reported in \citet{Park2023GenerativeAI}). 
+Among examined models, Qwen 2.5 exhibits the highest observed diversity, followed by Mistral Nemo and LLaMa 3.1 (Fig.~\ref{fig::diversity}). Notably, the Mistral model approximated the comment length of human discussions the best (Fig.~\ref{fig::comment_length}). While maximizing diversity is not the primary objective (a discussion with maximum diversity may indicate that the participants do not engage with each other), these results suggest that large and intensely aligned \acp{LLM} such as LLaMa may struggle to replicate authentic human conversational dynamics compared to other models, as also reported by \citep{Park2023GenerativeAI}.
 
-Alternatively, LLaMa's longer comments (Figure \ref{fig::comment_length}) may have caused the higher diversity scores. We find a qualitatively significant  ($Adj. R^2=0.202$), positive correlation ($\textit{diversity} = 2.38\mathrm{e}{-05} \times \textit{\#words} \times \textit{is\_synthetic} + 0.9030$) between the length of \textit{synthetic} discussions and their diversity score.
+Alternatively, LLaMa's longer comments (Fig.~\ref{fig::comment_length}) may have caused the higher diversity scores. We find a qualitatively and statistically significant positive correlation ($\textit{diversity} = 2.38\mathrm{e}{-05} \times \textit{\#words} \times \textit{is\_synthetic} + 0.9030, Adj. R^2=0.202$) between the length of \textit{synthetic} discussions and their diversity score. There is no such significance for human texts ($p=0.775$).
 
 
 \subsubsection{Turn taking}
 
-We investigate three turn taking functions: The Round Robin algorithm, which gets each user to talk in a predetermined, unchanging order, random selection, and our proposed turn taking algorithm (Section \ref{ssec:experimental:turn}).
-
-While the turn taking function by itself is not enough to approximate the human discussions (Figure \ref{fig::diversity} — since all the distributions diverge from the human distribution), it still seems to improve synthetic discussions. Discussions where the turn to speak was given either by chance or rotation, demonstrate extremely high diversity scores, diverging significantly from the human diversity distribution. This can not be explained by comment length (Figure \ref{fig::comment_length}). Thus, our proposed turn taking algorithm meaningfully positively impacts the quality of the generated data.
+We assess three methods for controlling user turns: Round Robin, Random Selection, and our novel approach (Section~\ref{ssec:experimental:turn}). Although no single function fully replicates human diversity (Fig.~\ref{fig::diversity}), both traditional methods yield discussions with extremely high diversity scores, deviating significantly from human norms. Our proposed algorithm improves synthetic conversations by reducing this divergence, demonstrating meaningful positive effects on data quality that cannot be attributed to comment length alone (Fig.~\ref{fig::comment_length}).
 
 
 \subsubsection{Prompting}
 
-We run discussions where user-agents (1) are not assigned \acp{SDB}, (2) are not assigned roles, and (3) are given a baseline prompt (see Appendix \ref{sssec:appendix:actors}). Figure \ref{fig::diversity} demonstrates that, while our approach (using roles, \acp{SDB} and the improved instruction prompt) is not enough to create discussions with similar diversity as human ones, removing any of its aspects leads to a significant divergence. This divergence is similar to the one observed when changing the turn taking function, and can similarly not be attributed to differences in comment length (Figure \ref{fig::comment_length}).
+We run discussions where user-agents (1) are not assigned \acp{SDB}, (2) are not assigned roles, and (3) are given a baseline prompt (see Appendix~\ref{sssec:appendix:actors}). Fig.~\ref{fig::diversity} demonstrates that, while our approach (using roles, \acp{SDB} and the improved instruction prompt) is not enough to create discussions with similar diversity as human ones, removing any of its aspects leads to a significant divergence. This divergence is similar to the one observed when changing the turn taking function, and can similarly not be attributed to differences in comment length (Fig.~\ref{fig::comment_length}).
 
-Finally, we test whether user-agents assigned with the “Troll” role lead other user-agents into displaying toxic behavior. We find that discussions which involved trolls cause a statistically and qualitatively significant rise in toxicity in the comments of the rest of the user-agents (Student-t test $p<.000$, see Figure \ref{fig::goad}). This was to be expected, since we explicitly set this behavior in our instruction prompt.
+Interactions involving “Troll” user-agents, guided by our finetuned instruction prompt, resulted in significantly more toxic comments and reduced \ac{AQ} (Student-t test: $p<.000$) among other users (Fig.~\ref{fig::boxplots})\footnote{This experiment was conducted with a moderator supplied with the “No Instructions” strategy.}. This effect is absent when we remove explicit instructions to react to toxic posts, although notably, the absence of these instructions still leads to a decrease in \ac{AQ}. Thus, our finetuned instruction prompts are necessary to induce behavior which our moderators can work on 
 
-\begin{figure}
-    \includegraphics[width=\columnwidth]{toxicity_troll_comparison.png} 
-	\caption{Trolls cause other participants to display toxic behavior.}
-	\label{fig::goad}
+\begin{figure}[t]
+    \centering
+    \begin{tabular}{cc}
+            \includegraphics[width=0.45\columnwidth]{boxplot_toxicity_original.png} &
+            \includegraphics[width=0.45\columnwidth]{boxplot_toxicity_basic.png} \\ 
+            \includegraphics[width=0.45\columnwidth]{boxplot_aq_original.png} &        
+            \includegraphics[width=0.45\columnwidth]{boxplot_aq_basic.png}
+    \end{tabular}
+    \caption{Toxicity (upper row) and \ac{AQ} (bottom row) of synthetic discussions, excluding comments by troll user-agents. First column includes synthetic discussions with our finetuned instruction prompts, second column uses the basic ablation instruction prompt. Less is better.}
+    \label{fig::boxplots}
 \end{figure}
 
 \begin{figure*}[t]
@@ -101,7 +105,7 @@ Finally, we test whether user-agents assigned with the “Troll” role lead oth
     \hfill
     \includegraphics[width=0.30\linewidth]{rougel_prompts.png}
 	\centering
-	\caption{Diversity (Section \ref{ssec:methodology:diversity}) distribution for each discussion by model (Section \ref{ssec:experimental:model}), turn-taking function $u$ (Section \ref{ssec:experimental:turn}), and prompting function $\phi$ used (Section \ref{ssec:experimental:prompts}).}
+	\caption{Diversity (Section~\ref{ssec:methodology:diversity}) distribution for each discussion by model (Section~\ref{ssec:experimental:model}), turn-taking function $u$ (Section~\ref{ssec:experimental:turn}), and prompting function $\phi$ used (Section~\ref{ssec:experimental:prompts}).}
 	\label{fig::diversity}
 \end{figure*}
 
@@ -111,7 +115,7 @@ Finally, we test whether user-agents assigned with the “Troll” role lead oth
     \hfill
     \includegraphics[width=0.30\linewidth]{comment_len_prompts.png}
 	\centering
-	\caption{Comment length for each discussion by model (Section \ref{ssec:experimental:model}), turn-taking function $u$ (Section \ref{ssec:experimental:turn}), and prompting function $\phi$ used (Section \ref{ssec:experimental:prompts}). For ease of comparison, comments above $400$ words are marked at the end of the x-axis.}
+	\caption{Comment length for each discussion by model (Section~\ref{ssec:experimental:model}), turn-taking function $u$ (Section~\ref{ssec:experimental:turn}), and prompting function $\phi$ used (Section~\ref{ssec:experimental:prompts}). For ease of comparison, comments above $400$ words are marked at the end of the x-axis.}
 	\label{fig::comment_length}
 \end{figure*}
 
