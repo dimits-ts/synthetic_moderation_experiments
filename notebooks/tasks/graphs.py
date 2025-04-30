@@ -212,15 +212,42 @@ def plot_timeseries(
 
 
 def trolls_boxplot(df: pd.DataFrame, title: str, val_col: str) -> None:
-    sns.boxplot(
-        data=df, x="trolls_exist", y=val_col, hue="trolls_exist"
-    )
+    sns.boxplot(data=df, x="trolls_exist", y=val_col, hue="trolls_exist")
     plt.title(title, fontsize=18)
     plt.ylabel("Average " + val_col)
     plt.xlabel("Trolls in the discussion")
     plt.ylim(0.8, 5.2)
     plt.legend("", frameon=False)
 
+
+def disagreement_plot(
+    var_with_sdb: pd.Series, var_no_sdb: pd.Series, title: str, stat_col: str
+) -> None:
+    sdb_toxicity_var = var_with_sdb.reset_index()
+    sdb_toxicity_var["annotator"] = "With SDB"
+    no_sdb_toxicity_var = var_no_sdb.reset_index()
+    no_sdb_toxicity_var["annotator"] = "No SDB"
+    merged_df = pd.concat(
+        [sdb_toxicity_var, no_sdb_toxicity_var], ignore_index=True
+    )
+    # I can not find how to remove legend title because displot returns
+    # a facet grid for some reason
+    merged_df = merged_df.rename(columns={"annotator": "Annotator SDB"})
+
+    ax = sns.displot(
+        data=merged_df,
+        x=stat_col,
+        hue="Annotator SDB",
+        common_norm=False,
+        stat="density",
+        multiple="dodge",
+        bins=10,
+    )
+    plt.title(title)
+    plt.xlim(0, 1)
+    plt.xlabel("nDFU")
+    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
+    
 
 # ======== posthoc_dunn_heatmap ========
 
