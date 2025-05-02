@@ -13,6 +13,7 @@
     \acro{AQ}{Argument Quality}
     %\acro{IR}{Information Retrieval}
     %\acro{NLP}{Natural Language Processing}
+    \acro{nDFU}{normalized Distance From Unimodality}
 \end{acronym}
 
 \subsection{Synthetic Annotation}
@@ -27,14 +28,18 @@ In many annotation tasks involving humans, a datapoint is annotated only by a su
 
 \subsubsection{Validating the LLM annotations}
 
-Analyzing (Fig.~\ref{fig:sdb_annot}). TODO.
+In this section, we examine the properties of \acp{LLM} annotations, as our findings partially hinge upon their reliability. Although not central to our study, investigating these annotations' characteristics is necessary to ensure the robustness of our results. We employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies the disagreement among N annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization). Unlike traditional metrics such as Cohen's Kappa, \ac{nDFU} is designed for multi-annotator settings. 
+
+Our analysis reveals a positive correlation between toxicity and annotator polarization: while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity increases $nDFU_{toxicity} = 0.1206 \times toxicity, p < .000, Adj R^2=0.224$); annotators agree on non-toxic comments but struggle with more toxic ones. This phenomenon does not manifest in the \ac{AQ} scores (Fig.~\ref{fig:ndfu_annot}). 
+
+To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs, the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we ran $10$ annotator-agents on a subset of comments with the same model, instruction prompt, and no \ac{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under these controlled conditions, there exists some polarization, with some comments showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
 
 
 \begin{figure*}[t]
     \includegraphics[width=0.45\linewidth]{sdb_toxicity.png} \hfill
     \includegraphics[width=0.45\linewidth]{sdb_aq.png}
 	\centering
-	\caption{Distribution plot of inter-annotator polarization (nDFU) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model.}
+	\caption{Distribution plot of inter-annotator polarization (\ac{nDFU}) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model. The blue (left-most) bars represent the disagreement between $10$ identical annotator-agents, while the orange (right-most) bars, the disagreement between $10$ annotators with different \acp{SDB}.}
     \label{fig:sdb_annot}
 \end{figure*}
 
@@ -42,18 +47,20 @@ Analyzing (Fig.~\ref{fig:sdb_annot}). TODO.
     \includegraphics[width=0.45\linewidth]{ndfu_toxicity.png} \hfill
     \includegraphics[width=0.45\linewidth]{ndfu_aq.png}
 	\centering
-	\caption{Inter-annotator polarization (nDFU) of each synthetic comment for all synthetic discussions, by annotation level.}
+	\caption{Inter-annotator polarization (\ac{nDFU}) of each synthetic comment for all synthetic discussions, by annotation level. Left graph shows the relationship between $nDFU_{toxicity}$ and toxicity, while the right graph shows the relationship between $nDFU_{arg\_quality}$ and \ac{AQ}.}
     \label{fig:ndfu_annot}
 \end{figure*}
+
 
 
 \subsection{Prompts Used}
 \label{ssec:appendix:prompts}
 
+
 \subsubsection{SocioDemographic Prompting}
 \label{sssec:appendix:sdbs}
 
-Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In the ablation study, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (Appendix~\ref{sssec:appendix:roles}).
+Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In the ablation study, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (Appendix~\ref{sssec:appendix:roles}). The actual values used for each of the $30$ \ac{LLM} user-agents and $10$ annotator-agents and the moderator, can be found in the project's repository\analysislink.
 
 \begin{table}[h]
 \centering
