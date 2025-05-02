@@ -1,12 +1,39 @@
 import itertools
 import multiprocessing
-from typing import Iterable
+from typing import Iterable, Callable
 
 from tqdm.auto import tqdm
 import numpy as np
 import pandas as pd
 import scipy.stats
 from rouge_score import rouge_scorer
+
+
+# code adapted from John Pavlopoulos
+# https://github.com/ipavlopoulos/ndfu/blob/main/src/__init__.py
+def ndfu(input_data: Iterable[float], num_bins: int = 5) -> float:
+    """The normalized Distance From Unimodality measure
+    :param: input_data: a list of annotations, not necessarily discrete
+    :raises ValueError: if input_data is empty
+    :return: the nDFU score
+    """
+    # compute DFU
+    hist = _to_hist(input_data, num_bins=num_bins)
+    max_value = max(hist)
+    pos_max = np.where(hist == max_value)[0][0]
+    # right search
+    max_diff = 0
+    for i in range(pos_max, len(hist) - 1):
+        diff = hist[i + 1] - hist[i]
+        if diff > max_diff:
+            max_diff = diff
+    for i in range(pos_max, 0, -1):
+        diff = hist[i - 1] - hist[i]
+        if diff > max_diff:
+            max_diff = diff
+
+    # return normalized dfu
+    return max_diff / max_value
 
 
 def rougel_similarity(comments: list[str]) -> list[float]:
@@ -35,7 +62,8 @@ def discussion_var(
     discussion_key_col: str,
     comment_key_col: str,
     val_col: str,
-) -> pd.Series:
+    var_func: Callable[[Iterable[float]], float] = ndfu,
+) -> pd.DataFrame:
     comment_var_df = (
         df.groupby([discussion_key_col, comment_key_col])[val_col]
         .agg(ndfu)
@@ -72,33 +100,6 @@ def mean_comp_test(
     ]
 
     return scipy.stats.f_oneway(*groups).pvalue[0]
-
-
-# code adapted from John Pavlopoulos 
-# https://github.com/ipavlopoulos/ndfu/blob/main/src/__init__.py
-def ndfu(input_data: Iterable[float], num_bins: int = 5) -> float:
-    """The normalized Distance From Unimodality measure
-    :param: input_data: a list of annotations, not necessarily discrete
-    :raises ValueError: if input_data is empty
-    :return: the nDFU score
-    """
-    # compute DFU
-    hist = _to_hist(input_data, num_bins=num_bins)
-    max_value = max(hist)
-    pos_max = np.where(hist == max_value)[0][0]
-    # right search
-    max_diff = 0
-    for i in range(pos_max, len(hist) - 1):
-        diff = hist[i + 1] - hist[i]
-        if diff > max_diff:
-            max_diff = diff
-    for i in range(pos_max, 0, -1):
-        diff = hist[i - 1] - hist[i]
-        if diff > max_diff:
-            max_diff = diff
-
-    # return normalized dfu
-    return max_diff / max_value
 
 
 def _compute_pairwise_rougel(comments: list[str]) -> float:
