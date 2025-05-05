@@ -213,13 +213,18 @@ def plot_timeseries(
     plt.tight_layout()
 
 
-def trolls_boxplot(df: pd.DataFrame, title: str, val_col: str) -> None:
-    sns.boxplot(data=df, x="trolls_exist", y=val_col, hue="trolls_exist")
+def trolls_plot(df: pd.DataFrame, title: str, val_col: str) -> None:
+    ax = sns.displot(
+        data=df.rename(columns={"trolls_exist": "Trolls in Discussion"}),
+        x=val_col,
+        hue="Trolls in Discussion",
+        common_norm=False,
+        stat="density",
+        multiple="dodge",
+        bins=10,
+    )
     plt.title(title, fontsize=18)
-    plt.ylabel("Average " + val_col)
-    plt.xlabel("Trolls in the discussion")
-    plt.ylim(0.8, 5.2)
-    plt.legend("", frameon=False)
+    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
 
 
 def disagreement_plot(

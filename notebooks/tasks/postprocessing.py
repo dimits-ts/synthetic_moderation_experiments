@@ -20,7 +20,7 @@ def get_main_dataset() -> pd.DataFrame:
         constants.DATASET_DIR / "main" / "data" / "datasets" / "dataset.csv",
         encoding="utf8",
     )
-    full_df = format_dataset(full_df, min_message_len=1)
+    full_df = format_dataset(full_df, min_message_len=-1)
     return full_df
 
 
