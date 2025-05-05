@@ -4,7 +4,10 @@
 \subsection{Acronyms Used}
 
 \begin{acronym}[WWW] % Give the longest label here so that the list is nicely aligned
-    \acro{VMD}{Virtual Moderation Dataset}
+    \ifthenelse{\boolean{review}}
+        {}
+        {\acro{VMD}{Virtual Moderation Dataset}}
+    
 	\acro{LLM}{Large Language Model}
 	\acro{NPC}{Non-Playable Character}
 	\acro{ML}{Machine Learning}
@@ -28,11 +31,13 @@ In many annotation tasks involving humans, a datapoint is annotated only by a su
 
 \subsubsection{Validating the LLM annotations}
 
-In this section, we examine the properties of \acp{LLM} annotations, as our findings partially hinge upon their reliability. Although not central to our study, investigating these annotations' characteristics is necessary to ensure the robustness of our results. We employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies the disagreement among N annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization). Unlike traditional metrics such as Cohen's Kappa, \ac{nDFU} is designed for multi-annotator settings. 
+In this section, we examine the properties of \ac{LLM} annotations. Although not central to our study, investigating these annotations' characteristics is necessary to ensure the robustness of our results.
 
-Our analysis reveals a positive correlation between toxicity and annotator polarization: while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity increases $nDFU_{toxicity} = 0.1206 \times toxicity, p < .000, Adj R^2=0.224$); annotators agree on non-toxic comments but struggle with more toxic ones. This phenomenon does not manifest in the \ac{AQ} scores (Fig.~\ref{fig:ndfu_annot}). 
+A key dimension for exploring annotations is annoator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies annotation polarization among N annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization). A compelling feature of this metric is that, unlike traditional metrics such as Cohen's Kappa, \ac{nDFU} is designed for multi-annotator settings. 
 
-To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs, the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we ran $10$ annotator-agents on a subset of comments with the same model, instruction prompt, and no \ac{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under these controlled conditions, there exists some polarization, with some comments showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
+Our analysis reveals a positive correlation between toxicity and annotator polarization: while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity increases ($nDFU_{toxicity} = 0.1206 \times toxicity, p < .000, Adj R^2=0.224$). This phenomenon does not manifest in the \ac{AQ} scores (Fig.~\ref{fig:ndfu_annot}). 
+
+To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we ran $10$ annotator-agents on a subset of comments with the same annotator model, annotator instruction prompt, and no \acp{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
 
 
 \begin{figure*}[t]
@@ -60,9 +65,9 @@ To mitigate the instability inherent in \ac{LLM} outputs—even when given ident
 \subsubsection{SocioDemographic Prompting}
 \label{sssec:appendix:sdbs}
 
-Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In the ablation study, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (Appendix~\ref{sssec:appendix:roles}). The actual values used for each of the $30$ \ac{LLM} user-agents and $10$ annotator-agents and the moderator, can be found in the project's repository\analysislink.
+Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In ablation studes where we remove the \acp{SDB}, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (Appendix~\ref{sssec:appendix:roles}). The actual values used for each of the $30$ \ac{LLM} user-agents and $10$ annotator-agents and the moderator, can be found in the project's repository\analysislink.
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \begin{tabular}{|l|l|}
     \toprule

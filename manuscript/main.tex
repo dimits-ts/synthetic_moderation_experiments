@@ -4,9 +4,6 @@
 
 \documentclass[11pt]{article}
 
-
-\usepackage[preprint]{acl}
-
 % style packages
 \usepackage{times}
 \usepackage{latexsym}
@@ -31,6 +28,14 @@
 \usepackage{booktabs}
 \usepackage{xurl} % break url strings
 \usepackage{subcaption}
+\usepackage{xifthen}
+
+% Change this to switch between review/preprint versions
+\newboolean{review}
+\setboolean{review}{true}
+\ifthenelse{\boolean{review}}
+   {\usepackage[review]{acl}}
+   {\usepackage[preprint]{acl}}
 
 % table commands
 \renewcommand{\arraystretch}{1.2}
@@ -38,14 +43,16 @@
 \graphicspath{ {./resources}  }
 
 
-% links
-\newcommand{\projectlink}{\footnote{\url{https://github.com/dimits-ts/synthetic_discussion_framework}}}
-\newcommand{\analysislink}{\footnote{\url{https://github.com/dimits-ts/synthetic_moderation_experiments}}}
-\newcommand{\datasetlink}{\footnote{\url{https://paperswithcode.com/dataset/vmd}}}
-\newcommand{\textWarning}[1]{\begin{center}\textcolor{red}{\textbf{#1}}\end{center}}
+\newcommand{\showifnotreview}[1]{%
+  \ifthenelse{\boolean{review}}{}{#1\unskip}%
+}
+\newcommand{\syndisco}{\showifnotreview{``SynDisco''}}
+\newcommand{\pip}{\showifnotreview{\texttt{(pip install syndisco)}}}
+\newcommand{\vmd}{\showifnotreview{the ``\ac{VMD}'' }}
+\newcommand{\projectlink}{\showifnotreview{\footnote{\url{https://github.com/dimits-ts/synthetic_discussion_framework}}}}
+\newcommand{\datasetlink}{\showifnotreview{\footnote{\url{https://paperswithcode.com/dataset/vmd}}}}
+\newcommand{\analysislink}{\showifnotreview{\footnote{\url{https://github.com/dimits-ts/synthetic_moderation_experiments}}}}
 
-% math
-\DeclareMathOperator*{\argmax}{argmax} % thin space, limits underneath in displays
 
 \title{Scalable Evaluation of Online Facilitation Strategies via Synthetic Simulations}
 \author{
@@ -54,7 +61,7 @@
     Archimedes, Athena Research Center, Greece \\
     \texttt{\{dim.tsirmpas,ion,annis\}@aueb.gr}
 }
-\date{February 2025}
+\date{May 2025}
 
 \begin{document}
 
@@ -74,7 +81,10 @@
 \input{sections/09-future-work}
 \input{sections/10-limitations}
 \input{sections/11-ethical}
-\input{sections/12-acknowledgements}
+
+\ifthenelse{\boolean{review}}
+   {}
+   { \input{sections/12-acknowledgements}}
 
 \bibliography{refs}
 \appendix
