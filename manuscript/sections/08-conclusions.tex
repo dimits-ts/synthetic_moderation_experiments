@@ -1,0 +1,7 @@
+% !TEX root = ../main.tex
+%
+\section{Conclusions \& Future Work}
+
+Our study is the first to apply synthetic data generation to the field of online discussion moderation/facilitation. We propose a simple and generalizable methodology, which enables researchers to inexpensively conduct pilot online moderation experiments using exclusively synthetic \ac{LLM} user-agents. We also conduct an ablation study to demonstrate that each component of our methodology meaningfully results in higher-quality synthetic data.
+
+We create an open-source Python Framework \syndisco that applies this methodology to hundreds of experiments, which we use to create and publish a large-scale synthetic dataset (\vmd). Using this dataset, we compare the effectiveness of numerous moderation strategies and baselines  for \ac{LLM} moderators, elicited from current conversational moderation research. We demonstrate that (1) \ac{LLM} moderators significantly improve the quality of synthetic discussions and (2) established human moderation/facilitation guidelines often do not surpass simple baselines with regard to toxicity and \ac{AQ}. We hope that the methodology, synthetic dataset, and software presented in this paper can help research in the domain of \ac{LLM}-based moderation, and that the data presented in this paper can help finetune models for online moderation.

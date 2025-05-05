@@ -1,0 +1,93 @@
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
+
+\documentclass[11pt]{article}
+
+% style packages
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+
+% my packages
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{array,etoolbox}
+\usepackage{hyperref}
+\usepackage{orcidlink}
+\usepackage{acronym}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{enumitem}
+\usepackage{amsfonts}
+\usepackage{booktabs}
+\usepackage{xurl} % break url strings
+\usepackage{subcaption}
+\usepackage{xifthen}
+
+% Change this to switch between review/preprint versions
+\newboolean{review}
+\setboolean{review}{true}
+\ifthenelse{\boolean{review}}
+   {\usepackage[review]{acl}}
+   {\usepackage[preprint]{acl}}
+
+% table commands
+\renewcommand{\arraystretch}{1.2}
+% graphix commands
+\graphicspath{ {./resources}  }
+
+
+\newcommand{\showifnotreview}[1]{%
+  \ifthenelse{\boolean{review}}{}{#1\unskip}%
+}
+\newcommand{\syndisco}{\showifnotreview{``SynDisco''}}
+\newcommand{\pip}{\showifnotreview{\texttt{(pip install syndisco)}}}
+\newcommand{\vmd}{\showifnotreview{the ``\ac{VMD}'' }}
+\newcommand{\projectlink}{\showifnotreview{\footnote{\url{https://github.com/dimits-ts/synthetic_discussion_framework}}}}
+\newcommand{\datasetlink}{\showifnotreview{\footnote{\url{https://paperswithcode.com/dataset/vmd}}}}
+\newcommand{\analysislink}{\showifnotreview{\footnote{\url{https://github.com/dimits-ts/synthetic_moderation_experiments}}}}
+
+
+\title{Scalable Evaluation of Online Facilitation Strategies via Synthetic Simulations}
+\author{
+    Dimitris Tsirmpas \orcidlink{0000-0002-5675-3939}, Ion Androutsopoulos \orcidlink{0009-0000-2969-0509}, John Pavlopoulos \orcidlink{0000-0001-9188-7425} \\
+    Dept.\ of Informatics, Athens University of Economics and Business, Greece and \\
+    Archimedes, Athena Research Center, Greece \\
+    \texttt{\{dim.tsirmpas,ion,annis\}@aueb.gr}
+}
+\date{May 2025}
+
+\begin{document}
+
+\maketitle
+
+%\textWarning{Content warning: This paper contains samples of harmful text, including violent, toxic, controversial, and potentially illegal statements.}
+
+\input{sections/00-abstract}
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-methodology}
+\input{sections/04-experimental-setup}
+\input{sections/05-results}
+\input{sections/06-software}
+\input{sections/07-data}
+\input{sections/08-conclusions}
+\input{sections/09-future-work}
+\input{sections/10-limitations}
+\input{sections/11-ethical}
+
+\ifthenelse{\boolean{review}}
+   {}
+   { \input{sections/12-acknowledgements}}
+
+\bibliography{refs}
+\appendix
+\input{sections/99-appendix}
+
+\end{document}

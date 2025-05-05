@@ -1,0 +1,10 @@
+% !TEX root = ../main.tex
+%
+\section{Limitations} 
+\label{sec:limitations}
+
+Because synthetic data generation with \acp{LLM} is a relatively new area of research, the literature review in this paper is partially based on relevant unpublished work (preprints). These sources are considered when appropriate, as they offer important insights for the interpretation and inherent limitations of our results.
+
+Our experimental setup makes certain assumptions that may affect the generalizability of our findings. Principally, we investigate the effects of only three \acp{LLM}, we assume that at most one moderator is present in each simulated discussion, and our turn-taking algorithm does not account for contextual factors such as relevance or emotional engagement, which are critical in human discussions. Our study also does not account for meta-knowledge available to participants, as human users would likely behave differently when faced with a synthetic moderator compared to a human one. Lastly, our methodology does not attempt to simulate algorithmic recommendation systems, which would realistically play a role in the context of social media discussions \cite{y_social}.
+
+Lastly, in order to comprehensively assess the authenticity of our generated conversations, a wide-scale human correlation study comparing them with genuine discussions is required. Our current analysis partly depends on annotations supplied by \ac{LLM} agents, which may incorporate biases associated with these models. To confidently evaluate both the believability and the quality of synthetic discussions, extensive human correlation studies are essential for empirical validation.

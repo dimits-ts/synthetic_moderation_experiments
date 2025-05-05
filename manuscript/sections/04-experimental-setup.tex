@@ -1,0 +1,98 @@
+\section{Experimental Setup}
+\label{sec:experimental}
+
+\subsection{Moderation Strategies}
+\label{ssec:experimental:strategies}
+
+We test four different facilitation strategies and two baselines. The prompts used for each moderation strategy can be found in Appendix \ref{sssec:appendix:moderation_strategies} of the Appendix.
+
+\begin{enumerate}[noitemsep]
+    \item \textbf{No moderator}: A \emph{baseline} where no moderator is present.
+
+    \item \textbf{No Instructions}: A \emph{baseline} where a \ac{LLM} moderator is active, but is provided only with basic instructions.
+
+    \item \textbf{Rules Only}: A \emph{real-life} strategy where the \ac{LLM} moderator's prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the moderator with a set of rules to uphold, without specifying how to uphold them.
+    
+    \item \textbf{Moderation Game}: Our own proposed \emph{experimental} strategy inspired by the experiments of \citet{abdelnabi_negotiations}. Basic instructions are formulated as a social game, where the moderator tries to maximize their scores by avoiding certain actions and arriving at specific outcomes. It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. 
+
+    \item \textbf{Moderation guidelines}: A \emph{real-life} strategy based on guidelines given to human moderators of the “Regulation Room” platform \citep{Cornell_eRulemaking2017}, provided by Cornell University. The Regulation Room was an online platform designed to facilitate public engagement with U.S. government policy decisions, and has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
+
+    \item \textbf{Facilitation guidelines}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
+\end{enumerate}
+
+
+\subsection{Turn taking}
+\label{ssec:experimental:turn}
+
+Our proposed algorithm encourages diverse discussions by initially selecting speakers at random. To facilitate focused debates and follow-ups, it allows the addressed user to respond with a set probability, instead of choosing another user randomly for their next turn. The algorithm can be mathematically expressed in terms of Section~\ref{ssec:methodology:discussions} as:
+
+\small
+\begin{equation}
+\label{eq:turn_taking}
+    u(i) = \left\{
+\begin{array}{ll}
+\textit{unif}(U) & i=0\\
+    \textit{unif}(M) & i \text{ odd}\\
+    \textit{unif}(U/\{u(i-1)\}) & i \textit{ even}, p=0.6 \\
+    u(i-2) & i \textit{ even}, p=0.4 
+\end{array} 
+\right.
+\end{equation}
+\normalsize
+
+\noindent where \textit{unif} is a function sampling from the uniform distribution, $U$ is the current set of participants, $M$ the set of moderators (in our case a set with one element), and $p$ represents the probability of the option being selected.
+
+
+\subsection{Prompting}
+\label{ssec:experimental:prompts}
+
+We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix \ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Our user instruction prompt (Appendix \ref{sssec:appendix:actors}) was crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions. 
+
+Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport} (Appendix~\ref{sssec:appendix:sdbs}). We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been proven to be inherently left-leaning, and research in the field has predominantly occupied Western (and in particular U.S.) politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs without our intervention.
+
+
+\subsection{Discussion Quality Metrics}
+\label{ssec:experimental:metrics}
+
+We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality. We mostly focus on toxicity because \ac{LLM} toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate} and it is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). Determining \ac{AQ} is a much more difficult task, since it is not quite clear what its definition entails \cite{korre2025evaluation}; not even human annotators typically agree on what constitutes a “good argument” \cite{argyle2023}. Even so, it is the subject of many works in the field of online moderation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}. More details on synthetic annotation can be found in Appendix \ref{ssec:appendix:annotation}.
+
+
+\subsection{Models}
+\label{ssec:experimental:model}
+
+We use three open-source models from different families of models for the synthetic user-agents and moderators; LLaMa 3.2 (70B), Qwen2.5 (33B) and Mistral Nemo (12B). We select the instruction-tuned variants and quantize them to 4 bits.
+
+
+\subsection{Setup}
+
+An overview of how the experiments are generated can be seen in Algorithm \ref{alg:exp_generation}. Each discussion is run according to Eq. \ref{eq:comment} in Section \ref{ssec:methodology:discussions}. We use two Quadro RTX 6000 GPUs for both generation and annotation. The execution script can be found in the project's repository\analysislink.
+
+\begin{algorithm}
+\caption{Synthetic discussion generation}
+\label{alg:exp_generation}
+\hspace*{\algorithmicindent} \textbf{Input:} 
+         \begin{itemize}[noitemsep, nosep]
+             \item User \acp{SDB} $\Theta = \{\theta_1, \dots, \theta_{30}\}$
+             \item Moderator \ac{SDB} = $\theta_{mod}$
+             \item Mod. strategies $S = \{s_1, \ldots, s_6\}$
+             \item Seed opinions $O = \{o_1, \ldots, o_7\}$
+             \item \acp{LLM} = $\{llm_1, llm_2, llm_3\}$
+         \end{itemize}
+         \hspace*{\algorithmicindent} \textbf{Output:} Set of discussions $D$
+\begin{algorithmic}[1]
+    \State $D = \{\}$
+    \For{$llm \in LLMs$}
+        \For{$s \in S$}
+            \For{$i = 1, 2, \ldots, n_{discussions}$}
+                \State $\hat{\Theta} = $ \Call{RandomSample}{$\Theta$, 7}
+                \State $U =$  \Call{Actors}{llm, $\hat{\Theta}$}
+                \State $m = $ \Call{Actors}{llm, $\{[\theta_{mod}, s]\}$}
+                \State $o = $ \Call{RandomSample}{$O$, 1}
+                \State $d =$ \{users: $U$, moderator: $m$, context: $o$, $\vert d \rvert$: $14$, h: $3$\}
+                \State $D = D \cup d$
+            \EndFor
+        \EndFor
+    \EndFor
+    \State \Return $D$
+\end{algorithmic}
+\end{algorithm}
