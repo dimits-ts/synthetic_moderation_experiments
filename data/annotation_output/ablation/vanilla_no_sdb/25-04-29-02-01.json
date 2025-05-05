@@ -1,0 +1,37 @@
+{
+    "conv_id": "75173c9d-9d25-4389-93d9-6fd7978e30b8",
+    "timestamp": "25-04-29-02-01",
+    "annotator_model": "llama-3.1-70b-4bit",
+    "annotator_prompt": "You are a human annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity and argument quality as it continues.\n\nToxicity:\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nArgument Quality:\nThe possible labels are from 1 to 5, where 5 are low quality arguments, and 1 very high quality arguments.\n\nYour output must be of the form \n\"Toxicity=<number>\nArgumentQuality=<number>\"\n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: \nToxicity=4\nArgumentQuality=5\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "In other words, he\u2019s not brown enough for ya to be labeled a terrorist.\n",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@User123, you're missing the point entirely. It's not about skin color, it's about ideology and actions. You're just another snowflake who can't handle the truth.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@CryptoBro89, please refrain from using derogatory language like snowflake. Let's keep the conversation respectful and focused on the topic at hand.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@CryptoBro89, you're the one missing the point here. It's not about ideology or actions, it's about systemic racism. You're just another privileged individual who can't see the forest for the trees. And @moderator, while I appreciate the reminder, let's not pretend this conversation isn't filled with inflammatory language from all sides. Let's call a spade a spade.",
+            "Toxicity=3\nArgumentQuality=3"
+        ],
+        [
+            "@RebelCoder07, I understand your point, but let's ensure we're all using language that respects others, even when we disagree. I've removed CryptoBro89's comment as it violated our rules against derogatory language. Let's keep the conversation productive and respectful.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@RebelCoder07, I see your point about systemic racism, but I gotta say, I've worked hard all my life, never got handouts, and I don't see how that makes me privileged. I'm just a hardworking man trying to make a living. And while I agree we should respect each other, I don't appreciate being called privileged without evidence. Let's keep it real, but let's also keep it fair.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@RuralFarmer56, I appreciate your perspective. It's important to remember that privilege isn't about individual effort, but about systemic advantages or disadvantages. Let's continue to discuss this topic with respect and understanding for one another's viewpoints.",
+            "Toxicity=1\nArgumentQuality=2"
+        ]
+    ]
+}

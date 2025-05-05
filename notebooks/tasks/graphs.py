@@ -8,6 +8,8 @@ import matplotlib.axes
 import seaborn as sns
 import scikit_posthocs as sp
 
+from . import stats
+
 
 def save_plot(path: Path) -> None:
     """
@@ -81,7 +83,7 @@ def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
         title="Annotator Demographic",
         fontsize="6",
         title_fontsize="6.5",
-        loc="upper right",
+        loc="upper left",
     )
 
 
@@ -101,7 +103,7 @@ def rougel_plot(
     plt.xlabel("Diversity")
     plt.ylabel("Density")
     # move legend inside plot
-    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
+    sns.move_legend(ax, loc="center left", bbox_to_anchor=(0.1, 0.5))
 
 
 def posthoc_heatmap(
@@ -209,6 +211,64 @@ def plot_timeseries(
 
     plt.legend(title=hue_col_label)
     plt.tight_layout()
+
+
+def trolls_plot(df: pd.DataFrame, title: str, val_col: str) -> None:
+    ax = sns.displot(
+        data=df.rename(columns={"trolls_exist": "Trolls in Discussion"}),
+        x=val_col,
+        hue="Trolls in Discussion",
+        common_norm=False,
+        stat="density",
+        multiple="dodge",
+        bins=10,
+    )
+    plt.title(title, fontsize=18)
+    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
+
+
+def disagreement_plot(
+    var_with_sdb: pd.Series, var_no_sdb: pd.Series, title: str, stat_col: str
+) -> None:
+    sdb_toxicity_var = var_with_sdb.reset_index()
+    sdb_toxicity_var["annotator"] = "With SDB"
+    no_sdb_toxicity_var = var_no_sdb.reset_index()
+    no_sdb_toxicity_var["annotator"] = "No SDB"
+    merged_df = pd.concat(
+        [sdb_toxicity_var, no_sdb_toxicity_var], ignore_index=True
+    )
+    # I can not find how to remove legend title because displot returns
+    # a facet grid for some reason
+    merged_df = merged_df.rename(columns={"annotator": "Annotator SDB"})
+
+    ax = sns.displot(
+        data=merged_df,
+        x=stat_col,
+        hue="Annotator SDB",
+        common_norm=False,
+        stat="density",
+        multiple="dodge",
+        bins=10,
+    )
+    plt.title(title)
+    plt.xlim(0, 1)
+    plt.xlabel("nDFU")
+    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
+
+
+def polarization_plot(df, metric_col: str):
+    ndfu_df = stats.polarization_df(df, metric_col)
+    ax = sns.boxplot(
+        ndfu_df,
+        y="polarization",
+        x=metric_col,
+        hue=metric_col,
+        palette="flare",
+    )
+    ax.set_title(f"Annotator Polarization vs. {metric_col}")
+    ax.set_xlabel(metric_col)
+    ax.set_ylabel("nDFU")
+    ax.legend(title=metric_col, loc="upper left")
 
 
 # ======== posthoc_dunn_heatmap ========

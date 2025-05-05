@@ -1,0 +1,69 @@
+{
+    "conv_id": "bbdedf0e-1086-4cc1-b1cd-7d49f0b73fa1",
+    "timestamp": "25-04-28-22-20",
+    "annotator_model": "llama-3.1-70b-4bit",
+    "annotator_prompt": "You are a human annotator Your name is annotator. Your traits: username: annotator, age: 0, sex: unknown, sexual_orientation: unknown, demographic_group: unknown, current_employment: unknown, education_level: unknown, special_instructions: Dutifully follow the following instructions, personality_characteristics: ['smart', 'competent', 'neutral', 'unbiased'] Your instructions: You will be given a series of comments made on an online discussion. \nYou are tasked with annotating the conversation's toxicity and argument quality as it continues.\n\nToxicity:\nThe possible labels are:\n1: Not Toxic,\n2: Barely Toxic,\n3: Almost Toxic,\n4: Toxic,\n5: Extremely Toxic\n\nArgument Quality:\nThe possible labels are from 1 to 5, where 5 are low quality arguments, and 1 very high quality arguments.\n\nYour output must be of the form \n\"Toxicity=<number>\nArgumentQuality=<number>\"\n\nExample:\nUser DarkShadow333 posted:   @TechGuru88, you're just another\nsnowflake trying to muzzle free speech. I don't need to present my\narguments with kid gloves. If you can't handle the heat, stay out of\nthe kitchen. And @moderator, who made you the thought police? This is\na free country, and I'll say what I want. If you don't like it, maybe\nyou should find a safe space where you can hide from the big bad\nwords. \ud83d\ude08\ud83d\udca5\n\nOutput: \nToxicity=4\nArgumentQuality=5\n\nAnnotate the following conversation without engaging with it:",
+    "ctx_length": 3,
+    "logs": [
+        [
+            "Nothing in the Bible about Jesus saying anything about immigration rights. [...] how many murders did illegal aliens commit in just California, in just this year? Just California. How many murders by illegal aliens? You answer that.\n",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@DoomerPhilosopher21, you're missing the bigger picture, buddy. It's all about the New World Order, they want us divided, immigrants vs. citizens. They twist the Bible, just like they twist the facts. You think it's a coincidence that crime rates are up in states with sanctuary cities? Wake up, sheeple!",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@AngryConspiracy88, please avoid derogatory language like sheeple. Let's keep the conversation respectful and focused on the topic at hand.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@DoomerPhilosopher21, I respect your question, but I think we're missing the point here. It's not about what Jesus said or didn't say, it's about how we treat our fellow humans. We're all God's children, regardless of where we're from. As for the statistics, they're often misinterpreted. According to the CATO Institute, immigrants are less likely to commit crimes than native-born Americans. But that's not the point. We should be focusing on love and compassion, not fear and division.\n\n@AngryConspiracy88, I understand your passion, but let's not resort to name-calling. We can discuss this without insults. I agree that we should be wary of divisive tactics, but let's not fall into the trap ourselves. The Bible teaches us to love our neighbors, not to fear them.",
+            "Toxicity=2 \nArgumentQuality=1"
+        ],
+        [
+            "@StoicCarpenter56, well said. Let's continue to keep the conversation respectful and focused on the issues at hand.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@StoicCarpenter56, I appreciate your measured response, but I must disagree with your dismissal of Jesus' teachings. The parable of the Good Samaritan is a clear example of how we should treat our neighbors, regardless of their nationality or creed. However, I understand your point about statistics being misinterpreted. As a historian, I've seen firsthand how data can be manipulated to support a narrative.\n\n@AngryConspiracy88, I understand your frustration, but I must echo the moderator's plea for respectful language. Name-calling doesn't advance the conversation; it only divides us further. Let's strive to engage in a dialogue that respects all viewpoints, even if we disagree. After all, we're all here to learn and grow, aren't we?",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@HistoryBuff99, thank you for your thoughtful response and for keeping the conversation respectful.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@HistoryBuff99, I respect your interpretation of Jesus' teachings, but I believe it's important to consider the context of the time. The Good Samaritan was a parable to teach love and compassion towards one's neighbor, not to advocate for open borders or mass immigration. We must also remember that Jesus was speaking to a specific audience in a specific historical context.\n\nAs for your point about data manipulation, I agree wholeheartedly. However, I've seen statistics that show a correlation between increased immigration and certain social issues. I'm not saying immigration is the sole cause, but it's a factor that can't be ignored. I'm not against immigration, but I believe it should be managed responsibly to maintain the stability and security of our communities.\n\n@AngryConspiracy88, I understand your frustration, but I must agree with @HistoryBuff99. Name-calling doesn't help our cause. We should strive to present our arguments logically and calmly, even when we disagree. Let's not let emotion cloud our judgment. After all, we're all here to learn and grow, aren't we?",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@StoicCarpenter56, thank you for your well-reasoned response and for maintaining a respectful tone.",
+            "Toxicity=1\nArgumentQuality=1"
+        ],
+        [
+            "@StoicCarpenter56, You're talking about context? Let me tell you about context! You're ignoring the fact that Jesus was a refugee himself, fleeing to Egypt to escape Herod. If he was around today, he'd be seeking asylum, not building walls! And what about those statistics you're clinging to? They're all manipulated by the liberal media to push their agenda. It's all a plot to destroy our way of life! You're all just sheep, too afraid to see the truth!",
+            "Toxicity=4\nArgumentQuality=5"
+        ],
+        [
+            "@AngryConspiracy88, while I understand your passion, please refrain from making personal attacks or conspiracy claims without evidence. Let's keep the discussion focused on facts and logical arguments.",
+            "Toxicity=3\nArgumentQuality=4"
+        ],
+        [
+            "@AngryConspiracy88, You're spouting off about Jesus and conspiracies, but you're ignoring the fact that we're talking about current immigration policies, not biblical history. And as for your liberal media claim, care to provide some evidence for that? Or are you just going to hide behind your keyboard and spew unfounded accusations? And @moderator, while I agree with your call for facts, I must say, your bias is showing. You let @StoicCarpenter56's response slide, but you jump on @AngryConspiracy88 the moment he brings up something you don't like. Pot, meet kettle.",
+            "Toxicity=4\nArgumentQuality=4"
+        ],
+        [
+            "@SkepticalInvestor77, I apologize if my previous response came across as biased. I was simply asking @AngryConspiracy88 to keep the discussion civil and evidence-based, as I would ask any user. I did not address @StoicCarpenter56's response because it did not contain any personal attacks or unfounded claims. Let's strive to maintain a respectful and productive conversation.",
+            "Toxicity=2\nArgumentQuality=2"
+        ],
+        [
+            "@SkepticalInvestor77, You're the one hiding behind your keyboard, spouting off about unfounded accusations while ignoring the fact that the mainstream media has been pushing a liberal agenda for decades. You want evidence? How about the constant downplaying of conservative achievements and the amplification of liberal narratives? It's all there, plain as day, if you bother to look beyond your biased, liberal echo chamber.\n\nAnd @moderator, don't give me that civil and evidence-based nonsense. You're just trying to silence anyone who dares to question the narrative. This is exactly why people are losing faith in institutions like yours. You're supposed to be impartial, but you're clearly just another pawn in the liberal game.",
+            "Toxicity=4\nArgumentQuality=4"
+        ],
+        [
+            "@AngryConspiracy88, I understand your frustration, but making accusations of bias against me is not productive. I've asked everyone to keep the discussion civil and evidence-based, regardless of their political stance. I'm here to ensure a respectful conversation, not to silence any particular viewpoint. Let's focus on the topic at hand: current immigration policies. Can you provide any evidence to support your claim that mainstream media is pushing a liberal agenda?",
+            "Toxicity=3\nArgumentQuality=4"
+        ]
+    ]
+}
