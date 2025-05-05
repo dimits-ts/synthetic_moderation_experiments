@@ -7,9 +7,9 @@
 \subsection{Defining synthetic discussions}
 \label{ssec:methodology:discussions}
 
-Let $U$ be the set of users participating in discussions and $M$ the set of moderators, where $M \cap U = \emptyset$. We define a conversation $d$ of $\lvert d \rvert$ comments\footnote{Also referred to as “dialogue turns” in some publications.} $c(d, i)$ as an ordered set:
+Let $U$ be the set of users participating in discussions and $M$ the set of moderators, where $M \cap U = \emptyset$. We define a discussion $d$ of $\lvert d \rvert$ comments\footnote{Also referred to as “dialogue turns” in some publications.} $c(d, i)$ as an ordered set:
 \begin{equation}
-    d = \{c(d, 1), c(d, 2), \ldots, c(d, \lvert d \rvert)\}
+    d = \{c(d, 1), c(d, 2), \ldots\}
 \end{equation}
 
 
@@ -51,7 +51,7 @@ Our methodology thus assumes that the contents of any synthetic discussion are d
 \subsection{Evaluating Synthetic Discussions}
 \label{ssec:methodology:diversity}
 
-As discussed in Section \ref{ssec:related:discussions}, it may not be methodologically sound to attempt approximating realism as the goal of our synthetic discussions. Therefore, we use the “\textit{Diversity}” metric introduced by \citet{ulmer2024}:
+As discussed in Section \ref{ssec:related:discussions}, it may not be methodologically sound to attempt approximating realism as the goal of our synthetic discussions. Therefore, we use the “\textit{Diversity}” metric introduced by \citet{ulmer2024} and defined as:
 
 \small
 \begin{equation}
@@ -62,4 +62,4 @@ As discussed in Section \ref{ssec:related:discussions}, it may not be methodolog
 
 \noindent where \textit{RLF1} is the ROUGE-L F1 score \cite{lin-2004-rouge}.
 
-We can compare the \textit{Diversity} distribution of synthetic discussions to sampled human ones. This gives us an intuition on how close these synthetic discussions are to real-life discussions in terms of variety of contents. This formulation also renders the metric invariant to the discussed topics.
+We can compare the \textit{Diversity} distribution of synthetic discussions to sampled human ones. This gives us an intuition on how close these synthetic discussions are to real-life discussions in terms of variety of contents. This formulation also renders the metric invariant to the discussed topics and correlates well with useful finetuning data \cite{ulmer2024}.
