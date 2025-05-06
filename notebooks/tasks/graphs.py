@@ -256,7 +256,7 @@ def disagreement_plot(
     plt.title(title)
     plt.xlim(0, 1)
     plt.xlabel("nDFU")
-    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
+    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.68, 0.5))
 
 
 def polarization_plot(df, metric_col: str):
@@ -319,7 +319,7 @@ def _pvalue_heatmap(
     ticklabels = value_df.columns if show_labels else "auto"
 
     # Create the heatmap
-    sns.heatmap(
+    ax = sns.heatmap(
         value_df,
         annot=formatted_values,
         fmt="",  # This allows us to use strings with asterisks
@@ -333,6 +333,8 @@ def _pvalue_heatmap(
         vmax=vmax,
         ax=ax,
     )
+    ax.set_xticklabels(ax.get_xmajorticklabels(), fontsize=12)
+    ax.set_yticklabels(ax.get_ymajorticklabels(), fontsize=12)
 
 
 def _pairwise_diffs(
