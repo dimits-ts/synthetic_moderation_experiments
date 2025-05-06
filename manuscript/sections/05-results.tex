@@ -6,33 +6,7 @@
 
 \subsection{Main findings}
 
-\begin{enumerate}[nosep, noitemsep]
-    \item Unmoderated discussions exhibit significantly higher toxicity and lower \ac{AQ} (Fig.~\ref{fig::toxicity_aq_stats}) (ANOVA\footnote{The large size and balanced nature of our dataset allows the use of parametric tests.} $p<.000$).
-
-    \item  While the Moderation and Facilitation Guidelines slightly improve \ac{AQ} relative to baselines, their impact is marginal (Fig.~\ref{fig::toxicity_aq_stats}). Notably, these strategies do not reduce toxicity more effectively than the “No Instructions” baseline and perform worse than the “Rules Only” strategy.
-
-    \item Toxicity and \ac{AQ} generally improve over time under all strategies when compared to unmoderated discussions, indicating a limited, but consistent restraining effect by the \ac{LLM} moderators over time (Table~\ref{tab:timeseries}).
-
-    \item \ac{LLM} moderators intervene frequently throughout discussions (Fig.~\ref{fig::intervention_count}). \ac{LLM} user-agents exhibit atypical tolerance for excessive moderator interventions, whereas with human participants such repeated interventions often provoke irritation and increased toxicity \cite{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}.
-\end{enumerate}
-
-
-\begin{figure*}[t]
-    \includegraphics[width=0.48\linewidth]{toxicity_stats.png} \hfill
-    \includegraphics[width=0.48\linewidth]{argumentq_stats.png}
-	\centering
-	\caption{Mean difference of Toxicity (left) and \ac{AQ} (right) between each moderation strategy. $A[i, j] = 0.3^{***}$ indicates that the strategy $i$ leads to overall worse discussions (more toxicity/worse arguments) compared to $j$ for an average of $0.3$ annotation levels ($1-5$) with $p<0.001$. Each comparison is accompanied by pairwise student-t tests, in the form of significance asterisks.}
-	\label{fig::toxicity_aq_stats}
-\end{figure*}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\columnwidth]{intervention_count.png}
-	\caption{Histogram of interventions by \ac{LLM} moderators. The maximum number of interventions is $14$.}
-	\label{fig::intervention_count}
-\end{figure}
-
-\begin{table}[htbp]
+\begin{table}[t]
     \centering
     \begin{tabular}{lll}
         \toprule
@@ -59,17 +33,42 @@
     \label{tab:timeseries}
 \end{table}
 
+\begin{enumerate}[nosep, noitemsep]
+    \item Unmoderated discussions exhibit significantly worse toxicity and \ac{AQ} (Fig.~\ref{fig::toxicity_aq_stats}) (ANOVA\footnote{The large size and balanced nature of our dataset allows the use of parametric tests.} $p<.000$).
+
+    \item  While the Moderation and Facilitation Guidelines slightly improve \ac{AQ} relative to baselines, their impact is marginal (Fig.~\ref{fig::toxicity_aq_stats}). Notably, these strategies do not reduce toxicity more effectively than the “No Instructions” baseline and perform worse than the “Rules Only” strategy.
+
+    \item Toxicity and \ac{AQ} generally improve over time under all strategies when compared to unmoderated discussions, indicating a limited, but consistent restraining effect caused by the \ac{LLM} moderators over time (Table~\ref{tab:timeseries}).
+
+    \item \ac{LLM} moderators intervene frequently throughout discussions (Fig.~\ref{fig::intervention_count}). \ac{LLM} user-agents exhibit atypical tolerance for excessive moderator interventions, whereas with human participants such repeated interventions often provoke irritation and increased toxicity \cite{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}.
+\end{enumerate}
+
+Suprisingly, our work fails to find any positive effects of adding sophisticated instruction prompts to \ac{LLM} moderators. This suggests that out-of-the-box \acp{LLM} may not be as adaptable as human moderators. Alternatively, they may lack a high “skill ceiling” which would enable them to effectively use advanced instructions present in current moderation/facilitation manuals. There is also the possibility that our experimental setup constrains the discussions, inhibiting the latent potential of \ac{LLM} moderators, although \ac{LLM} moderators have shown important limitations in discussions with human participants \cite{cho-etal-2024-language}.
+
+
+\begin{figure*}[t]
+    \includegraphics[width=0.49\linewidth]{toxicity_stats.png} \hfill
+    \includegraphics[width=0.49\linewidth]{argumentq_stats.png}
+	\centering
+	\caption{Comparison of mean Toxicity (left) and \ac{AQ} (right) between each moderation strategy. $A[i, j] = 0.3^{***}$ indicates that the strategy $i$ leads to overall worse discussions (more toxicity/worse arguments) compared to $j$ for an average of $0.3$ annotation levels ($1-5$) with $p<0.001$. The matrix is symmetrical. Each comparison is accompanied by pairwise student-t tests, in the form of significance asterisks.}
+	\label{fig::toxicity_aq_stats}
+\end{figure*}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\columnwidth]{intervention_count.png}
+	\caption{Histogram of interventions by \ac{LLM} moderators. The maximum number of interventions is $14$.}
+	\label{fig::intervention_count}
+\end{figure}
 
 
 \subsection{Ablation study}
 \label{ssec:results:ablation}
 
-We test the effects of our proposed methodology by running $8$ synthetic discussions using the Qwen 2.5 model, and comparing their \textit{diversity} scores (Section \ref{ssec:methodology:diversity}) with our original dataset, as well as with human discussions. We use the Cornell eRulemaking “Regulation Room” dataset \footnote{\url{http://archive.regulationroom.org}}, from which we extract all comments from all initiatives. 
-
-% Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI (Cornell e-Rulemaking Initiative)
+We test the effects of our proposed methodology by running $8$ synthetic discussions using the Qwen 2.5 model, and comparing their \textit{diversity} scores (Section \ref{ssec:methodology:diversity}) with our original dataset, as well as with human discussions. We use the Cornell eRulemaking “Regulation Room” dataset \footnote{\url{http://archive.regulationroom.org} Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the \ac{CeRI}}, from which we extract all comments from all initiatives. 
 
 
-\subsubsection{Models}
+\subsubsection{Model outputs}
 
 Among examined models, Qwen 2.5 exhibits the highest observed diversity, followed by Mistral Nemo and LLaMa 3.1 (Fig.~\ref{fig::diversity}). Notably, the Mistral model approximated the comment length of human discussions the best (Fig.~\ref{fig::comment_length}). While maximizing diversity should not be the primary objective (a discussion with maximum diversity may indicate that the participants do not engage with each other), these results suggest that large and intensely aligned \acp{LLM} such as LLaMa may struggle to replicate authentic human conversational dynamics compared to other models, as also reported by \citep{Park2023GenerativeAI}.
 

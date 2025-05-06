@@ -4,20 +4,20 @@
 \subsection{Moderation Strategies}
 \label{ssec:experimental:strategies}
 
-We test four different facilitation strategies and two baselines. The prompts used for each moderation strategy can be found in Appendix \ref{sssec:appendix:moderation_strategies} of the Appendix.
+We test four different facilitation strategies and two baselines. The prompts used for each moderation strategy can be found in Appendix~\ref{sssec:appendix:moderation_strategies}.
 
 \begin{enumerate}[noitemsep]
     \item \textbf{No moderator}: A \emph{baseline} where no moderator is present.
 
-    \item \textbf{No Instructions}: A \emph{baseline} where a \ac{LLM} moderator is active, but is provided only with basic instructions.
+    \item \textbf{No Instructions}: A \emph{baseline} where a \ac{LLM} moderator is active, but is provided only with basic instructions (e.g., “You are a moderator, keep the discussion civil”).
 
-    \item \textbf{Rules Only}: A \emph{real-life} strategy where the \ac{LLM} moderator's prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the moderator with a set of rules to uphold, without specifying how to uphold them.
+    \item \textbf{Rules Only}: A \emph{real-life} strategy where the \ac{LLM} moderator's prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution} (e.g, “Be fair and impartial, assist users, don't spread misinformation”). This provides the moderator with a set of rules to uphold, without specifying how to uphold them.
     
-    \item \textbf{Moderation Game}: Our own proposed \emph{experimental} strategy inspired by the experiments of \citet{abdelnabi_negotiations}. Basic instructions are formulated as a social game, where the moderator tries to maximize their scores by avoiding certain actions and arriving at specific outcomes. It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. 
+    \item \textbf{Moderation Game}: Our own proposed \emph{experimental} strategy, inspired by the experiments of \citet{abdelnabi_negotiations}. Basic instructions are formulated as a social game, where the moderator tries to maximize their scores by avoiding certain actions and arriving at specific outcomes (e.g., “User is toxic: $-5$ points, User corrects behavior: $+10$ points”). It is worth noting that no actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. 
 
-    \item \textbf{Moderation guidelines}: A \emph{real-life} strategy based on guidelines given to human moderators of the “Regulation Room” platform \citep{Cornell_eRulemaking2017}, provided by Cornell University. The Regulation Room was an online platform designed to facilitate public engagement with U.S. government policy decisions, and has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
+    \item \textbf{Moderation guidelines}: A \emph{real-life} strategy based on guidelines given to human moderators of \ac{CeRI} \citep{Cornell_eRulemaking2017} (e.g., “Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments”). %These moderators were deployed to the “Regulation Room”, an online platform designed to facilitate public engagement with U.S. government policy decisions, which has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
 
-    \item \textbf{Facilitation guidelines}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
+    \item \textbf{Facilitation guidelines}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book} (e.g., “Do not make decisions, be a guide, provide explanations”). It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
 \end{enumerate}
 
 
@@ -42,32 +42,7 @@ Our proposed algorithm encourages diverse discussions by initially selecting spe
 
 \noindent where \textit{unif} is a function sampling from the uniform distribution, $U$ is the current set of participants, $M$ the set of moderators (in our case a set with one element), and $p$ represents the probability of the option being selected.
 
-
-\subsection{Prompting}
-\label{ssec:experimental:prompts}
-
-We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix \ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Our user instruction prompt (Appendix \ref{sssec:appendix:actors}) was crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions. 
-
-Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport} (Appendix~\ref{sssec:appendix:sdbs}). We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been proven to be inherently left-leaning, and research in the field has predominantly occupied Western (and in particular U.S.) politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs without our intervention.
-
-
-\subsection{Discussion Quality Metrics}
-\label{ssec:experimental:metrics}
-
-We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality. We mostly focus on toxicity because \ac{LLM} toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate} and it is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). Determining \ac{AQ} is a much more difficult task, since it is not quite clear what its definition entails \cite{korre2025evaluation}; not even human annotators typically agree on what constitutes a “good argument” \cite{argyle2023}. Even so, it is the subject of many works in the field of online moderation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}. More details on synthetic annotation can be found in Appendix \ref{ssec:appendix:annotation}.
-
-
-\subsection{Models}
-\label{ssec:experimental:model}
-
-We use three open-source models from different families of models for the synthetic user-agents and moderators; LLaMa 3.2 (70B), Qwen2.5 (33B) and Mistral Nemo (12B). We select the instruction-tuned variants and quantize them to 4 bits.
-
-
-\subsection{Setup}
-
-An overview of how the experiments are generated can be seen in Algorithm \ref{alg:exp_generation}. Each discussion is run according to Eq. \ref{eq:comment} in Section \ref{ssec:methodology:discussions}. We use two Quadro RTX 6000 GPUs for both generation and annotation. The execution script can be found in the project's repository\analysislink.
-
-\begin{algorithm}
+\begin{algorithm}[t]
 \caption{Synthetic discussion generation}
 \label{alg:exp_generation}
 \hspace*{\algorithmicindent} \textbf{Input:} 
@@ -96,3 +71,32 @@ An overview of how the experiments are generated can be seen in Algorithm \ref{a
     \State \Return $D$
 \end{algorithmic}
 \end{algorithm}
+
+
+\subsection{Prompting}
+\label{ssec:experimental:prompts}
+
+We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix \ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Our user instruction prompt (Appendix \ref{sssec:appendix:actors}) was crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions. 
+
+Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport} (Appendix~\ref{sssec:appendix:sdbs}). We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been proven to be inherently left-leaning, and research in the field has predominantly occupied Western (and in particular U.S.) politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs without our intervention.
+
+
+\subsection{Discussion Quality Metrics}
+\label{ssec:experimental:metrics}
+
+We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality. We mostly focus on toxicity because \ac{LLM} toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate} and it is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). 
+
+Determining \ac{AQ} is a much more difficult task, since researchers disagree whether human annotators can properly assess what constitutes a “good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. \citet{wachsmuth-etal-2017-computational} provide a theoretical definition of \ac{AQ} comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. In any case, \ac{AQ} can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}, and is the subject of many works in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}. 
+Details on synthetic annotation can be found in Appendix~\ref{ssec:appendix:annotation}.
+
+
+\subsection{Model selection}
+\label{ssec:experimental:model}
+
+We use three open-source models from different families of models for the synthetic user-agents and moderators; LLaMa 3.2 (70B), Qwen2.5 (33B) and Mistral Nemo (12B). We select the instruction-tuned variants and quantize them to 4 bits.
+
+
+\subsection{Setup}
+
+An overview of how the experiments are generated can be seen in Algorithm \ref{alg:exp_generation}. Each discussion is run according to Eq. \ref{eq:comment} in Section \ref{ssec:methodology:discussions}. We use two Quadro RTX 6000 GPUs for both generation and annotation. The execution script can be found in the project's repository\analysislink.
+
