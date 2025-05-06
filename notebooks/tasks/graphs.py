@@ -153,6 +153,9 @@ def posthoc_heatmap(
         vmax=vmax,
         ax=ax,
     )
+    plt.ylabel("")
+    plt.xlabel("")
+    plt.title(val_col, fontsize=24)
 
 
 def plot_metrics_barplots(
@@ -317,15 +320,15 @@ def _pvalue_heatmap(
 
     # Create the heatmap
     sns.heatmap(
-        np.tril(value_df),
-        annot=np.tril(formatted_values),
+        value_df,
+        annot=formatted_values,
         fmt="",  # This allows us to use strings with asterisks
         cmap="icefire",
-        mask=_upper_tri_masking(value_df),
+        #mask=_upper_tri_masking(value_df),
         xticklabels=ticklabels,
         yticklabels=ticklabels,
         cbar_kws={"label": "Mean Difference"},
-        annot_kws={"fontsize": 8},
+        annot_kws={"fontsize": 14},
         vmin=vmin,
         vmax=vmax,
         ax=ax,
@@ -433,6 +436,6 @@ def _format_with_asterisks(
             else:  # if NaN
                 num_asterisks = 0
 
-            formatted_df.iloc[i, j] = f"{value:.3f}{num_asterisks * '*'}"
+            formatted_df.iloc[i, j] = f"{value:.3f}\n{num_asterisks * '*'}"
 
     return formatted_df
