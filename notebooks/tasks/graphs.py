@@ -53,10 +53,6 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
     - bins (int): The number of bins for the histogram.
     - figsize (tuple): The size of the figure.
     """
-
-    # remove dependent variable with no degrees of freedom
-    df = df[df[feature] != 1]
-
     bin_edges = np.histogram_bin_edges(df[feature], bins=bins)
     instruction_values = df["instructions"].unique()
     colors = sns.color_palette()
@@ -86,14 +82,14 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
         )
 
     plt.axvline(0, color="red", linestyle="--")
-    plt.yticks(np.arange(2, 6, 1))
+    plt.yticks(np.arange(1, 6, 1))
     plt.ylabel(f"{feature} level")
     plt.xlabel(
         "Relative diff. of #annotations\n(Trolls - No Trolls in discussion)",
         fontsize=16,
     )
     plt.title(f"Impact of trolls on other users")
-    plt.legend(title="Instructions", loc="center right")
+    plt.legend(title="Instructions", loc="upper left")
 
 
 def rougel_plot(
