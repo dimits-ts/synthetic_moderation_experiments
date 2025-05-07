@@ -89,11 +89,11 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
     plt.yticks(np.arange(2, 6, 1))
     plt.ylabel(f"{feature} level")
     plt.xlabel(
-        "Relative diff. of #annotations\n(Trolls - No Trolls)",
+        "Relative diff. of #annotations\n(Trolls - No Trolls in discussion)",
         fontsize=16,
     )
     plt.title(f"Impact of trolls on other users")
-    plt.legend(title="Instruction")
+    plt.legend(title="Instructions", loc="center right")
 
 
 def rougel_plot(
