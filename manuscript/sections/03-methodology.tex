@@ -7,13 +7,13 @@
 \subsection{Defining synthetic discussions}
 \label{ssec:methodology:discussions}
 
-Let $U$ be the set of users participating in discussions and $M$ the set of moderators, where $M \cap U = \emptyset$. We define a discussion $d$ of $\lvert d \rvert$ comments\footnote{Also referred to as “dialogue turns” in some publications.} $c(d, i)$ as an ordered set:
+Let $U$ be the set of users participating in discussions and $M$ the set of moderators/facilitators, where $M \cap U = \emptyset$. We define a discussion $d$ of $\lvert d \rvert$ comments\footnote{Also referred to as “dialogue turns” in some publications.} $c(d, i)$ as an ordered set:
 \begin{equation}
     d = \{c(d, 1), c(d, 2), \ldots\}
 \end{equation}
 
 
-Next, we define a turn-taking function $u: D  \times \mathbb{N} \rightarrow U \cup M$ mapping a comment in the $i$-th turn of a discussion $d \in D$ to an arbitrary user in $U$, or moderator in $M$. In real discussions, $u$ is not strictly defined, since which user responds to each comment can not be reliably determined. However, in a synthetic environment, $u$ can be made deterministic (see Section \ref{ssec:experimental:turn}).
+Next, we define a turn-taking function $u: D  \times \mathbb{N} \rightarrow U \cup M$ mapping a comment in the $i$-th turn of a discussion $d \in D$ to an arbitrary user in $U$, or moderator/facilitator in $M$. In real discussions, $u$ is not strictly defined, since which user responds to each comment can not be reliably determined. However, in a synthetic environment, $u$ can be made deterministic (see Section \ref{ssec:experimental:turn}).
 
 In our case, all comments are synthetic, hence, a comment $c$ in a discussion $d \in D$, at the $i$-th turn is defined recursively as:
 
@@ -28,27 +28,14 @@ In our case, all comments are synthetic, hence, a comment $c$ in a discussion $d
 \noindent where $[\cdot]$ is string concatenation and $h$ is the context length of the \ac{LLM} user-agent (how many past comments they can “remember”) and $\phi: U \times M \rightarrow s$ is a function mapping a user $u$ to their instruction prompt $s$.
 
 Our methodology thus assumes that the contents of any synthetic discussion are dependent on the following parameters:
-\begin{itemize}[noitemsep]
+\begin{itemize}[nosep, noitemsep]
     \item The underlying model ($LLM(\cdot)$)
     \item The turn-taking function $u$
     \item The prompting function $\phi$
 \end{itemize}
 
 
-%\subsection{Evaluating moderation strategies}
-%\label{ssec:methodology:strategies}
-
-%Let $D^{s} = \{d^s_1, d^s_2, \ldots, d^s_{\lvert D^s \rvert}\}$  the set of discussions that took place with the moderators following strategy $s$. We can intuitively claim that a moderation strategy $s$ is \textit{overall} better than $s'$ for a measure $m$ if:
-
-%\begin{equation}
-%\label{eq:strategy_comparison}
-%    \frac{1}{\lvert D^{s} \rvert} {\sum_{d^{s} \in D^{s}} m(d^{s})} > \frac{1}{\lvert D^{s'} \rvert} {\sum_{d^{s'} \in D^{s'}} m(d^{s'})}
-%\end{equation}
-
-%\noindent Assuming a larger $m$ score is better. In the case that $m$ can only be computed on the level of comments, we can average the scores across a discussion to get a discussion-level metric (e.g., average toxicity). In practice, we check whether Equation \ref{eq:strategy_comparison} holds in the presence of randomness and limited samples.
-
-
-\subsection{Evaluating Synthetic Discussions}
+\subsection{Evaluating synthetic discussions}
 \label{ssec:methodology:diversity}
 
 As discussed in Section \ref{ssec:related:discussions}, it may not be methodologically sound to attempt approximating realism as the goal of our synthetic discussions. Therefore, we use the “\textit{Diversity}” metric introduced by \citet{ulmer2024} and defined as:
@@ -60,6 +47,6 @@ As discussed in Section \ref{ssec:related:discussions}, it may not be methodolog
 \end{equation}
 \normalsize
 
-\noindent where \textit{RLF1} is the ROUGE-L F1 score \cite{lin-2004-rouge}. Intuitively, the metric  penalizes long, repeated sequences between comments in a single discussion. 
+\noindent where \textit{RLF1} is the ROUGE-L F1 score \cite{lin-2004-rouge}. Intuitively, the metric penalizes long, repeated sequences between each pair of comments in a single discussion.  Importantly, this formulation renders the metric invariant to the specific topics discussed, and correlates well with the quality of synthetic data \cite{ulmer2024}.
 
-We can compare the \textit{Diversity} distribution of synthetic discussions to sampled human ones. This gives us an intuition on how close these synthetic discussions are to real-life discussions in terms of variety of contents. This formulation also renders the metric invariant to the discussed topics and correlates well with useful finetuning data \cite{ulmer2024}.
+While maximizing diversity in discussions may seem desirable, it should not be the primary objective, as very high diversity may indicate a lack of meaningful interaction between participants. Instead, we compare the \textit{diversity} distribution of synthetic discussions with that of sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world ones in terms of content variety and participant interaction. 

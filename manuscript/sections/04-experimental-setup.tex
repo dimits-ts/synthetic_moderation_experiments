@@ -4,9 +4,9 @@
 \subsection{Moderation Strategies}
 \label{ssec:experimental:strategies}
 
-We test four different facilitation strategies and two baselines. The prompts used for each moderation strategy can be found in Appendix~\ref{sssec:appendix:moderation_strategies}.
+We test four different facilitation strategies and two baselines:\footnote{The exact prompts used for each moderation strategy can be found in Appendix~\ref{sssec:appendix:moderation_strategies}.}
 
-\begin{enumerate}[noitemsep]
+\begin{enumerate}[nosep, noitemsep]
     \item \textbf{No moderator}: A \emph{baseline} where no moderator is present.
 
     \item \textbf{No Instructions}: A \emph{baseline} where a \ac{LLM} moderator is active, but is provided only with basic instructions (e.g., “You are a moderator, keep the discussion civil”).
@@ -24,7 +24,7 @@ We test four different facilitation strategies and two baselines. The prompts us
 \subsection{Turn taking}
 \label{ssec:experimental:turn}
 
-Our proposed algorithm encourages diverse discussions by initially selecting speakers at random. To facilitate focused debates and follow-ups, it allows the addressed user to respond with a set probability, instead of choosing another user randomly for their next turn. The algorithm can be mathematically expressed in terms of Section~\ref{ssec:methodology:discussions} as:
+Our proposed algorithm encourages diverse discussions by initially selecting speakers at random. To facilitate focused debates and follow-ups, it allows the addressed user to respond with a set probability, instead of choosing another user randomly for their next turn. The algorithm can be mathematically expressed as:
 
 \small
 \begin{equation}
@@ -32,15 +32,14 @@ Our proposed algorithm encourages diverse discussions by initially selecting spe
     u(i) = \left\{
 \begin{array}{ll}
 \textit{unif}(U) & i=0\\
-    \textit{unif}(M) & i \text{ odd}\\
-    \textit{unif}(U/\{u(i-1)\}) & i \textit{ even}, p=0.6 \\
-    u(i-2) & i \textit{ even}, p=0.4 
+    \textit{unif}(U/\{u(i-1)\}) & p=0.6 \\
+    u(i-2) & p=0.4 
 \end{array} 
 \right.
 \end{equation}
 \normalsize
 
-\noindent where \textit{unif} is a function sampling from the uniform distribution, $U$ is the current set of participants, $M$ the set of moderators (in our case a set with one element), and $p$ represents the probability of the option being selected.
+\noindent where $U$ is the set of all users as defined in Section\ref{ssec:methodology:discussions}, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the option being selected. When a moderator is present, $u$ picks a user every other turn, in order to allow the moderator to intervene.
 
 \begin{algorithm}[t]
 \caption{Synthetic discussion generation}
@@ -78,7 +77,7 @@ Our proposed algorithm encourages diverse discussions by initially selecting spe
 
 We assigned roles to user-agents, providing incentives for participation (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (see Appendix \ref{sssec:appendix:roles}). We created three types of users: neutral, trolls, and community-focused users. Our user instruction prompt (Appendix \ref{sssec:appendix:actors}) was crafted to balance breaking out of overly polite \ac{LLM} behavior while avoiding injecting our own biases and expectations in synthetic interactions. 
 
-Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport} (Appendix~\ref{sssec:appendix:sdbs}). We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been proven to be inherently left-leaning, and research in the field has predominantly occupied Western (and in particular U.S.) politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs without our intervention.
+Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport} (Appendix~\ref{sssec:appendix:sdbs}), since \acp{SDB} have proven promising in generating varied responses, and alleviating the Western bias exhibited by \acp{LLM} \cite{burton2024large}. We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been proven to be inherently left-leaning, and research in the field has predominantly occupied Western (and in particular U.S.) politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs without our intervention.
 
 
 \subsection{Discussion Quality Metrics}
@@ -86,8 +85,8 @@ Additionally, we generated 30 \ac{LLM} user personas with unique \acp{SDB} using
 
 We define two objectives for an ideal discussion; comments should not be toxic, and the arguments used should be of high quality. We mostly focus on toxicity because \ac{LLM} toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate} and it is a frequently identified inhibitor of online/deliberative discussions \citep{dekock2022disagree, XiaToxicity} (although this is not certain \citep{Avalle2024PersistentIP}). 
 
-Determining \ac{AQ} is a much more difficult task, since researchers disagree whether human annotators can properly assess what constitutes a “good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. \citet{wachsmuth-etal-2017-computational} provide a theoretical definition of \ac{AQ} comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. In any case, \ac{AQ} can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}, and is the subject of many works in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}. 
-Details on synthetic annotation can be found in Appendix~\ref{ssec:appendix:annotation}.
+\ac{AQ} can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}, and is the subject of many works in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting}. \citet{wachsmuth-etal-2017-computational} provide a definition of \ac{AQ} comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a “good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. 
+%Details on synthetic annotation can be found in Appendix~\ref{ssec:appendix:annotation}.
 
 
 \subsection{Model selection}
@@ -98,5 +97,5 @@ We use three open-source models from different families of models for the synthe
 
 \subsection{Setup}
 
-An overview of how the experiments are generated can be seen in Algorithm \ref{alg:exp_generation}. Each discussion is run according to Eq. \ref{eq:comment} in Section \ref{ssec:methodology:discussions}. We use two Quadro RTX 6000 GPUs for both generation and annotation. The execution script can be found in the project's repository\analysislink.
+An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}. Each discussion is run according to Eq.~\ref{eq:comment} in Section~\ref{ssec:methodology:discussions}. We use two Quadro RTX 6000 GPUs for both generation and annotation. The execution script can be found in the project's repository\analysislink.
 
