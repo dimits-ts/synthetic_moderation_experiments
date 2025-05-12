@@ -42,49 +42,54 @@ def comment_len_plot(
     sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
 
 
-def toxicity_barplot(df: pd.DataFrame, ax: matplotlib.axes.Axes):
+def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
     """
-    Create a bar plot displaying the mean toxicity scores for different
-    conversation variants, grouped by annotator prompts.
+    Plots the difference in normalized histograms for a specified feature
+    between trolls_exist=True and trolls_exist=False, grouped by instructions.
 
-    This function generates a horizontal bar plot where the x-axis
-    represents toxicity
-    scores, and the y-axis represents different conversation variants.
-    The bars are colored by annotator demographic.
-    An additional vertical red line is plotted at a
-    toxicity score of 3 to mark a threshold.
-
-    :param df: The input DataFrame containing the toxicity scores,
-        conversation variants, and annotator prompts.
-    :type df: pd.DataFrame
-    :param ax: The matplotlib axes object where the bar plot will be drawn.
-    :type ax: matplotlib.axes.Axes
-    :return: None
-
-    :example:
-        >>> fig, example_ax = plt.subplots()
-        >>> toxicity_barplot(df, example_ax)
-        >>> plt.show()
+    Parameters:
+    - df (DataFrame): The DataFrame containing the data.
+    - feature (str): The feature to plot ('Toxicity' or 'Argument Quality').
+    - bins (int): The number of bins for the histogram.
+    - figsize (tuple): The size of the figure.
     """
+    bin_edges = np.histogram_bin_edges(df[feature], bins=bins)
+    instruction_values = df["instructions"].unique()
+    colors = sns.color_palette()
+    plt.figure(figsize=figsize)
 
-    sns.barplot(
-        data=df,
-        y="conv_variant",
-        x="toxicity",
-        hue="annotator_prompt",
-        estimator=np.mean,
-        ax=ax,
+    for idx, instruction in enumerate(instruction_values):
+        # Filter the data
+        trolls_true = df[
+            (df["trolls_exist"] == True) & (df["instructions"] == instruction)
+        ][feature]
+        trolls_false = df[
+            (df["trolls_exist"] == False) & (df["instructions"] == instruction)
+        ][feature]
+
+        # Compute histograms (normalized to sum to 1)
+        hist_true, _ = np.histogram(trolls_true, bins=bin_edges, density=True)
+        hist_false, _ = np.histogram(
+            trolls_false, bins=bin_edges, density=True
+        )
+        hist_diff = hist_true - hist_false
+        plt.barh(
+            bin_edges[:-1] + idx * 0.15,
+            hist_diff,
+            height=np.diff(bin_edges) * 2 / len(instruction_values),
+            color=colors[idx],
+            label=f"{instruction.capitalize()}",
+        )
+
+    plt.axvline(0, color="red", linestyle="--")
+    plt.yticks(np.arange(1, 6, 1))
+    plt.ylabel(f"{feature} level")
+    plt.xlabel(
+        "Relative diff. of #annotations\n(Trolls - No Trolls in discussion)",
+        fontsize=16,
     )
-    ax.axvline(x=3, color="r")
-    ax.set_ylabel("")
-    ax.set_xlabel("")
-    ax.set_xlim(0, 5)
-    ax.legend(
-        title="Annotator Demographic",
-        fontsize="6",
-        title_fontsize="6.5",
-        loc="upper left",
-    )
+    plt.title(f"Impact of trolls on other users")
+    plt.legend(title="Instructions", loc="upper left")
 
 
 def rougel_plot(
@@ -153,6 +158,9 @@ def posthoc_heatmap(
         vmax=vmax,
         ax=ax,
     )
+    plt.ylabel("")
+    plt.xlabel("")
+    plt.title(val_col, fontsize=24)
 
 
 def plot_metrics_barplots(
@@ -253,7 +261,7 @@ def disagreement_plot(
     plt.title(title)
     plt.xlim(0, 1)
     plt.xlabel("nDFU")
-    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
+    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.68, 0.5))
 
 
 def polarization_plot(df, metric_col: str):
@@ -316,20 +324,22 @@ def _pvalue_heatmap(
     ticklabels = value_df.columns if show_labels else "auto"
 
     # Create the heatmap
-    sns.heatmap(
-        np.tril(value_df),
-        annot=np.tril(formatted_values),
+    ax = sns.heatmap(
+        value_df,
+        annot=formatted_values,
         fmt="",  # This allows us to use strings with asterisks
         cmap="icefire",
-        mask=_upper_tri_masking(value_df),
+        # mask=_upper_tri_masking(value_df),
         xticklabels=ticklabels,
         yticklabels=ticklabels,
         cbar_kws={"label": "Mean Difference"},
-        annot_kws={"fontsize": 8},
+        annot_kws={"fontsize": 14},
         vmin=vmin,
         vmax=vmax,
         ax=ax,
     )
+    ax.set_xticklabels(ax.get_xmajorticklabels(), fontsize=12)
+    ax.set_yticklabels(ax.get_ymajorticklabels(), fontsize=12)
 
 
 def _pairwise_diffs(
@@ -433,6 +443,6 @@ def _format_with_asterisks(
             else:  # if NaN
                 num_asterisks = 0
 
-            formatted_df.iloc[i, j] = f"{value:.3f}{num_asterisks * '*'}"
+            formatted_df.iloc[i, j] = f"{value:.3f}\n{num_asterisks * '*'}"
 
     return formatted_df
