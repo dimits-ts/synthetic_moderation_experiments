@@ -73,20 +73,6 @@
 \subsection{Ablation study}
 \label{ssec:results:ablation}
 
-In order to assess the impact of each component of our proposed methodology, we conducted eight synthetic discussions using a single model, Qwen, to limit computational cost. We evaluated the diversity of these generated discussions by comparing their diversity scores (cf. Section~\ref{ssec:methodology:diversity}) with i) discussions in our original dataset produced solely by the Qwen model; and ii) human discussions from the \ac{CeRI} “Regulation Room” dataset\footnote{\url{http://archive.regulationroom.org} Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the \ac{CeRI}} which includes moderated online deliberative discussions for ten diverse topics.
-
-
-\subsubsection{Effects of turn taking functions}
-
-\paragraph{Our proposed turn-taking function meaningfully improves the quality of synthetic data.} We compare our turn-taking function (Section~\ref{ssec:experimental:turn}) to two baselines: Round Robin (placing each participant in a predetermined queue) and Random Selection. Fig.~\ref{fig:rougel_turns} demonstrates that no single function fully approximates human diversity scores (all distributions diverge from the blue—human—distribution). However, unlike our own function, both baselines feature extremely high diversity. Additionally, Fig.~\ref{fig:comment_length_turns} demonstrates that comments in discussions following our turn-taking function emulate the length of human discussions. This may have partially affected the diversity scores.
-
-
-\subsubsection{Effects of user-agent prompting}
-
-We conduct three separate experiments in which user-agents (excluding moderators) are subjected to one of the following conditions at a time: (1) no assigned \acp{SDB}, (2) no assigned roles, or (3) only a basic instruction prompt (\S\ref{sssec:appendix:actors}). 
-
-\paragraph{\acp{SDB}, roles and our instruction prompt increase the quality of synthetic data.} Fi.~\ref{fig:rougel_prompts} illustrates that although our proposed methodology—incorporating \acp{SDB}, roles, and finetuned instruction prompts—does not achieve discussions with diversity scores comparable to human ones, eliminating any component of our prompting mechanisms results in a notable deterioration. For instance, omitting \acp{SDB} (denoted as ``No \acp{SDB}'' and represented by the red distribution) causes the majority of discussions to exhibit maximum diversity—one—indicating a significant loss in participant interaction. This decline is analogous to the effects observed when modifying the turn-taking function. Also similarly to the turn-taking ablation study, our proposed methodology features comments that best emulate observed human comment length (Fig.~\ref{fig:comment_length_prompts}).
-
 \begin{figure*}[t]
     \begin{subfigure}{0.32\linewidth}
         \includegraphics[width=\textwidth]{rougel_model.png}
@@ -132,3 +118,18 @@ We conduct three separate experiments in which user-agents (excluding moderators
     \caption{Comment length for each discussion by model (Section~\ref{ssec:experimental:setup}), turn-taking function $t$ (Section~\ref{ssec:experimental:turn}), and prompting function $\phi$ used (Section~\ref{ssec:experimental:prompts}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
     \label{fig:comment_length}
 \end{figure*}
+
+
+In order to assess the impact of each component of our proposed methodology, we conducted eight synthetic discussions using a single model, Qwen, to limit computational cost. We evaluated the diversity of these generated discussions by comparing their diversity scores (cf. Section~\ref{ssec:methodology:diversity}) with i) discussions in our original dataset produced solely by the Qwen model; and ii) human discussions from the \ac{CeRI} “Regulation Room” dataset\footnote{\url{http://archive.regulationroom.org} Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the \ac{CeRI}} which includes moderated online deliberative discussions for ten diverse topics.
+
+
+\subsubsection{Effects of turn taking functions}
+
+\paragraph{Our proposed turn-taking function meaningfully improves the quality of synthetic data.} We compare our turn-taking function (Section~\ref{ssec:experimental:turn}) to two baselines: Round Robin (placing each participant in a predetermined queue) and Random Selection. Fig.~\ref{fig:rougel_turns} demonstrates that no single function fully approximates human diversity scores (all distributions diverge from the blue—human—distribution). However, unlike our own function, both baselines feature extremely high diversity. Additionally, Fig.~\ref{fig:comment_length_turns} demonstrates that comments in discussions following our turn-taking function emulate the length of human discussions. This may have partially affected the diversity scores.
+
+
+\subsubsection{Effects of user-agent prompting}
+
+We conduct three separate experiments in which user-agents (excluding moderators) are subjected to one of the following conditions at a time: (1) no assigned \acp{SDB}, (2) no assigned roles, or (3) only a basic instruction prompt (\S\ref{sssec:appendix:actors}). 
+
+\paragraph{\acp{SDB}, roles and our instruction prompt increase the quality of synthetic data.} Fi.~\ref{fig:rougel_prompts} illustrates that although our proposed methodology—incorporating \acp{SDB}, roles, and finetuned instruction prompts—does not achieve discussions with diversity scores comparable to human ones, eliminating any component of our prompting mechanisms results in a notable deterioration. For instance, omitting \acp{SDB} (denoted as ``No \acp{SDB}'' and represented by the red distribution) causes the majority of discussions to exhibit maximum diversity—one—indicating a significant loss in participant interaction. This decline is analogous to the effects observed when modifying the turn-taking function. Also similarly to the turn-taking ablation study, our proposed methodology features comments that best emulate observed human comment length (Fig.~\ref{fig:comment_length_prompts}).
