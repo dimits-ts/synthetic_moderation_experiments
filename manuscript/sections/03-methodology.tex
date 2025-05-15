@@ -1,0 +1,64 @@
+% !TEX root = ../main.tex
+%
+
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Defining synthetic discussions}
+\label{ssec:methodology:discussions}
+
+%Let $U$ be the set of (non moderator) user-agents participating in discussions and $M$ the set of moderators, ($M \cap U = \emptyset$). We define a discussion $d$ as an ordered set of comments\footnote{Also referred to as “dialogue turns” in some publications.} $d = \{c(d, 1), c(d, 2), \ldots\}$.
+
+%Next, we define a turn-taking function $u: D  \times \mathbb{N} \rightarrow U \cup M$ mapping a comment in the $i$-th turn of a discussion $d \in D$ to an arbitrary user in $U$, or moderator/facilitator in $M$. In real discussions, $u$ is not strictly defined, since we can not reliably determine which user responds to each comment. However, in a synthetic environment, $u$ can be made deterministic (see Section \ref{ssec:experimental:turn}).
+
+We make the assumption that the most recent preceding comments at any given point in the discussion provide sufficient context for the \ac{LLM} agents—an assumption that has been used in tasks such as toxicity classification \cite{pavlopoulos_2020_toxicity}. This approach eliminates the need for additional mechanisms such as summarization \cite{balog_2024}, dynamic input manipulation \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM}, resulting in reduced computational overhead and a more transparent, explainable system.
+
+Additionally, we assume that three key functions define the structure of synthetic discussions:
+\begin{itemize}[nosep, noitemsep]
+    \item Underlying model ($LLM(\cdot)$)
+    \item Turn-taking function ($t$): Determines which user speaks at each turn.
+    \item Prompting function ($\phi$): Provides each participant with a personalized instruction prompt, including information such as name and \ac{SDB}.
+\end{itemize}
+
+We can then model a synthetic comment $c$ at position $i$ of a discussion $d$ recursively as:
+\begin{equation}
+\label{eq:comment}
+    c(d, i) = LLM(\phi(t(d, i)) \concat [c(d, j)]^{i-1}_{i-h})
+\end{equation}
+
+\noindent where $\concat$ is the string concatenation operator and $h$ is the context length of the \ac{LLM} user-agent (how many preceding comments they can “remember”).
+
+Our formulation of synthetic discussions not only simplifies the system, but also enables controlled experimentation with various alternatives for each of the three functions (Section \ref{ssec:results:ablation}).
+
+%\subsection{Evaluating moderation strategies}
+%\label{ssec:methodology:strategies}
+
+%Let $D^{s} = \{d^s_1, d^s_2, \ldots, d^s_{\lvert D^s \rvert}\}$  the set of discussions that took place with the facilitators following strategy $s$. We can intuitively claim that a moderation strategy $s$ is \textit{overall} better than $s'$ for a measure $m$ if:
+
+%\begin{equation}
+%\label{eq:strategy_comparison}
+%    \frac{1}{\lvert D^{s} \rvert} {\sum_{d^{s} \in D^{s}} m(d^{s})} > \frac{1}{\lvert D^{s'} \rvert} {\sum_{d^{s'} \in D^{s'}} m(d^{s'})}
+%\end{equation}
+
+%\noindent Assuming a larger $m$ score is better. In the case that $m$ can only be computed on the level of comments, we can average the scores across a discussion to get a discussion-level metric (e.g., average toxicity). In practice, we check whether Equation \ref{eq:strategy_comparison} holds in the presence of randomness and limited samples.
+
+
+\subsection{Evaluating Synthetic Discussions}
+\label{ssec:methodology:diversity}
+
+As discussed in Section~\ref{ssec:related:human-llm}, it may not be epistemologically sound for our goal to be approximating realism. Instead, we should focus on producing discussions that have few pathological problems (such as word repetitions or lack of inter-participant interaction), and feature high content variety, which can help in using the generated discussions as finetuning data \cite{ulmer2024}. 
+
+The “\textit{Diversity}” metric introduced by \citet{ulmer2024} is a viable alternative, for the reasons presented in Section~\ref{ssec:related:quality} (topic-invariant, correlates with high quality finetuning data). Intuitively, the metric penalizes long, repeated sequences between comment pairs in a discussion. It is defined as:
+
+\small
+\begin{equation}
+\label{eq:variety}
+    div(d) = 1- \frac{1}{N(N-1)} \sum_{i=1}^N \sum_{j=1, j \neq i}^N \textit{RLF1}(c(i, d), c(j, d))
+\end{equation}
+\normalsize
+
+\noindent where \textit{RLF1} is the ROUGE-L F1 score\footnote{We use the \href{https://pypi.org/project/rouge-score}{rouge-score} package in our analysis.} \cite{lin-2004-rouge}. 
+
+Low diversity scores point to pathological problems (e.g., \ac{LLM} user-agents repeating the previous comments). Extremely high diversity scores, on the other hand, may point to a lack of interaction between participants, as a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points).%, while discussions where the participants ignore each other will have very high diversity.
+
+For this reason, we compare the distribution of \textit{diversity} scores for synthetic discussions with that measured on sampled human discussions. This comparison allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction, or at the very least, points to pathological problems in our generated data.

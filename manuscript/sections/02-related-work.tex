@@ -1,0 +1,49 @@
+% !TEX root = ../main.tex
+%
+\section{Background}
+
+\subsection{LLMs as human subjects}
+\label{ssec:related:human-llm}
+
+When conducting social experiments with \acp{LLM} instead of human subjects, it is imperative to know how representative results can be. \citet{grossman_2023} argue that synthetic agents have the potential to eventually replace human participants, a perspective shared by other researchers \cite{tornberg_2023, argyle2023}. Indeed, \acp{LLM} have demonstrated emergent behaviors such as information diffusion \cite{Park2023GenerativeAI}, scale-free networks \cite{demarzo_2023}, social behavior (to an extent) \cite{leng_2024}, social strategies \cite{abdelnabi_negotiations}, and certain psychological patterns \cite{abramski_2023}. They are also capable of predicting human survey responses in aggregate \cite{hewitt2024predicting} and in the level of individual people, given extensive personal data \cite{park2024generativeagentsimulations1000}. %If realized, this development could revolutionize Social Sciences by alleviating significant costs and challenges associated with human participation in research \cite{rossi_2024, shapiro2019polling}.
+
+However, significant limitations of \acp{LLM} remain in the context of Social Science experiments. Issues include dataset contamination; undetectable behavioral hallucinations \cite{rossi_2024}; sociodemographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024}, often amplified during discussions \cite{Taubenfeld2024SystematicBI};unreliable survey responses \cite{jansen_2023,bisbee_2023,neumann_2025}; inconsistent annotations \cite{Gligoric2024CanUL}; non-deterministic outputs \cite{atil_2025}, especially in closed-source models \cite{bisbee_2023}; and excessive agreeableness due to alignment procedures \cite{Park2023GenerativeAI, anthis_2025, rossi_2024}. Despite these shortcomings, researchers frequently anthropomorphize \ac{LLM} agents \cite{rossi_2024}, leading to biased interpretations and obscuring the true nature of their behavior \cite{anthis_2025,zhou-etal-2024-real}. Our study must thus be conservative towards the generalizability of our results to discussions with human participants.
+
+
+\subsection{Synthetic Data Quality}
+\label{ssec:related:quality}
+
+Synthetic discussions often degrade rapidly without human interaction, exhibiting repetitive, low-quality content \citep{ulmer2024}. 
+%To address this, we require robust “synthetic quality” metrics that detect such phenomena, rather than realism (Section~\ref{ssec:related:human-llm}). 
+However, research on quantifying data quality is currently limited.
+
+\citet{balog_2024} introduce metrics utilizing comparisons with human data, but this approach depends on datasets with the same topics, and lacks scientific grounding since believable \ac{LLM} outputs do not necessarily lead to behavior simulation \cite{rossi_2024}. Their most generalizable metric—a vague “coherence” score—is \ac{LLM}-annotated without theoretical support. Alternatively, \citet{ulmer2024} propose metrics like N-gram-based \textit{“Diversity”} (Section \ref{ssec:methodology:diversity}), which is topic-agnostic, methodology-independent, and correlates with effective fine-tuning data.
+
+
+\section{Related Work}
+
+\subsection{Synthetic discussions}
+\label{ssec:related:discussions}
+
+%Researchers have explored \ac{LLM} “self-talk” (a term inspired by \acf{RL}'s “self-play” \citep{cheng-self-play}) for jailbreaking mitigation \cite{liu2024largelanguagemodelsagents, cheng-self-play}, alignment \cite{Bai2022ConstitutionalAH, collective_constitution}, and self-refinement \cite{Madaan2023SelfRefineIR, lambert2024}. 
+
+Synthetic discussion systems 
+%are often employed in the context of “digital twins”, which aim to replicate an environment and study its operation using synthetic components (in our case, synthetic participants). These range from 
+include synthetic clones of Reddit \cite{park_simulacra}, Twitter \cite{mou_2024} and social media in general \cite{tornberg_2023, y_social} as well as games \cite{Park2023GenerativeAI} and social experiments \cite{zhou_2024_sotopia}.
+
+Similarly to our work, \citet{balog_2024} introduce a thread-based methodology to produce synthetic discussions by summarizing past comments. However, their method faces challenges when \acp{LLM} generate malformed metadata, for which they offer no solution. Additionally, it does not attempt to model conversational dynamics with a turn-taking function, or the presence of moderators.
+
+\citet{ulmer2024} create synthetic discussions between two participants; an agent (who controls the environment) and a client (who interacts with the agent). They then filter the generated discussions and use them as training data for further finetuning steps. Our proposed methodology can be modelled as a generalization of their paradigm; an agent (moderator) converses with multiple clients (non-moderator users).
+
+Finally, \citet{abdelnabi_negotiations} create synthetic negotiations with multiple agents having various agendas and responsibilities. Our work can be modelled as a domain shift of their methodology; participants with different motivations (i.e., normal users, trolls, long-standing community members), with one stakeholder with veto power (moderator) presiding over the discussion.
+
+
+\subsection{LLM moderation}
+
+%\acp{LLM} have proven capable of detecting toxicity \cite{kang-qian-2024-implanting, Wang2022ToxicityDW}, hate-speech \cite{Nirmal2024TowardsIH, shi-2024-hatespeech}, and misinformation \cite{Liu2024DetectIJ, Xu2024ACS}. 
+Unlike traditional \ac{ML} models, \acp{LLM} can actively facilitate discussions \cite{korre2025evaluation}. They can warn users for rule violations \cite{Kumar_AbuHashem_Durumeric_2024}, monitor engagement \cite{schroeder-etal-2024-fora}, aggregate diverse opinions \cite{small-polis-llm} and provide translations and writing tips (which is especially useful for marginalized groups) \cite{Tsai2024Generative}. These capabilities suggest that \acp{LLM} can replace human facilitators in many tasks \cite{seering_self_moderation}.
+%\citet{small-polis-llm} suggest that \acp{LLM} can start discussions by generating initial opinions, although traditional Information Retrieval methods outperform \acp{LLM}. \cite{karadzhov2023delidata}, and some guidelines explicitly prohibit facilitators from performing these tasks \cite{dimitra-book}. 
+
+%TODO: kim approach
+Moderator chatbots have shown promise; \citet{kim_et_al_chatbot} demonstrated that simple rule-based models can enhance discussions, although their approach was largely confined to monitoring and balancing user activity. \citet{cho-etal-2024-language} use \ac{LLM} facilitators in human discussions, with moderation strategies based on Cognitive Behavioral Therapy and the work of \citet{rosenberg2015nonviolent}. They show that \ac{LLM} facilitators can provide “specific and fair feedback” to users, although they struggle to make users more respectful and cooperative.  In contrast to both, our work uses exclusively \ac{LLM} participants, tests them in an explicitly toxic and challenging environment, and focuses specifically on current facilitation literature.
+%Finally, \citet{dtsirmpas_thesis} use \ac{LLM} facilitators in synthetic discussions and investigate the use of \ac{LLM} annotator-agents for discussion evaluation.
