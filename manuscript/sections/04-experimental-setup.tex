@@ -51,16 +51,7 @@ Following the paradigm presented by \citet{abdelnabi_negotiations}, we assign ro
 
 Finally, we select a user instruction prompt (\S\ref{sssec:appendix:actors}) which balances breaking out of overly polite \ac{LLM} behavior while avoiding as much as possible injecting our own biases and expectations in synthetic interactions. In particular, we remind the participants that repeatedly toxic posts \emph{should} influence their behavior. 
 
-
-\subsection{Human-Centric Discussion Metrics}
-\label{ssec:experimental:metrics}
-
-Besides metrics for the quality of synthetic data (\S\ref{ssec:related:quality}, \S\ref{ssec:methodology:diversity}), we also need metrics that can quantify how ``well'' a discussion is going from the point of view of the participants, or outside users reading the discussion. We define two objectives for monitoring discussion quality in this work: comments should not be toxic, and the arguments used should be of high quality. 
-
-Prompting \acp{LLM} for toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, while toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}.\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.} \ac{AQ} on the other hand, is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, \ac{AQ} can be a vague term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. 
-%Details on synthetic annotation can be found in Appendix~\ref{ssec:appendix:annotation}.
-
-We use ten \ac{LLM} annotator-agents using the LLaMa3.1 70B model quantized to 4 bits, whose prompts include \acp{SDB}, annotation instructions and few-shot examples for both toxicity and \ac{AQ} \S\ref{ssec:appendix:annotation}. Each annotator is tasked with annotating all comments in each discussion once.
+We use ten \ac{LLM} annotator-agents using a model already used in prior work concerning toxicity annotation (LLaMa3.1 70B) \cite{kang-qian-2024-implanting}. Each annotator's prompt includes \acp{SDB} distinct from the ones provided to the users, annotation instructions, and few-shot examples (\S\ref{ssec:appendix:annotation}). Each annotator is tasked with annotating all comments in each discussion once.
 
 
 \subsection{Setup}

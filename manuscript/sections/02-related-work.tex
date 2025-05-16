@@ -12,14 +12,12 @@ However, significant limitations of \acp{LLM} remain in the context of Social Sc
 We stress that we propose and investigate synthetic discussions as a means of preliminarly “debugging” and exploring artificial facilitators (e.g., with different facilitation strategies) in silico, before testing them in much more costly experiments with human participants. For example, synthetic experiments may help illustrate a clear risk or disadvantage of a particular facilitation strategy, that may be otherwise difficult to foresee. Experiments with real participants, however, are ultimately needed, and we leave them for future work.
 
 
-\subsection{Synthetic Data Quality}
+\subsection{Evaluating Discussion Quality}
 \label{ssec:related:quality}
 
-Synthetic discussions often degrade rapidly without human interaction, exhibiting repetitive, low-quality content \citep{ulmer2024}. 
-%To address this, we require robust “synthetic quality” metrics that detect such phenomena, rather than realism (Section~\ref{ssec:related:human-llm}). 
-However, research on quantifying data quality is currently limited.
+Synthetic discussions often degrade rapidly without human interaction, exhibiting repetitive, low-quality content \citep{ulmer2024}. However, research on quantifying synthetic data quality is currently limited. \citet{balog_2024} introduce metrics utilizing comparisons with human data, but this approach depends on datasets with the same topics, and lacks scientific grounding since believable \ac{LLM} outputs do not necessarily lead to behavior simulation \cite{rossi_2024}. Their most generalizable metric—a vague “coherence” score—is \ac{LLM}-annotated without theoretical support. Alternatively, \citet{ulmer2024} propose metrics like N-gram-based \textit{“Diversity”} (Section \ref{ssec:methodology:diversity}), which is topic-agnostic, methodology-independent, and correlates with effective fine-tuning data.
 
-\citet{balog_2024} introduce metrics utilizing comparisons with human data, but this approach depends on datasets with the same topics, and lacks scientific grounding since believable \ac{LLM} outputs do not necessarily lead to behavior simulation \cite{rossi_2024}. Their most generalizable metric—a vague “coherence” score—is \ac{LLM}-annotated without theoretical support. Alternatively, \citet{ulmer2024} propose metrics like N-gram-based \textit{“Diversity”} (Section \ref{ssec:methodology:diversity}), which is topic-agnostic, methodology-independent, and correlates with effective fine-tuning data.
+Besides metrics for the quality of synthetic data, we also need metrics that can quantify how ``well'' a discussion is going from the point of view of the participants, or outside users reading the discussion. We choose Toxicity for two primary reasons: Prompting \acp{LLM} for toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, and toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}.\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.} 
 
 
 \subsection{Synthetic Discussions}
