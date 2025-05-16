@@ -4,7 +4,7 @@
 \section{Methodology}
 \label{sec:methodology}
 
-\subsection{Defining synthetic discussions}
+\subsection{Defining Synthetic Discussions}
 \label{ssec:methodology:discussions}
 
 %Let $U$ be the set of (non moderator) user-agents participating in discussions and $M$ the set of moderators, ($M \cap U = \emptyset$). We define a discussion $d$ as an ordered set of comments\footnote{Also referred to as “dialogue turns” in some publications.} $d = \{c(d, 1), c(d, 2), \ldots\}$.
@@ -62,4 +62,4 @@ The “\textit{Diversity}” metric introduced by \citet{ulmer2024} is a viable 
 
 Low diversity scores point to pathological problems (e.g., \ac{LLM} user-agents repeating the previous comments). Extremely high diversity scores, on the other hand, may point to a lack of interaction between participants, as a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants).%, while discussions where the participants ignore each other will have very high diversity.
 
-For this reason, we compare the distribution of \textit{diversity} scores for synthetic discussions with that measured on sampled human discussions. This comparison allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction, or at the very least, points to pathological problems in our generated data.
+For this reason, we compare the distribution of \textit{diversity} scores for synthetic discussions with that measured on sampled human discussions. This comparison allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction, or at the very least, points to pathological problems in our generated data. As mentioned in \S\ref{ssec:related:quality}, research around such metrics is extremely limited, thus the use of only one metric presents a limitation of our work.

@@ -7,57 +7,64 @@
 We test four different facilitation strategies,\footnote{The exact prompts used per strategy are in \S\ref{sssec:appendix:moderation_strategies}.} along with two naive ones that serve as baselines for discussion facilitation:
 
 \begin{enumerate}[nosep, noitemsep]
-    \item \textbf{No Moderator (NM)}: A \emph{baseline} where no moderator is present.
+    \item \textbf{No Moderator}: A \emph{baseline} where no facilitator is present.
 
-    \item \textbf{No Instructions (NI)}: A \emph{baseline} where a \ac{LLM} moderator is active, but is provided only with basic instructions (e.g., “You are a moderator, keep the discussion civil”).
+    \item \textbf{No Instructions}: A \emph{baseline} where a \ac{LLM} facilitator is present, but is provided only with basic instructions (e.g., “You are a moderator, keep the discussion civil”).
 
-     \item \textbf{Moderation Game (MGa)}: Our own proposed \emph{experimental} strategy, inspired by the experiments of \citet{abdelnabi_negotiations}. Basic instructions are formulated as a scorable, non-zero-sum game, where the moderator tries to maximize their scores by avoiding certain actions and arriving at specific outcomes (e.g., “User is toxic: $-5$ points, User corrects behavior: $+10$ points”). No actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. The participants are not provided with scores.
+     \item \textbf{Moderation Game}: Our own proposed \emph{experimental} strategy, inspired by the experiments of \citet{abdelnabi_negotiations} (\S\ref{ssec:related:discussions}). Basic instructions are formulated as a scorable game the facilitator plays, where they try to maximize their scores by avoiding certain actions and arriving at specific outcomes (e.g., “User is toxic: $-5$ points, User corrects behavior: $+10$ points”). No actual score is being kept; the scores only exist to act as indications for how desirable an action or outcome is. The other participants are not provided with scores, nor are they aware of the game rules.
 
-    \item \textbf{Rules Only (RO)}: A \emph{real-life} strategy where the prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the moderator with a set of rules to uphold, without specifying how to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”).
+    \item \textbf{Rules Only}: A \emph{real-life} strategy where the prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the facilitator with a set of rules to uphold, without specifying how to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”).
 
-    \item \textbf{Moderation Guidelines (MGu)}: A \emph{real-life} strategy based on guidelines given to human moderators of \ac{CeRI} \citep{Cornell_eRulemaking2017} (e.g., “Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments”). %These moderators were deployed to the “Regulation Room”, an online platform designed to facilitate public engagement with U.S. government policy decisions, which has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
+    \item \textbf{Moderation guidelines}: A \emph{real-life} strategy based on guidelines given to human facilitators of \ac{CeRI} \citep{Cornell_eRulemaking2017}. For example, “Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments”). %These facilitators were deployed to the “Regulation Room”, an online platform designed to facilitate public engagement with U.S. government policy decisions, which has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
 
-    \item \textbf{Facilitation Guidelines (FG)}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book} (e.g., “Do not make decisions, be a guide, provide explanations”). %It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
+    \item \textbf{Facilitation guidelines}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. For example, “Do not make decisions, be a guide, provide explanations”). %It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
 \end{enumerate}
 
 
-\subsection{Turn taking}
+\subsection{Turn Taking}
 \label{ssec:experimental:turn}
 
-In online discussions, users don't respond to comments uniformly, instead often creating ``comment chains'' where they follow up on responses to their previous comments. To simulate this, our proposed algorithm chooses between the preceding user and another random user for each turn in the discussion:
+In online discussions, users do not take turns uniformly, nor do they randomly select which comments to respond to. Instead, they often create ``comment chains'' where they follow up on responses to their own previous comments. To simulate this, our proposed algorithm chooses between the preceding user and another random user for each turn in the discussion:
+
 \small
 \begin{equation}
 \label{eq:turn_taking}
     t(i) = \left\{
 \begin{array}{ll}
-    \textit{unif}(U) & i=0, i=1\\
-    \textit{unif}(U/\{t(i-1)\}) & i \neq 0, p=0.6 \\
-    t(i-2) & i > 1, p=0.4 
+    \textit{unif}(U) & i=1, i=2\\
+    \textit{unif}(U/\{t(i-1)\}) & i > 2, p=0.6 \\
+    t(i-2) & i > 2, p=0.4 
 \end{array} 
 \right.
 \end{equation}
 \normalsize
 
-\noindent where $U$ is the set of all non-moderator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the option being selected. When a moderator is present, $t$ alternates between picking a normal user and the moderator.
+\noindent where $U$ is the set of all non-facilitator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the corresponding option being selected. When a facilitator is present, $t$ alternates between picking a normal user and the facilitator (the latter decides whether to respond to or not---the \ac{LLM} producing an empty string is equivalent to not responding).
 
 
 \subsection{Prompting}
 \label{ssec:experimental:prompts}
 
-\acp{SDB} have proven promising in generating varied responses, and alleviating the Western bias exhibited by \acp{LLM} \cite{burton2024large}. We generate 30 \ac{LLM} user personas with unique \acp{SDB} using a GPT-4 model \cite{openai2024gpt4technicalreport} (\S\ref{sssec:appendix:sdbs}). We do not explicitly encode political positions in our agents' prompts, since instruction-tuned \acp{LLM} have been shown to be inherently left-leaning, and research in the field has predominantly occupied Western politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. %In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs.
+\acfp{SDB} have proven promising in generating varied responses, and alleviating the Western bias exhibited by \acp{LLM} \cite{burton2024large}. We generate characteristics for 30 \ac{LLM} user personas with unique \acp{SDB} by prompting a GPT-4 model \cite{openai2024gpt4technicalreport} (\S\ref{sssec:appendix:sdbs}). We do not explicitly include political positions in the prompts of the participants, since instruction-tuned \acp{LLM} have been shown to be inherently left-leaning---which can not be alleviated with including other political views in the prompt \cite{Taubenfeld2024SystematicBI}---and research in the field has predominantly occupied Western politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. %In the interest of keeping our methodology generalizable, we let our \ac{LLM} agents implicitly select their own political beliefs.
 
-Following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-moderator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (\S\ref{sssec:appendix:roles}). We create three types of users: neutral, trolls, and community-focused users. Finally, we select a user instruction prompt (\S\ref{sssec:appendix:actors}) which balances breaking out of overly polite \ac{LLM} behavior while avoiding as much as possible injecting our own biases and expectations in synthetic interactions. 
+Following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (\S\ref{sssec:appendix:roles}). We create three roles for users: neutral, trolls, and community-focused users. 
+
+Finally, we select a user instruction prompt (\S\ref{sssec:appendix:actors}) which balances breaking out of overly polite \ac{LLM} behavior while avoiding as much as possible injecting our own biases and expectations in synthetic interactions. In particular, we remind the participants that repeatedly toxic posts \emph{should} influence their behavior. 
 
 
-\subsection{Discussion Quality Metrics}
+\subsection{Human-Centric Discussion Metrics}
 \label{ssec:experimental:metrics}
 
-We define two objectives for monitoring the discussion quality in this work: comments should not be toxic, and the arguments used should be of high quality. \ac{LLM}—based toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, while toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}.\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.} 
-\ac{AQ} on the other hand, is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, \ac{AQ} can be a vague term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. 
+Besides metrics for the quality of synthetic data (\S\ref{ssec:related:quality}, \S\ref{ssec:methodology:diversity}), we also need metrics that can quantify how ``well'' a discussion is going from the point of view of the participants, or outside users reading the discussion. We define two objectives for monitoring discussion quality in this work: comments should not be toxic, and the arguments used should be of high quality. 
+
+Prompting \acp{LLM} for toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, while toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}.\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.} \ac{AQ} on the other hand, is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, \ac{AQ} can be a vague term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. 
 %Details on synthetic annotation can be found in Appendix~\ref{ssec:appendix:annotation}.
+
+We use ten \ac{LLM} annotator-agents using the LLaMa3.1 70B model quantized to 4 bits, whose prompts include \acp{SDB}, annotation instructions and few-shot examples for both toxicity and \ac{AQ} \S\ref{ssec:appendix:annotation}. Each annotator is tasked with annotating all comments in each discussion once.
+
 
 \subsection{Setup}
 \label{ssec:experimental:setup}
 
-We use three open-source models from different families: LLaMa 3.2 (70B), Qwen2.5 (33B) and Mistral Nemo (12B). We select the instruction-tuned variants and quantize them to 4 bits. The original and ablation experiments were collectively completed within roughly four weeks of computational time, using two Quadro RTX 6000 GPUs. The execution script is available in the project's repository\analysislink. The automated discussion generation is detailed in \S\ref{ssec:appendix:discussion}.
+We use three open-source models (in Eq~\ref{eq:comment}) from different families and of different sizes: LLaMa 3.2 (70B), Qwen2.5 (33B) and Mistral Nemo (12B). We select the instruction-tuned variants and quantize them to 4 bits, due to our limited resources. The original and ablation experiments were collectively completed within roughly four weeks of computational time, using two Quadro RTX 6000 GPUs. The execution script is available in the project's repository\analysislink. The automated discussion generation is detailed in \S\ref{ssec:appendix:discussion}.
 
