@@ -8,15 +8,20 @@ We test four different facilitation strategies,\footnote{The exact prompts used 
 
 \begin{enumerate}[nosep, noitemsep]
     \item \textbf{No Moderator}: A \emph{baseline} where no facilitator is present.
+    \item \textbf{No Moderator}: A \emph{baseline} where no facilitator is present.
 
+    \item \textbf{No Instructions}: A \emph{baseline} where a \ac{LLM} facilitator is present, but is provided only with basic instructions (e.g., “You are a moderator, keep the discussion civil”).
     \item \textbf{No Instructions}: A \emph{baseline} where a \ac{LLM} facilitator is present, but is provided only with basic instructions (e.g., “You are a moderator, keep the discussion civil”).
 
      \item \textbf{Moderation Game}: Our proposed \emph{experimental} strategy, inspired by  \citet{abdelnabi_negotiations} (\S\ref{ssec:related:discussions}). Instructions are formulated as a game, where the facilitator tries to maximize their scores by arriving at specific outcomes (e.g., “User is toxic: $-5$ points, User corrects behavior: $+10$ points”). No actual score is being kept; they exist to act as indications for how desirable an action or outcome is. The other participants are not provided with scores, nor are they aware of the game rules.
 
     \item \textbf{Rules Only}: A \emph{real-life} strategy where the prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the facilitator with a set of rules to uphold, without specifying how to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”).
+    \item \textbf{Rules Only}: A \emph{real-life} strategy where the prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the facilitator with a set of rules to uphold, without specifying how to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”).
 
     \item \textbf{Moderation guidelines}: A \emph{real-life} strategy based on guidelines given to human facilitators of \ac{CeRI} \citep{Cornell_eRulemaking2017}. For example, “Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments”). %These facilitators were deployed to the “Regulation Room”, an online platform designed to facilitate public engagement with U.S. government policy decisions, which has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
+    \item \textbf{Moderation guidelines}: A \emph{real-life} strategy based on guidelines given to human facilitators of \ac{CeRI} \citep{Cornell_eRulemaking2017}. For example, “Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments”). %These facilitators were deployed to the “Regulation Room”, an online platform designed to facilitate public engagement with U.S. government policy decisions, which has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}.
 
+    \item \textbf{Facilitation guidelines}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. For example, “Do not make decisions, be a guide, provide explanations”). %It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
     \item \textbf{Facilitation guidelines}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. For example, “Do not make decisions, be a guide, provide explanations”). %It approaches moderation from a more personalized and facilitative angle, rather than the more strict and discipline-focused guidelines of the former.
 \end{enumerate}
 
