@@ -249,19 +249,19 @@ def disagreement_plot(
     # a facet grid for some reason
     merged_df = merged_df.rename(columns={"annotator": "Annotator SDB"})
 
-    ax = sns.displot(
+    plot = sns.histplot(
         data=merged_df,
         x=stat_col,
         hue="Annotator SDB",
         common_norm=False,
-        stat="density",
         multiple="dodge",
         bins=10,
     )
     plt.title(title)
     plt.xlim(0, 1)
     plt.xlabel("nDFU")
-    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.68, 0.5))
+    plot.get_legend().set_title(None)
+    #sns.move_legend(plot, loc="center right", bbox_to_anchor=(0.68, 0.5))
 
 
 def polarization_plot(df, metric_col: str):
