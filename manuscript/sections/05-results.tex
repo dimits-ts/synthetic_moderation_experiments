@@ -41,22 +41,22 @@
 	\small
 	\asterisknote
 	\normalsize
-	\caption{\ac{OLS} regression coefficients for Toxicity ($Adj. R^2=0.054$). \textit{“Time”} denotes dialogue turn, reference factor is \textit{“No moderator”}.}
+	\caption{\ac{OLS} regression coefficients for Toxicity ($Adj. R^2=0.054$). \textit{“Time”} denotes dialogue turn, reference factor is \textit{“No facilitator”}.}
 	\label{tab:toxicity}
 \end{table}
 
 \paragraph{Sophisticated facilitation strategies however do not qualitatively further improve synthetic discussions.} The impact of the ``Rules Only'', ``Moderation Guidelines'' and ``Facilitation Guidelines''  strategies (\S\ref{ssec:experimental:strategies}) is marginal, and sometimes even not statistically significant compared to the second baseline (``No Instructions'') (Fig.~\ref{fig:toxicity_stats}). This suggests that out-of-the-box \acp{LLM} may be unable to effectively use advanced instructions, verifying important limitations in \ac{LLM} facilitators \cite{cho-etal-2024-language}.
 
-\paragraph{\ac{LLM} facilitators choose to intervene far too frequently.} Fig.~\ref{fig:intervention_count} demonstrates that \ac{LLM} facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-agents exhibit atypical tolerance for excessive moderator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \cite{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}.
+\paragraph{\ac{LLM} facilitators choose to intervene far too frequently.} Fig.~\ref{fig:intervention_count} demonstrates that \ac{LLM} facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \cite{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}.
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\columnwidth]{intervention_count.png}
-	\caption{Histogram of interventions by \ac{LLM} moderators. The maximum number of interventions is $14$.}
+	\caption{Histogram of interventions by \ac{LLM} facilitators. The maximum number of interventions is $14$.}
 	\label{fig:intervention_count}
 \end{figure}
 
-\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned \acp{LLM}.} Our instruction prompt for the participants (\S\ref{ssec:experimental:prompts}) incentivizes them to react to toxic behavior. Indeed, discussions involving “Troll” user-agents, led to increased toxicity among \emph{other} participants, even when moderated under the “No Instructions” strategy (Blue, bottom bars in Fig.~\ref{fig:toxicity_trolls}, Student's t-test, $p < .000$). This effect diminishes when we remove these instructions (orange, top bars in Fig.~\ref{fig:toxicity_trolls}).
+\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned \acp{LLM}.} Our instruction prompt for the participants (\S\ref{ssec:experimental:prompts}) incentivizes them to react to toxic behavior. Indeed, discussions involving “Troll” user-agents, led to increased toxicity among \emph{other} participants, even under the ``No Instructions'' strategy (Blue, bottom bars in Fig.~\ref{fig:toxicity_trolls}, Student's t-test, $p < .000$). This effect diminishes when we remove these instructions (orange, top bars in Fig.~\ref{fig:toxicity_trolls}).
 
 \begin{figure}[t]
     \centering
@@ -122,7 +122,7 @@ We generated eight synthetic discussions per ablation experiment, using a single
 \subsubsection{Effects of LLMs}
 
 \paragraph{Mistral and Qwen generate discussions more aligned with human diversity scores, despite being significantly smaller than the LLaMa model.} As is shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
-LLaMa's lower diversity validates prior research suggesting that highly aligned \acp{LLM} struggle to replicate human dynamics \cite{Park2023GenerativeAI, leng_2024}. Alternatively, it can be partially attributed to its longer average comment length (Fig.~\ref{fig:comment_length_model}); we find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions ($Student's t-test p < .000$), although we can not verify this pattern in human-generated texts ($p = 0.775$).
+LLaMa's lower diversity validates prior research suggesting that highly aligned \acp{LLM} struggle to replicate human dynamics \cite{Park2023GenerativeAI, leng_2024}. Alternatively, it can be partially attributed to its longer average comment length (Fig.~\ref{fig:comment_length_model}); we find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we can not verify this pattern in human-generated texts ($p = 0.775$).
 
 
 \subsubsection{Effects of Turn-Taking Functions}
@@ -132,6 +132,6 @@ LLaMa's lower diversity validates prior research suggesting that highly aligned 
 
 \subsubsection{Effects of User Prompting}
 
-We conduct three separate experiments in which user-agents (excluding moderators) are subjected to one of the following conditions at a time: (1) no assigned \acp{SDB}, (2) no assigned roles, or (3) only a basic instruction prompt given (\S\ref{sssec:appendix:actors}). 
+We conduct three separate experiments in which user-agents (excluding facilitators) are subjected to one of the following conditions at a time: (1) no assigned \acp{SDB}, (2) no assigned roles, or (3) only a basic instruction prompt given (\S\ref{sssec:appendix:actors}). 
 
 \paragraph{\acp{SDB}, roles and our instruction prompt increase the quality of synthetic data.} Fig.~\ref{fig:rougel_prompts} illustrates that although our proposed methodology---incorporating \acp{SDB}, roles, and specialized instruction prompts---does not achieve discussions with diversity scores comparable to human ones, replacing any of the above results in a notable deterioration. For instance, omitting \acp{SDB} (denoted as ``No \acp{SDB}'' and represented by the red distribution in Fig.~\ref{fig:rougel_prompts}) causes the majority of discussions to exhibit maximum diversity---one---indicating a significant loss in participant interaction, which is not caused by longer comment length (Fig.~\ref{fig:comment_length_prompts}). This decline is analogous to the effects observed when modifying the turn-taking function. Also similarly to the turn-taking ablation study, our proposed methodology w.r.t. prompts, features comments that best emulate observed human comment length (Fig.~\ref{fig:comment_length_prompts}).
