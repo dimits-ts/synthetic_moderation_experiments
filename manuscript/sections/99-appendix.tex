@@ -18,6 +18,7 @@
     %\acro{NLP}{Natural Language Processing}
     \acro{CeRI}{Cornell e-Rulemaking Initiative}
     \acro{nDFU}{normalized Distance From Unimodality}
+    \acro{OLS}{Ordinary Least Squares}
 \end{acronym}
 
 
@@ -56,25 +57,26 @@ An overview of how the experiments are generated can be found in Algorithm~\ref{
 \end{algorithmic}
 \end{algorithm}
 
+
 \subsection{Synthetic Annotation}
 \label{ssec:appendix:annotation}
 
 \subsubsection{Annotation Procedure}
 
-In order to annotate the generated discussions, we create $10$ \ac{LLM} annotator-agents, each with unique \ac{SDB} information, in the same manner as the \ac{LLM} user-agents used in the synthetic discussions. Unlike the latter, the annotator-agents are not provided with usernames (so they don't overlap with user-agent names). The annotators all get the same instruction prompt (see \S\ref{sssec:appendix:actors}).
+In order to annotate the generated discussions, we prompt a GPT-4 model \cite{openai2024gpt4technicalreport} to generate $10$ \ac{LLM} annotator-agents, each with unique \ac{SDB} information, in the same manner as the \ac{LLM} user-agents used in the synthetic discussions. Unlike the latter, the annotator-agents are not provided with usernames (to avoid overlap with user-agent names). The annotators all get the same instruction prompt (see \S\ref{sssec:appendix:actors}).
 
 In many annotation tasks involving humans, a datapoint is annotated only by a subset of annotators. This is usually caused by human annotation being expensive and hard to scale. Since \acp{LLM} are comparatively cheaper and more easily scalable, we choose not to sample annotator-agents. We use the LLaMa-3.1-70b model exclusively for the synthetic annotation of the dataset, since it has been proven reliable for toxicity annotation \cite{koh-etal-2024-llms}. 
 
 
 \subsubsection{Validating the LLM annotations}
 
-In this section, we examine the properties of \ac{LLM} annotations. Although not central to our study, investigating these annotations' characteristics is necessary to ensure the robustness of our results.
+In this section, we examine the properties of \ac{LLM} annotations, since it is necessary to ensure the robustness of our results.
 
-A key dimension for exploring annotations is annoator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies annotation polarization among N annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization). A compelling feature of this metric is that, unlike traditional metrics such as Cohen's Kappa, \ac{nDFU} is designed for multi-annotator settings. 
+A key dimension for exploring annotations is annoator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies annotation polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization). %A compelling feature of this metric is that, unlike traditional metrics such as Cohen's Kappa, \ac{nDFU} is designed for multi-annotator settings. 
 
-Our analysis reveals a positive correlation between toxicity and annotator polarization: while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity increases ($nDFU_{toxicity} = 0.1206 \times toxicity, p < .000, Adj R^2=0.224$). This phenomenon does not manifest in the \ac{AQ} scores (Fig.~\ref{fig:ndfu_annot}). 
+Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the \ac{AQ} scores. 
 
-To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we ran $10$ annotator-agents on a subset of comments with the same annotator model, annotator instruction prompt, and no \acp{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
+To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we ran an experiment where we use $10$ annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no \acp{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
 
 
 \begin{figure*}[t]
@@ -89,9 +91,57 @@ To mitigate the instability inherent in \ac{LLM} outputs—even when given ident
     \includegraphics[width=0.45\linewidth]{ndfu_toxicity.png} \hfill
     \includegraphics[width=0.45\linewidth]{ndfu_aq.png}
 	\centering
-	\caption{Inter-annotator polarization (\ac{nDFU}) of each synthetic comment for all synthetic discussions, by annotation level. Left graph shows the relationship between $nDFU_{toxicity}$ and toxicity, while the right graph shows the relationship between $nDFU_{arg\_quality}$ and \ac{AQ}.}
+	\caption{Inter-annotator polarization (\ac{nDFU}) of each synthetic comment for all synthetic discussions, by annotation level. The left graph shows the relationship between $nDFU_{toxicity}$ and toxicity, while the right graph shows the relationship between $nDFU_{arg\_quality}$ and \ac{AQ}.}
     \label{fig:ndfu_annot}
 \end{figure*}
+
+
+\subsubsection{Investigating Argument Quality}
+
+While toxicity is a reliable and important metric, we can investigate other discussion quality dimensions, such as \ac{AQ}. \ac{AQ} is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, \ac{AQ} can be a vague term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}.
+
+Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} demonstrates that the presence of an \ac{LLM} facilitator qualitatively improves the \ac{AQ} of synthetic discussions, although to a lesser extent when compared with toxicity (Fig.~\ref{fig:toxicity_stats}). Similarly, there is no qualitative, observed improvement when advanced facilitation strategies are used (Fig.~\ref{fig:aq_stats}), and \ac{LLM} users show decreased \ac{AQ} in the presence of trolls, when we use our specialized instruction prompt. Contrary to toxicity, the presence of \ac{LLM} facilitators does not seem to increase \ac{AQ} over time, as demonstrated in Table~\ref{tab:argq}.
+
+\begin{figure}[t]
+    \includegraphics[width=\linewidth]{resources/argumentq_stats.png}
+	\centering
+	\caption{Mean difference of \ac{AQ} between pairs of facilitation strategies. When the value of a cell at row $i$ and column $j$ is $x$, strategy $i$ leads to overall worse (negative values) or better (positive values) \ac{AQ} compared to $j$ for an average of $x$ points in a scale of $1-5$. For each comparison, we use a pairwise Student t-test; p-values are shown as asterisks (\asterisknote).}
+	\label{fig:aq_stats}
+\end{figure}
+
+\begin{table}[t]
+\centering
+    \begin{tabular}{l p{3cm}}
+        \toprule
+        \textbf{Variable} & \textbf{Arg.Q.} \\
+        \midrule
+        Intercept & 2.113\textsuperscript{***} \\
+        Fac. Guid. & -0.007 \\
+        Mod. Guid. & -0.107\textsuperscript{*} \\
+        RL Game & -0.282\textsuperscript{***} \\
+        No Instructions & -0.213\textsuperscript{***} \\
+        Rules Only & -0.305\textsuperscript{***} \\
+        time & -0.012\textsuperscript{**} \\
+        Fac. Guid$\times$time & -0.024\textsuperscript{***} \\
+        Mod. Guid$\times$time & -0.011\textsuperscript{*} \\
+        RL Game$\times$time & 0.003 \\
+        No Instructions$\times$time & 0.003 \\
+        Rules Only$\times$time & -0.002 \\
+        \bottomrule
+    \end{tabular}
+    \small
+    \asterisknote
+    \normalsize
+    \caption{\ac{OLS} regression coefficients for Arg.Q. ($Adj. R^2=0.016$). \textit{“Time”} denotes dialogue turn, reference factor is \textit{“No moderator”}.}
+    \label{tab:argq}
+\end{table}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.8\linewidth]{toxicity_aq.png}
+    \caption{Relative differences in number of annotations per \ac{AQ} of synthetic discussions, when comments by troll users are excluded. We compare between our specialized and a basic instruction prompt.}
+    \label{fig:aq_trolls}
+\end{figure}
 
 
 
@@ -129,13 +179,12 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
 \label{sssec:appendix:actors}
 
 \begin{itemize}
-    \item \textbf{Users \& Moderator}:  You are a human participating in an online chatroom.
     
-    \item \textbf{Moderators}: You are a moderator. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username. You may take disciplinary action (e.g. banning a user) if you feel it's absolutely necessary.
+    \item \textbf{Moderators}: You are a human participating in an online chatroom. You are a moderator. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username. You may take disciplinary action (e.g. banning a user) if you feel it's absolutely necessary.
     
-    \item \textbf{Users}: You are a human in a forum. Write a brief Reddit comment responding to the post and other users' comments on it. Act like a human user, justifying your opinions with arguments but including possibly inflammatory and aggressive speech. You may feel provoked by other users during the conversation. Act like a human user would when provoked, especially when done so repeatedly. Do not repeat yourself. Respond to users by referring to their username as @username. Remain silent if you don't want to comment. Write an empty string when not responding to the conversation.
+    \item \textbf{Users}: You are a human participating in an online chatroom. Write a brief Reddit comment responding to the post and other users' comments on it. Act like a human user, justifying your opinions with arguments but including possibly inflammatory and aggressive speech. You may feel provoked by other users during the conversation. Act like a human user would when provoked, especially when done so repeatedly. Do not repeat yourself. Respond to users by referring to their username as @username. Remain silent if you don't want to comment. Write an empty string when not responding to the conversation.
 
-    \item \textbf{Users (ablation)}:  You are a human in an online forum. Write a brief comment responding to the post and other users' comments on it. Respond to users by referring to their username as @username. Respond in English
+    \item \textbf{Users (\S\ref{ssec:results:ablation} ablation)}:  You are a human in an online forum. Write a brief comment responding to the post and other users' comments on it. Respond to users by referring to their username as @username. Respond in English
 
     \item \textbf{Annotators}: You are tasked with annotating the conversation's toxicity and argument quality as it continues. 
     \textbf{Toxicity:} 
