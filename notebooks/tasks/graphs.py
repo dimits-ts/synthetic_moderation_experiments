@@ -85,10 +85,10 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
     plt.yticks(np.arange(1, 6, 1))
     plt.ylabel(f"{feature} level")
     plt.xlabel(
-        "Relative diff. of #annotations\n(Trolls - No Trolls in discussion)",
+        "rel.diff.(#Ann. w/Trolls - #Ann. wo/Trolls)",
         fontsize=16,
     )
-    plt.title(f"Impact of trolls on other users")
+    plt.title("Impact of trolls on other users")
     plt.legend(title="Instructions", loc="upper left")
 
 
