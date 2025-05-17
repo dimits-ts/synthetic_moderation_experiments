@@ -15,10 +15,6 @@
 
 \paragraph{\ac{LLM} facilitators choose to intervene far too frequently.} Fig.~\ref{fig:intervention_count} demonstrates that \ac{LLM} facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-agents exhibit atypical tolerance for excessive moderator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \cite{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}.
 
-\paragraph{Mistral and Qwen generate discussions more aligned with human diversity scores, despite being significantly smaller than the LLaMa model.} As is shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
-%Notably, Mistral produced the most human-like comment lengths (Fig.~\ref{fig:comment_length_model}). 
-LLaMa's lower diversity validates prior research suggesting that highly aligned \acp{LLM} struggle to replicate human dynamics \cite{Park2023GenerativeAI, leng_2024}. Alternatively, it can also be attributed to its longer average comment length (Fig.~\ref{fig:comment_length_model}); we find that there is a statistically significant negative correlation between comment length and diversity in synthetic discussions ($p < .000$), although we can not verify this pattern in human-generated texts ($p = 0.775$). Despite these differences, the performance gaps between models are relatively small; notably, smaller models like Mistral generate synthetic data of comparable quality to that produced by larger models such as Qwen and LLaMa.
-
 \paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned \acp{LLM}.} Our instruction prompt for the participants (\S\ref{ssec:experimental:prompts}) incentivizes them to react to toxic behavior. Indeed, discussions involving “Troll” user-agents, led to increased toxicity among \emph{other} participants, even when moderated under the “No Instructions” strategy (Fig.~\ref{fig:toxicity_trolls}, Student's t-test, $p < .000$). This effect diminishes when we remove these instructions (Fig.~\ref{fig:toxicity_trolls}).
 
 \begin{figure}[t]
@@ -120,6 +116,13 @@ LLaMa's lower diversity validates prior research suggesting that highly aligned 
 
 
 In order to assess the impact of each component of our proposed methodology, we generated eight synthetic discussions per ablation experiment, using a single model, Qwen, to limit computational cost. We evaluated the diversity of these generated ablated discussions by comparing their diversity scores (cf. \S\ref{ssec:related:quality}) with i) discussions in our original dataset produced solely by the Qwen model; and ii) human discussions from the \ac{CeRI} “Regulation Room” dataset\footnote{\url{http://archive.regulationroom.org} Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the \ac{CeRI}}, which includes moderated online deliberative discussions for ten diverse topics.
+
+
+\subsubsection{Effects of LLMs}
+
+\paragraph{Mistral and Qwen generate discussions more aligned with human diversity scores, despite being significantly smaller than the LLaMa model.} As is shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
+%Notably, Mistral produced the most human-like comment lengths (Fig.~\ref{fig:comment_length_model}). 
+LLaMa's lower diversity validates prior research suggesting that highly aligned \acp{LLM} struggle to replicate human dynamics \cite{Park2023GenerativeAI, leng_2024}. Alternatively, it can also be attributed to its longer average comment length (Fig.~\ref{fig:comment_length_model}); we find that there is a statistically significant negative correlation between comment length and diversity in synthetic discussions ($p < .000$), although we can not verify this pattern in human-generated texts ($p = 0.775$). Despite these differences, the performance gaps between models are relatively small; notably, smaller models like Mistral generate synthetic data of comparable quality to that produced by larger models such as Qwen and LLaMa.
 
 
 \subsubsection{Effects of Turn Taking Functions}
