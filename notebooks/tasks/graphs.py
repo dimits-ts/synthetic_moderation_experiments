@@ -163,36 +163,28 @@ def posthoc_heatmap(
     plt.title(f"{val_col} by facilitation strategy")
 
 
-def plot_metrics_barplots(
+def plot_metric_barplot(
     df: pd.DataFrame,
     group_by_col: str,
     group_by_col_label: str,
-    metrics: list[str],
-    yticks_list: list[np.array],
+    metric: str,
+    yticks: np.array,
 ) -> None:
-    fig, axes = plt.subplots(1, len(metrics))
-    fig.set_size_inches(12, 6)
-
-    for ax, metric, yticks in zip(axes, metrics, yticks_list):
-
-        sns.barplot(
-            data=df,
-            x=group_by_col,
-            hue=group_by_col,
-            y=metric,
-            errorbar="sd",
-            legend=False,
-            ax=ax,
-        )
-        ax.tick_params(axis="x", labelrotation=90, labelsize=8)
-        ax.set_xlabel("")
-        ax.set_ylabel(metric.capitalize())
-        ax.set_yticks(yticks)
-
-    fig.suptitle(f"Impact of {group_by_col_label} on Discussions")
-    fig.supxlabel(group_by_col_label)
-    fig.supylabel("Annotation Scores")
-    fig.tight_layout()
+    plt.figure(figsize=(8, 6))
+    sns.barplot(
+        data=df,
+        x=group_by_col,
+        hue=group_by_col,
+        y=metric,
+        errorbar="sd",
+        dodge=False
+    )
+    plt.xticks(rotation=45)
+    plt.ylabel(metric.capitalize())
+    plt.xlabel("")
+    plt.yticks(yticks)
+    plt.title(f"Impact of {group_by_col_label} on {metric}")
+    plt.tight_layout()
 
 
 def plot_timeseries(

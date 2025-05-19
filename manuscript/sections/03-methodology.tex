@@ -28,7 +28,7 @@ Our formulation of synthetic discussions not only keeps the system simple, but a
 
 
 \subsection{Turn Taking}
-\label{ssec:experimental:turn}
+\label{ssec:methodology:turn}
 
 In online discussions, users do not take turns uniformly, nor do they randomly select which comments to respond to. Instead, they often create ``comment chains'' where they follow up on responses to their own previous comments. To simulate this, our proposed function chooses between the preceding user and another random user for each turn in the discussion:
 
@@ -49,7 +49,7 @@ In online discussions, users do not take turns uniformly, nor do they randomly s
 
 
 \subsection{Prompting}
-\label{ssec:experimental:prompts}
+\label{ssec:methodology:prompts}
 
 \acfp{SDB} have proven promising in generating varied responses, and alleviating the Western bias exhibited by \acp{LLM} \cite{burton2024large}. We generate characteristics for 30 \ac{LLM} user personas with unique \acp{SDB} by prompting a GPT-4 model \cite{openai2024gpt4technicalreport} (\S\ref{sssec:appendix:sdbs}). We do not explicitly include political positions in the prompts of the participants, since instruction-tuned \acp{LLM} have been shown to be inherently left-leaning---which can not be alleviated by prompting alone \cite{Taubenfeld2024SystematicBI}---and research in the field has predominantly occupied Western politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. 
 Following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (\S\ref{sssec:appendix:roles}). We create three roles for users: neutral, trolls, and community-focused users.                                      
