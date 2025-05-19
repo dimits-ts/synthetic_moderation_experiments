@@ -88,7 +88,7 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
         "rel.diff.(#Ann. w/Trolls - #Ann. wo/Trolls)",
         fontsize=16,
     )
-    plt.title("Impact of trolls on other users")
+    plt.title("Specialized instruction prompt\nenhances the effects of trolls")
     plt.legend(title="Instructions", loc="upper left")
 
 
@@ -160,7 +160,7 @@ def posthoc_heatmap(
     )
     plt.ylabel("")
     plt.xlabel("")
-    plt.title(val_col, fontsize=24)
+    plt.title(f"{val_col} by facilitation strategy")
 
 
 def plot_metrics_barplots(

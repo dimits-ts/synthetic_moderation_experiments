@@ -8,8 +8,8 @@ MODERATION_STRATEGY_MAP = {
     "vanilla": "No Instructions",
     "moderation_game": "Mod. Game",
     "no_moderator": "No Moderator",
-    "erulemaking": "Mod. Guidelines",
-    "constructive_communications": "Fac. Guidelines",
+    "erulemaking": "Reg. Room",
+    "constructive_communications": "Constr. Comms",
     "collective_constitution": "Rules Only",
 }
 
