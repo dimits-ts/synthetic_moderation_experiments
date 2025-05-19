@@ -66,14 +66,15 @@ An overview of how the experiments are generated can be found in Algorithm~\ref{
 
 While toxicity is a reliable and important metric, we can investigate other discussion quality dimensions, such as \ac{AQ}. \ac{AQ} is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}.
 
-Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} demonstrates that the presence of an \ac{LLM} facilitator qualitatively improves the \ac{AQ} of synthetic discussions, although to a lesser extent when compared with toxicity (Fig.~\ref{fig:toxicity_stats}). Similarly, there is no qualitative, observed improvement when advanced facilitation strategies are used (Fig.~\ref{fig:aq_stats}), and \ac{LLM} users show decreased \ac{AQ} in the presence of trolls, when we use our specialized instruction prompt. Contrary to toxicity, the presence of \ac{LLM} facilitators does not seem to increase \ac{AQ} over time, as demonstrated in Table~\ref{tab:argq}.
+Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} demonstrates that the presence of an \ac{LLM} facilitator qualitatively improves the \ac{AQ} of synthetic discussions, although to a lesser extent when compared with toxicity (c.f. Fig.~\ref{fig:toxicity_stats}). Similarly, there is no qualitative, observed improvement when advanced facilitation strategies are used (Fig.~\ref{fig:aq_stats}). \ac{LLM} users also show worse \ac{AQ} in the presence of trolls, when we use our specialized instruction prompt. Contrary to toxicity, the presence of \ac{LLM} facilitators does not seem to improve \ac{AQ} over time, as demonstrated in Table~\ref{tab:argq}.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{resources/argumentq_stats.png}
 	\centering
-	\caption{Mean difference of \ac{AQ} between pairs of facilitation strategies. When the value of a cell at row $i$ and column $j$ is $x$, strategy $i$ leads to overall worse (negative values) or better (positive values) \ac{AQ} compared to $j$ for an average of $x$ points in a scale of $1-5$. For each comparison, we use a pairwise Student t-test; p-values are shown as asterisks (\asterisknote).}
+	\caption{Mean difference of \ac{AQ} between pairs of facilitation strategies. For ease of comparison we follow the same scale and direction for \ac{AQ} as with toxicity: when the value of a cell at row $i$ and column $j$ is $x$, strategy $i$ leads to overall  worse ($x>0$), or better ($x<0$) \ac{AQ} compared to $j$ for an average of $x$ points in a scale of $1-5$. For each comparison, we use a pairwise Student t-test; p-values are shown as asterisks (\asterisknote).}
 	\label{fig:aq_stats}
 \end{figure}
+
 
 \begin{table}
 	\centering
@@ -115,11 +116,11 @@ Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} 
 
 In this section, we examine the properties of \ac{LLM} annotations, since it is necessary to ensure the robustness of our results.
 
-A key dimension for exploring annotations is annotator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies annotation polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization). %A compelling feature of this metric is that, unlike traditional metrics such as Cohen's Kappa, \ac{nDFU} is designed for multi-annotator settings. 
+A key dimension for exploring annotations is annotator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
 
 Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the \ac{AQ} scores. 
 
-To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we ran an experiment where we use ten annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no \acp{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
+To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we run an experiment where we use ten annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no \acp{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments even showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
 
 
 \begin{figure*}
@@ -141,7 +142,7 @@ To mitigate the instability inherent in \ac{LLM} outputs—even when given ident
 
 \subsection{Additional Analysis}
 
-We verify that the models and roles used did not by themselves impact the findings presented in \S\ref{ssec:results:main}. Fig.~\ref{fig:toxicity_aq_role} demonstrates that only troll user-agents contribute on average worse toxicity and \ac{AQ} in the synthetic discussions. Fig.~\ref{fig:toxicity_aq_model} shows that toxicity and \ac{AQ} are on average not qualitatively dependent on the model used.
+We verify that the models and roles used did not by themselves impact the findings presented in \S\ref{ssec:results:main}. Fig.~\ref{fig:toxicity_aq_role} demonstrates that, as expected, only troll user-agents contribute on average worse toxicity and \ac{AQ} in the synthetic discussions. Furthermore, Fig.~\ref{fig:toxicity_aq_model} shows that toxicity and \ac{AQ} are on average not qualitatively dependent on the model used.
 
 \begin{figure*}
 	\includegraphics[width=0.45\linewidth]{toxicity_intent_barplot.png} \hfill
@@ -169,7 +170,7 @@ We verify that the models and roles used did not by themselves impact the findin
 
 Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In ablation studes where we remove the \acp{SDB}, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (\S\ref{sssec:appendix:roles}). The actual values used for each of the $30$ \ac{LLM} user-agents and $10$ annotator-agents and the moderator, can be found in the project's repository\analysislink.
 
-\begin{table}[ht]
+\begin{table}
 \centering
 \begin{tabular}{|l|l|}
     \toprule
@@ -189,13 +190,14 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
 \caption{\ac{SDB} information provided to the synthetic participants.}
 \label{tab:sdb}
 \end{table}
-   
+  
+  
 \subsubsection{Actor Prompts}
 \label{sssec:appendix:actors}
 
 \begin{itemize}
     
-    \item \textbf{Moderators}: You are a human participating in an online chatroom. You are a moderator. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username. You may take disciplinary action (e.g. banning a user) if you feel it's absolutely necessary.
+    \item \textbf{Facilitators}: You are a human participating in an online chatroom. You are a moderator. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username. You may take disciplinary action (e.g. banning a user) if you feel it's absolutely necessary.
     
     \item \textbf{Users}: You are a human participating in an online chatroom. Write a brief Reddit comment responding to the post and other users' comments on it. Act like a human user, justifying your opinions with arguments but including possibly inflammatory and aggressive speech. You may feel provoked by other users during the conversation. Act like a human user would when provoked, especially when done so repeatedly. Do not repeat yourself. Respond to users by referring to their username as @username. Remain silent if you don't want to comment. Write an empty string when not responding to the conversation.
 
@@ -236,9 +238,9 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
 \label{sssec:appendix:moderation_strategies}
 
 \begin{itemize}
-\item \textbf{No Strategy}: Oversee the conversation. Be neutral. Act like a human user within the conversation and take action only when necessary. Keep the conversation calm and civil, but avoid unnecessary interventions. Do not repeat yourself. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username.
+\item \textbf{\strategynoinstr}: Oversee the conversation. Be neutral. Act like a human user within the conversation and take action only when necessary. Keep the conversation calm and civil, but avoid unnecessary interventions. Do not repeat yourself. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username.
 
-\item \textbf{Moderation Game}: Oversee the conversation. Be neutral. Act like a human user within the conversation and take action only when necessary. Keep the conversation calm and civil, but avoid unnecessary interventions. Do not repeat yourself. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username. View the discussion as a scorable game. Your goal is to maximize your score. Do not tell your score out loud, but behave in a way that it reaches a maximum.
+\item \textbf{\strategymodgame}: Oversee the conversation. Be neutral. Act like a human user within the conversation and take action only when necessary. Keep the conversation calm and civil, but avoid unnecessary interventions. Do not repeat yourself. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username. View the discussion as a scorable game. Your goal is to maximize your score. Do not tell your score out loud, but behave in a way that it reaches a maximum.
     \textbf{Scores:}
     \begin{itemize}[noitemsep, nosep]
         \item Keep discussion civil without appealing to your authority as a moderator: +10
@@ -249,7 +251,7 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
         \item Ban a participant: -5
     \end{itemize}
     
-\item \textbf{Collective Constitution}: Oversee the conversation and ensure the rules below are enforced. Your response must:
+\item \textbf{\strategyrules}: Oversee the conversation and ensure the rules below are enforced. Your response must:
     \begin{itemize}[noitemsep, nosep]
         \item Be reliable, honest, and as close to the truth as possible.
         \item Convey clear intentions.
@@ -273,7 +275,7 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
     \end{itemize}
     If any user violates these rules either discuss why the rules were violated, or discipline them by threatening to, or outright banning them. Respond to users by referring to their username as @username. Keep responses concise and use simple, clear language.
     
-\item \textbf{eRulemaking}: Oversee the conversation and ensure the rules below are enforced. Follow the following guidelines: 
+\item \textbf{\strategyregroom}: Oversee the conversation and ensure the rules below are enforced. Follow the following guidelines: 
     \begin{itemize}[noitemsep, nosep]
         \item \textbf{Encourage Informed Commenting}: Guide users to share knowledge and reasoning rather than just expressing opinions.
         \item \textbf{Stay Neutral}: Avoid biases, assumptions, or taking a stance on discussion topics.
@@ -291,7 +293,7 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
     \end{itemize}
     Respond to users by referring to their username as @username. Keep responses concise and use simple, clear language.
     
-\item \textbf{Constructive Communications}: Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username.
+\item \textbf{\strategyconstrcomm}: Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username.
     \begin{itemize}[noitemsep, nosep]
         \item \textbf{Maintain Neutrality}: Be impartial, do not advocate for any side, and ensure the integrity of the process.
         \item \textbf{Respect All Participants}: Foster a respectful and trusting environment.

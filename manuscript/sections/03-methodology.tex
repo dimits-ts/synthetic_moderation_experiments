@@ -45,7 +45,7 @@ In online discussions, users do not take turns uniformly, nor do they randomly s
 \end{equation}
 \normalsize
 
-\noindent where $U$ is the set of all non-facilitator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the corresponding option being selected. When a facilitator is present, $t$ alternates between picking a normal user and the facilitator (the latter decides whether to respond to or not---the \ac{LLM} producing an empty string is equivalent to not responding).
+\noindent where $U$ is the set of all non-facilitator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the corresponding option being selected. When a facilitator is present, $t$ alternates between picking a normal user and the facilitator (the latter is instructed to decide whether to respond---the \ac{LLM} producing an empty string is equivalent to not responding).
 
 
 \subsection{Prompting}
