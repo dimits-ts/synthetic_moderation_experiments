@@ -81,23 +81,23 @@ Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} 
 		\textbf{Variable} & \textbf{Arg.Q.} \\
 		\midrule
 		Intercept & 2.113\textsuperscript{***} \\
-		No Instructions & -0.213\textsuperscript{***} \\
-		\ac{RL} Game & -0.282\textsuperscript{***} \\
-		Rules Only & -0.305\textsuperscript{***} \\
-		Moderation Guid. & -0.107\textsuperscript{*} \\
-		Facilitation Guid. & -0.007\textsuperscript{} \\
+		\strategynoinstr & -0.213\textsuperscript{***} \\
+		\strategymodgame & -0.282\textsuperscript{***} \\
+		\strategyrules & -0.305\textsuperscript{***} \\
+		\strategyregroom & -0.107\textsuperscript{*} \\
+		\strategyconstrcomm & -0.007\textsuperscript{} \\
 		time & -0.012\textsuperscript{**} \\
 		No Instructions$\times$time & 0.003 \\
-		\ac{RL} Game$\times$time & 0.003 \\
-		Rules Only$\times$time & -0.002 \\
-		Moderation Guid.$\times$time & -0.011\textsuperscript{*} \\
-		Facilitation Guid.$\times$time & -0.024\textsuperscript{***} \\
+		\strategymodgame$\times$time & 0.003 \\
+		\strategyrules$\times$time & -0.002 \\
+		\strategyregroom$\times$time & -0.011\textsuperscript{*} \\
+		\strategyconstrcomm$\times$time & -0.024\textsuperscript{***} \\
 		\bottomrule
 	\end{tabular}
 	\small
 	\asterisknote
 	\normalsize
-	\caption{\ac{OLS} regression coefficients for Arg.Q. (Adj.R2=0.016). \textit{“Time”} denotes dialogue turn, reference factor is \textit{“No facilitator”}.}
+	\caption{\ac{OLS} regression coefficients for Arg.Q. ($Adj.R^2=0.016$). \textit{“Time”} denotes dialogue turn, reference factor is \emph{\strategynomod}.}
 	\label{tab:argq}
 \end{table}
 

@@ -7,7 +7,7 @@
 
 \subsection{Main findings}
 
-\paragraph{\ac{LLM} facilitators significantly improve synthetic discussions.} As is shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly worse toxicity (ANOVA $p<.000$).\footnote{The large size of our dataset allows the use of parametric tests.} 
+\paragraph{\ac{LLM} facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly worse toxicity (ANOVA $p<.000$).\footnote{The large size of our dataset allows the use of parametric tests.} 
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{toxicity_stats.png}
@@ -16,7 +16,7 @@
 	\label{fig:toxicity_stats}
 \end{figure}
 
-\paragraph{Sophisticated facilitation strategies dampen toxicity over time} Table~\ref{tab:toxicity} demonstrates that the average toxicity with No Moderation is $2.164$ (\textit{Intercept}. For each dialogue turn, toxicity drops by an average of $-0.012$ points (\textit{turn}), while discussions following the \textit{Moderation Guidelines} strategy feature an average of  $-0.277$ (less) toxicity (\textit{Moderation Guid.}), and an additional $-0.023$ average drop per dialogue turn (\textit{Moderation Guid.}$\times$\textit{time}). We note that our strategy (\emph{RL Game}), the \emph{``Moderation Guidelines''}, and \emph{``Facilitation Guidelines''} strategies cause a statistically significant drop in toxicity over time.
+\paragraph{Sophisticated facilitation strategies dampen toxicity over time} Table~\ref{tab:toxicity} demonstrates that the average toxicity with \emph{\strategynomod} is $2.164$ (\textit{Intercept}. For each dialogue turn, toxicity drops by an average of $-0.012$ points (\textit{turn}), while discussions following the \emph{\strategyregroom} strategy feature an average of  $-0.277$ (less) toxicity, and an additional $-0.023$ average drop per dialogue turn (\emph{\strategyregroom}$\times$\textit{time}). We note that our strategy (\emph{\strategymodgame}), the \emph{\strategyregroom}, and \emph{\strategyconstrcomm} strategies cause a statistically significant drop in toxicity over time.
 
 \begin{table}[t]
 	\centering
@@ -25,27 +25,27 @@
 		\textbf{Variable} & \textbf{Toxicity} \\
 		\midrule
 		Intercept & 2.164\textsuperscript{***} \\
-		No Instructions & -0.426\textsuperscript{***} \\
-		\ac{RL} Game & -0.435\textsuperscript{***} \\
-		Rules Only & -0.461\textsuperscript{***} \\
-		Moderation Guid. & -0.277\textsuperscript{***} \\
-		Facilitation Guid. & -0.230\textsuperscript{***} \\
+		\strategynoinstr & -0.426\textsuperscript{***} \\
+		\strategymodgame & -0.435\textsuperscript{***} \\
+		\strategyrules & -0.461\textsuperscript{***} \\
+		\strategyregroom & -0.277\textsuperscript{***} \\
+		\strategyconstrcomm & -0.230\textsuperscript{***} \\
 		time & -0.012\textsuperscript{**} \\
-		No Instructions$\times$time & -0.003 \\
-		\ac{RL} Game$\times$time & -0.011\textsuperscript{*} \\
-		Rules Only$\times$time & -0.008 \\
-		Moderation Guid.$\times$time & -0.023\textsuperscript{***} \\
-		Facilitation Guid.$\times$time & -0.023\textsuperscript{***} \\
+		\strategynoinstr$\times$time & -0.003 \\
+		\strategymodgame$\times$time & -0.011\textsuperscript{*} \\
+		\strategyrules$\times$time & -0.008 \\
+		\strategyregroom$\times$time & -0.023\textsuperscript{***} \\
+		\strategyconstrcomm$\times$time & -0.023\textsuperscript{***} \\
 		\bottomrule
 	\end{tabular}
 	\small
 	\asterisknote
 	\normalsize
-	\caption{\ac{OLS} regression coefficients for Toxicity ($Adj. R^2=0.054$). \textit{“Time”} denotes dialogue turn, reference factor is \textit{“No facilitator”}.}
+	\caption{\ac{OLS} regression coefficients for Toxicity ($Adj. R^2=0.054$). \textit{“Time”} denotes dialogue turn, reference factor is \emph{\strategynomod}.}
 	\label{tab:toxicity}
 \end{table}
 
-\paragraph{Sophisticated facilitation strategies however do not qualitatively further improve synthetic discussions.} The impact of the ``Rules Only'', ``Moderation Guidelines'' and ``Facilitation Guidelines''  strategies (\S\ref{ssec:experimental:strategies}) is marginal, and sometimes even not statistically significant compared to the second baseline (``No Instructions'') (Fig.~\ref{fig:toxicity_stats}). This suggests that out-of-the-box \acp{LLM} may be unable to effectively use advanced instructions, verifying important limitations in \ac{LLM} facilitators \cite{cho-etal-2024-language}.
+\paragraph{Sophisticated facilitation strategies however do not qualitatively further improve synthetic discussions.} The impact of the \emph{\strategyrules}, \emph{\strategyregroom} and \emph{\strategyconstrcomm}  strategies (\S\ref{ssec:experimental:strategies}) is marginal, and sometimes even not statistically significant compared to the second baseline (\emph{\strategynoinstr}) (Fig.~\ref{fig:toxicity_stats}). This suggests that out-of-the-box \acp{LLM} may be unable to effectively use advanced instructions, verifying research pointing to important limitations in \ac{LLM} facilitators \cite{cho-etal-2024-language}.
 
 \paragraph{\ac{LLM} facilitators choose to intervene far too frequently.} Fig.~\ref{fig:intervention_count} demonstrates that \ac{LLM} facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \cite{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}.
 
@@ -56,7 +56,7 @@
 	\label{fig:intervention_count}
 \end{figure}
 
-\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned \acp{LLM}.} Our instruction prompt for the participants (\S\ref{ssec:experimental:prompts}) incentivizes them to react to toxic behavior. Indeed, discussions involving “Troll” user-agents, led to increased toxicity among \emph{other} participants, even under the ``No Instructions'' strategy (Blue, bottom bars in Fig.~\ref{fig:toxicity_trolls}, Student's t-test, $p < .000$). This effect diminishes when we remove these instructions (orange, top bars in Fig.~\ref{fig:toxicity_trolls}).
+\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned \acp{LLM}.} Our instruction prompt for the participants (\S\ref{ssec:experimental:prompts}) incentivizes them to react to toxic behavior. Indeed, discussions involving “Troll” user-agents, led to increased toxicity among \emph{other} participants, even under the \emph{\strategynoinstr} strategy (Blue, bottom bars in Fig.~\ref{fig:toxicity_trolls}, Student's t-test, $p < .000$). This effect diminishes when we remove these instructions (orange, top bars in Fig.~\ref{fig:toxicity_trolls}).
 
 \begin{figure}[t]
     \centering
