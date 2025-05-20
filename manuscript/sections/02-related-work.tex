@@ -15,21 +15,21 @@ Our study must thus be conservative towards the generalizability of our results 
 \subsection{Evaluating Discussion Quality}
 \label{ssec:related:quality}
 
-Synthetic discussions often degrade rapidly without human interaction, exhibiting repetitive, low-quality content \citep{ulmer2024}. However, research on quantifying synthetic data quality is currently limited. \citet{balog_2024} utilize a collection of graph-based, methodology-dependent, and lexical similarity metrics, which primarily utilize human discussion datasets. Their most generalizable metric—a vague ``coherence'' score—is \ac{LLM}-annotated without theoretical support. \citet{kim_et_al_chatbot} rely on post-discussion surveys and lexical diversity to estimate the number of diverse opinions. \citet{ulmer2024} propose \emph{``Diversity''}, a metric which penalizes repeated sequences between comments in a discussion:
+Synthetic discussions often degrade rapidly without human interaction, exhibiting repetitive, low-quality content \citep{ulmer2024}. However, research on quantifying synthetic data quality is currently limited. \citet{balog_2024} utilize a collection of graph-based, methodology-dependent, and lexical similarity metrics, most of which utilize human discussion datasets. Their most generalizable metric—a vague ``coherence'' score—is \ac{LLM}-annotated without theoretical support. \citet{kim_et_al_chatbot} rely on post-discussion surveys and lexical diversity to estimate the number of diverse opinions. \citet{ulmer2024} propose \emph{``Diversity''}, a metric which penalizes repeated sequences between comments in a discussion:
 
 \small
 \begin{equation}
 \label{eq:variety}
     \textit{div}(d) = 1 - \frac{2}{N_d(N_d-1)}
-\sum_{i=1}^{N_d} \sum_{\substack{j=i+1}}^{N_d} R(c(i,d), c(j,d))
+\sum_{i=1}^{N_d-1} \sum_{\substack{j=i+1}}^{N_d} R(c(i,d), c(j,d))
 \end{equation}
 \normalsize
 
 \noindent where \textit{R} is the ROUGE-L F1 score\footnote{We use the \href{https://pypi.org/project/rouge-score}{rouge-score} package in our analysis.} \cite{lin-2004-rouge}, and $N_d$ the length (in comments) of discussion $d$.
 
-Low diversity points to pathological problems (e.g., \acp{LLM} repeating previous comments). Extremely high diversity scores on the other hand, may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants).
+Low diversity points to pathological problems (e.g., \acp{LLM} repeating previous comments) \cite{ulmer2024}. On the other hand, we find that extremely high diversity scores may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants).
 
-Besides metrics for the quality of synthetic data, we also need metrics that can quantify how ``well'' a discussion is going from a human standpoint. We choose \emph{toxicity} for two reasons: Prompting \acp{LLM} for toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, and toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}.\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.}
+Besides metrics for the quality of synthetic data, we also need metrics that can quantify how ``well'' a discussion is going from a human standpoint. We choose \emph{toxicity} for two reasons: prompting \acp{LLM} for toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, and toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.}. In this work, we employ \ac{LLM} annotators for toxicity detection (\S\ref{ssec:experimental:evaluation}).
 
 
 \subsection{Synthetic Discussions}
@@ -37,11 +37,11 @@ Besides metrics for the quality of synthetic data, we also need metrics that can
 
 Synthetic discussion systems include synthetic clones of Reddit \cite{park_simulacra}, Twitter/X \cite{mou_2024}, generic social media \cite{tornberg_2023, y_social}, games \cite{Park2023GenerativeAI}, and social experiments \cite{zhou_2024_sotopia}.
 
-\citet{balog_2024} introduce their own methodology to produce synthetic discussions; they extract topics and comments from real-world online discussions, and prompt an \ac{LLM} to continue them. Unlike our approach, they do not use \ac{LLM} user-agents to model conversational dynamics, nor do they model the presence of facilitators. Their methodology faces challenges when \acp{LLM} generate malformed metadata, for which they offer no solution besides detecting the errors. It also relies on the existence of suitable human discussion datasets.
+\citet{balog_2024} introduce their own methodology to produce synthetic discussions; they extract topics and comments from real-world online discussions, and prompt an \ac{LLM} to continue them. Unlike our approach, they do not use \ac{LLM} user-agents to model conversational dynamics, nor do they model the presence of facilitators. Their methodology faces challenges when \acp{LLM} generate malformed metadata (such as missing usernames), for which they offer no solution besides detecting the errors. It also relies on the existence of suitable human discussion datasets.
 
-\citet{ulmer2024} create synthetic discussions between two participants; an agent (who controls the environment) and a client (who interacts with the agent). They then filter the generated discussions and use them as training data to further finetune the agent \ac{LLM} for a specific task. Their approach however does not model the existence of multiple clients (users), nor is it applied on online discussion facilitation. Our proposed methodology can be modelled as a generalization of their paradigm; an agent (facilitator) converses with multiple clients (non-facilitator users).
+\citet{ulmer2024} create synthetic discussions between two participants; an agent (who controls a fictional environment) and a client (who interacts with the agent). They then filter the generated discussions and use them as training data to further finetune the agent \ac{LLM} for a specific task. Their approach, however, does not model the existence of multiple clients (users), nor is it applied to online discussion facilitation. Our proposed methodology can be modelled as a generalization of their paradigm; an agent (facilitator) converses with multiple clients (non-facilitator users).
 
-Finally, \citet{abdelnabi_negotiations} create synthetic negotiations with multiple agents having various agendas and responsibilities. Our work can be modelled as a domain shift of their methodology from negotiations, to discussion facilitation; participants with different motivations (i.e., normal users, trolls, long-standing community members), interact with one another, while a stakeholder holding veto power (facilitator) presides over the discussion.
+Finally, \citet{abdelnabi_negotiations} create synthetic negotiations with multiple agents having various agendas and responsibilities. Our work can be modelled as a domain shift of their methodology, from negotiations to discussion facilitation; participants with different motivations (i.e., normal users, trolls, long-standing community members) interact with one another, while a stakeholder holding veto power (facilitator) presides over the discussion.
 
 
 \subsection{LLM Facilitation}

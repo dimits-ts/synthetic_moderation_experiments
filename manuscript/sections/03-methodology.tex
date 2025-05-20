@@ -22,7 +22,7 @@ We can then model a synthetic comment $c$ at position $i$ of a discussion $d$ re
     c(d, i) = \textit{LLM}(\phi(t(d, i)) \concat [c(d, j)]^{i-1}_{i-h})
 \end{equation}
 
-\noindent where $\concat$ is the string concatenation operator, and $[c(d,j)]_{i-h}^{i-1}\dots]$ denotes the concatenation of the previous $h$ comments.
+\noindent where $\concat$ is the string concatenation operator, and $[c(d,j)]_{i-h}^{i-1}]$ denotes the concatenation of the previous $h$ comments.
 
 Our formulation of synthetic discussions not only keeps the system simple, but also enables controlled experimentation with various alternatives for each of the three functions (Section \ref{ssec:results:ablation}).
 
@@ -38,19 +38,19 @@ In online discussions, users do not take turns uniformly, nor do they randomly s
     t(i) = \left\{
 \begin{array}{ll}
     \textit{unif}(U) & i=1, i=2\\
-    \textit{unif}(U/\{t(i-1)\}) & i > 2, p=0.6 \\
+    \textit{unif}(U \setminus \{t(i-1)\}) & i > 2, p=0.6 \\
     t(i-2) & i > 2, p=0.4 
 \end{array} 
 \right.
 \end{equation}
 \normalsize
 
-\noindent where $U$ is the set of all non-facilitator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the corresponding option being selected. When a facilitator is present, $t$ alternates between picking a normal user and the facilitator (the latter is instructed to decide whether to respond---the \ac{LLM} producing an empty string is equivalent to not responding).
+\noindent where $U$ is the set of all non-facilitator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the corresponding option being selected. When a facilitator is present, $t$ alternates between picking a normal user and the facilitator. The facilitator, however, is instructed (\S\ref{ssec:appendix:prompts}) to decide whether to say something or not (generate the empty string), when given by $t$ the chance to talk, i.e., the facilitator does not necessarily talk right after every user utterance. 
 
 
 \subsection{Prompting}
 \label{ssec:methodology:prompts}
 
-\acfp{SDB} have proven promising in generating varied responses, and alleviating the Western bias exhibited by \acp{LLM} \cite{burton2024large}. We generate characteristics for 30 \ac{LLM} user personas with unique \acp{SDB} by prompting a GPT-4 model \cite{openai2024gpt4technicalreport} (\S\ref{sssec:appendix:sdbs}). We do not explicitly include political positions in the prompts of the participants, since instruction-tuned \acp{LLM} have been shown to be inherently left-leaning---which can not be alleviated by prompting alone \cite{Taubenfeld2024SystematicBI}---and research in the field has predominantly occupied Western politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. 
+\acfp{SDB} have proven promising in generating varied responses, and alleviating the Western bias exhibited by \acp{LLM} \cite{burton2024large}. We generate characteristics for 30 \ac{LLM} user personas with unique \acp{SDB} by prompting a GPT-4 model \cite{openai2024gpt4technicalreport} (\S\ref{sssec:appendix:sdbs}). We do not explicitly include political positions in the prompts of the participants, since instruction-tuned \acp{LLM} have been shown to be inherently left-leaning---which cannot be alleviated by prompting alone \cite{Taubenfeld2024SystematicBI}. %---and research in the field has predominantly occupied Western politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. 
 Following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (\S\ref{sssec:appendix:roles}). We create three roles for users: neutral, trolls, and community-focused users.                                      
- Finally, we create a user instruction prompt (\S\ref{sssec:appendix:actors}) which instructs participants that repeatedly toxic posts \emph{should} influence their behavior. 
+Finally, we create a user instruction prompt (\S\ref{sssec:appendix:actors}) which instructs participants that repeatedly toxic posts \emph{should} influence their behavior. 

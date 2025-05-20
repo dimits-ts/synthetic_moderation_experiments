@@ -26,16 +26,16 @@
 \subsection{Synthetic Discussion Generation}
 \label{ssec:appendix:discussion}
 
-An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}. Each discussion is run according to Eq.~\ref{eq:comment} in Section~\ref{ssec:methodology:discussions}.
+An overview of how the experiments are generated (\emph{not} executed) can be found in Algorithm~\ref{alg:exp_generation}. Each discussion is run according to Eq.~\ref{eq:comment} in \S\ref{ssec:methodology:discussions}.
 
-\begin{algorithm}[t]
-\caption{Synthetic discussion generation}
+\begin{algorithm}[ht]
+\caption{Synthetic discussion setup generation}
 \label{alg:exp_generation}
 \hspace*{\algorithmicindent} \textbf{Input:} 
          \begin{itemize}[noitemsep, nosep]
              \item User \acsp{SDB} $\Theta = \{\theta_1, \dots, \theta_{30}\}$
              \item Moderator \acs{SDB} = $\theta_{mod}$
-             \item Mod. strategies $S = \{s_1, \ldots, s_6\}$
+             \item Strategies $S = \{s_1, \ldots, s_6\}$
              \item Seed opinions $O = \{o_1, \ldots, o_7\}$
              \item \acp{LLM} = $\{llm_1, llm_2, llm_3\}$
          \end{itemize}
@@ -44,7 +44,7 @@ An overview of how the experiments are generated can be found in Algorithm~\ref{
     \State $D = \{\}$
     \For{$llm \in LLMs$}
         \For{$s \in S$}
-            \For{$i = 1, 2, \ldots, n_{discussions}$}
+            \For{$i = 1, 2, \ldots, N_d$}
                 \State $\hat{\Theta} = $ \Call{RandomSample}{$\Theta$, 7}
                 \State $U =$  \Call{Actors}{llm, $\hat{\Theta}$}
                 \State $m = $ \Call{Actors}{llm, $\{[\theta_{mod}, s]\}$}
@@ -64,14 +64,14 @@ An overview of how the experiments are generated can be found in Algorithm~\ref{
 
 \subsubsection{Investigating Argument Quality}
 
-While toxicity is a reliable and important metric, we can investigate other discussion quality dimensions, such as \ac{AQ}. \ac{AQ} is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}.
+While toxicity is a reliable and important metric, we can also investigate other discussion quality dimensions, such as \ac{AQ}. \ac{AQ} is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. Nevertheless, in this section we present preliminary results obtained by prompting \ac{LLM} to measure \ac{AQ}(\S\ref{ssec:appendix:prompts}). 
 
-Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} demonstrates that the presence of an \ac{LLM} facilitator qualitatively improves the \ac{AQ} of synthetic discussions, although to a lesser extent when compared with toxicity (c.f. Fig.~\ref{fig:toxicity_stats}). Similarly, there is no qualitative, observed improvement when advanced facilitation strategies are used (Fig.~\ref{fig:aq_stats}). \ac{LLM} users also show worse \ac{AQ} in the presence of trolls, when we use our specialized instruction prompt. Contrary to toxicity, the presence of \ac{LLM} facilitators does not seem to improve \ac{AQ} over time, as demonstrated in Table~\ref{tab:argq}.
+Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} demonstrates that the presence of an \ac{LLM} facilitator qualitatively improves the \ac{AQ} of synthetic discussions, although to a lesser extent when compared with toxicity (c.f.\  Fig.~\ref{fig:toxicity_stats}). Similarly, there is no qualitative, observed improvement when advanced facilitation strategies are used (Fig.~\ref{fig:aq_stats}). \ac{LLM} users also show worse \ac{AQ} in the presence of trolls, when we use our specialized instruction prompt. Contrary to toxicity, the presence of \ac{LLM} facilitators does not seem to improve \ac{AQ} over time, as demonstrated in Table~\ref{tab:argq}.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{resources/argumentq_stats.png}
 	\centering
-	\caption{Mean difference of \ac{AQ} between pairs of facilitation strategies. For ease of comparison we follow the same scale and direction for \ac{AQ} as with toxicity: when the value of a cell at row $i$ and column $j$ is $x$, strategy $i$ leads to overall  worse ($x>0$), or better ($x<0$) \ac{AQ} compared to $j$ for an average of $x$ points in a scale of $1-5$. For each comparison, we use a pairwise Student t-test; p-values are shown as asterisks (\asterisknote).}
+	\caption{Difference in average \ac{AQ} levels for comments following pairs of facilitation strategies. When the value of a cell at row $i$ and column $j$ is $x$, strategy $i$ leads to overall more ($x>0$), or less ($x<0$) intense toxicity compared to $j$ for an average of $x$ points in a scale of $1-5$. For each comparison, we use a pairwise Student t-test; p-values shown as asterisks (\asterisknote).}
 	\label{fig:aq_stats}
 \end{figure}
 
@@ -114,9 +114,7 @@ Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} 
 
 \subsubsection{Validating the LLM annotations}
 
-In this section, we examine the properties of \ac{LLM} annotations, since it is necessary to ensure the robustness of our results.
-
-A key dimension for exploring annotations is annotator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
+In this section, we examine the properties of \ac{LLM} annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
 
 Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the \ac{AQ} scores. 
 
@@ -187,7 +185,7 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
     Personality Characteristics & list of strings \\
     \bottomrule
 \end{tabular}
-\caption{\ac{SDB} information provided to the synthetic participants.}
+\caption{\ac{SDB} information provided to the synthetic participants. Because of the size of the data instances, we defer the reader to the project repository for the actual values.\analysislink}
 \label{tab:sdb}
 \end{table}
   
@@ -203,7 +201,7 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
 
     \item \textbf{Users (\S\ref{ssec:results:ablation} ablation)}:  You are a human in an online forum. Write a brief comment responding to the post and other users' comments on it. Respond to users by referring to their username as @username. Respond in English
 
-    \item \textbf{Annotators}: You are tasked with annotating the conversation's toxicity and argument quality as it continues. 
+    \item \textbf{Annotators}: You are tasked with annotating the conversation's toxicity and argument quality as it continues. \\
     \textbf{Toxicity:} 
     The possible labels are:
     \begin{itemize}[noitemsep, nosep]
@@ -234,7 +232,7 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
 \end{itemize}
 
 
-\subsubsection{Moderator Prompts}
+\subsubsection{Facilitation Strategies}
 \label{sssec:appendix:moderation_strategies}
 
 \begin{itemize}

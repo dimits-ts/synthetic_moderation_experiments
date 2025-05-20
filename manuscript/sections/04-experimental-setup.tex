@@ -4,14 +4,14 @@
 \subsection{Facilitation Strategies}
 \label{ssec:experimental:strategies}
 
-We test four different facilitation strategies,\footnote{The exact prompts used per strategy are in \S\ref{sssec:appendix:moderation_strategies}.} along with two baselines for discussion facilitation:
+We test four different facilitation strategies, along with two common-place strategies for discussion facilitation.\footnote{The exact prompts used per strategy are in \S\ref{sssec:appendix:moderation_strategies}.}
 
 \begin{enumerate}[nosep, noitemsep]
-    \item \textbf{\strategynomod}: A \emph{baseline} where no facilitator is present.
+    \item \textbf{\strategynomod}: A \emph{common} strategy where no facilitator is present.
 
-    \item \textbf{\strategynoinstr}: A \emph{baseline} where a \ac{LLM} facilitator is present, but is provided only with basic instructions. Example: “You are a moderator, keep the discussion civil”.
+    \item \textbf{\strategynoinstr}: A \emph{common} strategy where a \ac{LLM} facilitator is present, but is provided only with basic instructions. Example: “You are a moderator, keep the discussion civil”.
 
-     \item \textbf{\strategymodgame}: Our proposed \emph{experimental} strategy, inspired by  \citet{abdelnabi_negotiations} (\S\ref{ssec:related:discussions}). Instructions are formulated as a game, where the facilitator tries to maximize their scores by arriving at specific outcomes. No actual score is being kept; they exist to act as indications for how desirable an outcome is. The other participants are not provided with scores, nor are they aware of the game rules. Example: ``User is toxic: $-5$ points, User corrects behavior: $+10$ points''.
+     \item \textbf{\strategymodgame}: Our proposed \emph{experimental} strategy, inspired by  \citet{abdelnabi_negotiations} (\S\ref{ssec:related:discussions}). Instructions are formulated as a game, where the facilitator \ac{LLM} tries to maximize its scores by arriving at specific outcomes. No actual score is being kept; they exist to act as indications for how desirable an outcome is. The other participants are not provided with scores, nor are they aware of the game rules. Example: ``User is toxic: $-5$ points, User corrects behavior: $+10$ points''.
 
     \item \textbf{\strategyrules}: A \emph{real-life} strategy where the prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the facilitator with a set of rules to uphold, without specifying how to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”).
 
@@ -24,12 +24,12 @@ We test four different facilitation strategies,\footnote{The exact prompts used 
 \subsection{Evaluation}
 \label{ssec:experimental:evaluation}
 
- We use the \emph{diversity} and \emph{toxicity} metrics presented in \S\ref{ssec:related:quality}. While diversity by itself can be used to detect pathological problems, we can not know when diversity is so high in a discussion to indicate issues with inter-participant interaction (\S\ref{ssec:related:quality}). Instead, we can compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction.
+ We use the \emph{diversity} and \emph{toxicity} metrics presented in \S\ref{ssec:related:quality}. While diversity by itself can be used to detect pathological problems, we cannot know when diversity is so high in a discussion to indicate issues with inter-participant interaction (\S\ref{ssec:related:quality}). Instead, we can compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction.
  
- For toxicity annotation, we use ten \ac{LLM} annotator-agents controlled by a model already used in prior work (LLaMa3.1 70B) \cite{kang-qian-2024-implanting}. Each annotator's prompt includes \acp{SDB} distinct from the ones provided to the users, annotation instructions, and few-shot examples (\S\ref{ssec:appendix:annotation}). Each annotator is tasked with annotating all comments in each discussion once.
+ For toxicity annotation, we use ten \ac{LLM} annotator-agents controlled by a model already used in prior work (LLaMa3.1 70B) \cite{kang-qian-2024-implanting}. Each annotator's prompt includes \acp{SDB} different from the ones provided to the users, annotation instructions, and few-shot examples (\S\ref{ssec:appendix:annotation}). Each annotator is tasked with annotating all comments in each discussion once.
 
 
 \subsection{Technical Details}
 \label{ssec:experimental:setup}
 
-We use three open-source models from different families and of different sizes: LLaMa 3.2 (70B), Qwen2.5 (33B) and Mistral Nemo (12B). We select the instruction-tuned variants and quantize them to 4 bits, due to our limited resources. All of the experiments were collectively completed within roughly four weeks of computational time, using two Quadro RTX 6000 GPUs. The execution script is available in the project's repository\analysislink. The process of generating discussion setups is detailed in \S\ref{ssec:appendix:discussion}.
+We use three open-source models from different families and of different sizes: LLaMa 3.2 (70B), Qwen2.5 (33B),  Mistral Nemo (12B). We use their instruction-tuned variants and quantize  to 4 bits, due to our limited resources. All the experiments were collectively completed within roughly four weeks of computational time, using two Quadro RTX 6000 GPUs. The process of generating discussion setups is detailed in \S\ref{ssec:appendix:discussion}. The execution script is available in the project's repository.\analysislink 
