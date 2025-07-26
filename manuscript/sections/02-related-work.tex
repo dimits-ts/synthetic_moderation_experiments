@@ -2,36 +2,6 @@
 %
 \section{Background and Related Work}
 
-\subsection{LLMs as Human Subjects}
-\label{ssec:related:human-llm}
-
-When conducting social experiments with \acp{LLM} instead of human subjects, it is imperative to know how representative results can be. \citet{grossman_2023} argue that synthetic agents have the potential to eventually replace human participants, a perspective shared by other researchers \cite{tornberg_2023, argyle2023}. Indeed, \acp{LLM} have demonstrated complex, emergent social behaviors \cite{Park2023GenerativeAI, demarzo_2023, leng_2024, abdelnabi_negotiations, abramski_2023}, and are able to infer survey responses from \acp{SDB} \cite{hewitt2024predicting} and personalized interviews \cite{park2024generativeagentsimulations1000}.
-
-However, significant limitations of \acp{LLM} remain in the context of Social Science experiments. Issues include undetectable behavioral hallucinations \cite{rossi_2024}; sociodemographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024}, often amplified during discussions \cite{Taubenfeld2024SystematicBI}; unreliable survey responses \cite{jansen_2023,bisbee_2023,neumann_2025}; inconsistent annotations \cite{Gligoric2024CanUL}; non-deterministic outputs \cite{atil_2025}, especially in closed-source models \cite{bisbee_2023}; and excessive agreeableness due to alignment procedures \cite{Park2023GenerativeAI, anthis_2025, rossi_2024}. Despite these issues, researchers frequently anthropomorphize \ac{LLM} agents \cite{rossi_2024}, obscuring the true causes of their behavior \cite{anthis_2025,zhou-etal-2024-real}. 
-
-Our study must thus be conservative towards the generalizability of our results to discussions with humans. We stress that our methodology is designed for “debugging” and exploring \ac{LLM} facilitators in-silico, before testing them in much more costly experiments with human participants. Reproduction studies with humans are ultimately needed, and we leave them for future work.
-
-
-\subsection{Evaluating Discussion Quality}
-\label{ssec:related:quality}
-
-Synthetic discussions often degrade rapidly without human interaction, exhibiting repetitive, low-quality content \citep{ulmer2024}. However, research on quantifying synthetic data quality is currently limited. \citet{balog_2024} utilize a collection of graph-based, methodology-dependent, and lexical similarity metrics, most of which utilize human discussion datasets. Their most generalizable metric—a vague ``coherence'' score—is \ac{LLM}-annotated without theoretical support. \citet{kim_et_al_chatbot} rely on post-discussion surveys and lexical diversity to estimate the number of diverse opinions. \citet{ulmer2024} propose \emph{``Diversity''}, a metric which penalizes repeated sequences between comments in a discussion:
-
-\small
-\begin{equation}
-\label{eq:variety}
-    \textit{div}(d) = 1 - \frac{2}{N_d(N_d-1)}
-\sum_{i=1}^{N_d-1} \sum_{\substack{j=i+1}}^{N_d} R(c(i,d), c(j,d))
-\end{equation}
-\normalsize
-
-\noindent where \textit{R} is the ROUGE-L F1 score\footnote{We use the \href{https://pypi.org/project/rouge-score}{rouge-score} package in our analysis.} \cite{lin-2004-rouge}, and $N_d$ the length (in comments) of discussion $d$.
-
-Low diversity points to pathological problems (e.g., \acp{LLM} repeating previous comments) \cite{ulmer2024}. On the other hand, we find that extremely high diversity scores may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants).
-
-Besides metrics for the quality of synthetic data, we also need metrics that can quantify how ``well'' a discussion is going from a human standpoint. We choose \emph{toxicity} for two reasons: prompting \acp{LLM} for toxicity detection is reliable \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, and toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.}. In this work, we employ \ac{LLM} annotators for toxicity detection (\S\ref{ssec:experimental:evaluation}).
-
-
 \subsection{Synthetic Discussions}
 \label{ssec:related:discussions}
 
@@ -49,3 +19,34 @@ Finally, \citet{abdelnabi_negotiations} create synthetic negotiations with multi
 Unlike \ac{ML} classification models traditionally used in online platforms, \acp{LLM} can actively facilitate discussions \cite{korre2025evaluation}. They can warn users for rule violations \cite{Kumar_AbuHashem_Durumeric_2024}, monitor engagement \cite{schroeder-etal-2024-fora}, aggregate diverse opinions \cite{small-polis-llm}, and provide translations and writing tips, which is especially useful for marginalized groups \cite{Tsai2024Generative}. These capabilities suggest that \acp{LLM} may be able to assist or even replace human facilitators in many tasks \cite{small-polis-llm, seering_self_moderation}.
 
 Moderator chatbots have shown promise; \citet{kim_et_al_chatbot} demonstrated that simple rule-based models can enhance discussions, although their approach was largely confined to organizing the discussion based on the ``think-pair-share'' framework \cite{ahmad_2010_supporting, Navajas2018}, and balancing user activity. \citet{cho-etal-2024-language} use \ac{LLM} facilitators in human discussions, with facilitation strategies based on Cognitive Behavioral Therapy and the work of \citet{rosenberg2015nonviolent}. They show that \ac{LLM} facilitators can provide “specific and fair feedback” to users, although they struggle to make users more respectful and cooperative.  In contrast to both works, our work uses exclusively \ac{LLM} participants and \ac{LLM} facilitators, and tests the latter in an explicitly toxic and challenging environment.
+
+
+\subsection{Evaluating Discussion Quality}
+\label{ssec:related:quality}
+
+In this paper we need to evaluate two different quality dimensions. One is discussion quality as seen by humans; which we measure using toxicity as annotated by \acp{LLM}  (\S\ref{ssec:experimental:evaluation}). \acp{LLM} are reliable for toxicity detection \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, and toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.}. 
+
+The second quality dimension is unrelated to human discussions, but crucial to ones where all the actors are \acp{LLM}, since they often degrade rapidly without human interaction, exhibiting repetitive, low-quality content \citep{ulmer2024}. However, research on quantifying synthetic data quality is currently limited. \citet{balog_2024} utilize a collection of graph-based, methodology-dependent, and lexical similarity metrics, most of which utilize human discussion datasets. Their most generalizable metric—a vague ``coherence'' score—is \ac{LLM}-annotated without theoretical support. \citet{kim_et_al_chatbot} rely on post-discussion surveys and lexical diversity to estimate the number of diverse opinions. 
+
+\citet{ulmer2024} propose \emph{``Diversity''}, a metric which penalizes repeated sequences between comments in a discussion. Low diversity points to pathological problems (e.g., \acp{LLM} repeating previous comments) \cite{ulmer2024}. On the other hand, extremely high diversity may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants). Diversity is defined as:
+
+\small
+\begin{equation}
+	\label{eq:variety}
+	\textit{div}(d) = 1 - \frac{2}{N_d(N_d-1)}
+	\sum_{i=1}^{N_d-1} \sum_{\substack{j=i+1}}^{N_d} R(c(i,d), c(j,d))
+\end{equation}
+\normalsize
+\noindent where \textit{R} is the ROUGE-L F1 score\footnote{We use the \href{https://pypi.org/project/rouge-score}{rouge-score} package in our analysis.} \cite{lin-2004-rouge}, and $N_d$ the length (in comments) of discussion $d$.
+
+ We will be using \emph{diversity} in this paper, although we note that more robust synthetic quality metrics are needed.
+
+
+\subsection{LLMs as Human Subjects}
+\label{ssec:related:human-llm}
+
+\citet{grossman_2023} argue that synthetic agents have the potential to eventually replace human participants, a perspective shared by other researchers \cite{tornberg_2023, argyle2023}. Indeed, \acp{LLM} have demonstrated complex, emergent social behaviors \cite{Park2023GenerativeAI, demarzo_2023, leng_2024, abdelnabi_negotiations, abramski_2023, hewitt2024predicting, park2024generativeagentsimulations1000}.
+
+However, significant limitations of \acp{LLM} remain in the context of Social Science experiments. Issues include undetectable behavioral hallucinations \cite{rossi_2024}; socio-demographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024, Taubenfeld2024SystematicBI}; unreliable annotations \cite{jansen_2023,bisbee_2023,neumann_2025, Gligoric2024CanUL}; non-deterministic outputs \cite{atil_2025, bisbee_2023}; and excessive agreeableness \cite{Park2023GenerativeAI, anthis_2025, rossi_2024}.
+
+Our study must thus be conservative towards the generalizability of our results to discussions with humans. We stress that our methodology is designed for “debugging” and exploring \ac{LLM} facilitators in-silico, before testing them in much more costly experiments with human participants. Reproduction studies with humans are ultimately needed, and we leave them for future work.
