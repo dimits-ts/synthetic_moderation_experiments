@@ -5,7 +5,7 @@
 \subsection{Synthetic Discussions}
 \label{ssec:related:discussions}
 
-Synthetic discussion systems include synthetic clones of Reddit \cite{park_simulacra}, Twitter/X \cite{mou_2024}, generic social media \cite{tornberg_2023, y_social}, games \cite{Park2023GenerativeAI}, and social experiments \cite{zhou_2024_sotopia}.
+While studies exist for simulating user interactions in social media \cite{park_simulacra, mou_2024, tornberg_2023, y_social, balog_2024}, and for using \ac{LLM} facilitators \cite{kim_et_al_chatbot, cho-etal-2024-language}, none so far have combined the two approaches. 
 
 \citet{balog_2024} introduce their own methodology to produce synthetic discussions; they extract topics and comments from real-world online discussions, and prompt an \ac{LLM} to continue them. Unlike our approach, they do not use \ac{LLM} user-agents to model conversational dynamics, nor do they model the presence of facilitators. Their methodology faces challenges when \acp{LLM} generate malformed metadata (such as missing usernames), for which they offer no solution besides detecting the errors. It also relies on the existence of suitable human discussion datasets.
 
@@ -24,11 +24,12 @@ Moderator chatbots have shown promise; \citet{kim_et_al_chatbot} demonstrated th
 \subsection{Evaluating Discussion Quality}
 \label{ssec:related:quality}
 
-In this paper we need to evaluate two different quality dimensions. One is discussion quality as seen by humans; which we measure using toxicity as annotated by \acp{LLM}  (\S\ref{ssec:experimental:evaluation}). \acp{LLM} are reliable for toxicity detection \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, and toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.}. 
+In this paper we need to evaluate two different quality dimensions. One is \emph{discussion quality as seen by humans}; which we measure using toxicity as annotated by \acp{LLM}  (\S\ref{ssec:experimental:evaluation}). \acp{LLM} are reliable for toxicity detection \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}, and toxicity can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.}. 
 
 The second quality dimension is unrelated to human discussions, but crucial to ones where all the actors are \acp{LLM}, since they often degrade rapidly without human interaction, exhibiting repetitive, low-quality content \citep{ulmer2024}. However, research on quantifying synthetic data quality is currently limited. \citet{balog_2024} utilize a collection of graph-based, methodology-dependent, and lexical similarity metrics, most of which utilize human discussion datasets. Their most generalizable metric—a vague ``coherence'' score—is \ac{LLM}-annotated without theoretical support. \citet{kim_et_al_chatbot} rely on post-discussion surveys and lexical diversity to estimate the number of diverse opinions. 
 
-\citet{ulmer2024} propose \emph{``Diversity''}, a metric which penalizes repeated sequences between comments in a discussion. Low diversity points to pathological problems (e.g., \acp{LLM} repeating previous comments) \cite{ulmer2024}. On the other hand, extremely high diversity may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants). Diversity is defined as:
+\citet{ulmer2024} propose \emph{``Diversity''}, a metric which penalizes repeated sequences between comments in a discussion. Low diversity points to pathological problems (e.g., \acp{LLM} repeating previous comments). On the other hand, extremely high diversity may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants). 
+Diversity is defined as:
 
 \small
 \begin{equation}
@@ -39,7 +40,7 @@ The second quality dimension is unrelated to human discussions, but crucial to o
 \normalsize
 \noindent where \textit{R} is the ROUGE-L F1 score\footnote{We use the \href{https://pypi.org/project/rouge-score}{rouge-score} package in our analysis.} \cite{lin-2004-rouge}, and $N_d$ the length (in comments) of discussion $d$.
 
- We will be using \emph{diversity} in this paper, although we note that more robust synthetic quality metrics are needed.
+We will be using \emph{diversity} in this paper, although we note that more robust synthetic quality metrics are needed.
 
 
 \subsection{LLMs as Human Subjects}
@@ -49,4 +50,5 @@ The second quality dimension is unrelated to human discussions, but crucial to o
 
 However, significant limitations of \acp{LLM} remain in the context of Social Science experiments. Issues include undetectable behavioral hallucinations \cite{rossi_2024}; socio-demographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024, Taubenfeld2024SystematicBI}; unreliable annotations \cite{jansen_2023,bisbee_2023,neumann_2025, Gligoric2024CanUL}; non-deterministic outputs \cite{atil_2025, bisbee_2023}; and excessive agreeableness \cite{Park2023GenerativeAI, anthis_2025, rossi_2024}.
 
-Our study must thus be conservative towards the generalizability of our results to discussions with humans. We stress that our methodology is designed for “debugging” and exploring \ac{LLM} facilitators in-silico, before testing them in much more costly experiments with human participants. Reproduction studies with humans are ultimately needed, and we leave them for future work.
+Our study must thus be conservative towards the generalizability of our results to discussions with humans. Reproduction studies with humans are ultimately needed, and we leave them for future work.
+% We stress that our methodology is designed for “debugging” and exploring \ac{LLM} facilitators in-silico, before testing them in much more costly experiments with human participants. 
