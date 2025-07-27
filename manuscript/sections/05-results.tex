@@ -8,7 +8,7 @@
 \subsection{Main findings}
 \label{ssec:results:main}
 
-\paragraph{\ac{LLM} facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly more intense toxicity (ANOVA $p<.000$).\footnote{The large size of our dataset allows using parametric tests.} 
+\paragraph{Finding 1: \ac{LLM} facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly more intense toxicity (ANOVA $p<.000$).\footnote{The large size of our dataset allows using parametric tests.} 
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{toxicity_stats.png}
@@ -17,7 +17,7 @@
 	\label{fig:toxicity_stats}
 \end{figure}
 
-\paragraph{More elaborate facilitation strategies fail to decrease toxicity}.
+\paragraph{Finding 2: More elaborate facilitation strategies fail to decrease toxicity}.
 More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\strategyconstrcomm}, and our proposed \emph{\strategymodgame}, lead to a statistically significant reduction in comment toxicity over time compared to \emph{unmoderated} discussions (Table~\ref{tab:toxicity}). However, their additional impact beyond that of the simpler \emph{\strategynoinstr} strategy is marginal and sometimes not statistically significant (Fig.~\ref{fig:toxicity_stats}), suggesting that out-of-the-box \acp{LLM} may struggle to effectively leverage advanced instructions---echoing prior findings on the limitations of \ac{LLM} facilitators \cite{cho-etal-2024-language}.
 
 
@@ -50,7 +50,7 @@ More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\
 \end{table}
 
 
-\paragraph{\ac{LLM} facilitators choose to intervene far too frequently, which is tolerated by the other participants .} Fig.~\ref{fig:intervention_count} demonstrates that \ac{LLM} facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. This confirms that \acp{LLM} generally can not decide not to speak (\S\ref{ssec:methodology:turn}). 
+\paragraph{Finding 3: \ac{LLM} facilitators choose to intervene far too frequently, which is tolerated by the other participants .} Fig.~\ref{fig:intervention_count} demonstrates that \ac{LLM} facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. This confirms that \acp{LLM} generally can not decide not to speak (\S\ref{ssec:methodology:turn}). To our knowledge, this has not been reported in relevant literature, and \emph{is an example of ``debugging'' problems with \acp{LLM}} --- a core motivation of our work.
 
 Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact caused by alignment procedures, making \acp{LLM} too agreeable \citep{park2023game}.
 
@@ -59,14 +59,6 @@ Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-
 	\includegraphics[width=\columnwidth]{intervention_count.png}
 	\caption{Histogram of interventions by \ac{LLM} facilitators per strategy used.}
 	\label{fig:intervention_count}
-\end{figure}
-
-
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.8\linewidth]{toxicity_trolls.png}
-    \caption{Non-troll toxicity levels in discussions with and without trolls. There is a significant uptick on the number of ``somewhat toxic" ($Toxicity=2$) comments when the participants are primed to respond to toxic comments.}
-    \label{fig:toxicity_trolls}
 \end{figure}
 
 
@@ -96,48 +88,58 @@ Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-
     \label{fig:diversity}
 \end{figure*}
 
-\begin{figure*}[t]
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\textwidth]{comment_len_model.png}
-        \caption{Model}
-        \label{fig:comment_length_model}
-    \end{subfigure}%
-    \hfill
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\textwidth]{comment_len_turns.png}
-        \caption{Turn-taking function $t$}
-        \label{fig:comment_length_turns}
-    \end{subfigure}%
-    \hfill
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\textwidth]{comment_len_prompts.png}
-        \caption{Prompting function $\phi$}
-        \label{fig:comment_length_prompts}
-    \end{subfigure}%
-
-    \caption{Comment length for each discussion by \ac{LLM} (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
-    \label{fig:comment_length}
-\end{figure*}
-
-
-We generate eight synthetic discussions per ablation experiment, using a single model, Qwen, to limit computational cost. We evaluate the diversity (cf. \S\ref{ssec:related:quality}) of the ablated discussions by comparing them with: (1) discussions in our original dataset produced solely by the Qwen model; and (2) human discussions from the \ac{CeRI} “Regulation Room” dataset\footnote{\url{http://archive.regulationroom.org}. Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the \ac{CeRI}.}, which includes moderated online deliberative discussions for ten diverse topics.
+We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \ref{ssec:experimental:evaluation}) of these discussions with ones from the \ac{CeRI} “Regulation Room” dataset\footnote{\url{http://archive.regulationroom.org}. Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the \ac{CeRI}.}, which includes moderated online deliberative discussions for ten diverse topics.
 
 
 \subsubsection{Effects of LLMs}
 
-\paragraph{Mistral and Qwen generate discussions more aligned with human diversity scores, despite being significantly smaller than the LLaMa model.} As shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
-LLaMa's lower diversity validates prior research suggesting that highly aligned \acp{LLM} struggle to replicate human dynamics \cite{Park2023GenerativeAI, leng_2024}. Alternatively, the lower diversity scores can be partially attributed to its longer average comment length (Fig.~\ref{fig:comment_length_model}); we find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we cannot verify the existence of this pattern in human-generated comments ($p = 0.775$).
+\paragraph{Larger models do not lead to more high-quality discussions.} As shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
+
+%Alternatively, the lower diversity scores can be partially attributed to its longer average comment length (Fig.~\ref{fig:comment_length_model}); we find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we cannot verify the existence of this pattern in human-generated comments ($p = 0.775$).
 
 
 \subsubsection{Effects of Turn-Taking Functions}
 
-\paragraph{Our proposed turn-taking function substantially improves the quality of synthetic data.} We compare our turn-taking function (\S\ref{ssec:methodology:turn}) to two baselines: Round Robin (participants speaking one after the other, then repeating) and Random Selection (uniformly sampling another participant each turn). Fig.~\ref{fig:rougel_turns} demonstrates that no single function fully approximates human diversity scores (all distributions diverge from the blue—human—distribution). However, unlike our own function, both baselines feature extremely high diversity, which cannot be attributed to lengthier comments (Fig.~\ref{fig:comment_length_turns}). Additionally, comments following our turn-taking function, closely follow the length of human discussions (Fig.~\ref{fig:comment_length_turns}).
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.8\linewidth]{toxicity_trolls.png}
+	\caption{Non-troll toxicity levels in discussions with and without trolls. There is a significant uptick on the number of ``somewhat toxic" ($Toxicity=2$) comments when the participants are primed to respond to toxic comments.}
+	\label{fig:toxicity_trolls}
+\end{figure}
+
+
+\paragraph{Our proposed turn-taking function substantially improves the quality of synthetic data.} We compare our turn-taking function (\S\ref{ssec:methodology:turn}) to two baselines: Round Robin (participants speaking one after the other, then repeating) and Random Selection (uniformly sampling another participant each turn). Fig.~\ref{fig:rougel_turns} demonstrates that although all distributions diverge from the blue—human—distribution, our function is the only one not exhibiting extremely high diversity (i.e., very limited participant interaction \S\ref{ssec:experimental:evaluation}).
 
 
 \subsubsection{Effects of User Prompting}
 
-We conduct three separate experiments in which user-agents (excluding facilitators) are subjected to one of the following conditions at a time: (1) no assigned \acp{SDB}, (2) no assigned roles, or (3) only a basic instruction prompt given (\S\ref{sssec:appendix:actors}). 
+We conduct three separate experiments in which participants are subjected to one of the following conditions at a time: (1) no assigned \acp{SDB}, (2) no assigned roles, or (3) only a very basic instruction prompt given (\S\ref{sssec:appendix:actors}). 
 
 \paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned \acp{LLM}.} Our instruction prompt for the participants (\S\ref{ssec:methodology:prompts-instructions}) incentivizes them to react to toxic behavior. Indeed, inserting “troll” participants to discussions, leads to more intense toxicity among \emph{other} participants \emph{only if we instruct participants to react to toxic posts} (Fig.~\ref{fig:toxicity_trolls}). 
 
-\paragraph{\acp{SDB}, roles, and our specialized instruction prompt increase the quality of synthetic data.} Fig.~\ref{fig:rougel_prompts} illustrates that although our proposed methodology---incorporating \acp{SDB}, roles, and specialized instruction prompts---does not achieve discussions with diversity scores comparable to human ones, replacing any of the above results in a notable deterioration. For instance, omitting \acp{SDB} (red ``No \acp{SDB}'' distribution in Fig.~\ref{fig:rougel_prompts}) causes the majority of discussions to exhibit maximum diversity---one---indicating a significant loss in participant interaction, which is not caused by longer comment length (Fig.~\ref{fig:comment_length_prompts}). This decline is analogous to the effects observed when modifying the turn-taking function. Also similarly to the turn-taking ablation study, our proposed methodology w.r.t.\ prompts features comments that best emulate observed human comment length (Fig.~\ref{fig:comment_length_prompts}).
+\paragraph{\acp{SDB}, roles, and our instruction prompt all increase the quality of synthetic data.} Fig.~\ref{fig:rougel_prompts} illustrates that incorporating \acp{SDB}, roles, and specialized instruction prompts, results in diversity scores more closely aligned with human discussions.
+
+\iffalse
+\begin{figure*}[t]
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_model.png}
+		\caption{Model}
+		\label{fig:comment_length_model}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_turns.png}
+		\caption{Turn-taking function $t$}
+		\label{fig:comment_length_turns}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_prompts.png}
+		\caption{Prompting function $\phi$}
+		\label{fig:comment_length_prompts}
+	\end{subfigure}%
+	
+	\caption{Comment length for each discussion by \ac{LLM} (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
+	\label{fig:comment_length}
+\end{figure*}
+\fi
