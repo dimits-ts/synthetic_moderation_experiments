@@ -26,13 +26,13 @@ In this section, we define a simple, generalizable methodology which can be used
 \subsection{Context-passing}
 \label{ssec:methodology:context}
 
-We assume that the $h$ most recent preceding comments at any given point in the discussion provide sufficient context for the \ac{LLM} users, facilitators, and annotators, a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}. While techniques such as summarization \cite{balog_2024}, \ac{LLM} self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM} exist, they result in greater computational cost and a less transparent, explainable system.
+We assume that the $h$ most recent preceding comments at any given point in the discussion provide sufficient context for the \ac{LLM} users, facilitators, and annotators; a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}. While techniques such as summarization \cite{balog_2024}, \ac{LLM} self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM} exist, they result in greater computational cost and a less transparent, explainable system.
 
 
 \subsection{Turn Taking}
 \label{ssec:methodology:turn}
 
-In online fora, users often create ``comment chains'' where they follow up on responses to their own previous comments. Thus, for each discussion turn, we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($40\%$).The probability was selected experimentally; larger values tend to create ``debate''-style discussions where many users may not get a chance to speak, while lower values tend to create scenarios with minimal interaction between the participants. A facilitator can respond after every comment, or stay silent by responding with an empty string.
+In online fora, users often create ``comment chains'' where they follow up on responses to their previous comments. Thus, for each discussion turn, we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($60\%$). This probability was selected experimentally; larger values tend to create ``debate''-style discussions between only two or three users, while lower values tend to create scenarios with minimal interaction between the participants. A facilitator can respond after every comment, or stay silent by responding with an empty string.
 
 
 \subsection{Instruction Prompting}
@@ -40,10 +40,10 @@ In online fora, users often create ``comment chains'' where they follow up on re
 
 We use a standard instruction prompt for the non-facilitator participants (\S\ref{sssec:appendix:actors}) which instructs them to respond to repeatedly toxic comments. This was a necessary measure to bypass the extreme agreeableness of \acp{LLM}  \cite{park2024generativeagentsimulations1000}.
 
-Additionally, following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (\S\ref{sssec:appendix:roles}). We create three roles for users: neutral, trolls, and community-focused users.    
+Additionally, following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (\S\ref{sssec:appendix:roles}). We create three roles for users: neutral users, trolls, and community veterans.    
 
 
 \subsection{LLM Personas}    
 \label{ssec:methodology:prompts-sdb}                
 
-\acfp{SDB} have proven promising in generating varied responses from \acp{LLM}, and alleviating the Western bias exhibited by them \cite{burton2024large}. We generate 30 \ac{LLM} user personas with unique \acp{SDB} by prompting a GPT-4 model \cite{openai2024gpt4technicalreport} (see \S\ref{sssec:appendix:sdbs}). Using these \ac{SDB} prompts, we observe that \ac{LLM} users are able to create and share personal narratives and experiences from the provided information (Fig~\ref{fig::example}). 
+\acfp{SDB} have proven promising in generating varied responses from \acp{LLM}, and alleviating the Western bias exhibited by them \cite{burton2024large}. We generate 30 \ac{LLM} user personas with unique \acp{SDB} by prompting a GPT-4 model \cite{openai2024gpt4technicalreport} (see \S\ref{sssec:appendix:sdbs}). Using these \ac{SDB} prompts, we observe that \ac{LLM} users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
