@@ -1,7 +1,5 @@
-\section{Appendix}
-\label{sec:appendix}
-
-\subsection{Acronyms Used}
+\section{Acronyms Used}
+\label{sec:acronyms}
 
 \begin{acronym}[WWW] % Give the longest label here so that the list is nicely aligned
     \ifthenelse{\boolean{review}}
@@ -9,24 +7,23 @@
         {\acro{VMD}{Virtual Moderation Dataset}}
     
 	\acro{LLM}{Large Language Model}
-	%\acro{NPC}{Non-Playable Character}
 	\acro{ML}{Machine Learning}
 	\acro{RL}{Reinforcement Learning}
 	\acro{SDB}{SocioDemographic Background}
     \acro{AQ}{Argument Quality}
-    %\acro{IR}{Information Retrieval}
-    %\acro{NLP}{Natural Language Processing}
     \acro{CeRI}{Cornell e-Rulemaking Initiative}
     \acro{nDFU}{normalized Distance From Unimodality}
     \acro{OLS}{Ordinary Least Squares}
-    \acro{GLP}{GNU General Public License}
+    \acro{GPL}{GNU General Public License}
 \end{acronym}
 
+
+\section{Methodological Details}
 
 \subsection{Synthetic Discussion Generation}
 \label{ssec:appendix:discussion}
 
-An overview of how the experiments are generated (\emph{not} executed) can be found in Algorithm~\ref{alg:exp_generation}. Each discussion is run according to Eq.~\ref{eq:comment} in \S\ref{ssec:methodology:discussions}.
+An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}. We provide our framework with a set of starting opinions (``seed opinions'') and \acp{SDB}. We then run $N_d=8$ discussions for each pair of facilitation strategies $S$ and model. Synthetic generation is then handled as described in \S\ref{sec:methodology}. We use the \texttt{transformers} library to load and manage the model.
 
 \begin{algorithm}[ht]
 \caption{Synthetic discussion setup generation}
@@ -58,11 +55,34 @@ An overview of how the experiments are generated (\emph{not} executed) can be fo
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{SocioDemographic Prompting}
+\label{sssec:appendix:sdbs}
 
-\subsection{Synthetic Annotation}
-\label{ssec:appendix:annotation}
+Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In ablation studes where we remove the \acp{SDB}, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (\S\ref{sssec:appendix:roles}). The actual values used for each of the $30$ \ac{LLM} user-agents and $10$ annotator-agents and the moderator, can be found in the project's repository\analysislink.
 
-\subsubsection{Investigating Argument Quality}
+\begin{table}
+	\centering
+	\begin{tabular}{|l|l|}
+		\toprule
+		Name & Type \\
+		\midrule
+		Username & string \\
+		Age & integer \\
+		Sex & string \\
+		Education Level & string \\
+		Sexual Orientation & string \\
+		Demographic Group & string \\
+		Current Employment & string \\
+		Special Instructions & string \\
+		Personality Characteristics & list of strings \\
+		\bottomrule
+	\end{tabular}
+	\caption{\ac{SDB} information provided to the synthetic participants. Because of the size of the data instances, we defer the reader to the project repository for the actual values.\analysislink}
+	\label{tab:sdb}
+\end{table}
+
+
+\section{Generalizing the Annotation Framework}
 
 While toxicity is a reliable and important metric, we can also investigate other discussion quality dimensions, such as \ac{AQ}. \ac{AQ} is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. Nevertheless, in this section we present preliminary results obtained by prompting \ac{LLM} to measure \ac{AQ}(\S\ref{ssec:appendix:prompts}). 
 
@@ -78,7 +98,7 @@ Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} 
 
 \begin{table}
 	\centering
-	\begin{tabular}{l p{2.5cm}}
+	\begin{tabular}{p{5cm} p{1.5cm}}
 		\toprule
 		\textbf{Variable} & \textbf{Arg.Q.} \\
 		\midrule
@@ -112,33 +132,10 @@ Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} 
 \end{figure}
 
 
-\subsubsection{Validating the LLM annotations}
 
-In this section, we examine the properties of \ac{LLM} annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
+\section{Additional Analysis}
 
-Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the \ac{AQ} scores. 
-
-To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we run an experiment where we use ten annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no \acp{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments even showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
-
-
-\begin{figure*}
-    \includegraphics[width=0.45\linewidth]{sdb_toxicity.png} \hfill
-    \includegraphics[width=0.45\linewidth]{sdb_aq.png}
-	\centering
-	\caption{Distribution plot of inter-annotator polarization (\ac{nDFU}) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model. The blue (left-most) bars represent the disagreement between $10$ identical annotator-agents, while the orange (right-most) bars, the disagreement between $10$ annotators with different \acp{SDB}.}
-    \label{fig:sdb_annot}
-\end{figure*}
-
-\begin{figure*}
-    \includegraphics[width=0.45\linewidth]{ndfu_toxicity.png} \hfill
-    \includegraphics[width=0.45\linewidth]{ndfu_aq.png}
-	\centering
-	\caption{Inter-annotator polarization (\ac{nDFU}) of each synthetic comment for all synthetic discussions, by annotation level. The left graph shows the relationship between $nDFU_{toxicity}$ and toxicity, while the right graph shows the relationship between $nDFU_{arg\_quality}$ and \ac{AQ}.}
-    \label{fig:ndfu_annot}
-\end{figure*}
-
-
-\subsection{Additional Analysis}
+\subsection{The Role of Roles}
 
 We verify that the models and roles used did not by themselves impact the findings presented in \S\ref{ssec:results:main}. Fig.~\ref{fig:toxicity_aq_role} demonstrates that, as expected, only troll user-agents contribute on average worse toxicity and \ac{AQ} in the synthetic discussions. Furthermore, Fig.~\ref{fig:toxicity_aq_model} shows that toxicity and \ac{AQ} are on average not qualitatively dependent on the model used.
 
@@ -159,38 +156,65 @@ We verify that the models and roles used did not by themselves impact the findin
 \end{figure*}
 
 
-\subsection{Prompts Used}
+\subsection{Comment Length}
+
+\begin{figure*}[t]
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_model.png}
+		\caption{Model}
+		\label{fig:comment_length_model}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_turns.png}
+		\caption{Turn-taking function $t$}
+		\label{fig:comment_length_turns}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_prompts.png}
+		\caption{Prompting function $\phi$}
+		\label{fig:comment_length_prompts}
+	\end{subfigure}%
+	
+	\caption{Comment length for each discussion by \ac{LLM} (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
+	\label{fig:comment_length}
+\end{figure*}
+
+We find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we cannot verify the existence of this pattern in human-generated comments ($p = 0.775$). This may partially explain the divergent diversity scores of different models in \S\ref{ssec:results:ablation}  (Fig.~\ref{fig:comment_length_model}) --- although it does not ultimately change the conclusions presented.
+
+\subsection{Generalizing Synthetic Annotation}
+\label{ssec:appendix:annotation}
+
+In this section, we examine the properties of \ac{LLM} annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
+
+Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the \ac{AQ} scores. 
+
+To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we run an experiment where we use ten annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no \acp{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments even showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
+
+
+\begin{figure*}
+	\includegraphics[width=0.45\linewidth]{sdb_toxicity.png} \hfill
+	\includegraphics[width=0.45\linewidth]{sdb_aq.png}
+	\centering
+	\caption{Distribution plot of inter-annotator polarization (\ac{nDFU}) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model. The blue (left-most) bars represent the disagreement between $10$ identical annotator-agents, while the orange (right-most) bars, the disagreement between $10$ annotators with different \acp{SDB}.}
+	\label{fig:sdb_annot}
+\end{figure*}
+
+\begin{figure*}
+	\includegraphics[width=0.45\linewidth]{ndfu_toxicity.png} \hfill
+	\includegraphics[width=0.45\linewidth]{ndfu_aq.png}
+	\centering
+	\caption{Inter-annotator polarization (\ac{nDFU}) of each synthetic comment for all synthetic discussions, by annotation level. The left graph shows the relationship between $nDFU_{toxicity}$ and toxicity, while the right graph shows the relationship between $nDFU_{arg\_quality}$ and \ac{AQ}.}
+	\label{fig:ndfu_annot}
+\end{figure*}
+
+
+\section{Prompts Used}
 \label{ssec:appendix:prompts}
-
-
-\subsubsection{SocioDemographic Prompting}
-\label{sssec:appendix:sdbs}
-
-Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In ablation studes where we remove the \acp{SDB}, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (\S\ref{sssec:appendix:roles}). The actual values used for each of the $30$ \ac{LLM} user-agents and $10$ annotator-agents and the moderator, can be found in the project's repository\analysislink.
-
-\begin{table}
-\centering
-\begin{tabular}{|l|l|}
-    \toprule
-    Name & Type \\
-    \midrule
-    Username & string \\
-    Age & integer \\
-    Sex & string \\
-    Education Level & string \\
-    Sexual Orientation & string \\
-    Demographic Group & string \\
-    Current Employment & string \\
-    Special Instructions & string \\
-    Personality Characteristics & list of strings \\
-    \bottomrule
-\end{tabular}
-\caption{\ac{SDB} information provided to the synthetic participants. Because of the size of the data instances, we defer the reader to the project repository for the actual values.\analysislink}
-\label{tab:sdb}
-\end{table}
   
   
-\subsubsection{Actor Prompts}
+\subsection{Actor Prompts}
 \label{sssec:appendix:actors}
 
 \begin{itemize}
@@ -222,7 +246,7 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
 \end{itemize}
 
 
-\subsubsection{User Roles}
+\subsection{User Roles}
 \label{sssec:appendix:roles}
 
 \begin{itemize}
@@ -232,7 +256,7 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
 \end{itemize}
 
 
-\subsubsection{Facilitation Strategies}
+\subsection{Facilitation Strategies}
 \label{sssec:appendix:moderation_strategies}
 
 \begin{itemize}

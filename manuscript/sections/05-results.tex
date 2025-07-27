@@ -20,8 +20,6 @@
 \paragraph{Finding 2: More elaborate facilitation strategies fail to decrease toxicity.}
 More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\strategyconstrcomm}, and our proposed \emph{\strategymodgame}, lead to a statistically significant reduction in comment toxicity over time compared to \emph{unmoderated} discussions (Table~\ref{tab:toxicity}). However, their additional impact beyond that of the simpler \emph{\strategynoinstr} strategy is marginal and sometimes not statistically significant (Fig.~\ref{fig:toxicity_stats}), suggesting that out-of-the-box \acp{LLM} may struggle to effectively leverage advanced instructions---echoing prior findings on the limitations of \ac{LLM} facilitators \cite{cho-etal-2024-language}.
 
-
-
 \begin{table}[t]
 	\centering
 	\begin{tabular}{p{5cm} p{1.5cm}}
@@ -95,8 +93,6 @@ We generate eight synthetic discussions per ablation experiment, using a single 
 
 \paragraph{Larger models do not lead to more high-quality discussions.} As shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
 
-%Alternatively, the lower diversity scores can be partially attributed to its longer average comment length (Fig.~\ref{fig:comment_length_model}); we find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we cannot verify the existence of this pattern in human-generated comments ($p = 0.775$).
-
 
 \subsubsection{Effects of Turn-Taking Functions}
 
@@ -118,28 +114,3 @@ We conduct three separate experiments in which participants are subjected to one
 \paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned \acp{LLM}.} Our instruction prompt for the participants (\S\ref{ssec:methodology:prompts-instructions}) incentivizes them to react to toxic behavior. Indeed, inserting “troll” participants to discussions, leads to more intense toxicity among \emph{other} participants \emph{only if we instruct participants to react to toxic posts} (Fig.~\ref{fig:toxicity_trolls}). 
 
 \paragraph{\acp{SDB}, roles, and our instruction prompt all increase the quality of synthetic data.} Fig.~\ref{fig:rougel_prompts} illustrates that incorporating \acp{SDB}, roles, and specialized instruction prompts, results in diversity scores more closely aligned with human discussions.
-
-\iffalse
-\begin{figure*}[t]
-	\begin{subfigure}{0.32\linewidth}
-		\includegraphics[width=\textwidth]{comment_len_model.png}
-		\caption{Model}
-		\label{fig:comment_length_model}
-	\end{subfigure}%
-	\hfill
-	\begin{subfigure}{0.32\linewidth}
-		\includegraphics[width=\textwidth]{comment_len_turns.png}
-		\caption{Turn-taking function $t$}
-		\label{fig:comment_length_turns}
-	\end{subfigure}%
-	\hfill
-	\begin{subfigure}{0.32\linewidth}
-		\includegraphics[width=\textwidth]{comment_len_prompts.png}
-		\caption{Prompting function $\phi$}
-		\label{fig:comment_length_prompts}
-	\end{subfigure}%
-	
-	\caption{Comment length for each discussion by \ac{LLM} (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
-	\label{fig:comment_length}
-\end{figure*}
-\fi
