@@ -73,6 +73,8 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
             trolls_false, bins=bin_edges, density=True
         )
         hist_diff = hist_true - hist_false
+
+        # Plot horizontal bars for histogram differences
         plt.barh(
             bin_edges[:-1] + idx * 0.15,
             hist_diff,
@@ -82,14 +84,40 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
         )
 
     plt.axvline(0, color="red", linestyle="--")
-    plt.yticks(np.arange(1, 6, 1))
-    plt.ylabel(f"{feature} level")
-    plt.xlabel(
-        "rel.diff.(#Ann. w/Trolls - #Ann. wo/Trolls)",
-        fontsize=16,
+    plt.ylabel(f"{feature} level", fontsize=16)
+    plt.xlabel("Normalized diff. of #annotations", fontsize=16)
+    plt.title(
+        "Trolls affect discussions differently depending on\n "
+        "participant instructions",
+        fontsize=14,
     )
-    plt.title("Specialized instruction prompt\nenhances the effects of trolls")
-    plt.legend(title="Instructions", loc="upper left")
+    plt.legend(title="Prompt", loc="upper left", fontsize=14)
+
+    # Add "Less toxic" and "More toxic" text on x-axis ends
+    xmin, xmax = plt.xlim()
+    y_pos = (
+       bin_edges[0] - np.diff(bin_edges).max()
+    )  # place above top bin
+    plt.text(
+        xmin,
+        y_pos,
+        "Fewer comments",
+        ha="left",
+        va="center",
+        fontsize=14,
+        color="black",
+    )
+    plt.text(
+        xmax,
+        y_pos,
+        "More comments",
+        ha="right",
+        va="center",
+        fontsize=14,
+        color="black",
+    )
+
+    plt.tight_layout()
 
 
 def rougel_plot(
@@ -177,7 +205,7 @@ def plot_metric_barplot(
         hue=group_by_col,
         y=metric,
         errorbar="sd",
-        dodge=False
+        dodge=False,
     )
     plt.xticks(rotation=45)
     plt.ylabel(metric.capitalize())
@@ -253,7 +281,7 @@ def disagreement_plot(
     plt.xlim(0, 1)
     plt.xlabel("nDFU")
     plot.get_legend().set_title(None)
-    #sns.move_legend(plot, loc="center right", bbox_to_anchor=(0.68, 0.5))
+    # sns.move_legend(plot, loc="center right", bbox_to_anchor=(0.68, 0.5))
 
 
 def polarization_plot(df, metric_col: str):
