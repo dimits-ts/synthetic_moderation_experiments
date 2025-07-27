@@ -4,29 +4,31 @@
 \subsection{Facilitation Strategies}
 \label{ssec:experimental:strategies}
 
-We test four different facilitation strategies, along with two common-place strategies for discussion facilitation.\footnote{The exact prompts used per strategy are in \S\ref{sssec:appendix:moderation_strategies}.}
+We test four different facilitation strategies, along with two common-place strategies for discussion facilitation. The exact prompts used per strategy are in \S\ref{sssec:appendix:moderation_strategies}. Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source \acp{LLM}, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.
 
 \begin{enumerate}[nosep, noitemsep]
     \item \textbf{\strategynomod}: A \emph{common} strategy where no facilitator is present.
 
     \item \textbf{\strategynoinstr}: A \emph{common} strategy where a \ac{LLM} facilitator is present, but is provided only with basic instructions. Example: “You are a moderator, keep the discussion civil”.
 
-     \item \textbf{\strategymodgame}: Our proposed \emph{experimental} strategy, inspired by  \citet{abdelnabi_negotiations} (\S\ref{ssec:related:discussions}). Instructions are formulated as a game, where the facilitator \ac{LLM} tries to maximize its scores by arriving at specific outcomes. No actual score is being kept; they exist to act as indications for how desirable an outcome is. The other participants are not provided with scores, nor are they aware of the game rules. Example: ``User is toxic: $-5$ points, User corrects behavior: $+10$ points''.
+    \item \textbf{\strategyrules}: A \emph{real-life} strategy where the prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. These guidelines were selected to be as unanimously agreed upon across various human groups. They thus provide a set of rules to uphold, without specifying \emph{how} to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”).
 
-    \item \textbf{\strategyrules}: A \emph{real-life} strategy where the prompt is adapted from \ac{LLM} alignment guidelines \cite{collective_constitution}. This provides the facilitator with a set of rules to uphold, without specifying how to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”).
+    \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \citep{Cornell_eRulemaking2017}. The instructions are typical of online moderation. Example: ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
 
-    \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the \ac{CeRI} \citep{Cornell_eRulemaking2017}. These facilitators were deployed to the “Regulation Room”, an online platform designed to facilitate public engagement with U.S. government policy decisions, which has been used in online moderation literature \cite{seering_self_moderation, park_et_al_2012_facilitation}. Example: ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
-
-    \item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches facilitation from a more personalized and indirect angle. Example: ``Do not make decisions, be a guide, provide explanations''.
+    \item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions. Example: ``Do not make decisions, be a guide, provide explanations''.
+    
+    \item \textbf{\strategymodgame}: Our proposed \emph{experimental} strategy, inspired by \citet{abdelnabi_negotiations} (see \S\ref{ssec:related:discussions}). Instructions are formulated as a game, where the facilitator \ac{LLM} tries to maximize their scores by arriving at specific outcomes. No actual score is being kept; they exist to act as indications for how desirable an outcome is. The other participants are not provided with scores, nor are they aware of the game rules. Example: ``User is toxic: $-5$ points, User corrects behavior: $+10$ points''.
 \end{enumerate}
 
 
 \subsection{Evaluation}
 \label{ssec:experimental:evaluation}
 
- We use the \emph{diversity} and \emph{toxicity} metrics presented in \S\ref{ssec:related:quality}. While diversity by itself can be used to detect pathological problems, we cannot know when diversity is so high in a discussion to indicate issues with inter-participant interaction (\S\ref{ssec:related:quality}). Instead, we can compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction.
- 
- For toxicity annotation, we use ten \ac{LLM} annotator-agents controlled by a model already used in prior work (LLaMa3.1 70B) \cite{kang-qian-2024-implanting}. Each annotator's prompt includes \acp{SDB} different from the ones provided to the users, annotation instructions, and few-shot examples (\S\ref{ssec:appendix:annotation}). Each annotator is tasked with annotating all comments in each discussion once.
+In our study, we use \emph{toxicity} as a proxy for discussion quality, since it can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.}. We use ten \ac{LLM} annotator-agents controlled by a model already used in prior work (LLaMa3.1 70B) \cite{kang-qian-2024-implanting} (\S\ref{ssec:experimental:evaluation}), as \acp{LLM} are reliable for toxicity detection \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}.
+
+In order to gauge the quality of our synthetic discussions, since we can not reliably measure ``realism'' (see \S\ref{ssec:related:human-llm}), we use the ``diversity'' metric \citep{ulmer2024}. Low diversity points to pathological problems (e.g., \acp{LLM} repeating previous comments). On the other hand, extremely high diversity may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants). We compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction. 
+
+We note again that these metrics are better interpreted as heuristics of actual discussion and synthetic data quality respectively. More research is needed w.r.t. reliable and generalizable quality metrics.
 
 
 \subsection{Technical Details}
