@@ -4,53 +4,46 @@
 \section{Methodology}
 \label{sec:methodology}
 
-\subsection{Defining Synthetic Discussions}
-\label{ssec:methodology:discussions}
+ \begin{figure*}[t]
+	\centering
+	\includegraphics[width=\linewidth]{example.png}
+	\caption{Excerpt from a synthetic discussion. The \ac{LLM} participants use their \ac{SDB} prompts to insert personal stories and justify their perspectives in the discussion. Comments are clipped due to length. @CynicalInvestor88 is also a part of the discussion; not a hallucination.}
+	\label{fig::example}
+\end{figure*}
 
-We assume that the $h$ most recent preceding comments at any given point in the discussion provide sufficient context for the \ac{LLM} users, facilitators, and annotators \cite{pavlopoulos_2020_toxicity}. This approach eliminates the need for additional mechanisms such as summarization \cite{balog_2024}, \ac{LLM} self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM}, resulting in reduced computational overhead and a more transparent, explainable system.
+In this section, we define a simple, generalizable methodology which can be used to create high-quality synthetic discussions, as this is a prerequisite for experimenting and analyzing \ac{LLM} facilitators. Specifically, we need to define the following mechanisms:
 
-Additionally, we assume that three key functions define the structure of synthetic discussions:
 \begin{itemize}[nosep, noitemsep]
-    \item Underlying model ($\textit{LLM}(\cdot)$).
-    \item Turn-taking function ($t$): Determines which user speaks at each turn.
-    \item Prompting function ($\phi$): Provides each participant with a personalized instruction prompt, including information such as name and \ac{SDB}.
+	\item \textbf{Context passing}: How an \ac{LLM} receives the context of the discussion so far (\S\ref{ssec:methodology:context}).  
+	
+	\item \textbf{Turn order}: Given that \acp{LLM} are trained to be chat-bot assistants, they tend to always speak when given the chance. Therefore, turn order in a discussion must be enforced by an outside system (\S\ref{ssec:methodology:turn}).
+	
+	\item \textbf{Participant prompts}: The \acp{LLM} should at least attempt to emulate real-world dynamics. Therefore, we need to craft appropriate instruction prompts (\S\ref{ssec:methodology:prompts-instructions}).
+	
+	\item \textbf{Discussion variety}: Different \ac{LLM} users should behave differently in a discussion (\S\ref{ssec:methodology:prompts-sdb}; Fig.~\ref{fig::example}).
 \end{itemize}
 
-We can then model a synthetic comment $c$ at position $i$ of a discussion $d$ recursively as:
-\begin{equation}
-\label{eq:comment}
-    c(d, i) = \textit{LLM}(\phi(t(d, i)) \concat [c(d, j)]^{i-1}_{i-h})
-\end{equation}
+\subsection{Context-passing}
+\label{ssec:methodology:context}
 
-\noindent where $\concat$ is the string concatenation operator, and $[c(d,j)]_{i-h}^{i-1}]$ denotes the concatenation of the previous $h$ comments.
-
-Our formulation of synthetic discussions not only keeps the system simple, but also enables controlled experimentation with various alternatives for each of the three functions (Section \ref{ssec:results:ablation}).
+We assume that the $h$ most recent preceding comments at any given point in the discussion provide sufficient context for the \ac{LLM} users, facilitators, and annotators, a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}. While techniques such as summarization \cite{balog_2024}, \ac{LLM} self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM} exist, they result in greater computational cost and a less transparent, explainable system.
 
 
 \subsection{Turn Taking}
 \label{ssec:methodology:turn}
 
-In online discussions, users do not take turns uniformly, nor do they randomly select which comments to respond to. Instead, they often create ``comment chains'' where they follow up on responses to their own previous comments. To simulate this, our proposed function chooses between the preceding user and another random user for each turn in the discussion:
-
-\small
-\begin{equation}
-\label{eq:turn_taking}
-    t(i) = \left\{
-\begin{array}{ll}
-    \textit{unif}(U) & i=1, i=2\\
-    \textit{unif}(U \setminus \{t(i-1)\}) & i > 2, p=0.6 \\
-    t(i-2) & i > 2, p=0.4 
-\end{array} 
-\right.
-\end{equation}
-\normalsize
-
-\noindent where $U$ is the set of all non-facilitator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the corresponding option being selected. When a facilitator is present, $t$ alternates between picking a normal user and the facilitator. The facilitator, however, is instructed (\S\ref{ssec:appendix:prompts}) to decide whether to say something or not (generate the empty string), when given by $t$ the chance to talk, i.e., the facilitator does not necessarily talk right after every user utterance. 
+In online fora, users often create ``comment chains'' where they follow up on responses to their own previous comments. Thus, for each discussion turn, we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($40\%$).The probability was selected experimentally; larger values tend to create ``debate''-style discussions where many users may not get a chance to speak, while lower values tend to create scenarios with minimal interaction between the participants. A facilitator can respond after every comment, or stay silent by responding with an empty string.
 
 
-\subsection{Prompting}
-\label{ssec:methodology:prompts}
+\subsection{Instruction Prompting}
+\label{ssec:methodology:prompts-instructions}
 
-\acfp{SDB} have proven promising in generating varied responses, and alleviating the Western bias exhibited by \acp{LLM} \cite{burton2024large}. We generate characteristics for 30 \ac{LLM} user personas with unique \acp{SDB} by prompting a GPT-4 model \cite{openai2024gpt4technicalreport} (\S\ref{sssec:appendix:sdbs}). We do not explicitly include political positions in the prompts of the participants, since instruction-tuned \acp{LLM} have been shown to be inherently left-leaning---which cannot be alleviated by prompting alone \cite{Taubenfeld2024SystematicBI}. %---and research in the field has predominantly occupied Western politics \cite{Taubenfeld2024SystematicBI, potter-etal-2024-hidden, political_2024, pit2024oninvestigatingpoliticalstance}. 
-Following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (\S\ref{sssec:appendix:roles}). We create three roles for users: neutral, trolls, and community-focused users.                                      
-Finally, we create a user instruction prompt (\S\ref{sssec:appendix:actors}) which instructs participants that repeatedly toxic posts \emph{should} influence their behavior. 
+We use a standard instruction prompt for the non-facilitator participants (\S\ref{sssec:appendix:actors}) which instructs them to respond to repeatedly toxic comments. This was a necessary measure to bypass the extreme agreeableness of \acp{LLM}  \cite{park2024generativeagentsimulations1000}.
+
+Additionally, following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions (\S\ref{sssec:appendix:roles}). We create three roles for users: neutral, trolls, and community-focused users.    
+
+
+\subsection{LLM Personas}    
+\label{ssec:methodology:prompts-sdb}                
+
+\acfp{SDB} have proven promising in generating varied responses from \acp{LLM}, and alleviating the Western bias exhibited by them \cite{burton2024large}. We generate 30 \ac{LLM} user personas with unique \acp{SDB} by prompting a GPT-4 model \cite{openai2024gpt4technicalreport} (see \S\ref{sssec:appendix:sdbs}). Using these \ac{SDB} prompts, we observe that \ac{LLM} users are able to create and share personal narratives and experiences from the provided information (Fig~\ref{fig::example}). 
