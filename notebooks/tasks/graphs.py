@@ -185,7 +185,6 @@ def rougel_plot(
     )
 
     plt.tight_layout()
-    plt.show()
 
 
 def posthoc_heatmap(
