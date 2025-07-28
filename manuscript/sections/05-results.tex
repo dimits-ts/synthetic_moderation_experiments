@@ -8,17 +8,17 @@
 \subsection{Main findings}
 \label{ssec:results:main}
 
-\paragraph{Finding 1: \ac{LLM} facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly more intense toxicity (ANOVA $p<.000$).\footnote{The large size of our dataset allows using parametric tests.} 
+\paragraph{Finding 1: LLM facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly more intense toxicity (ANOVA $p<.000$).\footnote{The large size of our dataset allows using parametric tests.} 
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{toxicity_stats.png}
 	\centering
-	\caption{Difference in average toxicity levels for comments following pairs of facilitation strategies. Red cells ($x>0$) indicate that the strategy on the left performs worse than the one on the bottom, for an average of $x$ points in a scale of 1-5. Conversely for blue ($x<0$) cells. Black cells denote minute changes. Asterisks denote pairwise Student-t tests (\asterisknote).}
+	\caption{Difference in average toxicity levels for comments following pairs of facilitation strategies. Red cells ($x>0$) indicate that the strategy on the left performs worse than the one on the bottom, for an average of $x$ points in a scale of 1-5. Conversely for blue ($x<0$) cells. Black cells denote minute changes. Asterisks from pairwise Student-t tests (\asterisknote).}
 	\label{fig:toxicity_stats}
 \end{figure}
 
 \paragraph{Finding 2: More elaborate facilitation strategies fail to decrease toxicity.}
-More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\strategyconstrcomm}, and our proposed \emph{\strategymodgame}, lead to a statistically significant reduction in comment toxicity over time compared to \emph{unmoderated} discussions (Table~\ref{tab:toxicity}). However, their additional impact beyond that of the simpler \emph{\strategynoinstr} strategy is marginal and sometimes not statistically significant (Fig.~\ref{fig:toxicity_stats}), suggesting that out-of-the-box \acp{LLM} may struggle to effectively leverage advanced instructions---echoing prior findings on the limitations of \ac{LLM} facilitators \cite{cho-etal-2024-language}.
+More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\strategyconstrcomm}, and our proposed \emph{\strategymodgame}, lead to a statistically significant reduction in comment toxicity over time compared to \emph{unmoderated} discussions (Table~\ref{tab:toxicity}). However, their additional impact beyond that of the simpler \emph{\strategynoinstr} strategy is marginal and sometimes not statistically significant (Fig.~\ref{fig:toxicity_stats}), suggesting that out-of-the-box LLMs may struggle to effectively leverage advanced instructions---echoing prior findings on the limitations of LLM facilitators \cite{cho-etal-2024-language}.
 
 \begin{table}[t]
 	\centering
@@ -43,19 +43,19 @@ More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\
 	\small
 	\asterisknote
 	\normalsize
-	\caption{\ac{OLS} regression coefficients for toxicity ($Adj. R^2=0.054$). Average toxicity without facilitators is $2.164$. Each new comment slightly reduces average toxicity ($time = \minus0.012$). Negative values next to each strategy (e.g., $\strategyregroom = \minus0.277$) mean that discussions using that strategy are less toxic  compared to \textit{\strategynomod}. (e.g., by an average of $\minus0.277$ toxicity). Terms such as $\strategyregroom \times time = \minus0.023$ show that toxicity decreases more after each comment.}
+	\caption{OLS regression coefficients for toxicity ($Adj. R^2=0.054$). Average toxicity without facilitators is $2.164$.}
 	\label{tab:toxicity}
 \end{table}
 
 
-\paragraph{Finding 3: \ac{LLM} facilitators choose to intervene far too frequently, which is tolerated by the other participants .} Fig.~\ref{fig:intervention_count} demonstrates that \ac{LLM} facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. This confirms that \acp{LLM} generally can not decide not to speak (\S\ref{ssec:methodology:turn}). To our knowledge, this has not been reported in relevant literature, and \emph{is an example of ``debugging'' problems with \acp{LLM}} --- a core motivation of our work.
+\paragraph{Finding 3: LLM facilitators choose to intervene far too frequently, which is tolerated by the other participants .} Fig.~\ref{fig:intervention_count} demonstrates that LLM facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. This confirms that LLMs generally can not decide not to speak (\S\ref{ssec:methodology:turn}). To our knowledge, this has not been reported in relevant literature, and \emph{is an example of ``debugging'' problems with LLMs} --- a core motivation of our work.
 
-Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact caused by alignment procedures, making \acp{LLM} too agreeable \citep{park2023game}.
+Additionally, a qualitative look through the dataset reveals that LLM user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact caused by alignment procedures, making LLMs too agreeable \citep{park2023game}.
 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\columnwidth]{intervention_count.png}
-	\caption{Histogram of interventions by \ac{LLM} facilitators per strategy used.}
+	\caption{Histogram of interventions by LLM facilitators per strategy used.}
 	\label{fig:intervention_count}
 \end{figure}
 
@@ -82,11 +82,11 @@ Additionally, a qualitative look through the dataset reveals that \ac{LLM} user-
         \label{fig:rougel_prompts}
     \end{subfigure}%
 
-    \caption{Diversity (\S\ref{ssec:related:quality}) distribution for each discussion by \ac{LLM} (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}).}
+    \caption{Diversity (\S\ref{ssec:related:quality}) distribution for each discussion by LLM (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}).}
     \label{fig:diversity}
 \end{figure*}
 
-We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \ref{ssec:experimental:evaluation}) of these discussions with ones from the \ac{CeRI} “Regulation Room” dataset\footnote{\url{http://archive.regulationroom.org}. Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the \ac{CeRI}.}, which includes moderated online deliberative discussions for ten diverse topics.
+We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \ref{ssec:experimental:evaluation}) of these discussions with ones from the CeRI “Regulation Room” dataset\footnote{\url{http://archive.regulationroom.org}. Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.}, which includes moderated online deliberative discussions for ten diverse topics.
 
 
 \subsubsection{Effects of LLMs}
@@ -109,8 +109,8 @@ We generate eight synthetic discussions per ablation experiment, using a single 
 
 \subsubsection{Effects of User Prompting}
 
-We conduct three separate experiments in which participants are subjected to one of the following conditions at a time: (1) no assigned \acp{SDB}, (2) no assigned roles, or (3) only a very basic instruction prompt given (\S\ref{sssec:appendix:actors}). 
+We conduct three separate experiments in which participants are subjected to one of the following conditions at a time: (1) no assigned SDBs, (2) no assigned roles, or (3) only a very basic instruction prompt given. 
 
-\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned \acp{LLM}.} Our instruction prompt for the participants (\S\ref{ssec:methodology:prompts-instructions}) incentivizes them to react to toxic behavior. Indeed, inserting “troll” participants to discussions, leads to more intense toxicity among \emph{other} participants \emph{only if we instruct participants to react to toxic posts} (Fig.~\ref{fig:toxicity_trolls}). 
+\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned LLMs.} Our instruction prompt for the participants (\S\ref{ssec:methodology:prompts-instructions}) incentivizes them to react to toxic behavior. Indeed, inserting “troll” participants to discussions, leads to more intense toxicity among \emph{other} participants \emph{only if we instruct participants to react to toxic posts} (Fig.~\ref{fig:toxicity_trolls}). 
 
-\paragraph{\acp{SDB}, roles, and our instruction prompt all increase the quality of synthetic data.} Fig.~\ref{fig:rougel_prompts} illustrates that incorporating \acp{SDB}, roles, and specialized instruction prompts, results in diversity scores more closely aligned with human discussions.
+\paragraph{SDBs, roles, and our instruction prompt all increase the quality of synthetic data.} Fig.~\ref{fig:rougel_prompts} illustrates that incorporating SDBs, roles, and specialized instruction prompts, results in diversity scores more closely aligned with human discussions.

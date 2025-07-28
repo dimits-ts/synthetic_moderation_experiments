@@ -8,7 +8,6 @@
     
 	\acro{LLM}{Large Language Model}
 	\acro{ML}{Machine Learning}
-	\acro{RL}{Reinforcement Learning}
 	\acro{SDB}{SocioDemographic Background}
     \acro{AQ}{Argument Quality}
     \acro{CeRI}{Cornell e-Rulemaking Initiative}
@@ -23,7 +22,7 @@
 \subsection{Synthetic Discussion Generation}
 \label{ssec:appendix:discussion}
 
-An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}. We provide our framework with a set of starting opinions (``seed opinions'') and \acp{SDB}. We then run $N_d=8$ discussions for each pair of facilitation strategies $S$ and model. Synthetic generation is then handled as described in \S\ref{sec:methodology}. We use the \texttt{transformers} library to load and manage the model.
+An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}. We provide our framework with a set of starting opinions (``seed opinions'') and SDBs. We then run $N_d=8$ discussions for each pair of facilitation strategies $S$ and model. Synthetic generation is then handled as described in \S\ref{sec:methodology}. We use the \texttt{transformers} library to load and manage the model.
 
 \begin{algorithm}[ht]
 \caption{Synthetic discussion setup generation}
@@ -34,7 +33,7 @@ An overview of how the experiments are generated can be found in Algorithm~\ref{
              \item Moderator \acs{SDB} = $\theta_{mod}$
              \item Strategies $S = \{s_1, \ldots, s_6\}$
              \item Seed opinions $O = \{o_1, \ldots, o_7\}$
-             \item \acp{LLM} = $\{llm_1, llm_2, llm_3\}$
+             \item LLMs = $\{llm_1, llm_2, llm_3\}$
          \end{itemize}
          \hspace*{\algorithmicindent} \textbf{Output:} Set of discussions $D$
 \begin{algorithmic}[1]
@@ -58,7 +57,7 @@ An overview of how the experiments are generated can be found in Algorithm~\ref{
 \subsection{SocioDemographic Prompting}
 \label{sssec:appendix:sdbs}
 
-Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic participant. This applies to \ac{LLM} users, annotators and moderators. In ablation studes where we remove the \acp{SDB}, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (\S\ref{sssec:appendix:roles}). The actual values used for each of the $30$ \ac{LLM} user-agents and $10$ annotator-agents and the moderator, can be found in the project's repository\analysislink.
+Table \ref{tab:sdb} shows the sociodemographic information provided to each synthetic participant. This applies to LLM users, annotators and moderators. In ablation studes where we remove the SDBs, each value is replaced with the string “unknown”. The “Special Instructions” refer to the participant's role (\S\ref{sssec:appendix:roles}). The actual values used for each of the $30$ LLM user-agents and $10$ annotator-agents and the moderator, can be found in the project's repository.
 
 \begin{table}
 	\centering
@@ -77,16 +76,16 @@ Table \ref{tab:sdb} shows the \ac{SDB} information provided to each synthetic pa
 		Personality Characteristics & list of strings \\
 		\bottomrule
 	\end{tabular}
-	\caption{\ac{SDB} information provided to the synthetic participants. Because of the size of the data instances, we defer the reader to the project repository for the actual values.\analysislink}
+	\caption{sociodemographic information provided to the synthetic participants. Because of the size of the data instances, we defer the reader to the project repository for the actual values.\analysislink}
 	\label{tab:sdb}
 \end{table}
 
 
 \section{Generalizing the Annotation Framework}
 
-While toxicity is a reliable and important metric, we can also investigate other discussion quality dimensions, such as \ac{AQ}. \ac{AQ} is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. Nevertheless, in this section we present preliminary results obtained by prompting \ac{LLM} to measure \ac{AQ}(\S\ref{ssec:appendix:prompts}). 
+While toxicity is a reliable and important metric, we can also investigate other discussion quality dimensions, such as \ac{AQ}. \ac{AQ} is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining \ac{AQ} is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. Nevertheless, in this section we present preliminary results obtained by prompting LLM to measure \ac{AQ}(\S\ref{ssec:appendix:prompts}). 
 
-Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} demonstrates that the presence of an \ac{LLM} facilitator qualitatively improves the \ac{AQ} of synthetic discussions, although to a lesser extent when compared with toxicity (c.f.\  Fig.~\ref{fig:toxicity_stats}). Similarly, there is no qualitative, observed improvement when advanced facilitation strategies are used (Fig.~\ref{fig:aq_stats}). \ac{LLM} users also show worse \ac{AQ} in the presence of trolls, when we use our specialized instruction prompt. Contrary to toxicity, the presence of \ac{LLM} facilitators does not seem to improve \ac{AQ} over time, as demonstrated in Table~\ref{tab:argq}.
+Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} demonstrates that the presence of an LLM facilitator qualitatively improves the \ac{AQ} of synthetic discussions, although to a lesser extent when compared with toxicity (c.f.\  Fig.~\ref{fig:toxicity_stats}). Similarly, there is no qualitative, observed improvement when advanced facilitation strategies are used (Fig.~\ref{fig:aq_stats}). LLM users also show worse \ac{AQ} in the presence of trolls, when we use our specialized instruction prompt. Contrary to toxicity, the presence of LLM facilitators does not seem to improve \ac{AQ} over time, as demonstrated in Table~\ref{tab:argq}.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{resources/argumentq_stats.png}
@@ -139,19 +138,19 @@ Most findings w.r.t. toxicity are mirrored for \ac{AQ}. Fig.~\ref{fig:aq_stats} 
 
 We verify that the models and roles used did not by themselves impact the findings presented in \S\ref{ssec:results:main}. Fig.~\ref{fig:toxicity_aq_role} demonstrates that, as expected, only troll user-agents contribute on average worse toxicity and \ac{AQ} in the synthetic discussions. Furthermore, Fig.~\ref{fig:toxicity_aq_model} shows that toxicity and \ac{AQ} are on average not qualitatively dependent on the model used.
 
-\begin{figure*}
+\begin{figure*}[ht]
 	\includegraphics[width=0.45\linewidth]{toxicity_intent_barplot.png} \hfill
 	\includegraphics[width=0.45\linewidth]{aq_intent_barplot.png}
 	\centering
-	\caption{Average Toxicity (left) and \acf{AQ} (right) per \ac{LLM} user-role (\S\ref{ssec:methodology:prompts}).}
+	\caption{Average Toxicity (left) and \acf{AQ} (right) per LLM user-role (\S\ref{ssec:methodology:prompts-instructions}).}
 	\label{fig:toxicity_aq_role}
 \end{figure*}
 
-\begin{figure*}
+\begin{figure*}[ht]
 	\includegraphics[width=0.45\linewidth]{toxicity_llm_barplot.png} \hfill
 	\includegraphics[width=0.45\linewidth]{aq_llm_barplot.png}
 	\centering
-	\caption{Boxplots for average Toxicity (left) and \acf{AQ} (right) per \ac{LLM} (\S\ref{ssec:experimental:setup}).}
+	\caption{Boxplots for average Toxicity (left) and \acf{AQ} (right) per LLM (\S\ref{ssec:experimental:setup}).}
 	\label{fig:toxicity_aq_model}
 \end{figure*}
 
@@ -177,7 +176,7 @@ We verify that the models and roles used did not by themselves impact the findin
 		\label{fig:comment_length_prompts}
 	\end{subfigure}%
 	
-	\caption{Comment length for each discussion by \ac{LLM} (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
+	\caption{Comment length for each discussion by LLM (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
 	\label{fig:comment_length}
 \end{figure*}
 
@@ -186,18 +185,18 @@ We find that there is a statistically significant, negative correlation between 
 \subsection{Generalizing Synthetic Annotation}
 \label{ssec:appendix:annotation}
 
-In this section, we examine the properties of \ac{LLM} annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
+In this section, we examine the properties of LLM annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the \ac{nDFU} metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
 
 Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the \ac{AQ} scores. 
 
-To mitigate the instability inherent in \ac{LLM} outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we run an experiment where we use ten annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no \acp{SDB}. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments even showing maximum polarization. Running the same experiment with different \acp{SDB} yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on \ac{LLM} instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
+To mitigate the instability inherent in LLM outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we run an experiment where we use ten annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no SDBs. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments even showing maximum polarization. Running the same experiment with different SDBs yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on LLM instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
 
 
 \begin{figure*}
 	\includegraphics[width=0.45\linewidth]{sdb_toxicity.png} \hfill
 	\includegraphics[width=0.45\linewidth]{sdb_aq.png}
 	\centering
-	\caption{Distribution plot of inter-annotator polarization (\ac{nDFU}) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model. The blue (left-most) bars represent the disagreement between $10$ identical annotator-agents, while the orange (right-most) bars, the disagreement between $10$ annotators with different \acp{SDB}.}
+	\caption{Distribution plot of inter-annotator polarization (\ac{nDFU}) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model. The blue (left-most) bars represent the disagreement between $10$ identical annotator-agents, while the orange (right-most) bars, the disagreement between $10$ annotators with different SDBs.}
 	\label{fig:sdb_annot}
 \end{figure*}
 
