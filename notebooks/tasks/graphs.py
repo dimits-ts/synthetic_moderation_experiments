@@ -10,6 +10,8 @@ import scikit_posthocs as sp
 
 from . import stats
 
+hatches = ["/", "|", "\\", "-", "+", "x", "o", "O", ".", "*"]
+
 
 def save_plot(path: Path) -> None:
     """
@@ -20,7 +22,7 @@ def save_plot(path: Path) -> None:
     :type path: pathlib.Path
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(path, bbox_inches="tight")
+    plt.savefig(path, bbox_inches="tight", dpi=300)
     print(f"Figure saved to {path.resolve()}")
 
 
@@ -46,97 +48,144 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
     """
     Plots the difference in normalized histograms for a specified feature
     between trolls_exist=True and trolls_exist=False, grouped by instructions.
-
-    Parameters:
-    - df (DataFrame): The DataFrame containing the data.
-    - feature (str): The feature to plot ('Toxicity' or 'Argument Quality').
-    - bins (int): The number of bins for the histogram.
-    - figsize (tuple): The size of the figure.
     """
+
+    # Define histogram bins
     bin_edges = np.histogram_bin_edges(df[feature], bins=bins)
-    instruction_values = df["instructions"].unique()
-    colors = sns.color_palette()
+
+    # Sort instruction groups in reverse order (top will be plotted last)
+    instruction_values = sorted(df["instructions"].unique())
+
+    # Get colorblind palette in *same order* as instructions (top to bottom)
+    palette = sns.color_palette("colorblind", n_colors=len(instruction_values))
+
+    # Build legend patches in advance (top to bottom)
+    legend_patches = [
+        matplotlib.patches.Patch(
+            facecolor=palette[i],
+            edgecolor="black",
+            label=instruction.capitalize(),
+            hatch=hatches[i % len(hatches)],
+        )
+        for i, instruction in enumerate(instruction_values)
+    ]
+
     plt.figure(figsize=figsize)
 
-    for idx, instruction in enumerate(instruction_values):
-        # Filter the data
+    # Plot groups so that last one is plotted on top (visually highest)
+    for idx, (instruction, color) in enumerate(
+        zip(instruction_values, palette)
+    ):
         trolls_true = df[
-            (df["trolls_exist"] == True) & (df["instructions"] == instruction)
+            (df["trolls_exist"]) & (df["instructions"] == instruction)
         ][feature]
         trolls_false = df[
-            (df["trolls_exist"] == False) & (df["instructions"] == instruction)
+            (~df["trolls_exist"]) & (df["instructions"] == instruction)
         ][feature]
 
-        # Compute histograms (normalized to sum to 1)
         hist_true, _ = np.histogram(trolls_true, bins=bin_edges, density=True)
         hist_false, _ = np.histogram(
             trolls_false, bins=bin_edges, density=True
         )
         hist_diff = hist_true - hist_false
 
-        # Plot horizontal bars for histogram differences
-        plt.barh(
-            bin_edges[:-1] + idx * 0.15,
-            hist_diff,
-            height=np.diff(bin_edges) * 2 / len(instruction_values),
-            color=colors[idx],
-            label=f"{instruction.capitalize()}",
+        # Stack top-to-bottom by INVERTING vertical offset: top bar = higher y
+        y_positions = (
+            bin_edges[:-1] + (len(instruction_values) - idx - 1) * 0.15
         )
 
-    plt.axvline(0, color="red", linestyle="--")
-    plt.ylabel(f"{feature} level", fontsize=16)
-    plt.xlabel("Normalized diff. of #annotations", fontsize=16)
-    plt.title(
-        "Trolls affect discussions differently depending on\n "
-        "participant instructions",
-        fontsize=14,
-    )
-    plt.legend(title="Prompt", loc="upper left", fontsize=14)
+        plt.barh(
+            y_positions,
+            hist_diff,
+            height=np.diff(bin_edges) * 2 / len(instruction_values),
+            color=color,
+            hatch=hatches[idx % len(hatches)],
+            edgecolor="black",
+        )
 
-    # Add "Less toxic" and "More toxic" text on x-axis ends
+    # Vertical reference line
+    plt.axvline(0, color="red", linestyle="--")
+
+    # Labels and title
+    plt.ylabel(f"{feature} level", fontsize=16)
+    plt.xlabel("Normalized difference in #annotations", fontsize=16)
+    plt.title(
+        "Trolls affect discussions differently depending on\nparticipant instructions",
+        fontsize=15,
+        weight="bold",
+    )
+
+    # Legend: order now matches visual top-to-bottom
+    plt.legend(
+        handles=legend_patches,
+        loc="upper left",
+        title="Prompt",
+        fontsize=13,
+        title_fontsize=14,
+        frameon=False,
+    )
+
+    # X-axis side labels
     xmin, xmax = plt.xlim()
-    y_pos = (
-       bin_edges[0] - np.diff(bin_edges).max()
-    )  # place above top bin
+    y_pos = bin_edges[0] - np.diff(bin_edges).max()
     plt.text(
-        xmin,
-        y_pos,
-        "Fewer comments",
-        ha="left",
-        va="center",
-        fontsize=14,
-        color="black",
+        xmin, y_pos, "Fewer comments", ha="left", va="center", fontsize=13
     )
     plt.text(
-        xmax,
-        y_pos,
-        "More comments",
-        ha="right",
-        va="center",
-        fontsize=14,
-        color="black",
+        xmax, y_pos, "More comments", ha="right", va="center", fontsize=13
     )
 
     plt.tight_layout()
 
 
 def rougel_plot(
-    df: pd.DataFrame, rougel_col: str, feature_col: str, hue_order: list
+    df: pd.DataFrame,
+    rougel_col: str,
+    feature_col: str,
+    hue_order: list,
+    palette: str = "colorblind",
+    title: str = "Diversity Distribution by Group",
 ) -> None:
-    ax = sns.displot(
-        data=df,
-        x=rougel_col,
-        hue=feature_col,
-        hue_order=hue_order,
-        stat="density",
-        multiple="layer",
-        kde=False,
-        common_norm=False,  # normalize observation counts by feature_col
+    plt.figure(figsize=(9, 4.5))
+    
+    colors = sns.color_palette(palette, n_colors=len(hue_order))
+
+    bin_edges = np.histogram_bin_edges(df[rougel_col], bins=30, range=(0.6, 1.0))
+    bin_width = bin_edges[1] - bin_edges[0]
+
+    for i, group in enumerate(hue_order):
+        subset = df[df[feature_col] == group][rougel_col]
+        counts, _ = np.histogram(subset, bins=bin_edges, density=True)
+
+        for j, count in enumerate(counts):
+            plt.bar(
+                bin_edges[j],
+                count,
+                width=bin_width * 0.9,
+                align='edge',
+                color=colors[i],
+                edgecolor='black',
+                alpha=0.6,
+                label=group if j == 0 else "",  # only add legend once per group
+                hatch=hatches[i % len(hatches)],
+            )
+
+    plt.xlabel("Diversity", fontsize=14)
+    plt.ylabel("Density", fontsize=14)
+    plt.xlim(0.6, 1.0)
+    plt.title(title, fontsize=16)
+
+    plt.legend(
+        title=feature_col.replace("_", " ").title(),
+        title_fontsize=14,
+        fontsize=12,
+        loc="center left",
+        bbox_to_anchor=(1, 0.5),
+        frameon=False
     )
-    plt.xlabel("Diversity")
-    plt.ylabel("Density")
-    # move legend inside plot
-    sns.move_legend(ax, loc="center left", bbox_to_anchor=(0.1, 0.5))
+
+    plt.tight_layout()
+    plt.show()
 
 
 def posthoc_heatmap(
@@ -348,7 +397,7 @@ def _pvalue_heatmap(
         value_df,
         annot=formatted_values,
         fmt="",  # This allows us to use strings with asterisks
-        cmap="icefire",
+        cmap="RdBu_r",
         # mask=_upper_tri_masking(value_df),
         xticklabels=ticklabels,
         yticklabels=ticklabels,
