@@ -26,13 +26,13 @@ In this section, we define a simple, generalizable methodology which can be used
 \subsection{Context-passing}
 \label{ssec:methodology:context}
 
-We assume that the $h$ most recent preceding comments at any given point in the discussion provide sufficient context for the LLM users, facilitators, and annotators; a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}. While techniques such as summarization \cite{balog_2024}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM} exist, they result in greater computational cost and a less transparent, explainable system.
+We assume that the $h$ most recent preceding comments at any given point in the discussion provide sufficient context for the LLM users, facilitators, and annotators; a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}. While techniques such as dynamic summarization \cite{balog_2024}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM} exist, they result in greater computational cost and a less transparent, explainable system.
 
 
 \subsection{Turn Taking}
 \label{ssec:methodology:turn}
 
-In online fora, users often create ``comment chains'' where they follow up on responses to their previous comments. Thus, for each discussion turn, we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($60\%$). This probability was selected experimentally; larger values tend to create ``debate''-style discussions between only two or three users, while lower values tend to create scenarios with minimal interaction between the participants. A facilitator can respond after every comment, or stay silent by responding with an empty string.
+In online fora, users often create ``comment chains'' where they follow up on responses to their previous comments. Thus, for each discussion turn, we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($60\%$). This probability was selected experimentally; larger values tend to create ``debate''-style discussions between only two or three participants, while lower values tend to create scenarios with minimal interaction between them. A facilitator can respond after every comment, or stay silent by responding with an empty string.
 
 
 \subsection{Instruction Prompting}
@@ -56,7 +56,7 @@ SocioDemographic Backgrounds (SDBs) have proven promising in generating varied r
 		\midrule
 		Username & string \\
 		Age & integer \\
-		Sex & string \\
+		Gender & string \\
 		Education Level & string \\
 		Sexual Orientation & string \\
 		Demographic Group & string \\
