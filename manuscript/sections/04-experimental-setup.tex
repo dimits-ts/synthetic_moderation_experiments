@@ -1,0 +1,75 @@
+\section{Experimental Setup}
+\label{sec:experimental}
+
+\subsection{Synthetic Discussion Generation}
+\label{ssec:appendix:discussion}
+
+We provide our framework with a set of starting opinions (``seed opinions'') and SDBs. We then run $N_d=8$ discussions for each pair of facilitation strategies $S$ and LLM (\S\ref{ssec:experimental:setup}). Synthetic generation is then handled as described in \S\ref{sec:methodology}.
+
+An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}.  The $RandomSample$ function returns a number of samples from the uniform distribution. The $ACTORS$ function creates a LLM agent using a model and a (string) prompt.
+
+\begin{algorithm}[t]
+	\caption{Synthetic discussion setup generation}
+	\label{alg:exp_generation}
+	\hspace*{\algorithmicindent} \textbf{Input:} 
+	\begin{itemize}[noitemsep, nosep]
+		\item User SDBs $\Theta = \{\theta_1, \dots, \theta_{30}\}$
+		\item Moderator SDB = $\theta_{mod}$
+		\item Strategies $S = \{s_1, \ldots, s_6\}$
+		\item Seed opinions $O = \{o_1, \ldots, o_7\}$
+		\item LLMs = $\{LLaMa, Mistral, Qwen\}$
+	\end{itemize}
+	\hspace*{\algorithmicindent} \textbf{Output:} Set of discussions $D$
+	\begin{algorithmic}[1]
+		\State $D = \{\}$
+		\For{$llm \in LLMs$}
+		\For{$s \in S$}
+		\For{$i = 1, 2, \ldots, N_d$}
+		\State $\hat{\Theta} = $ \Call{RandomSample}{$\Theta, num=7$}
+		\State $U =$  \Call{Actors}{llm, $\hat{\Theta}$}
+		\State $m = $ \Call{Actors}{llm, $\{[\theta_{mod}, s]\}$}
+		\State $o = $ \Call{RandomSample}{$O, num=1$}
+		\State $d =$ \{users: $U$, mod: $m$, topic: $o$\}
+		\State $D = D \cup d$
+		\EndFor
+		\EndFor
+		\EndFor
+		\State \Return $D$
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Facilitation Strategies}
+\label{ssec:experimental:strategies}
+
+We test four different facilitation strategies, three of which are derived from Social Science research, along with two common-place strategies for discussion facilitation. Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.
+
+\begin{enumerate}[nosep, noitemsep]
+    \item \textbf{\strategynomod}: A \emph{common} strategy where no facilitator is present.
+
+    \item \textbf{\strategynoinstr}: A \emph{common} strategy where a LLM facilitator is present, but is provided only with basic instructions. Example: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \citep{Tsai_Deliberate_Lab_Open-Source_2025}.
+
+    \item \textbf{\strategyrules}: A \emph{real-life} strategy where the prompt is adapted from LLM alignment guidelines \cite{collective_constitution}. These guidelines were selected to be as unanimously agreed upon across various human groups. They thus provide a set of rules to uphold, without specifying \emph{how} to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”), leaving the LLM completely unconstrained.
+
+    \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \citep{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their efficiency (throughput). Example: ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
+
+    \item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions. This makes the strategy ideal for deliberative environments. Example: ``Do not make decisions, be a guide, provide explanations''.
+    
+    \item \textbf{\strategymodgame}: Our proposed \emph{experimental} strategy, inspired by \citet{abdelnabi_negotiations} (see \S\ref{ssec:related:discussions}). Instructions are formulated as a game, where the facilitator LLM tries to maximize their scores by arriving at specific outcomes. No actual score is being kept; they exist to act as indications for how desirable an outcome is. The other participants are not provided with scores, nor are they aware of the game rules. Example: ``User is toxic: $-5$ points, User corrects behavior: $+10$ points''.
+\end{enumerate}
+
+
+
+\subsection{Evaluation}
+\label{ssec:experimental:evaluation}
+
+In our study, we use \emph{toxicity} as a proxy for discussion quality, since it can inhibit online and deliberative discussions \citep{dekock2022disagree, XiaToxicity}\footnote{We note that this is not always true \citep{Avalle2024PersistentIP}.}. We use ten LLM annotator-agents controlled by a model already used in prior work---LLaMa3.1 70B \citep{kang-qian-2024-implanting}---as LLMs are reliable for toxicity detection \citep{kang-qian-2024-implanting, Wang2022ToxicityDW, anjum2024hate}.
+
+In order to gauge the quality of our synthetic discussions, since we can not reliably measure ``realism'' (\S\ref{ssec:related:human-llm}), we use the ``diversity'' metric \citep{ulmer2024}. Low diversity points to pathological problems (e.g., LLMs repeating previous comments). On the other hand, extremely high diversity may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants). We compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction. 
+
+We note again that these metrics are better interpreted as heuristics of actual discussion and synthetic data quality respectively. More research is needed w.r.t. reliable and generalizable quality metrics.
+
+
+\subsection{Technical Details}
+\label{ssec:experimental:setup}
+
+We use three instruction-tuned, open-source models: LLaMa 3.2 (70B), Qwen2.5 (33B),  Mistral Nemo (12B), quantized to 4 bits. All the experiments were collectively completed within four weeks of computational time, using two Quadro RTX 6000 GPUs. The process of generating discussion setups is detailed in \S\ref{ssec:appendix:discussion}. The execution script is available in the project's repository.\analysislink 
