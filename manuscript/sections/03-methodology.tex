@@ -46,4 +46,25 @@ Additionally, following the paradigm presented by \citet{abdelnabi_negotiations}
 \subsection{LLM Personas}    
 \label{ssec:methodology:prompts-sdb}                
 
-SocioDemographic Backgrounds (SDBs) have proven promising in generating varied responses from LLMs, and alleviating the Western bias exhibited by them \cite{burton2024large}. We generate 30 LLM user personas with unique SDBs by prompting a GPT-4 model \cite{openai2024gpt4technicalreport}. Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
+SocioDemographic Backgrounds (SDBs) have proven promising in generating varied responses from LLMs, and alleviating the Western bias exhibited by them \cite{burton2024large}. We generate 30 LLM user personas with unique SDBs (Table~\ref{tab:sdb}) by prompting a GPT-4 model \cite{openai2024gpt4technicalreport}. Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
+
+\begin{table}[t]
+	\centering
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{Name} & \textbf{Type} \\
+		\midrule
+		Username & string \\
+		Age & integer \\
+		Sex & string \\
+		Education Level & string \\
+		Sexual Orientation & string \\
+		Demographic Group & string \\
+		Current Employment & string \\
+		Special Instructions & string \\
+		Personality Characteristics & list of strings \\
+		\bottomrule
+	\end{tabular}
+	\caption{Sociodemographic information provided to the LLM participants and annotators. We defer the reader to the project repository for the actual values.\analysislink}
+	\label{tab:sdb}
+\end{table}
