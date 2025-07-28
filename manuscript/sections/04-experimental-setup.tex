@@ -41,18 +41,18 @@ An overview of how the experiments are generated can be found in Algorithm~\ref{
 \subsection{Facilitation Strategies}
 \label{ssec:experimental:strategies}
 
-We test four different facilitation strategies, along with two common-place strategies for discussion facilitation. Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.
+We test four different facilitation strategies, three of which are derived from Social Science research, along with two common-place strategies for discussion facilitation. Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.
 
 \begin{enumerate}[nosep, noitemsep]
     \item \textbf{\strategynomod}: A \emph{common} strategy where no facilitator is present.
 
-    \item \textbf{\strategynoinstr}: A \emph{common} strategy where a LLM facilitator is present, but is provided only with basic instructions. Example: “You are a moderator, keep the discussion civil”.
+    \item \textbf{\strategynoinstr}: A \emph{common} strategy where a LLM facilitator is present, but is provided only with basic instructions. Example: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \citep{Tsai_Deliberate_Lab_Open-Source_2025}.
 
-    \item \textbf{\strategyrules}: A \emph{real-life} strategy where the prompt is adapted from LLM alignment guidelines \cite{collective_constitution}. These guidelines were selected to be as unanimously agreed upon across various human groups. They thus provide a set of rules to uphold, without specifying \emph{how} to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”).
+    \item \textbf{\strategyrules}: A \emph{real-life} strategy where the prompt is adapted from LLM alignment guidelines \cite{collective_constitution}. These guidelines were selected to be as unanimously agreed upon across various human groups. They thus provide a set of rules to uphold, without specifying \emph{how} to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”), leaving the LLM completely unconstrained.
 
-    \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \citep{Cornell_eRulemaking2017}. The instructions are typical of online moderation. Example: ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
+    \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \citep{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their efficiency (throughput). Example: ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
 
-    \item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions. Example: ``Do not make decisions, be a guide, provide explanations''.
+    \item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy based on the human facilitation guidelines used by the MIT Center for Constructive Communications \cite{dimitra-book}. It approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions. This makes the strategy ideal for deliberative environments. Example: ``Do not make decisions, be a guide, provide explanations''.
     
     \item \textbf{\strategymodgame}: Our proposed \emph{experimental} strategy, inspired by \citet{abdelnabi_negotiations} (see \S\ref{ssec:related:discussions}). Instructions are formulated as a game, where the facilitator LLM tries to maximize their scores by arriving at specific outcomes. No actual score is being kept; they exist to act as indications for how desirable an outcome is. The other participants are not provided with scores, nor are they aware of the game rules. Example: ``User is toxic: $-5$ points, User corrects behavior: $+10$ points''.
 \end{enumerate}
