@@ -30,3 +30,12 @@ In this paper we need to evaluate two different quality dimensions. One is \emph
 The second quality dimension is measuring “high-quality” or “useful” data. This is essential in LLM-based discussion frameworks, as such discussions tend to deteriorate quickly without human involvement, often becoming repetitive and low-quality \citep{ulmer2024}. Despite this importance, methods for quantifying the quality of synthetic data remain limited.
 
  \citet{balog_2024} use a mix of graph-based, methodology-specific, and lexical similarity metrics, many of which depend on human discussion datasets. Their most generalizable measure is a loosely defined “coherence” score, which is LLM-annotated without theoretical grounding. \citet{kim_et_al_chatbot} assess quality through post-discussion surveys and by measuring lexical diversity to approximate the variety of opinions expressed. \citet{ulmer2024}  introduce a metric called \emph{``Diversity''}, which penalizes repeated text sequences between comments using ROUGE-L \citep{lin-2004-rouge} scores.
+
+\subsection{LLMs as Human Subjects}
+\label{ssec:related:human-llm}
+
+While there is always a desire for synthetic simulation systems to be ``realistic'' w.r.t. human behavior \citet{grossman_2023, tornberg_2023, argyle2023}, this can not be claimed nor reliably measured by using LLM agents in lieu of humans \citep{rossi_2024}.
+
+It is true that LLMs have demonstrated complex, emergent social behaviors \cite{Park2023GenerativeAI, demarzo_2023, leng_2024, abdelnabi_negotiations, abramski_2023, hewitt2024predicting, park2024generativeagentsimulations1000}. However, significant limitations of LLMs remain in the context of Social Science experiments. Issues include undetectable behavioral hallucinations \cite{rossi_2024}; sociodemographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024, Taubenfeld2024SystematicBI}; unreliable annotations \cite{jansen_2023,bisbee_2023,neumann_2025, Gligoric2024CanUL}; non-deterministic outputs \cite{atil_2025, bisbee_2023}; and excessive agreeableness \cite{Park2023GenerativeAI, anthis_2025, rossi_2024}.
+
+Thus, an inherent limitation of our study is that we can not claim it produces ``realistic'' discussions. Reproduction studies with humans are ultimately needed, and we leave them for future work.
