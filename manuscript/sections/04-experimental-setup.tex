@@ -4,9 +4,7 @@
 \subsection{Synthetic Discussion Generation}
 \label{ssec:appendix:discussion}
 
-We provide our framework with a set of starting opinions (``seed opinions'') and SDBs. We then run $N_d=8$ discussions for each pair of facilitation strategies $S$ and LLM (\S\ref{ssec:experimental:setup}). Synthetic generation is then handled as described in \S\ref{sec:methodology}.
-
-An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}.  The $RandomSample$ function returns a number of samples from the uniform distribution. The $ACTORS$ function creates a LLM agent using a model and a (string) prompt.
+We provide our framework with a set of SDBs and starting opinions (``seed opinions'')---in our case controversial statements from \citet{pavlopoulos-likas-2024-polarized}. We then run $N_d=8$ discussions for each pair of facilitation strategies $S$ and LLM (\S\ref{ssec:experimental:setup}). Synthetic generation is handled as described in \S\ref{sec:methodology}. An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}.  The $RandomSample$ function returns a number of samples from a set following the uniform distribution. The $Actors$ function creates a LLM agent using a model and a (string) prompt.
 
 \begin{algorithm}[t]
 	\caption{Synthetic discussion setup generation}
@@ -38,6 +36,7 @@ An overview of how the experiments are generated can be found in Algorithm~\ref{
 	\end{algorithmic}
 \end{algorithm}
 
+
 \subsection{Facilitation Strategies}
 \label{ssec:experimental:strategies}
 
@@ -46,9 +45,9 @@ We test four different facilitation strategies, three of which are derived from 
 \begin{enumerate}[nosep, noitemsep]
     \item \textbf{\strategynomod}: A \emph{common} strategy where no facilitator is present.
 
-    \item \textbf{\strategynoinstr}: A \emph{common} strategy where a LLM facilitator is present, but is provided only with basic instructions. Example: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \citep{Tsai_Deliberate_Lab_Open-Source_2025}.
+    \item \textbf{\strategynoinstr}: A \emph{common} strategy where a LLM facilitator is present, but is provided only with basic instructions. This approach is already being used in some platforms \citep{Tsai_Deliberate_Lab_Open-Source_2025}. Example: “You are a moderator, keep the discussion civil”. 
 
-    \item \textbf{\strategyrules}: A \emph{real-life} strategy where the prompt is adapted from LLM alignment guidelines \cite{collective_constitution}. These guidelines were selected to be as unanimously agreed upon across various human groups. They thus provide a set of rules to uphold, without specifying \emph{how} to uphold them (e.g, “Be fair and impartial, assist users, don't spread misinformation”), leaving the LLM completely unconstrained.
+    \item \textbf{\strategyrules}: A \emph{real-life} strategy where the prompt is adapted from LLM alignment guidelines \cite{collective_constitution}. These guidelines were selected to be as unanimously agreed upon as possible, across various human groups. They thus provide a set of rules to uphold, without specifying \emph{how} to uphold them, leaving the LLM completely unconstrained. Example: ``Be fair and impartial, assist users, don't spread misinformation''.
 
     \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \citep{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their efficiency (throughput). Example: ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
 
@@ -72,4 +71,4 @@ We note again that these metrics are better interpreted as heuristics of actual 
 \subsection{Technical Details}
 \label{ssec:experimental:setup}
 
-We use three instruction-tuned, open-source models: LLaMa 3.2 (70B), Qwen2.5 (33B),  Mistral Nemo (12B), quantized to 4 bits and run using a set seed (42). All the experiments were collectively completed within four weeks of computational time, using two Quadro RTX 6000 GPUs. The process of generating discussion setups is detailed in \S\ref{ssec:appendix:discussion}. The execution script is available in the project's repository.\analysislink 
+We use three instruction-tuned, open-source models: LLaMa3.1 (70B), Qwen2.5 (33B),  Mistral Nemo (12B), quantized to 4 bits and run using a set seed (42). All the experiments were collectively completed within four weeks of computational time, using two Quadro RTX 6000 GPUs. The execution script is available in the project's repository.\analysislink 

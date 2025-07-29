@@ -8,7 +8,7 @@
 \subsection{Main findings}
 \label{ssec:results:main}
 
-\paragraph{Finding 1: LLM facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly more intense toxicity. Linear regression on toxicity over time show that the toxicity of trolls decreases by $-0.0125$ points on average per turn---$p=0.003$), although this restraining effect is even more pronounced for neutral and community-oriented users, whose toxicity decreases by $0.0225 (p <.000)$  and $0.0350 (p <.000)$ points per turn respectively. This suggests that the facilitator is effective at steering discussions toward lower toxicity over time, even in the absence of direct punitive mechanisms. While trolls are more resistant to this influence, they still exhibit a measurable decline in toxicity as the discussion progresses.
+\paragraph{Finding 1: LLM facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly more intense toxicity. Linear regression on toxicity over time show that the toxicity of trolls decreases by $\minus0.0125$ points on average per discussion turn ($Adj. R^2= 0.413, p=0.003$), although this restraining effect is even more pronounced for neutral and community-oriented users, whose toxicity decreases by $0.0225 (p <.000)$  and $0.0350 (p <.000)$ points per turn respectively. This suggests that the facilitator is effective at steering discussions toward lower toxicity over time, even in the absence of direct punitive mechanisms. While trolls are more resistant to this influence, they still exhibit a measurable decline in toxicity as the discussion progresses.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{toxicity_stats.png}
@@ -18,7 +18,7 @@
 \end{figure}
 
 \paragraph{Finding 2: More elaborate facilitation strategies fail to decrease toxicity.}
-More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\strategyconstrcomm}, and our proposed \emph{\strategymodgame}, lead to a statistically significant reduction in comment toxicity over time compared to \emph{unmoderated} discussions (Table~\ref{tab:toxicity}). However, this is not the case with the \emph{\strategynoinstr} strategy (Fig.~\ref{fig:toxicity_stats}), suggesting that out-of-the-box LLMs may struggle to effectively leverage advanced instructions---echoing prior findings on the limitations of LLM facilitators \cite{cho-etal-2024-language}.
+Strategies such as \emph{\strategyregroom}, \emph{\strategyconstrcomm}, and our proposed \emph{\strategymodgame} significantly reduce comment toxicity compared to \emph{unmoderated} discussions, with their effectiveness increasing over time (Table~\ref{tab:toxicity}). However, these more elaborate facilitation approaches do not consistently outperform the simpler \emph{\strategynoinstr} strategy overall (Fig.~\ref{fig:toxicity_stats}). This suggests that out-of-the-box LLMs may struggle to meaningfully incorporate complex instructions—a limitation noted in prior work \cite{cho-etal-2024-language}. While the real-life strategies show a slight edge over time compared to \emph{\strategynoinstr}, the observed long-term gains are modest and not qualitatively significant in the broader context.
 
 \begin{table}[t]
 	\centering
@@ -48,9 +48,9 @@ More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\
 \end{table}
 
 
-\paragraph{Finding 3: LLM facilitators choose to intervene far too frequently, which is tolerated by the other participants.} Fig.~\ref{fig:intervention_count} demonstrates that LLM facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. This confirms that LLMs generally can not decide not to speak (\S\ref{ssec:methodology:turn}). To our knowledge, this has not been reported in relevant literature, and \emph{is an example of ``debugging'' problems with LLMs} --- a core motivation of our work.
+\paragraph{Finding 3: LLM facilitators choose to intervene far too frequently, which is tolerated by the other participants.} Fig.~\ref{fig:intervention_count} demonstrates that LLM facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. This confirms that LLMs generally can not decide not to speak even when instructed to do so  (\S\ref{ssec:methodology:turn}). To our knowledge, this has not been reported in relevant literature, and \emph{is an example of ``debugging'' problems with LLMs} --- a core motivation of our work.
 
-Additionally, a qualitative look through the dataset reveals that LLM user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact caused by alignment procedures, making LLMs too agreeable \citep{park2023game}.
+Additionally, a qualitative look through the dataset reveals that LLM user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact caused by alignment procedures, making LLMs too agreeable \citep{park2023game, anthis_2025}.
 
 \begin{figure}[t]
 	\centering
@@ -95,18 +95,10 @@ Additionally, a qualitative look through the dataset reveals that LLM user-agent
 
 We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \S\ref{ssec:experimental:evaluation}) of these discussions with ones from the CeRI “Regulation Room” dataset\footnote{Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.}. We pick this dataset because it is publicly available and comprised of facilitated online human discussions on ten diverse topics.
 
-\subsubsection{Effects of LLMs}
-
 \paragraph{Larger models do not lead to more high-quality discussions.} As shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
 
 
-\subsubsection{Effects of Turn-Taking Functions}
-
-
 \paragraph{Our proposed turn-taking function substantially improves the quality of synthetic data.} We compare our turn-taking function (\S\ref{ssec:methodology:turn}) to two baselines: Round Robin (participants speaking one after the other, then repeating) and Random Selection (uniformly sampling another participant each turn). Fig.~\ref{fig:rougel_turns} demonstrates that although all distributions diverge from the blue—human—distribution, our function is the only one not exhibiting extremely high diversity (i.e., very limited participant interaction \S\ref{ssec:experimental:evaluation}).
-
-
-\subsubsection{Effects of User Prompting}
 
 We conduct three separate experiments in which participants are subjected to one of the following conditions at a time: (1) no assigned SDBs, (2) no assigned roles, or (3) only a very basic instruction prompt given. 
 

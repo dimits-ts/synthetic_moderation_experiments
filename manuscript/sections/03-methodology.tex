@@ -7,11 +7,11 @@
  \begin{figure*}[t]
 	\centering
 	\includegraphics[width=\linewidth]{example.png}
-	\caption{Excerpt from a synthetic discussion. The LLM participants use their sociodemographic prompts to insert personal stories and justify their perspectives in the discussion. Comments are clipped due to length. @CynicalInvestor88 is also a part of the discussion; not a hallucination.}
+	\caption{Excerpt from a synthetic discussion. The LLM participants use their sociodemographic prompts to insert personal stories and justify their perspectives in the discussion. They are also able to learn and retain information about other agents through conversation (a behavior also observed in \citet{park2023game}). User \texttt{CynicalInvestor88} is also a part of the discussion; not a hallucination. Comments clipped due to length.}
 	\label{fig::example}
 \end{figure*}
 
-In this section, we define a simple, generalizable methodology which can be used to create high-quality synthetic discussions, as this is a prerequisite for experimenting and analyzing LLM facilitators. Specifically, we need to define the following mechanisms:
+In this section, we define a simple, generalizable methodology which can be used to improve the quality of synthetic discussions with multiple users, as this is a prerequisite for experimenting and analyzing LLM facilitators. Specifically, we need to define the following mechanisms:
 
 \begin{itemize}[nosep, noitemsep]
 	\item \textbf{Context passing}: How an LLM receives the context of the discussion so far (\S\ref{ssec:methodology:context}).  
@@ -26,7 +26,7 @@ In this section, we define a simple, generalizable methodology which can be used
 \subsection{Context-passing}
 \label{ssec:methodology:context}
 
-We assume that the $h$ most recent preceding comments at any given point in the discussion provide sufficient context for the LLM users, facilitators, and annotators; a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}. While techniques such as dynamic summarization \cite{balog_2024}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM} exist, they result in greater computational cost and a less transparent, explainable system.
+We assume that the $h$ most recent preceding comments at any given point in the discussion provide sufficient context for the LLM users, facilitators, and annotators; a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}. While techniques such as dynamic summarization \cite{balog_2024}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM} exist, they result in greater computational cost and a less transparent and explainable system.
 
 
 \subsection{Turn Taking}
@@ -38,7 +38,7 @@ In online fora, users often create ``comment chains'' where they follow up on re
 \subsection{Instruction Prompting}
 \label{ssec:methodology:prompts-instructions}
 
-We use a standard instruction prompt for the non-facilitator participants, which instructs them to respond to repeatedly toxic comments. This was a necessary measure to bypass the extreme agreeableness of LLMs \cite{park2023game}.
+We use a standard instruction prompt for the non-facilitator participants, which instructs them to respond to repeatedly toxic comments. This was a necessary measure to bypass the extreme agreeableness of LLMs \cite{park2023game}. Facilitators are instructed according to the facilitation strategy used (\S\ref{ssec:experimental:strategies}), although we always instruct them to only respond when necessary.
 
 Additionally, following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). Each role was mapped to specific instructions. We create three roles for users: neutral users, trolls, and community veterans.    
 
@@ -56,7 +56,7 @@ SocioDemographic Backgrounds (SDBs) have proven promising in generating varied r
 		\midrule
 		Username & string \\
 		Age & integer \\
-		 & string \\
+		Gender & string \\
 		Education Level & string \\
 		Sexual Orientation & string \\
 		Demographic Group & string \\
