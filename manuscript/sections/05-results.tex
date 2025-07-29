@@ -8,7 +8,7 @@
 \subsection{Main findings}
 \label{ssec:results:main}
 
-\paragraph{Finding 1: LLM facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly more intense toxicity.
+\paragraph{Finding 1: LLM facilitators significantly improve synthetic discussions.} As shown in Fig.~\ref{fig:toxicity_stats}, comments in unmoderated discussions exhibit significantly more intense toxicity. Linear regression on toxicity over time show that the toxicity of trolls decreases by $-0.0125$ points on average per turn---$p=0.003$), although this restraining effect is even more pronounced for neutral and community-oriented users, whose toxicity decreases by $0.0225 (p <.000)$  and $0.0350 (p <.000)$ points per turn respectively. This suggests that the facilitator is effective at steering discussions toward lower toxicity over time, even in the absence of direct punitive mechanisms. While trolls are more resistant to this influence, they still exhibit a measurable decline in toxicity as the discussion progresses.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{toxicity_stats.png}
@@ -43,7 +43,7 @@ More elaborate facilitation strategies, such as \emph{\strategyregroom}, \emph{\
 	\small
 	\asterisknote
 	\normalsize
-	\caption{OLS regression coefficients for toxicity ($Adj. R^2=0.054$). Average toxicity without facilitators is $2.164$.}
+	\caption{OLS regression coefficients for toxicity on the non-facilitator comments ($Adj. R^2=0.054$). Reference factor is \textit{\strategynomod}. All strategies outperform \textit{\strategynomod} in general. The \textit{\strategyregroom} and \textit{\strategyconstrcomm} real-life strategies additionally show improvements over time compared to \textit{\strategynomod}.}
 	\label{tab:toxicity}
 \end{table}
 
@@ -93,8 +93,7 @@ Additionally, a qualitative look through the dataset reveals that LLM user-agent
     \label{fig:diversity}
 \end{figure*}
 
-We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \S\ref{ssec:experimental:evaluation}) of these discussions with ones from the CeRI “Regulation Room” dataset\footnote{http://archive.regulationroom.org. Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.}, which includes moderated online deliberative discussions for ten diverse topics.
-
+We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \S\ref{ssec:experimental:evaluation}) of these discussions with ones from the CeRI “Regulation Room” dataset\footnote{Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.}. We pick this dataset because it is publicly available and comprised of facilitated online human discussions on ten diverse topics.
 
 \subsubsection{Effects of LLMs}
 
