@@ -32,7 +32,7 @@ We assume that the $h$ most recent preceding comments at any given point in the 
 \subsection{Turn Taking}
 \label{ssec:methodology:turn}
 
-In online fora, users often create ``comment chains'' where they follow up on responses to their previous comments. Thus, for each discussion turn, we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($60\%$). This probability was selected experimentally; larger values tend to create ``debate''-style discussions between only two or three participants, while lower values tend to create scenarios with minimal interaction between them. A facilitator can respond after every comment, or stay silent by responding with an empty string.
+In online fora, users often create ``comment chains'' where they follow up on responses to their previous comments. Thus, for each discussion turn, we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($60\%$). This probability was selected experimentally; larger values tend to create ``debate''-style discussions between only two or three participants, while lower values tend to create scenarios with minimal interaction between them.\footnote{It would be interesting to analyze quantitatively how discussions change when modifying this parameter, but this is outside of the scope of our work.} A facilitator can respond after every comment, or stay silent by responding with an empty string.
 
 
 \subsection{Instruction Prompting}
@@ -40,7 +40,7 @@ In online fora, users often create ``comment chains'' where they follow up on re
 
 We use a standard instruction prompt for the non-facilitator participants, which instructs them to respond to repeatedly toxic comments. This was a necessary measure to bypass the extreme agreeableness of LLMs \cite{park2023game}. Facilitators are instructed according to the facilitation strategy used (\S\ref{ssec:experimental:strategies}), although we always instruct them to only respond when necessary.
 
-Additionally, following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). We create three roles for users: neutral users, trolls, and community veterans---each role was mapped to specific instructions, for which we defer the reader to the project repository.  
+Additionally, following the paradigm presented by \citet{abdelnabi_negotiations}, we assign roles to non-facilitator user-agents, which inform their incentives for participating in the discussion (e.g., helping the community or disrupting discussions). We create three roles for users: neutral users, trolls, and community veterans---each role was mapped to specific instructions, for which we defer the reader to the project repository. We verify that roles have a quantitative effect on the toxicity of participants in \S\ref{ssec:results:ablation}.
 
 
 \subsection{LLM Personas}    
