@@ -11,16 +11,15 @@
 	\label{fig::example}
 \end{figure*}
 
-In this section, we define a simple, generalizable methodology which can be used to improve the quality of synthetic discussions with multiple users, as this is a prerequisite for experimenting and analyzing LLM facilitators. Specifically, we need to define the following mechanisms:
+We define a simple, generalizable methodology which can be used to improve the quality of synthetic discussions with multiple users, as this is a prerequisite for experimenting and analyzing LLM facilitators. In order to support controlled evaluation, our methodology must be simple and transparent. It requires the following mechanisms:
 
 \begin{itemize}[nosep, noitemsep]
 	\item \textbf{Context passing}: How an LLM receives the context of the discussion so far (\S\ref{ssec:methodology:context}).  
 	
 	\item \textbf{Turn order}: Given that LLMs are trained to be chat-bot assistants, they tend to always speak when given the chance. Therefore, turn order in a discussion must be enforced by an outside system (\S\ref{ssec:methodology:turn}).
 	
-	\item \textbf{Participant prompts}: The LLMs should at least attempt to emulate real-world dynamics. Therefore, we need to craft appropriate instruction prompts that bypass their inherent nature as assistant chat-bots (\S\ref{ssec:methodology:prompts-instructions}).
+	\item \textbf{Participant prompts}: The LLMs should at least attempt to emulate real-world dynamics. Therefore, we need to craft appropriate instruction prompts that shift their output from assistant chat-bots to internet users (\S\ref{ssec:methodology:prompts-instructions};\S\ref{ssec:methodology:prompts-sdb}; Fig.~\ref{fig::example}).
 	
-	\item \textbf{Discussion variety}: Different LLM users should behave differently in a discussion (\S\ref{ssec:methodology:prompts-sdb}; Fig.~\ref{fig::example}).
 \end{itemize}
 
 \subsection{Context-passing}

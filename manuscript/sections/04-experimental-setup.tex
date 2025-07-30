@@ -4,7 +4,7 @@
 \subsection{Synthetic Discussion Generation}
 \label{ssec:appendix:discussion}
 
-We provide our framework with a set of SDBs and starting comments (``seed opinions'')---in our case controversial statements from \citet{pavlopoulos-likas-2024-polarized}. We then run $N_d=8$ discussions for each pair of facilitation strategies $S$ and LLM (\S\ref{ssec:experimental:setup}). Synthetic generation is handled as described in \S\ref{sec:methodology}. An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}.  The $RandomSample$ function returns a number of samples from a set following the uniform distribution. The $Actors$ function creates a LLM agent using a model and a (string) prompt.
+We use a set of starting comments (``seed opinions'')---in our case controversial statements from \citet{pavlopoulos-likas-2024-polarized}. We then run $N_d=8$ discussions for each pair of facilitation strategies $S$ and LLM (\S\ref{ssec:experimental:setup}). An overview of how the experiments are generated can be found in Algorithm~\ref{alg:exp_generation}.  The $RandomSample$ function returns a number of samples from a set following the uniform distribution. The $Actors$ function creates a LLM agent using a model and a prompt.
 
 \begin{algorithm}[t]
 	\caption{Synthetic discussion setup generation}
