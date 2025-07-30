@@ -169,43 +169,39 @@ firstAuthor@affiliation1.com, secondAuthor@affilation2.com, thirdAuthor@affiliat
 
 
 \newcommand{\showifnotreview}[1]{%
-  \ifthenelse{\boolean{review}}{}{#1\unskip}%
+\ifthenelse{\boolean{review}}{}{#1\unskip}%
 }
 
 \newcommand{\vmd}{\showifnotreview{the ``\ac{VMD}'' }}
 
 \newcommand{\syndisco}{%
-    \ifthenelse{\boolean{review}}%
-        {}%
-        {SynDisco}%
+\ifthenelse{\boolean{review}}%
+{}%
+{SynDisco}%
 }
 
 \newcommand{\syndiscolink}{%
-    \ifthenelse{\boolean{review}}%
-        {}
-        {\footnote{}}
+\ifthenelse{\boolean{review}}%
+{}
+{\footnote{}}
 }
 
 \newcommand{\pip}{%
-    \ifthenelse{\boolean{review}}%
-        {}%
-        {\texttt{(pip install syndisco)}}%
+\ifthenelse{\boolean{review}}%
+{}%
+{\texttt{(pip install syndisco)}}%
 }
 
 \newcommand{\datasetlink}{}
 
-\newcommand{\analysislink}{%
-    \ifthenelse{\boolean{review}}%
-        {}%
-        {\footnote{}}%
-}
+\newcommand{\analysislink}{}
 
 \newcommand{\concat}{%
-  \mathbin{{+}\mspace{-8mu}{+}}%
+\mathbin{{+}\mspace{-8mu}{+}}%
 }
 
 \newcommand{\asterisknote}{
-	$\cdot p<0.1$, \textsuperscript{*} $p<0.05$, \textsuperscript{**} $p<0.01$, \textsuperscript{***} $p<0.001$
+$\cdot p<0.1$, \textsuperscript{*} $p<0.05$, \textsuperscript{**} $p<0.01$, \textsuperscript{***} $p<0.001$
 }
 
 \newcommand{\strategynomod}{No Moderator}
@@ -240,8 +236,8 @@ firstAuthor@affiliation1.com, secondAuthor@affilation2.com, thirdAuthor@affiliat
 \input{sections/11-ethical}
 
 \ifthenelse{\boolean{review}}
-   {}
-   { \input{sections/12-acknowledgements}}
+{}
+{ \input{sections/12-acknowledgements}}
 
 \bibliography{refs}
 %\appendix

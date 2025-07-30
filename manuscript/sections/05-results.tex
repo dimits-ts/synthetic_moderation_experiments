@@ -71,37 +71,35 @@ Additionally, a qualitative look through the dataset reveals that LLM user-agent
 \end{figure}
 
 \begin{figure*}[t]
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\textwidth]{rougel_model.png}
-        \caption{Model}
-        \label{fig:rougel_model}
-    \end{subfigure}%
-    \hfill
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\textwidth]{rougel_turns.png}
-        \caption{Turn-taking function}
-        \label{fig:rougel_turns}
-    \end{subfigure}%
-    \hfill
-    \begin{subfigure}{0.32\linewidth}
-        \includegraphics[width=\textwidth]{rougel_prompts.png}
-        \caption{Instruction prompt}
-        \label{fig:rougel_prompts}
-    \end{subfigure}%
-
-    \caption{Diversity (\S\ref{ssec:related:quality}) distribution for each discussion by LLM (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}). Comparison with the CeRI Regulation Room dataset (``Human''). Note that the x-axis starts from $0.6$.}
-    \label{fig:diversity}
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{rougel_model.png}
+		\caption{Model}
+		\label{fig:rougel_model}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{rougel_turns.png}
+		\caption{Turn-taking function}
+		\label{fig:rougel_turns}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{rougel_prompts.png}
+		\caption{Instruction prompt}
+		\label{fig:rougel_prompts}
+	\end{subfigure}%
+	
+	\caption{Diversity (\S\ref{ssec:related:quality}) distribution for each discussion by LLM (\S\ref{ssec:experimental:setup}), turn-taking function $t$ (\S\ref{ssec:methodology:turn}), and prompting function $\phi$ used (\S\ref{ssec:methodology:prompts-instructions}). Comparison with the CeRI Regulation Room dataset (``Human''). Note that the x-axis starts from $0.6$.}
+	\label{fig:diversity}
 \end{figure*}
 
 We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \S\ref{ssec:experimental:evaluation}) of these discussions with ones from the CeRI “Regulation Room” dataset\footnote{Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.}. We pick this dataset because it is publicly available and comprised of facilitated online human discussions on ten diverse topics.
 
-\paragraph{Larger models do not lead to more high-quality discussions.} As shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
-
+\paragraph{SDBs, roles, and our instruction prompt all increase the quality of synthetic data.} Fig.~\ref{fig:rougel_prompts} illustrates that incorporating SDBs, roles, and specialized instruction prompts, results in diversity scores more closely aligned with human discussions.
 
 \paragraph{Our proposed turn-taking function substantially improves the quality of synthetic data.} We compare our turn-taking function (\S\ref{ssec:methodology:turn}) to two baselines: Round Robin (participants speaking one after the other, then repeating) and Random Selection (uniformly sampling another participant each turn). Fig.~\ref{fig:rougel_turns} demonstrates that although all distributions diverge from the blue—human—distribution, our function is the only one not exhibiting extremely high diversity (i.e., very limited participant interaction \S\ref{ssec:experimental:evaluation}).
 
-We conduct three separate experiments in which participants are subjected to one of the following conditions at a time: (1) no assigned SDBs, (2) no assigned roles, or (3) only a very basic instruction prompt given. 
+\paragraph{Larger models do not lead to more high-quality discussions.} As shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
 
-\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned LLMs.} Our instruction prompt for the participants (\S\ref{ssec:methodology:prompts-instructions}) incentivizes them to react to toxic behavior. Indeed, inserting “troll” participants to discussions, leads to more intense toxicity among \emph{other} participants \emph{only if we instruct participants to react to toxic posts} (Fig.~\ref{fig:toxicity_trolls}). 
+\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned LLMs.} We conduct three separate experiments in which participants are subjected to one of the following conditions at a time: (1) no assigned SDBs, (2) no assigned roles, or (3) only a very basic instruction prompt given. Our instruction prompt for the participants (\S\ref{ssec:methodology:prompts-instructions}) incentivizes them to react to toxic behavior. Indeed, inserting “troll” participants to discussions, leads to more intense toxicity among \emph{other} participants \emph{only if we instruct participants to react to toxic posts} (Fig.~\ref{fig:toxicity_trolls}). 
 
-\paragraph{SDBs, roles, and our instruction prompt all increase the quality of synthetic data.} Fig.~\ref{fig:rougel_prompts} illustrates that incorporating SDBs, roles, and specialized instruction prompts, results in diversity scores more closely aligned with human discussions.
