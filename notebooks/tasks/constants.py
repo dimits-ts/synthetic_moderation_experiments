@@ -3,6 +3,7 @@ from pathlib import Path
 
 GRAPH_OUTPUT_DIR = Path("../graphs")
 DATASET_DIR = Path("../data/datasets")
+HATCHES = ["/", "|", "\\", "-", "x", "o", "+", "O", ".", "*"]
 
 MODERATION_STRATEGY_MAP = {
     "vanilla": "No Instructions",

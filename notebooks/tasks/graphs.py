@@ -9,8 +9,7 @@ import seaborn as sns
 import scikit_posthocs as sp
 
 from . import stats
-
-hatches = ["/", "|", "\\", "-", "+", "x", "o", "O", ".", "*"]
+from . import constants
 
 
 def save_plot(path: Path) -> None:
@@ -65,7 +64,7 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
             facecolor=palette[i],
             edgecolor="black",
             label=instruction.capitalize(),
-            hatch=hatches[i % len(hatches)],
+            hatch=constants.HATCHES[i % len(constants.HATCHES)],
         )
         for i, instruction in enumerate(instruction_values)
     ]
@@ -99,7 +98,7 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
             hist_diff,
             height=np.diff(bin_edges) * 2 / len(instruction_values),
             color=color,
-            hatch=hatches[idx % len(hatches)],
+            hatch=constants.HATCHES[idx % len(constants.HATCHES)],
             edgecolor="black",
         )
 
@@ -147,10 +146,12 @@ def rougel_plot(
     title: str = "Diversity Distribution by Group",
 ) -> None:
     plt.figure(figsize=(9, 4.5))
-    
+
     colors = sns.color_palette(palette, n_colors=len(hue_order))
 
-    bin_edges = np.histogram_bin_edges(df[rougel_col], bins=30, range=(0.6, 1.0))
+    bin_edges = np.histogram_bin_edges(
+        df[rougel_col], bins=30, range=(0.6, 1.0)
+    )
     bin_width = bin_edges[1] - bin_edges[0]
 
     for i, group in enumerate(hue_order):
@@ -162,12 +163,16 @@ def rougel_plot(
                 bin_edges[j],
                 count,
                 width=bin_width * 0.9,
-                align='edge',
+                align="edge",
                 color=colors[i],
-                edgecolor='black',
+                edgecolor="black",
                 alpha=0.6,
-                label=group if j == 0 else "",  # only add legend once per group
-                hatch=hatches[i % len(hatches)],
+                label=(
+                    group if j == 0 else ""
+                ),  # only add legend once per group
+                hatch=constants.HATCHES[
+                    i % len(constants.HATCHES)
+                ],
             )
 
     plt.xlabel("Diversity", fontsize=14)
@@ -181,7 +186,7 @@ def rougel_plot(
         fontsize=12,
         loc="center left",
         bbox_to_anchor=(1, 0.5),
-        frameon=False
+        frameon=False,
     )
 
     plt.tight_layout()
