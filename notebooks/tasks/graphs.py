@@ -9,8 +9,7 @@ import seaborn as sns
 import scikit_posthocs as sp
 
 from . import stats
-
-hatches = ["/", "|", "\\", "-", "+", "x", "o", "O", ".", "*"]
+from . import constants
 
 
 def save_plot(path: Path) -> None:
@@ -29,19 +28,57 @@ def save_plot(path: Path) -> None:
 def comment_len_plot(
     df: pd.DataFrame, length_col: str, feature_col: str, hue_order: list
 ) -> None:
-    ax = sns.displot(
-        df,
-        x=length_col,
-        hue=feature_col,
-        hue_order=hue_order,
-        stat="density",
-        kde=False,
-        multiple="layer",
-        common_norm=False,  # normalize observation counts by feature_col
+    # Parameters borrowed from rougel_plot style
+    palette = "colorblind"
+    title = "Comment Length Distribution by Group"
+    plt.figure(figsize=(9, 4.5))
+
+    colors = sns.color_palette(palette, n_colors=len(hue_order))
+
+    # Determine reasonable bin edges based on the data (30 bins)
+    min_len = df[length_col].min()
+    max_len = df[length_col].max()
+    # add small padding so bars at extremes are fully visible
+    padding = (max_len - min_len) * 0.02 if max_len > min_len else 1
+    bin_edges = np.histogram_bin_edges(
+        df[length_col], bins=30, range=(min_len - padding, max_len + padding)
     )
-    plt.xlabel("Comment Length (#words)")
-    # move legend inside plot
-    sns.move_legend(ax, loc="center right", bbox_to_anchor=(0.7, 0.5))
+    bin_width = bin_edges[1] - bin_edges[0]
+
+    for i, group in enumerate(hue_order):
+        subset = df[df[feature_col] == group][length_col]
+        if subset.empty:
+            continue
+        counts, _ = np.histogram(subset, bins=bin_edges, density=False)
+
+        for j, count in enumerate(counts):
+            plt.bar(
+                bin_edges[j],
+                count,
+                width=bin_width * 0.9,
+                align="edge",
+                color=colors[i],
+                edgecolor="black",
+                alpha=0.6,
+                label=(group if j == 0 else ""),
+                hatch=constants.HATCHES[i % len(constants.HATCHES)],
+            )
+
+    plt.xlabel("Comment Length (#words)", fontsize=14)
+    plt.ylabel("#Discussions", fontsize=14)
+    plt.title(title, fontsize=16)
+    plt.xlim(bin_edges[0], bin_edges[-1])
+
+    plt.legend(
+        title=feature_col.replace("_", " ").title(),
+        title_fontsize=14,
+        fontsize=12,
+        loc="center left",
+        bbox_to_anchor=(1, 0.5),
+        frameon=False,
+    )
+
+    plt.tight_layout()
 
 
 def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
@@ -65,7 +102,7 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
             facecolor=palette[i],
             edgecolor="black",
             label=instruction.capitalize(),
-            hatch=hatches[i % len(hatches)],
+            hatch=constants.HATCHES[i % len(constants.HATCHES)],
         )
         for i, instruction in enumerate(instruction_values)
     ]
@@ -99,7 +136,7 @@ def difference_histogram(df, feature="Toxicity", bins=20, figsize=(6, 5)):
             hist_diff,
             height=np.diff(bin_edges) * 2 / len(instruction_values),
             color=color,
-            hatch=hatches[idx % len(hatches)],
+            hatch=constants.HATCHES[idx % len(constants.HATCHES)],
             edgecolor="black",
         )
 
@@ -147,31 +184,35 @@ def rougel_plot(
     title: str = "Diversity Distribution by Group",
 ) -> None:
     plt.figure(figsize=(9, 4.5))
-    
+
     colors = sns.color_palette(palette, n_colors=len(hue_order))
 
-    bin_edges = np.histogram_bin_edges(df[rougel_col], bins=30, range=(0.6, 1.0))
+    bin_edges = np.histogram_bin_edges(
+        df[rougel_col], bins=30, range=(0.6, 1.0)
+    )
     bin_width = bin_edges[1] - bin_edges[0]
 
     for i, group in enumerate(hue_order):
         subset = df[df[feature_col] == group][rougel_col]
-        counts, _ = np.histogram(subset, bins=bin_edges, density=True)
+        counts, _ = np.histogram(subset, bins=bin_edges, density=False)
 
         for j, count in enumerate(counts):
             plt.bar(
                 bin_edges[j],
                 count,
                 width=bin_width * 0.9,
-                align='edge',
+                align="edge",
                 color=colors[i],
-                edgecolor='black',
+                edgecolor="black",
                 alpha=0.6,
-                label=group if j == 0 else "",  # only add legend once per group
-                hatch=hatches[i % len(hatches)],
+                label=(
+                    group if j == 0 else ""
+                ),  # only add legend once per group
+                hatch=constants.HATCHES[i % len(constants.HATCHES)],
             )
 
     plt.xlabel("Diversity", fontsize=14)
-    plt.ylabel("Density", fontsize=14)
+    plt.ylabel("#Discussions", fontsize=14)
     plt.xlim(0.6, 1.0)
     plt.title(title, fontsize=16)
 
@@ -181,7 +222,7 @@ def rougel_plot(
         fontsize=12,
         loc="center left",
         bbox_to_anchor=(1, 0.5),
-        frameon=False
+        frameon=False,
     )
 
     plt.tight_layout()
@@ -304,32 +345,94 @@ def trolls_plot(df: pd.DataFrame, title: str, val_col: str) -> None:
 
 
 def disagreement_plot(
-    var_with_sdb: pd.Series, var_no_sdb: pd.Series, title: str, stat_col: str
+    var_with_sdb: pd.Series | pd.DataFrame,
+    var_no_sdb: pd.Series | pd.DataFrame,
+    title: str,
+    stat_col: str,
 ) -> None:
-    sdb_toxicity_var = var_with_sdb.reset_index()
-    sdb_toxicity_var["annotator"] = "With SDB"
-    no_sdb_toxicity_var = var_no_sdb.reset_index()
-    no_sdb_toxicity_var["annotator"] = "No SDB"
-    merged_df = pd.concat(
-        [sdb_toxicity_var, no_sdb_toxicity_var], ignore_index=True
-    )
-    # I can not find how to remove legend title because displot returns
-    # a facet grid for some reason
-    merged_df = merged_df.rename(columns={"annotator": "Annotator SDB"})
+    # Helper to coerce input to a Series containing the statistic
+    def extract_series(x, name):
+        if isinstance(x, pd.DataFrame):
+            if stat_col in x.columns:
+                return x[stat_col].reset_index(drop=True)
+            elif x.shape[1] == 1:
+                return x.iloc[:, 0].reset_index(drop=True)
+            else:
+                raise ValueError(
+                    f"DataFrame for '{name}' has multiple columns and none named '{stat_col}'."
+                )
+        elif isinstance(x, pd.Series):
+            return x.reset_index(drop=True)
+        else:
+            raise TypeError(
+                f"Expected Series or DataFrame for '{name}', got {type(x)}."
+            )
 
-    plot = sns.histplot(
-        data=merged_df,
-        x=stat_col,
-        hue="Annotator SDB",
-        common_norm=False,
-        multiple="dodge",
-        bins=10,
-    )
-    plt.title(title)
+    sdb_series = extract_series(var_with_sdb, "var_with_sdb")
+    no_sdb_series = extract_series(var_no_sdb, "var_no_sdb")
+
+    # Build merged DataFrame
+    sdb_df = sdb_series.to_frame(name=stat_col)
+    sdb_df["Annotator SDB"] = "With SDB"
+    no_sdb_df = no_sdb_series.to_frame(name=stat_col)
+    no_sdb_df["Annotator SDB"] = "No SDB"
+    merged_df = pd.concat([sdb_df, no_sdb_df], ignore_index=True)
+
+    # Styling like rougel_plot
+    plt.figure(figsize=(9, 4.5))
+    palette = "colorblind"
+    groups = ["With SDB", "No SDB"]
+    colors = sns.color_palette(palette, n_colors=len(groups))
+
+    # Bin setup over [0,1]
+    bin_edges = np.linspace(0.0, 1.0, 31)
+    bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+    bin_step = bin_centers[1] - bin_centers[0]
+
+    # Define dodge: each group gets a bar; total pair width is less than bin_step to leave gap
+    individual_width = (
+        bin_step * 0.35
+    )  # two bars take 0.7*bin_step, leaving 0.3*bin_step gap between pairs
+    shifts = {
+        "With SDB": -individual_width / 2,
+        "No SDB": individual_width / 2,
+    }
+
+    for i, group in enumerate(groups):
+        subset = merged_df[merged_df["Annotator SDB"] == group][stat_col]
+        if subset.empty:
+            continue
+        counts, _ = np.histogram(subset, bins=bin_edges, density=False)
+        for j, count in enumerate(counts):
+            center = bin_centers[j] + shifts[group]
+            plt.bar(
+                center,
+                count,
+                width=individual_width,
+                align="center",
+                color=colors[i],
+                edgecolor="black",
+                alpha=0.6,
+                label=(group if j == 0 else ""),
+                hatch=constants.HATCHES[i % len(constants.HATCHES)],
+            )
+
+    plt.title(title, fontsize=16)
+    plt.xlabel("nDFU", fontsize=14)
+    plt.ylabel("#Discussions", fontsize=14)
     plt.xlim(0, 1)
-    plt.xlabel("nDFU")
-    plot.get_legend().set_title(None)
-    # sns.move_legend(plot, loc="center right", bbox_to_anchor=(0.68, 0.5))
+
+    plt.legend(
+        title="Annotator SDB",
+        title_fontsize=14,
+        fontsize=12,
+        loc="center left",
+        bbox_to_anchor=(1, 0.5),
+        frameon=False,
+    )
+
+    sns.despine(trim=True)
+    plt.tight_layout()
 
 
 def polarization_plot(df, metric_col: str):
@@ -341,10 +444,10 @@ def polarization_plot(df, metric_col: str):
         hue=metric_col,
         palette="flare",
     )
-    ax.set_title(f"Annotator Polarization vs. {metric_col}")
-    ax.set_xlabel(metric_col)
+    ax.set_title(f"Annotator Polarization v.s. {metric_col}")
+    ax.set_xlabel(f"{metric_col} level")
     ax.set_ylabel("nDFU")
-    ax.legend(title=metric_col, loc="upper left")
+    ax.legend().remove()
 
 
 # ======== posthoc_dunn_heatmap ========

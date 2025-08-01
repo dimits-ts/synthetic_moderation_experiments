@@ -1,0 +1,36 @@
+% !TEX root = ../main.tex
+%
+\section{Background and Related Work}
+
+\subsection{Synthetic Discussions}
+\label{ssec:related:discussions}
+
+While studies exist for simulating user interactions in social media \cite{park_simulacra, mou_2024, tornberg_2023, y_social}, and for using LLM facilitators \cite{kim_et_al_chatbot, cho-etal-2024-language}, none so far have combined the two approaches. 
+
+\citet{balog_2024} extract topics and comments from online human discussions and prompt an LLM to continue them. However, they do not use LLM-based user agents to simulate conversational dynamics, nor do they include facilitators in their setup. Additionally, their approach depends on the availability of human discussion datasets with the desired topics. \citet{ulmer2024} create synthetic discussions between two roles: an agent controlling a fictional environment and a client interacting with it. These discussions are filtered and used to finetune the agent LLM for a specific task. Our methodology generalizes their framework: an agent (facilitator) interacts with multiple clients (non-facilitator users). Finally, \citet{abdelnabi_negotiations} generate synthetic negotiations involving multiple agents with different agendas and responsibilities. Our work can be seen as a domain shift of their approach---from negotiation to discussion facilitation---where various user types (e.g., normal users, trolls, community veterans) engage in discussion overseen by a facilitator with veto power.
+
+
+\subsection{LLM Facilitation}
+
+Unlike classification models traditionally used in online platforms, LLMs can actively facilitate discussions \cite{korre2025evaluation}. They can warn users for rule violations \cite{Kumar_AbuHashem_Durumeric_2024}, monitor engagement \cite{schroeder-etal-2024-fora}, aggregate diverse opinions \cite{small-polis-llm}, and provide translations and writing tips---which is especially useful for marginalized groups \cite{Tsai2024Generative}. These capabilities suggest that LLMs may be able to assist or even replace human facilitators in many tasks \cite{small-polis-llm, korre2025evaluation}.
+
+Moderator chatbots have shown promise; \citet{kim_et_al_chatbot} demonstrated that simple rule-based models can enhance discussions, although their approach was largely confined to organizing the discussion based on the ``think-pair-share'' framework \cite{ahmad_2010_supporting, Navajas2018}, and balancing user activity. \citet{cho-etal-2024-language} use LLM facilitators in human discussions, with prompts based on Cognitive Behavioral Therapy and the work of \citet{rosenberg2015nonviolent}. They show that LLM facilitators can provide high-quality feedback to users, although they struggle to make users more respectful and cooperative.  In contrast to both works, ours uses exclusively LLM participants and LLM facilitators, and tests the latter in an explicitly toxic and challenging environment.
+
+
+\subsection{Discussion Quality}
+\label{ssec:related:quality}
+
+We need to evaluate two different quality dimensions. One is \emph{discussion quality as seen by humans}, which is difficult to measure, both because of the breadth of the possible goals of a discussion, and because of the lack of established computational metrics in Social Science literature \cite{korre2025evaluation}. There are however some that could reasonably be applied in this domain, such as toxicity \citep{dekock2022disagree, XiaToxicity}, connective language \citep{lukito-etal-2024-comparing} and political discussion quality \citep{Jaidka_2022}.
+
+The second quality dimension is measuring “high-quality” or “useful” data. This is essential in LLM-based discussion frameworks, as such discussions tend to deteriorate quickly without human involvement, often becoming repetitive and low-quality \citep{ulmer2024}. Despite this importance, methods for quantifying the quality of synthetic data remain limited.
+
+ \citet{balog_2024} use a mix of graph-based, methodology-specific, and lexical similarity metrics, many of which depend on human discussion datasets. Their most generalizable measure is a loosely defined “coherence” score, which is LLM-annotated without theoretical grounding. \citet{kim_et_al_chatbot} assess quality through post-discussion surveys and by measuring lexical diversity to approximate the variety of opinions expressed. \citet{ulmer2024}  introduce a discussion-level metric called \emph{``Diversity''}, which penalizes repeated text sequences between comments using average pairwise ROUGE-L \citep{lin-2004-rouge} scores. Their approach suffers from the limitations of ROUGE scores (mainly the use of exact-word matching), but their metric is computationally efficient, explainable and independent from any specific domain and dataset.
+
+\subsection{LLMs as Human Subjects}
+\label{ssec:related:human-llm}
+
+While there is always a desire for synthetic simulation systems to be ``realistic'' w.r.t. human behavior \citep{grossman_2023, tornberg_2023, argyle2023}, this can not be claimed nor reliably measured by using LLM agents in lieu of humans \citep{rossi_2024}.
+
+It is true that LLMs have demonstrated complex, emergent social behaviors \cite{park2023game, demarzo_2023, leng_2024, abdelnabi_negotiations, abramski_2023, hewitt2024predicting, park2024generativeagentsimulations1000}. However, significant limitations of LLMs remain in the context of Social Science experiments. Issues include undetectable behavioral hallucinations \cite{rossi_2024}; sociodemographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024, Taubenfeld2024SystematicBI}; unreliable survey responses \cite{jansen_2023,bisbee_2023,neumann_2025, Gligoric2024CanUL}; non-deterministic outputs \cite{atil_2025, bisbee_2023}; and excessive agreeableness \cite{Park2023GenerativeAI, anthis_2025, rossi_2024}.
+
+Thus, \emph{no study based on LLM agents} can claim that it generates``realistic'' discussions; reproduction studies with humans are ultimately needed.
