@@ -43,14 +43,14 @@ The real-life strategies and our own strategy (\S\ref{ssec:experimental:strategi
 	\small
 	\asterisknote
 	\normalsize
-	\caption{OLS regression coefficients for toxicity on the non-facilitator comments ($Adj. R^2=0.054$). Reference factor is \textit{\strategynomod}. All strategies outperform \textit{\strategynomod} in general. The \textit{\strategyregroom} and \textit{\strategyconstrcomm} real-life strategies additionally show improvements over time compared to \textit{\strategynomod}.}
+	\caption{OLS regression coefficients for toxicity on the non-facilitator comments ($Adj. R^2=0.054$). Reference factor is \textit{\strategynomod}. All strategies outperform \textit{\strategynomod} in general. The \textit{\strategyregroom} and \textit{\strategyconstrcomm} real-life strategies additionally show improvements over time compared to \textit{\strategynoinstr}.}
 	\label{tab:toxicity}
 \end{table}
 
 
 \paragraph{Finding 3: LLM facilitators choose to intervene far too frequently, which is tolerated by the other participants.} Fig.~\ref{fig:intervention_count} demonstrates that LLM facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. This confirms that LLMs generally can not decide not to speak even when instructed to do so  (\S\ref{ssec:methodology:us}). To our knowledge, this has not been reported in relevant literature, and \emph{is an example of ``debugging'' problems with LLMs} --- a core motivation of our work.
 
-Additionally, a qualitative look through the dataset reveals that LLM user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact of LLMs being too agreeable \citep{park2023game, anthis_2025}.
+Additionally, we note that LLM user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact of LLMs being too agreeable \citep{park2023game, anthis_2025}.
 
 \begin{figure}[t]
 	\centering
@@ -89,7 +89,7 @@ Additionally, a qualitative look through the dataset reveals that LLM user-agent
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.8\linewidth]{toxicity_trolls.png}
-	\caption{Non-troll toxicity levels in discussions with and without trolls. There is a significant uptick on the number of ``somewhat toxic" ($Toxicity=2$) comments when the participants are primed to respond to toxic comments (lower bars).}
+	\caption{Non-troll toxicity levels in discussions with and without trolls. There is a significant uptick on the number of ``somewhat toxic" ($Toxicity=2$) comments when the participants are instructed to respond to toxic comments.}
 	\label{fig:toxicity_trolls}
 \end{figure}
 

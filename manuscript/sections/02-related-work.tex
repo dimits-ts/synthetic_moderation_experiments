@@ -5,13 +5,9 @@
 \subsection{Synthetic Discussions}
 \label{ssec:related:discussions}
 
-While studies exist for simulating user interactions in social media \cite{park_simulacra, mou_2024, tornberg_2023, y_social, balog_2024}, and for using LLM facilitators \cite{kim_et_al_chatbot, cho-etal-2024-language}, none so far have combined the two approaches. 
+While studies exist for simulating user interactions in social media \cite{park_simulacra, mou_2024, tornberg_2023, y_social}, and for using LLM facilitators \cite{kim_et_al_chatbot, cho-etal-2024-language}, none so far have combined the two approaches. 
 
-\citet{balog_2024} generate synthetic discussions by extracting topics and comments from online human discussions and prompting an LLM to continue them. However, they do not use LLM-based user agents to simulate conversational dynamics, nor do they include facilitators in their setup. Additionally, their approach depends on the availability of human discussion datasets with the desired topics.
-
-\citet{ulmer2024} create synthetic discussions between two roles: an agent controlling a fictional environment and a client interacting with it. These discussions are filtered and used to finetune the agent LLM for a specific task. Our methodology generalizes their framework: an agent (facilitator) interacts with multiple clients (non-facilitator users).
-
-Finally, \citet{abdelnabi_negotiations} generate synthetic negotiations involving multiple agents with different agendas and responsibilities. Our work can be seen as a domain shift of their approach---from negotiation to discussion facilitation---where various user types (e.g., normal users, trolls, community veterans) engage in discussion overseen by a facilitator with veto power.
+\citet{balog_2024} extract topics and comments from online human discussions and prompt an LLM to continue them. However, they do not use LLM-based user agents to simulate conversational dynamics, nor do they include facilitators in their setup. Additionally, their approach depends on the availability of human discussion datasets with the desired topics. \citet{ulmer2024} create synthetic discussions between two roles: an agent controlling a fictional environment and a client interacting with it. These discussions are filtered and used to finetune the agent LLM for a specific task. Our methodology generalizes their framework: an agent (facilitator) interacts with multiple clients (non-facilitator users). Finally, \citet{abdelnabi_negotiations} generate synthetic negotiations involving multiple agents with different agendas and responsibilities. Our work can be seen as a domain shift of their approach---from negotiation to discussion facilitation---where various user types (e.g., normal users, trolls, community veterans) engage in discussion overseen by a facilitator with veto power.
 
 
 \subsection{LLM Facilitation}
