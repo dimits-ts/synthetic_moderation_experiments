@@ -169,27 +169,27 @@ firstAuthor@affiliation1.com, secondAuthor@affilation2.com, thirdAuthor@affiliat
 
 
 \newcommand{\showifnotreview}[1]{%
-\ifthenelse{\boolean{review}}{}{#1\unskip}%
+  \ifthenelse{\boolean{review}}{}{#1\unskip}%
 }
 
 \newcommand{\vmd}{\showifnotreview{the ``\ac{VMD}'' }}
 
 \newcommand{\syndisco}{%
-\ifthenelse{\boolean{review}}%
-{}%
-{SynDisco}%
+    \ifthenelse{\boolean{review}}%
+        {}%
+        {SynDisco}%
 }
 
 \newcommand{\syndiscolink}{%
-\ifthenelse{\boolean{review}}%
-{}
-{\footnote{}}
+    \ifthenelse{\boolean{review}}%
+        {}
+        {\footnote{}}
 }
 
 \newcommand{\pip}{%
-\ifthenelse{\boolean{review}}%
-{}%
-{\texttt{(pip install syndisco)}}%
+    \ifthenelse{\boolean{review}}%
+        {}%
+        {\texttt{(pip install syndisco)}}%
 }
 
 \newcommand{\datasetlink}{}
@@ -197,11 +197,11 @@ firstAuthor@affiliation1.com, secondAuthor@affilation2.com, thirdAuthor@affiliat
 \newcommand{\analysislink}{}
 
 \newcommand{\concat}{%
-\mathbin{{+}\mspace{-8mu}{+}}%
+  \mathbin{{+}\mspace{-8mu}{+}}%
 }
 
 \newcommand{\asterisknote}{
-$\cdot p<0.1$, \textsuperscript{*} $p<0.05$, \textsuperscript{**} $p<0.01$, \textsuperscript{***} $p<0.001$
+	$\cdot p<0.1$, \textsuperscript{*} $p<0.05$, \textsuperscript{**} $p<0.01$, \textsuperscript{***} $p<0.001$
 }
 
 \newcommand{\strategynomod}{No Moderator}
@@ -214,7 +214,7 @@ $\cdot p<0.1$, \textsuperscript{*} $p<0.05$, \textsuperscript{**} $p<0.01$, \tex
 \newcommand{\minus}{\scalebox{0.75}[1.0]{$-$}}
 
 
-\title{Scalable Evaluation of Online Facilitation Strategies via Synthetic Simulation of Discussions}
+\title{Scalable Evaluation of Online Facilitation Strategies via\\Synthetic Simulation of Discussions}
 
 \begin{document}
 
@@ -236,8 +236,8 @@ $\cdot p<0.1$, \textsuperscript{*} $p<0.05$, \textsuperscript{**} $p<0.01$, \tex
 \input{sections/11-ethical}
 
 \ifthenelse{\boolean{review}}
-{}
-{ \input{sections/12-acknowledgements}}
+   {}
+   { \input{sections/12-acknowledgements}}
 
 \bibliography{refs}
 %\appendix

@@ -5,13 +5,13 @@
 \subsection{Synthetic Discussions}
 \label{ssec:related:discussions}
 
-While studies exist for simulating user interactions in social media \cite{park_simulacra, mou_2024, tornberg_2023, y_social, balog_2024}, and for using LLM facilitators \cite{kim_et_al_chatbot, cho-etal-2024-language}, none so far have combined the two approaches. 
+While studies exist for simulating user interactions in social media \cite{park_simulacra, mou_2024, tornberg_2023, y_social, balog_2024, Vezhnevets2023GenerativeAM}, and for using LLM facilitators \cite{kim_et_al_chatbot, cho-etal-2024-language}, none so far have combined the two approaches. 
 
 \citet{balog_2024} propose a methodology for generating synthetic discussions by extracting topics and comments from online human discussions, and prompting an LLM to continue them. However, they do not use LLM-based user agents to simulate conversational dynamics, nor do they include facilitators in their setup. Additionally, their approach depends on the availability of human discussion datasets with the desired topics.
 
 \citet{ulmer2024} create synthetic discussions between two roles: an agent controlling a fictional environment and a client interacting with it. These discussions are filtered and used to finetune the agent LLM for a specific task. Our methodology generalizes their framework: an agent (facilitator) interacts with multiple clients (non-facilitator users).
 
-Finally, \citet{abdelnabi_negotiations} generate synthetic negotiations involving multiple agents with different agendas and responsibilities. Our work can be seen as a domain shift of their approach --- from negotiation to discussion facilitation---where various user types (e.g., normal users, trolls, community veterans) engage in discussion moderated by a facilitator with veto power.
+Finally, \citet{abdelnabi_negotiations} generate synthetic negotiations involving multiple agents with different agendas and responsibilities. Our work can be seen as a domain shift of their approach --- from negotiation to discussion facilitation---where various user types (e.g., normal users, trolls, community veterans) engage in discussion overseen by a facilitator with veto power.
 
 
 \subsection{LLM Facilitation}
@@ -28,7 +28,7 @@ In this paper we need to evaluate two different quality dimensions. One is \emph
 
 The second quality dimension is measuring “high-quality” or “useful” data. This is essential in LLM-based discussion frameworks, as such discussions tend to deteriorate quickly without human involvement, often becoming repetitive and low-quality \citep{ulmer2024}. Despite this importance, methods for quantifying the quality of synthetic data remain limited.
 
-\citet{balog_2024} use a mix of graph-based, methodology-specific, and lexical similarity metrics, many of which depend on human discussion datasets. Their most generalizable measure is a loosely defined “coherence” score, which is LLM-annotated without theoretical grounding. \citet{kim_et_al_chatbot} assess quality through post-discussion surveys and by measuring lexical diversity to approximate the variety of opinions expressed. \citet{ulmer2024}  introduce a discussion-level metric called \emph{``Diversity''}, which penalizes repeated text sequences between comments using average pairwise ROUGE-L \citep{lin-2004-rouge} scores. Their approach suffers from the limitations of ROUGE scores (mainly the use of exact-word matching), but their metric is computationally efficient, explainable and independent from any specific domain and dataset.
+ \citet{balog_2024} use a mix of graph-based, methodology-specific, and lexical similarity metrics, many of which depend on human discussion datasets. Their most generalizable measure is a loosely defined “coherence” score, which is LLM-annotated without theoretical grounding. \citet{kim_et_al_chatbot} assess quality through post-discussion surveys and by measuring lexical diversity to approximate the variety of opinions expressed. \citet{ulmer2024}  introduce a discussion-level metric called \emph{``Diversity''}, which penalizes repeated text sequences between comments using average pairwise ROUGE-L \citep{lin-2004-rouge} scores. Their approach suffers from the limitations of ROUGE scores (mainly the use of exact-word matching), but their metric is computationally efficient, explainable and independent from any specific domain and dataset.
 
 \subsection{LLMs as Human Subjects}
 \label{ssec:related:human-llm}
