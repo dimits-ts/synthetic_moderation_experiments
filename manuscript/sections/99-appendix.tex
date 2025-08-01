@@ -2,81 +2,6 @@
 %
 \section{Technical Appendix}
 
-
-\subsection{The Role of Roles}
-
-We verify that the models and roles used did not by themselves impact the findings presented in \S\ref{ssec:results:main}. Fig.~\ref{fig:toxicity_aq_role} demonstrates that, as expected, only troll user-agents contribute on average intense toxicity and worse Arg. Quality in the synthetic discussions. Furthermore, Fig.~\ref{fig:toxicity_aq_model} shows that toxicity and Arg. Quality are on average not qualitatively dependent on the model used.
-
-\begin{figure*}[ht]
-	\includegraphics[width=0.45\linewidth]{toxicity_intent_barplot.png} \hfill
-	\includegraphics[width=0.45\linewidth]{aq_intent_barplot.png}
-	\centering
-	\caption{Average Toxicity (left) and Arg. Quality (right) per LLM user-role (\S\ref{ssec:methodology:prompts-instructions}).}
-	\label{fig:toxicity_aq_role}
-\end{figure*}
-
-\begin{figure*}[ht]
-	\includegraphics[width=0.45\linewidth]{toxicity_llm_barplot.png} \hfill
-	\includegraphics[width=0.45\linewidth]{aq_llm_barplot.png}
-	\centering
-	\caption{Boxplots for average Toxicity (left) and Arg. Quality (right) per LLM (\S\ref{ssec:experimental:setup}).}
-	\label{fig:toxicity_aq_model}
-\end{figure*}
-
-
-\subsection{Investigating Comment Length}
-
-\begin{figure*}[t]
-	\begin{subfigure}{0.32\linewidth}
-		\includegraphics[width=\textwidth]{comment_len_model.png}
-		\caption{Model}
-		\label{fig:comment_length_model}
-	\end{subfigure}%
-	\hfill
-	\begin{subfigure}{0.32\linewidth}
-		\includegraphics[width=\textwidth]{comment_len_turns.png}
-		\caption{Turn-taking function $t$}
-		\label{fig:comment_length_turns}
-	\end{subfigure}%
-	\hfill
-	\begin{subfigure}{0.32\linewidth}
-		\includegraphics[width=\textwidth]{comment_len_prompts.png}
-		\caption{Prompting function $\phi$}
-		\label{fig:comment_length_prompts}
-	\end{subfigure}%
-	
-	\caption{Comment length for each discussion by LLM (\S\ref{ssec:experimental:setup}), turn-taking function $t$, and prompt used (\S\ref{ssec:methodology:us}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
-	\label{fig:comment_length}
-\end{figure*}
-
-We find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we cannot verify the existence of this pattern in human-generated comments ($p = 0.775$). This may partially explain the divergent diversity scores of different models in \S\ref{ssec:results:ablation}  (Fig.~\ref{fig:comment_length_model}) --- although it does not ultimately change the conclusions presented.
-
-
-\subsection{Analyzing Annotations}
-
-In this section, we examine the properties of LLM annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the nDFU metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
-
-Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the Arg. Quality scores. 
-
-To mitigate the instability inherent in LLM outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we run an experiment where we use ten annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no SDBs. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments even showing maximum polarization. Running the same experiment with different SDBs yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on LLM instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
-
-
-\begin{figure*}[t]
-	\includegraphics[width=0.45\linewidth]{sdb_toxicity.png} \hfill
-	\includegraphics[width=0.45\linewidth]{sdb_aq.png}
-	\centering
-	\caption{Distribution plot of inter-annotator polarization (nDFU) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model. The blue (left-most) bars represent the disagreement between $10$ identical annotator-agents, while the orange (right-most) bars, the disagreement between $10$ annotators with different SDBs.}
-	\label{fig:sdb_annot}
-\end{figure*}
-
-\begin{figure*}[t]
-	\includegraphics[width=0.45\linewidth]{ndfu_toxicity.png} \hfill
-	\includegraphics[width=0.45\linewidth]{ndfu_aq.png}
-	\centering
-	\caption{Inter-annotator polarization (nDFU) of each synthetic comment for all synthetic discussions, by annotation level. The left graph shows the relationship between $nDFU_{toxicity}$ and toxicity, while the right graph shows the relationship between $nDFU_{arg\_quality}$ and Arg. Quality.}
-	\label{fig:ndfu_annot}
-\end{figure*}
-
 \subsection{Generalizing Synthetic Annotation}
 
 While toxicity is a reliable and important metric, we can also investigate other discussion quality dimensions, such as Arg. Quality. Arg. Quality is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining Arg. Quality is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. Nevertheless, in this section we present preliminary results obtained by prompting LLM to measure Arg. Quality(\S\ref{ssec:appendix:prompts}). 
@@ -127,13 +52,72 @@ Most findings w.r.t. toxicity are mirrored for Arg. Quality. Fig.~\ref{fig:aq_st
 \end{figure}
 
 
+\subsection{Analyzing Annotations}
 
-\section{Data}
+In this section, we examine the properties of LLM annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the nDFU metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
 
-\subsection{Prompts Used}
+Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the Arg. Quality scores. 
+
+To mitigate the instability inherent in LLM outputs—even when given identical inputs—the use of multiple annotator-agents is essential for obtaining reliable annotations. To demonstrate this necessity, we run an experiment where we use ten annotator-agents on a subset of comments with the same annotator model and instruction prompt, but no SDBs. As illustrated in Fig.~\ref{fig:sdb_annot}, even under conditions which guaranteed identical inputs, there exists some polarization, with some comments even showing maximum polarization. Running the same experiment with different SDBs yields identical results, indicating that the observed polarization is primarily due to unstable model outputs. Thus, we confirm the results of previous studies on LLM instability \cite{rossi_2024, atil_2025}, while also bypassing this limitation in our own results.
+
+
+\begin{figure*}[t]
+	\includegraphics[width=0.45\linewidth]{sdb_toxicity.png} \hfill
+	\includegraphics[width=0.45\linewidth]{sdb_aq.png}
+	\centering
+	\caption{Distribution plot of inter-annotator polarization (nDFU) for each comment in all synthetic discussions following the "No Instructions" strategy and using the Qwen 2.5 model. The blue (left-most) bars represent the disagreement between $10$ identical annotator-agents, while the orange (right-most) bars, the disagreement between $10$ annotators with different SDBs.}
+	\label{fig:sdb_annot}
+\end{figure*}
+
+\begin{figure*}[t]
+	\includegraphics[width=0.45\linewidth]{ndfu_toxicity.png} \hfill
+	\includegraphics[width=0.45\linewidth]{ndfu_aq.png}
+	\centering
+	\caption{Inter-annotator polarization (nDFU) of each synthetic comment for all synthetic discussions, by annotation level. The left graph shows the relationship between $nDFU_{toxicity}$ and toxicity, while the right graph shows the relationship between $nDFU_{arg\_quality}$ and Arg. Quality.}
+	\label{fig:ndfu_annot}
+\end{figure*}
+
+
+\subsection{Investigating Confounding Variables}
+
+We find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we cannot verify the existence of this pattern in human-generated comments ($p = 0.775$). This may partially explain the divergent diversity scores of different models in \S\ref{ssec:results:ablation}  (Fig.~\ref{fig:comment_length_model}) --- although it does not ultimately change the conclusions presented. Furthermore, Fig.~\ref{fig:toxicity_aq_model} shows that toxicity and Arg. Quality are on average not qualitatively dependent on the model used.
+
+\begin{figure*}[ht]
+	\includegraphics[width=0.45\linewidth]{toxicity_llm_barplot.png} \hfill
+	\includegraphics[width=0.45\linewidth]{aq_llm_barplot.png}
+	\centering
+	\caption{Boxplots for average Toxicity (left) and Arg. Quality (right) per LLM (\S\ref{ssec:experimental:setup}).}
+	\label{fig:toxicity_aq_model}
+\end{figure*}
+
+\begin{figure*}[t]
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_model.png}
+		\caption{Model}
+		\label{fig:comment_length_model}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_turns.png}
+		\caption{Turn-taking function $t$}
+		\label{fig:comment_length_turns}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{0.32\linewidth}
+		\includegraphics[width=\textwidth]{comment_len_prompts.png}
+		\caption{Prompting function $\phi$}
+		\label{fig:comment_length_prompts}
+	\end{subfigure}%
+	
+	\caption{Comment length for each discussion by LLM (\S\ref{ssec:experimental:setup}), turn-taking function $t$, and prompt used (\S\ref{ssec:methodology:us}). For ease of comparison, comments above 400 words are marked at the end of the x-axis.}
+	\label{fig:comment_length}
+\end{figure*}
+
+
+\section{Prompts Used}
 \label{ssec:appendix:prompts}
     
-\subsubsection{Actor Prompts}
+\subsection{Actor Prompts}
 \label{sssec:appendix:actors}
 
 \begin{itemize}
@@ -165,7 +149,7 @@ Most findings w.r.t. toxicity are mirrored for Arg. Quality. Fig.~\ref{fig:aq_st
 \end{itemize}
 
 
-\subsubsection{User Roles}
+\subsection{User Roles}
 \label{sssec:appendix:roles}
 
 \begin{itemize}
@@ -175,7 +159,7 @@ Most findings w.r.t. toxicity are mirrored for Arg. Quality. Fig.~\ref{fig:aq_st
 \end{itemize}
 
 
-\subsubsection{Facilitation Strategies}
+\subsection{Facilitation Strategies}
 \label{sssec:appendix:moderation_strategies}
 
 \begin{itemize}
