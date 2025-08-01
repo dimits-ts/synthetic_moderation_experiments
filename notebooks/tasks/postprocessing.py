@@ -30,7 +30,7 @@ def format_dataset(df: pd.DataFrame, min_message_len: int) -> pd.DataFrame:
     df = df.astype(str)
     # Extract all annotations from the 'annotation' column
     annotations = df["annotation"].apply(_get_annotations)
-
+    
     # Convert each annotation dictionary into separate columns
     annotations_df = pd.json_normalize(annotations)
 

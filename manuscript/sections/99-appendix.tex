@@ -1,10 +1,12 @@
 % !TEX root = ../main.tex
 %
-\section{Technical Appendix}
+\section{Appendix}
 
-\subsection{Generalizing Synthetic Annotation}
+\subsection{Verifying our findings}
 
-While toxicity is a reliable and important metric, we can also investigate other discussion quality dimensions, such as Arg. Quality. Arg. Quality is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining Arg. Quality is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. Nevertheless, in this section we present preliminary results obtained by prompting LLM to measure Arg. Quality(\S\ref{ssec:appendix:prompts}). 
+\subsubsection{Generalizing synthetic annotation}
+
+While toxicity is a reliable and important metric, we can also investigate other discussion quality dimensions, such as the ones described in \S\ref{ssec:related:quality}. In this section, we investigate how our framework handles another annotated metric; ``Argument Quality''. Arg. Quality is an important metric, frequently studied in the field of online facilitation \cite{argyle2023, schroeder-etal-2024-fora, falk-etal-2024-moderation, falk-etal-2021-predicting} and which can be correlated with toxicity \cite{chang-danescu-niculescu-mizil-2019-trouble}. However, it is also vague as a term; \citet{wachsmuth-etal-2017-computational} provide a definition comprised of logical, rhetorical, and dialectical dimensions, although other dimensions have also been proposed \cite{habernal-gurevych-2016-argument, persing-ng-2015-modeling}. Indeed, determining Arg. Quality is a difficult task, since even humans disagree on what constitutes a ``good argument” \cite{wachsmuth-etal-2017-computational, argyle2023}. 
 
 Most findings w.r.t. toxicity are mirrored for Arg. Quality. Fig.~\ref{fig:aq_stats} demonstrates that the presence of an LLM facilitator qualitatively improves the Arg. Quality of synthetic discussions, although to a lesser extent when compared with toxicity (c.f.\  Fig.~\ref{fig:toxicity_stats}). Similarly, there is no qualitative, observed improvement when advanced facilitation strategies are used (Fig.~\ref{fig:aq_stats}). LLM users also show worse Arg. Quality in the presence of trolls, when we use our specialized instruction prompt. Contrary to toxicity, the presence of LLM facilitators does not seem to improve Arg. Quality over time, as demonstrated in Table~\ref{tab:argq}.
 
@@ -52,9 +54,9 @@ Most findings w.r.t. toxicity are mirrored for Arg. Quality. Fig.~\ref{fig:aq_st
 \end{figure}
 
 
-\subsection{Analyzing Annotations}
+\subsubsection{How reliable is synthetic annotation?}
 
-In this section, we examine the properties of LLM annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the nDFU metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
+In this section, we examine the consistency of LLM annotations, since it is necessary to ensure the robustness of our results. A key dimension for exploring annotations is annotator polarization. To measure it, we employ the nDFU metric introduced by \citet{pavlopoulos-likas-2024-polarized}, which quantifies polarization among $n$ annotators, ranging from 0 (perfect agreement) to 1 (maximum polarization).
 
 Our analysis reveals a positive correlation between toxicity and annotator polarization: As demonstrated by Fig.~\ref{fig:ndfu_annot}, while there is general agreement on non-toxic comments, annotators struggle to reach consensus as toxicity becomes non-trivial ($\textit{toxicity} \in [2,5]$) with a statistically significant difference (Student's t-test $p < .000$). This phenomenon does not manifest in the Arg. Quality scores. 
 
@@ -78,9 +80,9 @@ To mitigate the instability inherent in LLM outputs—even when given identical 
 \end{figure*}
 
 
-\subsection{Investigating Confounding Variables}
+\subsubsection{Investigating confounding variables}
 
-We find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we cannot verify the existence of this pattern in human-generated comments ($p = 0.775$). This may partially explain the divergent diversity scores of different models in \S\ref{ssec:results:ablation}  (Fig.~\ref{fig:comment_length_model}) --- although it does not ultimately change the conclusions presented. Furthermore, Fig.~\ref{fig:toxicity_aq_model} shows that toxicity and Arg. Quality are on average not qualitatively dependent on the model used.
+We find that there is a statistically significant, negative correlation between comment length and diversity in synthetic discussions (Student's t-test  $p < .000$), although we cannot verify the existence of this pattern in human-generated comments ($p = 0.775$). This may partially explain the divergent diversity scores of different models in \S\ref{ssec:results:ablation}  (Fig.~\ref{fig:comment_length_model})---although it does not ultimately change the presented conclusions. Furthermore, Fig.~\ref{fig:toxicity_aq_model} shows that toxicity and Arg. Quality are not dependent on the model used.
 
 \begin{figure*}[ht]
 	\includegraphics[width=0.45\linewidth]{toxicity_llm_barplot.png} \hfill
@@ -114,10 +116,16 @@ We find that there is a statistically significant, negative correlation between 
 \end{figure*}
 
 
-\section{Prompts Used}
+\subsection{Replication Notes}
+
+The latest version of our framework (\texttt{2.0.2} at the time of writing) was not the one used in our experiments. In order to replicate our results, readers are advised to downgrade to version \texttt{1.0.1}.
+
+We did not take any preprocessing steps when analyzing our dataset besides excluding invalid annotations. This was necessary since the model did not always respond with a valid annotation score (we note that this refusal was rare). The only preprocessing performed on the CeRI Regulation Room dataset is the removal of HTML tags from the comment text.
+
+\subsection{Prompts Used}
 \label{ssec:appendix:prompts}
     
-\subsection{Actor Prompts}
+\subsubsection{Actor Prompts}
 \label{sssec:appendix:actors}
 
 \begin{itemize}
@@ -149,7 +157,7 @@ We find that there is a statistically significant, negative correlation between 
 \end{itemize}
 
 
-\subsection{User Roles}
+\subsubsection{User Roles}
 \label{sssec:appendix:roles}
 
 \begin{itemize}
@@ -159,7 +167,7 @@ We find that there is a statistically significant, negative correlation between 
 \end{itemize}
 
 
-\subsection{Facilitation Strategies}
+\subsubsection{Facilitation Strategies}
 \label{sssec:appendix:moderation_strategies}
 
 \begin{itemize}
