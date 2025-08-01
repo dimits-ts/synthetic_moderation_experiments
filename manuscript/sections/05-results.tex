@@ -8,7 +8,7 @@
 \subsection{Main findings}
 \label{ssec:results:main}
 
-\paragraph{Finding 1: LLM facilitators significantly improve synthetic discussions over time by restraining the toxicity of all participants---including trolls.} As illustrated in Fig.~\ref{fig:toxicity_stats}, unmoderated discussions tend to display significantly higher levels of toxicity. A linear regression analysis of toxicity over time ($Adj. R^2 = 0.413$) reveals that trolls begin with markedly higher toxicity—on average $1.3288$ points above neutral users and $1.3112$ above community veterans ($p < .000$). However, their toxicity decreases by an average of $\minus0.0125$ points per turn ($p = 0.003$). This trend is even more pronounced for neutral participants and community veterans, whose toxicity drops by $\minus0.0225$ ($p < .000$) and $\minus0.0350$ ($p < .000$) points per turn, respectively. These findings indicate that LLM facilitators are effective in guiding conversations toward reduced toxicity over time, despite the lack of punitive measures. While trolls are less responsive, they still show a clear reduction in toxic behavior as the discussion progresses.
+\paragraph{Finding 1: LLM facilitators significantly improve synthetic discussions over time.} Unmoderated discussions tend to display significantly higher levels of toxicity (Fig.~\ref{fig:toxicity_stats}, Table~\ref{tab:toxicity}). A linear regression analysis of toxicity over time ($Adj. R^2 = 0.413$) reveals that trolls exhibit intense toxicity---on average $1.3288$ points above neutral users and $1.3112$ above community veterans ($p < .000$) which decreases by an average of $\minus0.0125$ points per turn ($p = 0.003$). This trend is even more pronounced for neutral participants and community veterans, whose toxicity drops by $\minus0.0225$ ($p < .000$) and $\minus0.0350$ ($p < .000$) points per turn, respectively. This demonstrates the ability of the facilitator to reign in discussions over time, but also the diverging behaviors of different roles.
 
 \begin{figure}
 	\includegraphics[width=\linewidth]{toxicity_stats.png}
@@ -17,8 +17,8 @@
 	\label{fig:toxicity_stats}
 \end{figure}
 
-\paragraph{Finding 2: More elaborate facilitation strategies fail to decrease toxicity.}
-Strategies such as \emph{\strategyregroom}, \emph{\strategyconstrcomm}, and our proposed \emph{\strategymodgame} significantly reduce comment toxicity compared to \emph{unmoderated} discussions, with their effectiveness increasing over time (Table~\ref{tab:toxicity}). However, these more elaborate facilitation approaches do not consistently outperform the simpler \emph{\strategynoinstr} strategy overall (Fig.~\ref{fig:toxicity_stats}). This suggests that out-of-the-box LLMs may struggle to meaningfully incorporate complex instructions—a limitation noted in prior work \cite{cho-etal-2024-language}. While the real-life strategies show a slight edge over time compared to \emph{\strategynoinstr}, the observed long-term gains are modest and not qualitatively significant in the broader context.
+\paragraph{Finding 2: Elaborate facilitation strategies fail to decrease toxicity.}
+The real-life strategies and our own strategy (\S\ref{ssec:experimental:strategies}) show a slight edge over time compared to \emph{\strategynoinstr}, but they do not consistently outperform it (Fig~\ref{fig:toxicity_stats}). This suggests that out-of-the-box LLMs may struggle to meaningfully incorporate complex instructions---which has been noted in prior work \cite{cho-etal-2024-language}.
 
 \begin{table}[t]
 	\centering
@@ -50,7 +50,7 @@ Strategies such as \emph{\strategyregroom}, \emph{\strategyconstrcomm}, and our 
 
 \paragraph{Finding 3: LLM facilitators choose to intervene far too frequently, which is tolerated by the other participants.} Fig.~\ref{fig:intervention_count} demonstrates that LLM facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary. This confirms that LLMs generally can not decide not to speak even when instructed to do so  (\S\ref{ssec:methodology:us}). To our knowledge, this has not been reported in relevant literature, and \emph{is an example of ``debugging'' problems with LLMs} --- a core motivation of our work.
 
-Additionally, a qualitative look through the dataset reveals that LLM user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast, typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact caused by alignment procedures, making LLMs too agreeable \citep{park2023game, anthis_2025}.
+Additionally, a qualitative look through the dataset reveals that LLM user-agents exhibit atypical tolerance for excessive facilitator interventions. Humans in contrast typically become irritated and more toxic after repeated, unneeded interventions \citep{schaffner_community_guidelines, make_reddit_great, proactive_moderation, cresci_pesonalized_interventions}. This is likely another artifact of LLMs being too agreeable \citep{park2023game, anthis_2025}.
 
 \begin{figure}[t]
 	\centering
@@ -62,13 +62,6 @@ Additionally, a qualitative look through the dataset reveals that LLM user-agent
 
 \subsection{Ablation Study}
 \label{ssec:results:ablation}
-
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=0.8\linewidth]{toxicity_trolls.png}
-	\caption{Non-troll toxicity levels in discussions with and without trolls. There is a significant uptick on the number of ``somewhat toxic" ($Toxicity=2$) comments when the participants are primed to respond to toxic comments (lower bars).}
-	\label{fig:toxicity_trolls}
-\end{figure}
 
 \begin{figure*}[t]
     \begin{subfigure}{0.32\linewidth}
@@ -93,11 +86,18 @@ Additionally, a qualitative look through the dataset reveals that LLM user-agent
     \label{fig:diversity}
 \end{figure*}
 
-We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \S\ref{ssec:experimental:evaluation}) of these discussions with our broader synthetic dataset, as well as the CeRI “Regulation Room” dataset .\footnote{Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.} We pick this dataset because it is publicly available and comprised of facilitated online human discussions on ten diverse topics.
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.8\linewidth]{toxicity_trolls.png}
+	\caption{Non-troll toxicity levels in discussions with and without trolls. There is a significant uptick on the number of ``somewhat toxic" ($Toxicity=2$) comments when the participants are primed to respond to toxic comments (lower bars).}
+	\label{fig:toxicity_trolls}
+\end{figure}
 
-\paragraph{Each component of our methodology surpasses baselines in data quality} We compare our turn-taking function (\S\ref{ssec:methodology:us}) to two baselines: Round Robin (participants speaking one after the other, then repeating) and Random Selection (uniformly sampling another participant each turn). Fig.~\ref{fig:rougel_turns} demonstrates that although all distributions diverge from the blue—human—distribution, our function is the only one not exhibiting extremely high diversity (i.e., very limited participant interaction \S\ref{ssec:experimental:evaluation}). Fig.~\ref{fig:rougel_prompts} illustrates that each individual prompting design decision (SDBs, roles, and instruction prompts) results in diversity scores more closely aligned with human discussions.
+We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \S\ref{ssec:experimental:evaluation}) of these discussions with our broader synthetic dataset, as well as the CeRI “Regulation Room” dataset.\footnote{Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.} We pick this dataset because it is publicly available and comprised of facilitated online human discussions on ten diverse topics.
 
-\paragraph{Larger models do not lead to more high-quality discussions.} As shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. However, none of the models closely matched the diversity observed in human discussions. 
+\paragraph{Each component of our methodology surpasses baselines in data quality.} We compare our turn-taking function (\S\ref{ssec:methodology:us}) to two baselines: Round Robin (participants speaking one after the other, then repeating) and Random Selection (uniformly sampling another participant each turn). Fig.~\ref{fig:rougel_turns} demonstrates that although all distributions diverge from the blue—human—distribution, our function is the only one not exhibiting extremely high diversity (i.e., very limited participant interaction \S\ref{ssec:experimental:evaluation}). Fig.~\ref{fig:rougel_prompts} illustrates that each individual prompting design decision (SDBs, roles, and instruction prompts) results in diversity scores more closely aligned with human discussions.
 
-\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned LLMs.} Our instruction prompt for the participants (\S\ref{ssec:methodology:us}) incentivizes them to react to toxic behavior. Indeed, inserting “troll” participants to discussions, leads to more intense toxicity among \emph{other} participants \emph{only if we instruct participants to react to toxic posts} (Fig.~\ref{fig:toxicity_trolls}). 
+\paragraph{Larger models do not increase the quality of discussions.} As shown in Fig.~\ref{fig:rougel_model}, Qwen demonstrated the highest diversity among the evaluated models, indicating limited participant interaction (\S\ref{ssec:related:quality}), followed by Mistral Nemo and LLaMa. It's worth noting that none of the models closely matched the diversity observed in human discussions. 
+
+\paragraph{Specialized instruction prompts are essential for eliciting toxic behavior in instruction-tuned LLMs.} Inserting trolls to the discussion, leads to more intense toxicity among \emph{other} participants \emph{only if we instruct them to react to toxic posts} (Fig.~\ref{fig:toxicity_trolls}). 
 
