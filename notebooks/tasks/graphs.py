@@ -49,7 +49,7 @@ def comment_len_plot(
         subset = df[df[feature_col] == group][length_col]
         if subset.empty:
             continue
-        counts, _ = np.histogram(subset, bins=bin_edges, density=False)
+        counts, _ = np.histogram(subset, bins=bin_edges, density=True)
 
         for j, count in enumerate(counts):
             plt.bar(
@@ -65,7 +65,7 @@ def comment_len_plot(
             )
 
     plt.xlabel("Comment Length (#words)", fontsize=14)
-    plt.ylabel("#Discussions", fontsize=14)
+    plt.ylabel("Discussion Density", fontsize=14)
     plt.title(title, fontsize=16)
     plt.xlim(bin_edges[0], bin_edges[-1])
 
@@ -194,7 +194,7 @@ def rougel_plot(
 
     for i, group in enumerate(hue_order):
         subset = df[df[feature_col] == group][rougel_col]
-        counts, _ = np.histogram(subset, bins=bin_edges, density=False)
+        counts, _ = np.histogram(subset, bins=bin_edges, density=True)
 
         for j, count in enumerate(counts):
             plt.bar(
@@ -212,7 +212,7 @@ def rougel_plot(
             )
 
     plt.xlabel("Diversity", fontsize=14)
-    plt.ylabel("#Discussions", fontsize=14)
+    plt.ylabel("Discussion Density", fontsize=14)
     plt.xlim(0.6, 1.0)
     plt.title(title, fontsize=16)
 
