@@ -2,6 +2,7 @@ import argparse
 import logging
 import sys
 import yaml
+import random
 from pathlib import Path
 
 import pandas as pd
@@ -81,9 +82,13 @@ def create_discussion_experiment(
     users = get_users(
         model=llm,
         context=context,
-        instructions_path=Path(
-            discussion_config["files"]["user_instructions_path"]
+        vanilla_instructions_path=Path(
+            discussion_config["files"]["vanilla_instructions_path"]
         ),
+        troll_instructions_path=Path(
+            discussion_config["files"]["troll_instructions_path"]
+        ),
+        troll_chance=0.3,
         html_dir=Path(discussion_config["files"]["user_persona_dir"]),
     )
 
@@ -204,8 +209,8 @@ def parse_profile_table(html: str) -> list[syndisco.actors.Persona]:
             demographic_group=demographic_group or "",
             current_employment=current_employment,
             education_level=education_level,
-            special_instructions=description,
-            personality_characteristics=tags,
+            special_instructions="",
+            personality_characteristics=tags + [description],
         )
 
         personas.append(persona)
@@ -224,11 +229,14 @@ def get_personas_from_html(html_dir: Path) -> list[syndisco.actors.Persona]:
 def get_users(
     model: syndisco.model.BaseModel,
     context: str,
-    instructions_path: Path,
+    vanilla_instructions_path: Path,
+    troll_instructions_path: Path,
+    troll_chance: float,
     html_dir: Path,
 ) -> list[syndisco.actors.Actor]:
     personas = get_personas_from_html(html_dir=html_dir)
-    instructions = instructions_path.read_text()
+    vanilla_instructions = vanilla_instructions_path.read_text()
+    troll_instructions = troll_instructions_path.read_text()
 
     actors = []
     for persona in personas:
@@ -236,7 +244,11 @@ def get_users(
             model=model,
             persona=persona,
             context=context,
-            instructions=instructions,
+            instructions=(
+                vanilla_instructions
+                if random.random() < troll_chance
+                else troll_instructions
+            ),
             actor_type=syndisco.actors.ActorType.USER,
         )
         actors.append(actor)

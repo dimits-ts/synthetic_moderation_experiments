@@ -23,7 +23,8 @@ discussions:
   files:
     topics_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
     user_persona_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/personas/"
-    user_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
+    vanilla_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
+    troll_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/troll.txt"
     mod_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
     output_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_output/raw" 
     export_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_output/datasets"
@@ -32,7 +33,7 @@ discussions:
     include_mod: true # whether a moderator will be included in the experiments
     num_experiments: 2
     num_users: 7 # how many personas will be used in each experiment
-    context_prompt: "You are a human participating in an online chatroom."
+    context_prompt: "Pretend that you are a human participating in an online forum with the provided characteristics and respond as that human would."
   
   turn_taking:
     num_turns: 3
