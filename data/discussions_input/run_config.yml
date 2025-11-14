@@ -23,23 +23,20 @@ discussions:
   files:
     topics_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
     user_persona_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/personas/"
-    user_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/basic.txt"
+    user_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
     mod_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
-    output_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_output/ablation/prompts/basic_instructions" 
+    output_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_output/raw" 
+    export_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_output/datasets"
   
   experiment_variables:
     include_mod: true # whether a moderator will be included in the experiments
-    num_experiments: 20
+    num_experiments: 2
     num_users: 7 # how many personas will be used in each experiment
     context_prompt: "You are a human participating in an online chatroom."
   
   turn_taking:
-    num_turns: 20
+    num_turns: 3
     history_ctx_len: 3
     turn_manager_type: "random_weighted"
     respond_probability: 0.4 # only applicable for random_weighted turn manager type 
 
-dataset_export:
-  export_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/abl_turn_taking.csv"
-  discussion_root_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_output"
-  annotation_root_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/annotation_output"
