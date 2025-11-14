@@ -5,6 +5,7 @@ import yaml
 from pathlib import Path
 
 import pandas as pd
+import randomname
 from bs4 import BeautifulSoup
 
 import syndisco.model
@@ -196,7 +197,7 @@ def parse_profile_table(html: str) -> list[syndisco.actors.Persona]:
 
         # Create Persona object
         persona = syndisco.actors.Persona(
-            username=pid,
+            username=randomname.get_name(),
             age=age if age is not None else -1,
             sex=sex or "",
             sexual_orientation=sexual_orientation,
