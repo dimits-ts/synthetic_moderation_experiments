@@ -208,7 +208,7 @@ def get_turn_manager(
     turn_manager_type: str, p_respond: float
 ) -> syndisco.turn_manager.TurnManager:
     match (turn_manager_type):
-        case "random_weighted":
+        case "random-weighted":
             return syndisco.turn_manager.RandomWeighted(p_respond=p_respond)
         case "round-robin":
             return syndisco.turn_manager.RoundRobin()
@@ -263,7 +263,7 @@ if __name__ == "__main__":
         help="The turn strategy used",
     )
     parser.add_argument(
-        "--output_dir",
+        "--output-dir",
         required=True,
         help="The turn strategy used",
     )
