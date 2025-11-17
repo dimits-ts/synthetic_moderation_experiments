@@ -17,11 +17,25 @@ pseudos=(
 
 turn_managers=( "random_weighted" "round-robin" "random" )
 
+for turn_manager in "${turn_managers[@]}"; do
+    for i in "${!models[@]}"; do
+        name="${pseudos[i]}-${turn_manager}-nomod"
+        python run.py \
+            --config-file data/discussions_input/run_config.yml \
+            --model-url "${models[i]}" \
+            --model-pseudo "${pseudos[i]}" \
+            --mod-strategy-file "${mod_strat_file}" \
+            --turn_manager "${turn_manager}" \
+            --output-dir  "/data/discussions_output/${name}" \
+            --no-mod-active
+    done
+done
+
 for mod_strat_file in data/discussions_input/mod_instructions/*; do
     for turn_manager in "${turn_managers[@]}"; do
         for i in "${!models[@]}"; do
             file_base=$(basename "$mod_strat_file" .yaml)
-            name="${pseudos[i]}"-"${turn_manager}"-"{$file_base}-yesmod"
+            name="${pseudos[i]}-${turn_manager}-${file_base}-yesmod"
             python run.py \
                 --config-file data/discussions_input/run_config.yml \
                 --model-url "${models[i]}" \
