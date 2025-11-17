@@ -15,9 +15,20 @@ import syndisco.postprocessing
 logger = logging.getLogger(Path(__file__).name)
 
 
-def main(config_file_path: Path, model_url: str, model_name: str):
+def main(
+    config_file_path: Path,
+    model_url: str,
+    model_name: str,
+    turn_manager_type: str,
+    mod_active: bool,
+    mod_strategy_file: Path,
+    output_dir: Path,
+) -> None:
     with open(config_file_path, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
+
+    json_output_dir = output_dir / "raw"
+    dataset_export_dir = output_dir / "datasets"
 
     setup_logging(logging_config=yaml_data["logging"])
 
@@ -30,18 +41,19 @@ def main(config_file_path: Path, model_url: str, model_name: str):
     discussion_exp = create_discussion_experiment(
         llm=model,
         discussion_config=yaml_data["discussions"],
+        include_mod=mod_active,
+        mod_strategy_file=mod_strategy_file,
+        turn_manager_type=turn_manager_type,
     )
     run_discussion_experiment(
         experiment=discussion_exp,
-        output_dir=Path(yaml_data["discussions"]["files"]["output_dir"]),
+        output_dir=json_output_dir,
     )
 
     export_dataset(
-        json_output_dir=Path(yaml_data["discussions"]["files"]["output_dir"]),
-        dataset_export_dir=Path(
-            yaml_data["discussions"]["files"]["export_dir"]
-        ),
-        dataset_name="test.csv",
+        json_output_dir=json_output_dir,
+        dataset_export_dir=dataset_export_dir,
+        dataset_name="discussion.csv",
     )
 
 
@@ -67,7 +79,11 @@ def setup_logging(logging_config: dict) -> None:
 
 
 def create_discussion_experiment(
-    llm, discussion_config: dict
+    llm,
+    discussion_config: dict,
+    include_mod: bool,
+    mod_strategy_file: Path,
+    turn_manager_type: str,
 ) -> syndisco.experiments.DiscussionExperiment:
     context = discussion_config["experiment_variables"]["context_prompt"]
 
@@ -90,7 +106,6 @@ def create_discussion_experiment(
         ),
     )
 
-    include_mod = discussion_config["experiment_variables"]["include_mod"]
     if not include_mod:
         moderator = None
     else:
@@ -109,15 +124,11 @@ def create_discussion_experiment(
             model=llm,
             mod_persona=mod_persona,
             context=context,
-            mod_instructions_path=Path(
-                discussion_config["files"]["mod_instructions_path"]
-            ),
+            mod_instructions_path=mod_strategy_file,
         )
 
     next_turn_manager = get_turn_manager(
-        turn_manager_type=discussion_config["turn_taking"][
-            "turn_manager_type"
-        ],
+        turn_manager_type=turn_manager_type,
         p_respond=discussion_config["turn_taking"]["respond_probability"],
     )
 
@@ -196,10 +207,17 @@ def get_mod(
 def get_turn_manager(
     turn_manager_type: str, p_respond: float
 ) -> syndisco.turn_manager.TurnManager:
-    if turn_manager_type == "random_weighted":
-        return syndisco.turn_manager.RandomWeighted(p_respond=p_respond)
-    else:
-        return syndisco.turn_manager.RoundRobin()
+    match (turn_manager_type):
+        case "random_weighted":
+            return syndisco.turn_manager.RandomWeighted(p_respond=p_respond)
+        case "round-robin":
+            return syndisco.turn_manager.RoundRobin()
+        case "random":
+            return syndisco.turn_manager.RandomWeighted(p_respond=0)
+        case _:
+            raise ValueError(
+                f"Unrecognizable turn manager type: {turn_manager_type}"
+            )
 
 
 def run_discussion_experiment(
@@ -207,7 +225,7 @@ def run_discussion_experiment(
 ) -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.info("Starting synthetic discussion experiments...")
-    experiment.begin(discussions_output_dir=output_dir)
+    experiment.begin(discussions_output_dir=output_dir, verbose=False)
     logger.info("Finished synthetic discussion experiments.")
 
 
@@ -230,9 +248,32 @@ if __name__ == "__main__":
         required=True,
         help="Short-hand name for the model",
     )
+    parser.add_argument(
+        "--mod-active", action=argparse.BooleanOptionalAction, default=True
+    )
+    parser.add_argument(
+        "--mod-strategy-file",
+        required=True,
+        help="A txt file containing the instructions for the moderator",
+    )
+    parser.add_argument(
+        "--turn-manager",
+        required=True,
+        choices=["random-weighted", "round-robin", "random"],
+        help="The turn strategy used",
+    )
+    parser.add_argument(
+        "--output_dir",
+        required=True,
+        help="The turn strategy used",
+    )
     args = parser.parse_args()
     main(
         config_file_path=Path(args.config_file),
         model_url=args.model_url,
         model_name=args.model_pseudo,
+        mod_active=args.mod_active,
+        turn_manager_type=args.turn_manager,
+        mod_strategy_file=Path(args.mod_strategy_file),
+        output_dir=Path(args.output_dir),
     )

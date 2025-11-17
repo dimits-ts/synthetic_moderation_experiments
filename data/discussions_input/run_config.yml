@@ -1,9 +1,3 @@
-actions:
-  generate_discussions: true
-  generate_annotations: false
-  export_dataset: true
-
-
 logging:
   print_to_terminal: true
   write_to_file: true
@@ -22,13 +16,9 @@ discussions:
     topics_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/topics/polarized"
     user_persona_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/personas/personas.json"
     vanilla_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/vanilla.txt"
-    troll_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/troll.txt"
-    mod_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/mod_instructions/moderation_game.txt" 
-    output_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_output/raw" 
-    export_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_output/datasets"
-  
+    troll_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/troll.txt" 
+
   experiment_variables:
-    include_mod: true # whether a moderator will be included in the experiments
     num_experiments: 2
     num_users: 7 # how many personas will be used in each experiment
     context_prompt: "Pretend that you are a human participating in an online forum with the provided characteristics and respond as that human would."
@@ -36,6 +26,5 @@ discussions:
   turn_taking:
     num_turns: 3
     history_ctx_len: 3
-    turn_manager_type: "random_weighted"
     respond_probability: 0.4 # only applicable for random_weighted turn manager type 
 
