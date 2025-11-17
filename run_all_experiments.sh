@@ -17,6 +17,32 @@ pseudos=(
 
 turn_managers=( "random-weighted" "round-robin" "random" )
 
+for mod_strat_file in data/discussions_input/mod_instructions/*; do
+    for turn_manager in "${turn_managers[@]}"; do
+        for i in "${!models[@]}"; do
+            file_base=$(basename "$mod_strat_file" .yaml)
+            name="${pseudos[i]}_${turn_manager}_${file_base}_yesmod"
+
+            echo "======================================================"
+            echo "[YES-MOD RUN]"
+            echo " Model        : ${pseudos[i]}"
+            echo " Turn Manager : ${turn_manager}"
+            echo " Mod File     : ${file_base}"
+            echo "======================================================"
+
+            python run_experiment.py \
+                --config-file ./data/discussions_input/run_config.yml \
+                --model-url "${models[i]}" \
+                --model-pseudo "${pseudos[i]}" \
+                --mod-strategy-file "${mod_strat_file}" \
+                --turn-manager "${turn_manager}" \
+                --output-dir  "./data/discussions_output/${name}" \
+                --mod-active \
+                --trolls-active
+        done
+    done
+done
+
 for turn_manager in "${turn_managers[@]}"; do
     for i in "${!models[@]}"; do
         name="${pseudos[i]}_${turn_manager}_nomod"
@@ -34,32 +60,29 @@ for turn_manager in "${turn_managers[@]}"; do
             --mod-strategy-file "${mod_strat_file}" \
             --turn-manager "${turn_manager}" \
             --output-dir  "./data/discussions_output/${name}" \
-            --no-mod-active
+            --no-mod-active \
+            --trolls-active
     done
 done
 
-for mod_strat_file in data/discussions_input/mod_instructions/*; do
-    for turn_manager in "${turn_managers[@]}"; do
-        for i in "${!models[@]}"; do
-            file_base=$(basename "$mod_strat_file" .yaml)
-            name="${pseudos[i]}_${turn_manager}_${file_base}_yesmod"
 
-            echo "======================================================"
-            echo "[YES-MOD RUN]"
-            echo " Model        : ${pseudos[i]}"
-            echo " Turn Manager : ${turn_manager}"
-            echo " Mod File     : ${file_base}"
-            echo " Output Dir   : ./data/discussions_output/${name}"
-            echo "======================================================"
+for turn_manager in "${turn_managers[@]}"; do
+    for i in "${!models[@]}"; do
+        name="${pseudos[i]}_${turn_manager}_notrolls"
 
-            python run_experiment.py \
-                --config-file ./data/discussions_input/run_config.yml \
-                --model-url "${models[i]}" \
-                --model-pseudo "${pseudos[i]}" \
-                --mod-strategy-file "${mod_strat_file}" \
-                --turn_manager "${turn_manager}" \
-                --output-dir  "./data/discussions_output/${name}" \
-                --mod-active
-        done
+        echo "======================================================"
+        echo "[NO-TROLLS RUN]"
+        echo " Model        : ${pseudos[i]}"
+        echo " Turn Manager : ${turn_manager}"
+        echo "======================================================"
+
+        python run_experiment.py \
+            --config-file ./data/discussions_input/run_config.yml \
+            --model-url "${models[i]}" \
+            --model-pseudo "${pseudos[i]}" \
+            --mod-strategy-file "${mod_strat_file}" \
+            --turn-manager "${turn_manager}" \
+            --output-dir  "./data/discussions_output/${name}" \
+            --no-mod-active
     done
 done

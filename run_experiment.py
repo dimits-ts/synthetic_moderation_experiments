@@ -24,6 +24,7 @@ def main(
     mod_active: bool,
     mod_strategy_file: Path,
     output_dir: Path,
+    trolls_active: bool,
 ) -> None:
     with open(config_file_path, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
@@ -45,6 +46,7 @@ def main(
         include_mod=mod_active,
         mod_strategy_file=mod_strategy_file,
         turn_manager_type=turn_manager_type,
+        trolls_active=trolls_active
     )
     run_discussion_experiment(
         experiment=discussion_exp,
@@ -85,6 +87,7 @@ def create_discussion_experiment(
     include_mod: bool,
     mod_strategy_file: Path,
     turn_manager_type: str,
+    trolls_active: bool
 ) -> syndisco.experiments.DiscussionExperiment:
     context = discussion_config["experiment_variables"]["context_prompt"]
 
@@ -95,12 +98,13 @@ def create_discussion_experiment(
     users = get_users(
         model=llm,
         context=context,
-        vanilla_instructions_path=Path(
+        vanilla_instructions=Path(
             discussion_config["files"]["vanilla_instructions_path"]
-        ),
-        troll_instructions_path=Path(
+        ).read_text(),
+        troll_instructions=Path(
             discussion_config["files"]["troll_instructions_path"]
-        ),
+        ).read_text(),
+        trolls_active=trolls_active,
         troll_chance=0.3,
         persona_file_path=Path(
             discussion_config["files"]["user_persona_path"]
@@ -194,29 +198,33 @@ def get_topics(topics_path: Path) -> list[list[str]]:
 def get_users(
     model: syndisco.model.BaseModel,
     context: str,
-    vanilla_instructions_path: Path,
-    troll_instructions_path: Path,
+    vanilla_instructions: str,
+    troll_instructions: str,
+    trolls_active: bool,
     troll_chance: float,
     persona_file_path: Path,
 ) -> list[syndisco.actors.Actor]:
     personas = syndisco.actors.Persona.from_json_file(
         file_path=persona_file_path
     )
-    vanilla_instructions = vanilla_instructions_path.read_text()
-    troll_instructions = troll_instructions_path.read_text()
 
     actors = []
     for persona in personas:
         persona.username = randomname.get_name()
+        if not trolls_active:
+            instructions = vanilla_instructions
+        else:
+            instructions = (
+                vanilla_instructions
+                if random.random() < troll_chance
+                else troll_instructions
+            )
+
         actor = syndisco.actors.Actor(
             model=model,
             persona=persona,
             context=context,
-            instructions=(
-                vanilla_instructions
-                if random.random() < troll_chance
-                else troll_instructions
-            ),
+            instructions=instructions,
             actor_type=syndisco.actors.ActorType.USER,
         )
         actors.append(actor)
@@ -261,7 +269,7 @@ def run_discussion_experiment(
 ) -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.info("Starting synthetic discussion experiments...")
-    experiment.begin(discussions_output_dir=output_dir, verbose=True)
+    experiment.begin(discussions_output_dir=output_dir, verbose=False)
     logger.info("Finished synthetic discussion experiments.")
 
 
@@ -285,9 +293,6 @@ if __name__ == "__main__":
         help="Short-hand name for the model",
     )
     parser.add_argument(
-        "--mod-active", action=argparse.BooleanOptionalAction, default=True
-    )
-    parser.add_argument(
         "--mod-strategy-file",
         required=True,
         help="A txt file containing the instructions for the moderator",
@@ -303,6 +308,12 @@ if __name__ == "__main__":
         required=True,
         help="The turn strategy used",
     )
+    parser.add_argument(
+        "--trolls-active", action=argparse.BooleanOptionalAction, default=True
+    )
+    parser.add_argument(
+        "--mod-active", action=argparse.BooleanOptionalAction, default=True
+    )
     args = parser.parse_args()
     main(
         config_file_path=Path(args.config_file),
@@ -312,4 +323,5 @@ if __name__ == "__main__":
         turn_manager_type=args.turn_manager,
         mod_strategy_file=Path(args.mod_strategy_file),
         output_dir=Path(args.output_dir),
+        trolls_active=args.trolls_active,
     )
