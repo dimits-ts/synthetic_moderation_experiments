@@ -13,8 +13,6 @@ logging:
 
 discussion_model:
   disallowed_strings: ["```", "\""]
-  model_path: "unsloth/Llama-3.3-70B-Instruct-bnb-4bit"
-  model_pseudoname: "llama-70b"  # only used for record keeping
   max_tokens: 1500
   ctx_width_tokens: 4096
 

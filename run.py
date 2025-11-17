@@ -15,15 +15,15 @@ import syndisco.postprocessing
 logger = logging.getLogger(Path(__file__).name)
 
 
-def main(config_file_path: Path):
+def main(config_file_path: Path, model_url: str, model_name: str):
     with open(config_file_path, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
 
     setup_logging(logging_config=yaml_data["logging"])
 
     model = syndisco.model.TransformersModel(
-        model_path=yaml_data["discussion_model"]["model_path"],
-        name=yaml_data["discussion_model"]["model_pseudoname"],
+        model_path=model_url,
+        name=model_name,
         remove_string_list=yaml_data["discussion_model"]["disallowed_strings"],
         max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
     )
@@ -216,9 +216,23 @@ if __name__ == "__main__":
         description="Generate synthetic conversations"
     )
     parser.add_argument(
-        "--config_file",
+        "--config-file",
         required=True,
         help="Path to the YAML configuration file",
     )
+    parser.add_argument(
+        "--model-url",
+        required=True,
+        help="HuggingFace url for the desired model. No GGUF support.",
+    )
+    parser.add_argument(
+        "--model-pseudo",
+        required=True,
+        help="Short-hand name for the model",
+    )
     args = parser.parse_args()
-    main(config_file_path=Path(args.config_file))
+    main(
+        config_file_path=Path(args.config_file),
+        model_url=args.model_url,
+        model_name=args.model_pseudo,
+    )
