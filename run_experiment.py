@@ -4,6 +4,7 @@ import yaml
 import random
 from pathlib import Path
 
+import pandas as pd
 import randomname
 import syndisco.model
 import syndisco.actors
@@ -88,7 +89,7 @@ def create_discussion_experiment(
     context = discussion_config["experiment_variables"]["context_prompt"]
 
     topics = get_topics(
-        topics_dir=Path(discussion_config["files"]["topics_dir"])
+        topics_path=Path(discussion_config["files"]["topics_path"])
     )
 
     users = get_users(
@@ -147,12 +148,19 @@ def create_discussion_experiment(
     )
 
 
-def get_topics(topics_dir: Path) -> list[str]:
-    topics = []
-    for file in topics_dir.iterdir():
-        topic = file.read_text()
-        topics.append(topic)
-    return topics
+def get_topics(topics_path: Path) -> list[str]:
+    df = pd.read_csv(topics_path)
+    escalated_df = df[df.escalated]
+    # for each discussion (conv_id) in escalated_df, extract
+    # a random comment
+    sampled = (
+        escalated_df.groupby("conv_id")
+        .apply(lambda g: g.sample(1))
+        .reset_index(drop=True)
+    )
+
+    # return the text field as a list
+    return sampled["text"].tolist()
 
 
 def get_users(
