@@ -148,19 +148,47 @@ def create_discussion_experiment(
     )
 
 
-def get_topics(topics_path: Path) -> list[str]:
+def get_topics(topics_path: Path) -> list[list[str]]:
     df = pd.read_csv(topics_path)
-    escalated_df = df[df.escalated]
-    # for each discussion (conv_id) in escalated_df, extract
-    # a random comment
-    sampled = (
-        escalated_df.groupby("conv_id")
-        .apply(lambda g: g.sample(1))
-        .reset_index(drop=True)
-    )
 
-    # return the text field as a list
-    return sampled["text"].tolist()
+    df = df.loc[
+        :,
+        [
+            "conv_id",
+            "message_id",
+            "reply_to",
+            "user",
+            "escalated",
+            "text",
+        ],
+    ]
+
+    df = df.sort_values(["conv_id"]).reset_index(drop=True)
+
+    # Create a positional index within each conversation
+    df["pos"] = df.groupby("conv_id").cumcount()
+
+    # Filter to escalated rows that are *not* the first comment
+    escalated_df = df[(df.escalated) & (df.pos > 0)]
+
+    # Sample one per conversation (no deprecation warning)
+    sampled = escalated_df.groupby("conv_id", group_keys=False).sample(n=1)
+
+    results = []
+    for _, row in sampled.iterrows():
+        conv_id = row["conv_id"]
+        pos = row["pos"]
+
+        # previous comment = same conv_id, pos - 1
+        prev = df[(df.conv_id == conv_id) & (df.pos == pos - 1)]
+        prev_text = prev["text"].iloc[0]
+
+        curr_text = row["text"]
+        results.append([prev_text, curr_text])
+
+    return results
+
+    return results
 
 
 def get_users(
@@ -233,7 +261,7 @@ def run_discussion_experiment(
 ) -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.info("Starting synthetic discussion experiments...")
-    experiment.begin(discussions_output_dir=output_dir, verbose=False)
+    experiment.begin(discussions_output_dir=output_dir, verbose=True)
     logger.info("Finished synthetic discussion experiments.")
 
 
