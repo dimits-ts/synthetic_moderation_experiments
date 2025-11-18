@@ -257,7 +257,7 @@ def get_turn_manager(
         case "round-robin":
             return syndisco.turn_manager.RoundRobin()
         case "random":
-            return syndisco.turn_manager.RandomWeighted(p_respond=0)
+            return syndisco.turn_manager.RandomWeighted(p_respond=10e-6)
         case _:
             raise ValueError(
                 f"Unrecognizable turn manager type: {turn_manager_type}"
