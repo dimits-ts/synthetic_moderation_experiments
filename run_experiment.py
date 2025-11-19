@@ -2,6 +2,7 @@ import argparse
 import logging
 import yaml
 import random
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -39,35 +40,54 @@ def main(
     logger = logging.getLogger(run_logger_name)
     setup_logging(logging_config=yaml_data["logging"])
 
-    try:
-        model = syndisco.model.TransformersModel(
-            model_path=model_url,
-            name=model_name,
-            remove_string_list=[],
-            max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
-        )
-        discussion_exp = create_discussion_experiment(
-            llm=model,
-            discussion_config=yaml_data["discussions"],
-            include_mod=mod_active,
-            mod_strategy_file=mod_strategy_file,
-            turn_manager_type=turn_manager_type,
-            trolls_active=trolls_active,
-        )
-        logger.info(f"========================\n{args}\n========================")
-        run_discussion_experiment(
-            experiment=discussion_exp, output_dir=json_output_dir, logger=logger
-        )
+    already_executed = output_dir.is_dir() and any(
+        item.is_file() for item in output_dir.rglob("*")
+    )
+    arg_str = json.dumps(vars(args))
+    logger.info(
+        "================================================\n"
+        f"{json.loads(arg_str)}"
+        "\n================================================"
+    )
 
-        export_dataset(
-            json_output_dir=json_output_dir,
-            dataset_export_dir=dataset_export_dir,
-            dataset_name="discussion.csv",
-            logger=logger,
+    if not already_executed:
+        try:
+            model = syndisco.model.TransformersModel(
+                model_path=model_url,
+                name=model_name,
+                remove_string_list=[],
+                max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
+            )
+            discussion_exp = create_discussion_experiment(
+                llm=model,
+                discussion_config=yaml_data["discussions"],
+                include_mod=mod_active,
+                mod_strategy_file=mod_strategy_file,
+                turn_manager_type=turn_manager_type,
+                trolls_active=trolls_active,
+            )
+            run_discussion_experiment(
+                experiment=discussion_exp,
+                output_dir=json_output_dir,
+                logger=logger,
+            )
+
+            export_dataset(
+                json_output_dir=json_output_dir,
+                dataset_export_dir=dataset_export_dir,
+                dataset_name="discussion.csv",
+                logger=logger,
+            )
+        except Exception as e:
+            logger.critical(
+                "Error while running experiment " + run_logger_name
+            )
+            logger.exception(e)
+    else:
+        logger.info(
+            "Skipping experiment since dir "
+            f'"{output_dir.resolve()}" already has experiments.'
         )
-    except Exception as e:
-        logger.critical("Error while running experiment " + run_logger_name)
-        logger.exception(e)
 
 
 def export_dataset(
