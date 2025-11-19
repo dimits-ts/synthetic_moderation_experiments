@@ -4,12 +4,9 @@ logging:
   logs_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/logs"
   level: "info"
 
-
 discussion_model:
-  disallowed_strings: ["```", "\""]
   max_tokens: 1500
   ctx_width_tokens: 4096
-
 
 discussions:
   files:
@@ -19,12 +16,12 @@ discussions:
     troll_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/troll.txt" 
 
   experiment_variables:
-    num_experiments: 25
+    num_experiments: 20
     num_users: 7 # how many personas will be used in each experiment
     context_prompt: "Pretend that you are a human participating in an online forum with the provided characteristics and respond as that human would."
   
   turn_taking:
-    num_turns: 10
+    num_turns: 15
     history_ctx_len: 3
     respond_probability: 0.4 # only applicable for random_weighted turn manager type 
 

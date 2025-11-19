@@ -13,8 +13,6 @@ import syndisco.logging_util
 import syndisco.turn_manager
 import syndisco.postprocessing
 
-logger = logging.getLogger(Path(__file__).name)
-
 
 def main(
     config_file_path: Path,
@@ -32,41 +30,56 @@ def main(
     json_output_dir = output_dir / "raw"
     dataset_export_dir = output_dir / "datasets"
 
+    run_logger_name = (
+        f"strat"
+        f"run.{model_name}.{turn_manager_type}"
+        f".mod{'On' if mod_active else 'Off'}"
+        f".trolls{'On' if trolls_active else 'Off'}"
+    )
+    logger = logging.getLogger(run_logger_name)
     setup_logging(logging_config=yaml_data["logging"])
 
-    model = syndisco.model.TransformersModel(
-        model_path=model_url,
-        name=model_name,
-        remove_string_list=yaml_data["discussion_model"]["disallowed_strings"],
-        max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
-    )
-    discussion_exp = create_discussion_experiment(
-        llm=model,
-        discussion_config=yaml_data["discussions"],
-        include_mod=mod_active,
-        mod_strategy_file=mod_strategy_file,
-        turn_manager_type=turn_manager_type,
-        trolls_active=trolls_active
-    )
-    run_discussion_experiment(
-        experiment=discussion_exp,
-        output_dir=json_output_dir,
-    )
+    try:
+        model = syndisco.model.TransformersModel(
+            model_path=model_url,
+            name=model_name,
+            remove_string_list=[],
+            max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
+        )
+        discussion_exp = create_discussion_experiment(
+            llm=model,
+            discussion_config=yaml_data["discussions"],
+            include_mod=mod_active,
+            mod_strategy_file=mod_strategy_file,
+            turn_manager_type=turn_manager_type,
+            trolls_active=trolls_active,
+        )
+        logger.info(f"========================\n{args}\n========================")
+        run_discussion_experiment(
+            experiment=discussion_exp, output_dir=json_output_dir, logger=logger
+        )
 
-    export_dataset(
-        json_output_dir=json_output_dir,
-        dataset_export_dir=dataset_export_dir,
-        dataset_name="discussion.csv",
-    )
+        export_dataset(
+            json_output_dir=json_output_dir,
+            dataset_export_dir=dataset_export_dir,
+            dataset_name="discussion.csv",
+            logger=logger,
+        )
+    except Exception as e:
+        logger.critical("Error while running experiment " + run_logger_name)
+        logger.exception(e)
 
 
 def export_dataset(
-    json_output_dir: Path, dataset_export_dir: Path, dataset_name: str
+    json_output_dir: Path,
+    dataset_export_dir: Path,
+    dataset_name: str,
+    logger: logging.Logger,
 ) -> None:
     dataset_export_dir.mkdir(exist_ok=True, parents=True)
     export_path = dataset_export_dir / dataset_name
     conv_df = syndisco.postprocessing.import_discussions(json_output_dir)
-    conv_df.to_csv(path_or_buf=export_path, encoding="utf8", mode="w+")
+    conv_df.to_csv(path_or_buf=export_path, encoding="utf8", mode="w")
     logger.info(f"Dataset exported to {export_path}")
 
 
@@ -87,7 +100,7 @@ def create_discussion_experiment(
     include_mod: bool,
     mod_strategy_file: Path,
     turn_manager_type: str,
-    trolls_active: bool
+    trolls_active: bool,
 ) -> syndisco.experiments.DiscussionExperiment:
     context = discussion_config["experiment_variables"]["context_prompt"]
 
@@ -257,7 +270,7 @@ def get_turn_manager(
         case "round-robin":
             return syndisco.turn_manager.RoundRobin()
         case "random":
-            return syndisco.turn_manager.RandomWeighted(p_respond=10e-6)
+            return syndisco.turn_manager.RandomWeighted(p_respond=0)
         case _:
             raise ValueError(
                 f"Unrecognizable turn manager type: {turn_manager_type}"
@@ -265,7 +278,9 @@ def get_turn_manager(
 
 
 def run_discussion_experiment(
-    experiment: syndisco.experiments.DiscussionExperiment, output_dir: Path
+    experiment: syndisco.experiments.DiscussionExperiment,
+    output_dir: Path,
+    logger: logging.Logger,
 ) -> None:
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.info("Starting synthetic discussion experiments...")
@@ -315,6 +330,7 @@ if __name__ == "__main__":
         "--mod-active", action=argparse.BooleanOptionalAction, default=True
     )
     args = parser.parse_args()
+
     main(
         config_file_path=Path(args.config_file),
         model_url=args.model_url,
