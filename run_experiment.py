@@ -20,8 +20,11 @@ def main(
     model_url: str,
     model_name: str,
     turn_manager_type: str,
+    num_experiments: int,
     mod_active: bool,
-    mod_strategy_file: Path,
+    mod_strategy_path: Path,
+    user_instruction_path: Path,
+    user_persona_path: Path,
     output_dir: Path,
     trolls_active: bool,
 ) -> None:
@@ -62,9 +65,12 @@ def main(
                 llm=model,
                 discussion_config=yaml_data["discussions"],
                 include_mod=mod_active,
-                mod_strategy_file=mod_strategy_file,
+                mod_strategy_path=mod_strategy_path,
+                user_instruction_path=user_instruction_path,
+                user_persona_path=user_persona_path,
                 turn_manager_type=turn_manager_type,
                 trolls_active=trolls_active,
+                num_experiments=num_experiments,
             )
             run_discussion_experiment(
                 experiment=discussion_exp,
@@ -118,9 +124,12 @@ def create_discussion_experiment(
     llm,
     discussion_config: dict,
     include_mod: bool,
-    mod_strategy_file: Path,
+    mod_strategy_path: Path,
+    user_instruction_path: Path,
+    user_persona_path: Path,
     turn_manager_type: str,
     trolls_active: bool,
+    num_experiments: int,
 ) -> syndisco.experiments.DiscussionExperiment:
     context = discussion_config["experiment_variables"]["context_prompt"]
 
@@ -131,17 +140,13 @@ def create_discussion_experiment(
     users = get_users(
         model=llm,
         context=context,
-        vanilla_instructions=Path(
-            discussion_config["files"]["vanilla_instructions_path"]
-        ).read_text(),
+        vanilla_instructions=user_instruction_path.read_text(),
         troll_instructions=Path(
             discussion_config["files"]["troll_instructions_path"]
         ).read_text(),
         trolls_active=trolls_active,
         troll_chance=0.3,
-        persona_file_path=Path(
-            discussion_config["files"]["user_persona_path"]
-        ),
+        persona_file_path=user_persona_path,
     )
 
     if not include_mod:
@@ -162,7 +167,7 @@ def create_discussion_experiment(
             model=llm,
             mod_persona=mod_persona,
             context=context,
-            mod_instructions_path=mod_strategy_file,
+            mod_instructions_path=mod_strategy_path,
         )
 
     next_turn_manager = get_turn_manager(
@@ -179,9 +184,7 @@ def create_discussion_experiment(
         num_active_users=discussion_config["experiment_variables"][
             "num_users"
         ],
-        num_discussions=discussion_config["experiment_variables"][
-            "num_experiments"
-        ],
+        num_discussions=num_experiments,
     )
 
 
@@ -332,11 +335,16 @@ if __name__ == "__main__":
         required=True,
         help="A txt file containing the instructions for the moderator",
     )
+    parser.add_argument("--user-instruction-path", required=True)
+    parser.add_argument("--user-persona-path", required=True)
     parser.add_argument(
         "--turn-manager",
         required=True,
         choices=["random-weighted", "round-robin", "random"],
         help="The turn strategy used",
+    )
+    parser.add_argument(
+        "--num-experiments", type=int, required=False, default=20
     )
     parser.add_argument(
         "--output-dir",
@@ -357,7 +365,10 @@ if __name__ == "__main__":
         model_name=args.model_pseudo,
         mod_active=args.mod_active,
         turn_manager_type=args.turn_manager,
-        mod_strategy_file=Path(args.mod_strategy_file),
+        mod_strategy_path=Path(args.mod_strategy_file),
         output_dir=Path(args.output_dir),
+        num_experiments=args.num_experiments,
         trolls_active=args.trolls_active,
+        user_instruction_path=Path(args.user_instruction_path),
+        user_persona_path=Path(args.user_persona_path),
     )

@@ -29,6 +29,8 @@ for i in "${!models[@]}"; do
                 --mod-strategy-file "${mod_strat_file}" \
                 --turn-manager "${turn_manager}" \
                 --output-dir  "./data/discussions_output/${name}" \
+                --user-persona-path "./data/discussions_input/personas/personas.json" \
+                --user-instruction-path "./data/discussions_input/user_instructions/vanilla.txt" \
                 --mod-active \
                 --trolls-active
         done
