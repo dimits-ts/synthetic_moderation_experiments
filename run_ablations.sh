@@ -55,3 +55,45 @@ for i in "${!models[@]}"; do
         done
     done
 done
+
+
+for i in "${!models[@]}"; do
+    for mod_strat_file in data/discussions_input/mod_instructions/*; do
+        for turn_manager in "${turn_managers[@]}"; do
+            file_base=$(basename "$mod_strat_file" .yaml)
+            name="${pseudos[i]}_${turn_manager}_${file_base}_noinstr"
+
+            python run_experiment.py \
+                --config-file ./data/discussions_input/run_config.yml \
+                --model-url "${models[i]}" \
+                --model-pseudo "${pseudos[i]}" \
+                --mod-strategy-file "${mod_strat_file}" \
+                --turn-manager "${turn_manager}" \
+                --output-dir  "./data/discussions_output/${name}" \
+                --user-instruction-path "./data/discussions_input/user_instructions/no_instructions.txt" \
+                --user-persona-path "./data/discussions_input/personas/personas.json" \
+                --num-experiments=5
+        done
+    done
+done
+
+
+for i in "${!models[@]}"; do
+    for mod_strat_file in data/discussions_input/mod_instructions/*; do
+        for turn_manager in "${turn_managers[@]}"; do
+            file_base=$(basename "$mod_strat_file" .yaml)
+            name="${pseudos[i]}_${turn_manager}_${file_base}_nosdbs"
+
+            python run_experiment.py \
+                --config-file ./data/discussions_input/run_config.yml \
+                --model-url "${models[i]}" \
+                --model-pseudo "${pseudos[i]}" \
+                --mod-strategy-file "${mod_strat_file}" \
+                --turn-manager "${turn_manager}" \
+                --output-dir  "./data/discussions_output/${name}" \
+                --user-instruction-path "./data/discussions_input/user_instructions/vanilla.txt" \
+                --user-persona-path "./data/discussions_input/personas/no_sdbs.json" \
+                --num-experiments=5
+        done
+    done
+done
