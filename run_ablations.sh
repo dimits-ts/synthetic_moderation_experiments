@@ -50,7 +50,8 @@ for i in "${!models[@]}"; do
                 --user-instruction-path "./data/discussions_input/user_instructions/vanilla.txt" \
                 --user-persona-path "./data/discussions_input/personas/personas.json" \
                 --no-trolls-active \
-                --mod-active
+                --mod-active \
+                --num-experiments=5
         done
     done
 done
