@@ -13,6 +13,3 @@ python eval/toxicity.py \
     --output-path data/eval_output/ablation.csv \
     --api-key-path perspective.key
 
-mkdir -p data/eval_models
-git clone https://github.com/kj2013/deliberative-politics.git data/eval_models/deliberative-politics
-
