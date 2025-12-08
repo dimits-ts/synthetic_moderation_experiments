@@ -4,14 +4,12 @@ models=(
     "unsloth/OLMo-2-0325-32B-Instruct-unsloth-bnb-4bit"
     "unsloth/Qwen2.5-32B-Instruct-bnb-4bit"
     "unsloth/Llama-3.3-70B-Instruct-bnb-4bit"
-    "mistralai/Ministral-3-14B-Instruct-2512"
 )
 
 pseudos=(
     "olmo32b"
     "qwen32b"
     "llama70b"
-    "mistral"
 )
 
 turn_managers=( "round-robin" "random" "random-weighted" )
