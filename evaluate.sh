@@ -1,6 +1,7 @@
 #!/bin/bash
-python eval/create_datasets.py \ 
-    --discussions-root-dir data/discussions_output/ \
+
+python eval/create_datasets.py \
+    --discussions-root-dir data/discussions_output \
     --output-dir data/main_output
 
 python eval/toxicity.py \

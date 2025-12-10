@@ -22,8 +22,15 @@ def get_perspective_scores(
 
     # Prepare output: clear file if exists
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    # Load already scored IDs if file exists
     if out_path.exists():
-        out_path.unlink()
+        existing = pd.read_csv(out_path)
+        scored_ids = set(existing["message_id"].unique())
+        print(f"Loaded {len(scored_ids)} previously scored IDs.")
+        wrote_header = True
+    else:
+        scored_ids = set()
+        wrote_header = False
 
     batch = []
     wrote_header = False
@@ -35,6 +42,9 @@ def get_perspective_scores(
         msg_id = row["message_id"]
 
         if text == "":
+            continue
+
+        if msg_id in scored_ids:
             continue
 
         data = {
