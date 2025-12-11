@@ -39,18 +39,17 @@ def get_intervention_df(df: pd.DataFrame, groupby_col: str) -> pd.DataFrame:
 
     # Map conv_id → model
     groups = (
-        df.groupby("conv_id")[groupby_col]
-        .first()
-        .reindex(mod_total.index)
+        df.groupby("conv_id")[groupby_col].first().reindex(mod_total.index)
     )
 
     # Construct final dataframe
-    return pd.DataFrame({
-        "conv_id": mod_total.index,
-        groupby_col: groups.values,
-        "intervention_pct": intervention_pct.values,
-    }).reset_index(drop=True)
-
+    return pd.DataFrame(
+        {
+            "conv_id": mod_total.index,
+            groupby_col: groups.values,
+            "intervention_pct": intervention_pct.values,
+        }
+    ).reset_index(drop=True)
 
 
 def intervention_plot(intervention_df: pd.DataFrame, groupby_col: str) -> None:
@@ -110,6 +109,18 @@ def intervention_plot(intervention_df: pd.DataFrame, groupby_col: str) -> None:
     plt.tight_layout()
 
 
+def moderation_analysis(
+    df: pd.DataFrame, groupby_col: str, graph_output_path: Path
+) -> None:
+    mod_df = get_intervention_df(df, groupby_col=groupby_col)
+    intervention_plot(
+        intervention_df=mod_df,
+        groupby_col=groupby_col,
+    )
+    tasks.graphs.save_plot(graph_output_path)
+    plt.close()
+
+
 def main(input_csv_path: Path, output_dir: Path):
     sns.set_theme(
         style="whitegrid",
@@ -118,16 +129,16 @@ def main(input_csv_path: Path, output_dir: Path):
         palette="colorblind",
     )
     df = pd.read_csv(input_csv_path)
-    mod_df = get_intervention_df(df, groupby_col="model")
-    print(mod_df.intervention_pct.describe())
-    print(mod_df)
-
-    intervention_plot(
-        intervention_df=mod_df,
+    moderation_analysis(
+        df=df,
         groupby_col="model",
+        graph_output_path=output_dir / "intervention_count.png",
     )
-    tasks.graphs.save_plot(output_dir / "intervention_count.png")
-    plt.close()
+    moderation_analysis(
+        df=df,
+        groupby_col="tag_2",
+        graph_output_path=output_dir / "intervention_count.png",
+    )
 
 
 if __name__ == "__main__":
