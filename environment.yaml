@@ -1,9 +1,11 @@
-name: syndisco_exp
+name: syndisco-exp
 channels:
   - conda-forge
 dependencies:
   - beautifulsoup4
   - pandas
   - randomname
+  - scikit-posthocs
+  - rouge-score
   - pip:
       - syndisco

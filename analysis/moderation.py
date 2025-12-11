@@ -7,68 +7,80 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import tasks.constants
+import tasks.graphs
 
 
-def get_intervention_df(df: pd.DataFrame) -> pd.DataFrame:
+def get_intervention_df(df: pd.DataFrame, groupby_col: str) -> pd.DataFrame:
+    df = df.copy()
+
+    # Keep only conversations with at least one moderator message
     moderated_convs = df[df.is_moderator].conv_id.unique()
-    filtered_df = df[df.conv_id.isin(moderated_convs)]
-    filtered_df = filtered_df[filtered_df.message.str.strip() != '""']
+    df = df.loc[df.conv_id.isin(moderated_convs), :]
 
-    # Count total messages per conversation
-    total_msgs = filtered_df.groupby("conv_id").size()
+    # Exclude "hardcoded" conversations
+    df = df.loc[df.model != "hardcoded", :]
+
+    # Extract moderator-only messages
+    mod_df = df[df.is_moderator]
 
     # Count moderator messages per conversation
-    mod_msgs = (
-        filtered_df[filtered_df["is_moderator"]].groupby("conv_id").size()
+    mod_total = mod_df.groupby("conv_id").size()
+
+    # Count moderator messages with empty "" as the content
+    empty_msg = mod_df.message.astype(str).str.strip() == '""'
+    mod_empty = mod_df[empty_msg].groupby("conv_id").size()
+
+    # Align empty-count to total-count index
+    mod_empty = mod_empty.reindex(mod_total.index, fill_value=0)
+
+    # Compute percentage:
+    #   (empty moderator replies) / (all moderator replies) * 100
+    intervention_pct = (mod_empty / mod_total) * 100
+
+    # Map conv_id → model
+    groups = (
+        df.groupby("conv_id")[groupby_col]
+        .first()
+        .reindex(mod_total.index)
     )
 
-    # Compute intervention percentage
-    intervention_pct = (mod_msgs / total_msgs).fillna(0) * 2 * 100
-
-    # Get conv_variant per conv_id (assuming it is unique per conv)
-    conv_variants = filtered_df.groupby("conv_id")["conv_variant"].first()
-
-    # Create intervention_df
-    intervention_df = pd.DataFrame(
-        {
-            "conv_id": intervention_pct.index,
-            "conv_variant": conv_variants,
-            "intervention_pct": intervention_pct.values,
-        }
-    ).reset_index(drop=True)
-    return intervention_df
+    # Construct final dataframe
+    return pd.DataFrame({
+        "conv_id": mod_total.index,
+        groupby_col: groups.values,
+        "intervention_pct": intervention_pct.values,
+    }).reset_index(drop=True)
 
 
-def intervention_df(intervention_df: pd.DataFrame, colors, hatches) -> None:
-    # (0-10%, 10-20%, ..., 90-100%)
+
+def intervention_plot(intervention_df: pd.DataFrame, groupby_col: str) -> None:
+    # Create bins 0–10, 10–20, ..., 90–100
     bins = np.arange(0, 110, 10)
-
     intervention_df["intervention_bin"] = pd.cut(
-        intervention_df.intervention_pct,
+        intervention_df["intervention_pct"],
         bins=bins,
         right=False,
         include_lowest=True,
     )
 
-    variants = intervention_df.conv_variant.unique()
-    colors = sns.color_palette("colorblind", 8).as_hex()
-
-    # Group and count: rows = bins, columns = variants
+    # Count rows in each (bin × variant)
     grouped = (
-        intervention_df.groupby(["intervention_bin", "conv_variant"])
+        intervention_df.groupby(["intervention_bin", groupby_col])
         .size()
         .unstack(fill_value=0)
     )
-    grouped = grouped.reindex(
-        index=pd.IntervalIndex.from_breaks(bins, closed="left"), fill_value=0
-    )
+    print(grouped)
 
+    # Prepare figure
     fig, ax = plt.subplots(figsize=(12, 6))
-
     x = np.arange(len(grouped))
     bottom = np.zeros(len(grouped))
 
-    for i, variant in enumerate(variants):
+    colors = sns.color_palette("colorblind", n_colors=20)
+    hatches = tasks.constants.HATCHES
+
+    # Plot stacked bars
+    for i, variant in enumerate(grouped.columns):
         counts = grouped[variant].values
         ax.bar(
             x,
@@ -79,46 +91,40 @@ def intervention_df(intervention_df: pd.DataFrame, colors, hatches) -> None:
             edgecolor="black",
             hatch=hatches[i % len(hatches)],
         )
-        bottom += counts  # stack bars on top
+        bottom += counts
 
+    # X-tick labels (e.g., "0–10%", "10–20%")
     ax.set_xticks(x)
     ax.set_xticklabels(
-        [
-            f"{int(interval.left)}-{int(interval.right)}%"
-            for interval in grouped.index
-        ],
+        [f"{int(iv.left)}-{int(iv.right)}%" for iv in grouped.index],
         rotation=45,
     )
-    ax.set_xlabel("Percentage of moderated comments")
-    ax.set_ylabel("Number of Discussions")
+
+    ax.set_xlabel("Percentage of unmoderated comments")
+    ax.set_ylabel("Number of discussions")
     ax.set_title(
         "LLM facilitators almost always intervene in synthetic discussions"
     )
     ax.legend(title="Strategy")
+
     plt.tight_layout()
 
 
 def main(input_csv_path: Path, output_dir: Path):
-    sns.set(
+    sns.set_theme(
         style="whitegrid",
         font_scale=1.5,
-        font="Times New Roman",
         context="paper",
         palette="colorblind",
     )
     df = pd.read_csv(input_csv_path)
-    mod_df = get_intervention_df(df)
+    mod_df = get_intervention_df(df, groupby_col="model")
     print(mod_df.intervention_pct.describe())
     print(mod_df)
 
-    strategies = intervention_df.conv_variant.unique()
-    colorblind_palette = sns.color_palette(
-        "colorblind", n_colors=len(strategies)
-    )
-    intervention_df(
+    intervention_plot(
         intervention_df=mod_df,
-        hatches=tasks.constants.HATCHES,
-        colors=colorblind_palette.as_hex(),
+        groupby_col="model",
     )
     tasks.graphs.save_plot(output_dir / "intervention_count.png")
     plt.close()
