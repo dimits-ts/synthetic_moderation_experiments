@@ -617,3 +617,12 @@ def _format_with_asterisks(
             formatted_df.iloc[i, j] = f"{value:.3f}\n{num_asterisks * '*'}"
 
     return formatted_df
+
+
+def seaborn_setup():
+    sns.set_theme(
+        style="whitegrid",
+        font_scale=1.5,
+        context="paper",
+        palette="colorblind",
+    )

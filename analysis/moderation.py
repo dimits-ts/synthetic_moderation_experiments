@@ -16,33 +16,20 @@ def get_intervention_df(df: pd.DataFrame, groupby_col: str) -> pd.DataFrame:
     # Keep only conversations with at least one moderator message
     moderated_convs = df[df.is_moderator].conv_id.unique()
     df = df.loc[df.conv_id.isin(moderated_convs), :]
-
-    # Exclude "hardcoded" conversations
     df = df.loc[df.model != "hardcoded", :]
-
-    # Extract moderator-only messages
     mod_df = df[df.is_moderator]
 
-    # Count moderator messages per conversation
     mod_total = mod_df.groupby("conv_id").size()
-
-    # Count moderator messages with empty "" as the content
     empty_msg = mod_df.message.astype(str).str.strip() == '""'
     mod_empty = mod_df[empty_msg].groupby("conv_id").size()
-
-    # Align empty-count to total-count index
     mod_empty = mod_empty.reindex(mod_total.index, fill_value=0)
 
-    # Compute percentage:
     #   (empty moderator replies) / (all moderator replies) * 100
     intervention_pct = (mod_empty / mod_total) * 100
-
-    # Map conv_id → model
     groups = (
         df.groupby("conv_id")[groupby_col].first().reindex(mod_total.index)
     )
 
-    # Construct final dataframe
     return pd.DataFrame(
         {
             "conv_id": mod_total.index,
@@ -122,12 +109,7 @@ def moderation_analysis(
 
 
 def main(input_csv_path: Path, output_dir: Path):
-    sns.set_theme(
-        style="whitegrid",
-        font_scale=1.5,
-        context="paper",
-        palette="colorblind",
-    )
+    tasks.graphs.seaborn_setup()
     df = pd.read_csv(input_csv_path)
     moderation_analysis(
         df=df,
