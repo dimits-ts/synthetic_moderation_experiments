@@ -5,15 +5,11 @@
 
 
 \begin{acronym}[WWW] % Give the longest label here so that the list is nicely aligned
-	\ifthenelse{\boolean{review}}
-	{}
-	{\acro{VMD}{Virtual Moderation Dataset}}
-	\acro{ML}{Machine Learning}
-	\acro{SDB}{SocioDemographic Background}
+	\acro{vmd}[VMD]{Virtual Moderation Dataset}
+	\acro{cs}[CS]{Computer Science}
+	\acro{sdb}[SDB]{SocioDemographic Background}
 	\acro{ceri}[CeRI]{Cornell e-Rulemaking Initiative}
-	\acro{OLS}{Ordinary Least Squares}
-	\acro{GPL}{GNU General Public License}
-	\acro{SDG}{Synthetic Discussion Generation}
+	\acro{sdg}[SDG]{Synthetic Discussion Generation}
 \end{acronym}
 
 
@@ -32,7 +28,6 @@ Finally, it's worth noting that while we have made efforts to make the study as 
 \section{Cost Comparison}
 \label{sec:appendix:cost}
 
-One of the defining arguments for the development and use of our framework is cost savings. It is thus natural that we should compare the price of our experiments with alternative options. An exact cost derivation is of course intractable, due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable when deciding which method to use. We assume that there are three main methods of generating such experiments: using proprietary models, open-source LLMs, and human participants.
 
 \subsection{Methodology}
 \label{ssec:appendix:cost:methodology}
@@ -51,31 +46,30 @@ Self-hosting open-source LLMs requires calculating the Total Cost of Ownership (
 
 The general formula for calculating the Total Cost of Ownership ($\text{TCO}_{\text{Self-Hosted}}$) over $N$ annual periods is defined as the sum of annualized capital and operational costs \citep{pan2025_cost_benefit}:
 
-\begin{equation}
+\[
 	\text{TCO}_{\text{Self-Hosted}} = \sum_{n=1}^{N} \left[ \text{CapEx}_n + \text{OpEx}_n \right]
-\end{equation}
+\]
 
 \noindent Where $\text{CapEx}_n$ includes the initial hardware cost (e.g., GPU servers) amortized over a depreciation period (often 4 years), and $\text{OpEx}_n$ includes yearly hosting, power, cooling, and personnel maintenance costs \cite{nvidia_tco}.
 
 To enable comparison with API models, the yearly TCO must be normalized to a cost-per-volume metric (e.g., Cost Per 1000 Prompts). This calculation is contingent on the hardware's achieved performance, measured in Requests Per Second (RPS) or Tokens Per Hour ($\text{TPH}$) \cite{pan2025_cost_benefit}.
 
-\begin{equation}
+\[
 	\begin{aligned}
 		& \text{Cost Per 1000 Prompts} = \\ &\frac{\text{TCO}_{\text{Yearly Server Cost}}}{\text{Total Yearly Requests per Server}} \times 1000
 	\end{aligned}
-\end{equation}
-
+\]
 \noindent The $\text{Total Yearly Requests per Server}$ is a function of the Optimal RPS adjusted by the system's expected uptime fraction, which reflects the financial viability being directly tied to utilization rates \cite{nvidia_tco}.
 
 
 \paragraph{Proprietary models}
 The task of calculating CPT for proprietary models is significantly easier, since their service has a clear pricing structure. The Cost Per Task for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL), using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
 
-\begin{equation}
+\[
 	\begin{aligned}
-		&CPT_{\text{Proprietary}} = \\&\frac{(\text{ISL} \times P_{\text{in}} + \text{OSL} \times P_{\text{out}})}{1,000,000} + C_{\text{API Overhead}} 
+		&\text{CPT}_{\text{Proprietary}} = \\&\frac{(\text{ISL} \times P_{\text{in}} + \text{OSL} \times P_{\text{out}})}{1,000,000} + C_{\text{API Overhead}} 
 	\end{aligned}
-\end{equation}
+\]
 \noindent Where $C_{\text{API Overhead}}$ includes amortized costs from failed calls and vendor usage fees.
 
 
@@ -85,11 +79,12 @@ Human participation costs can not, and should not, be calculated in a vacuum. Th
 
 The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage, mandatory platform fees, and quality assurance overhead:
 
-\begin{equation}
-	\begin{aligned}
+\[
+\begin{aligned}
 		&\text{Cost Per Hour}_{\text{Human}} = \\&W_{\text{gross}} \times (1 + F_{\text{platform}}) + C_{\text{QA-overhead}}
 	\end{aligned}
-\end{equation}
+\]
+
 
 \noindent Where:
 \begin{itemize}
@@ -99,11 +94,11 @@ The true cost of procuring human labor in a research context is calculated using
 \end{itemize}
 
 The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time required to complete the specific research task:
-\begin{equation}
+\[
 	\begin{aligned}
 		&CPT_{\text{Human}} =\\& (\text{Time Per Task}_{\text{est}} \times W_{\text{gross}}) \times\\&(1 + F_{\text{platform}}) + C_{\text{QA per Task}}
 	\end{aligned}
-\end{equation}
+\]
 
 
 \subsection{Assumptions}
@@ -114,27 +109,6 @@ We compare our setup with an OpenAI GPT-5 instance for proprietary models. The G
 
 For the human participation comparison we assume a task using Prolific as a platform, which currently charges a 33\% overhead, and a fair wage of 12\$ per participant. We assume that no data are thrown out for data quality reasons in any of the tasks.
  
-
-\subsection{Results}
-
-Given the methodology and assumptions presented above, we derive the cost estimates for our own experiments. The results per hour, and for all experiments ($CPT \times \text{num\_discussions}$) are provided in Table~\ref{tab:cost}.
-
-\begin{table}[ht]
-	\begin{tabular}{|p{2cm}|c|c|}
-		\hline
-		\textbf{Method} & \textbf{Cost Per Hour} & \textbf{Total Cost} \\
-		\hline
-		Open-source LLMs (ours) & 0.000322\$  &  \\
-		\hline
-		Proprietary LLMs & 0.002063\$ &  \\
-		\hline
-		Humans & 20\$ &  \\
-		\hline
-	\end{tabular}
-	\caption{The estimated costs of our experiments, and those of viable alternatives.}
-	\label{tab:cost}
-\end{table}
-
 
 \section{Prompts Used}
 \label{ssec:appendix:prompts}

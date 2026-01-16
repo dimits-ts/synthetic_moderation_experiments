@@ -18,7 +18,7 @@ Moderator chatbots have shown promise; \citet{kim_et_al_chatbot} demonstrated th
 \subsection{Discussion Quality}
 \label{ssec:related:quality}
 
-When creating \acp{SDG} we need to evaluate two different quality dimensions; discussion quality \emph{as seen by humans} and \emph{synthetic data quality}. The latter is essential for \acp{SDG}, as such synthetic discussions tend to deteriorate quickly without human involvement, often becoming repetitive and low-quality \citep{ulmer2024}. 
+When creating \acp{sdg} we need to evaluate two different quality dimensions; discussion quality \emph{as seen by humans} and \emph{synthetic data quality}. The latter is essential for \acp{sdg}, as such synthetic discussions tend to deteriorate quickly without human involvement, often becoming repetitive and low-quality \citep{ulmer2024}. 
 
 Despite this, methods for quantifying the quality of synthetic data remain limited. \citet{balog_2024} attempt to solve this through approaches that either depend on human datasets with similar discussion topics or lack theoretical grounding. \citet{kim_et_al_chatbot} assess quality through post-discussion surveys and by measuring lexical diversity. \citet{ulmer2024}  introduce a discussion-level metric called \emph{``Diversity''}, which penalizes repeated text sequences between comments using average pairwise ROUGE-L \citep{lin-2004-rouge} scores. Their approach suffers from the limitations of ROUGE scores (mainly the use of exact-word matching), but their metric is computationally efficient, explainable and independent of any specific domain and dataset.
 

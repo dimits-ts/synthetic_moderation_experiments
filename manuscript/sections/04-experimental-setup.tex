@@ -7,7 +7,7 @@
 We use a set of starting (``seed'') discussions taken from random points in escalated discussions featured in the CMV-Awry dataset \citep{chang-danescu-niculescu-mizil-2019-trouble} (see Appendix~\ref{TODO} for details). We then run $N_d=20$ discussions for each pair of facilitation strategies $S$ and LLM (\S\ref{ssec:experimental:setup}) with each discussion running for up to $30$ comments (including facilitator interventions). An overview of how the experiments are generated can be found in Alg.~\ref{alg:exp_generation}. The \textit{Sample} function returns a number of samples from a set following the uniform distribution, while the \textit{Actors} function creates an LLM agent using a model and a prompt.
 
 \begin{algorithm}[t]
-	\caption{\ac{SDG} setup}
+	\caption{\ac{sdg} setup}
 	\label{alg:exp_generation}
 	\hspace*{\algorithmicindent} \textbf{Input:} 
 	\begin{itemize}[noitemsep, nosep]
