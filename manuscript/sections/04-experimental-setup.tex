@@ -42,9 +42,9 @@ We use a set of starting (``seed'') discussions taken from random points in esca
 We test two facilitation strategies used in real-life and compare them with two baselines. Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.
 
 \begin{enumerate}[nosep, noitemsep]
-    \item \textbf{\strategynomod}: A \emph{common} strategy where no facilitator is present.
+    \item \textbf{\strategynomod}: A \emph{baseline} where no facilitator is present.
 
-    \item \textbf{\strategynoinstr}: A \emph{common} strategy where a LLM facilitator is present, but is provided only with basic instructions. This approach is already being used in some platforms \citep{Tsai_Deliberate_Lab_Open-Source_2025}. Example: “You are a moderator, keep the discussion civil”. 
+    \item \textbf{\strategynoinstr}: A \emph{baseline} where a LLM facilitator is present, but is provided only with basic instructions. This approach is already being used in some platforms \citep{Tsai_Deliberate_Lab_Open-Source_2025}. Example: “You are a moderator, keep the discussion civil”. 
 
     \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \citep{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their throughput. Example: ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
 
