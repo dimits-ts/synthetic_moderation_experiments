@@ -10,17 +10,58 @@ import pandas as pd
 
 
 def annualized_capex(
-    initial_server_cost, n_servers, depreciation_period_years
-):
+    initial_server_cost: float,
+    n_servers: int,
+    depreciation_period_years: int,
+) -> float:
+    """
+    Calculate the annualized capital expenditure (CapEx)
+    for server infrastructure.
+
+    This represents the portion of the initial server cost amortized over the
+    depreciation period, which is used to estimate the yearly cost of owning
+    the hardware.
+
+    :param initial_server_cost: Initial cost of a single server (e.g., in USD).
+    :type initial_server_cost: float
+    :param n_servers: Number of servers in the infrastructure.
+    :type n_servers: int
+    :param depreciation_period_years:
+        Number of years over which the server cost is amortized.
+    :type depreciation_period_years: int
+    :return: Annualized CapEx (in USD).
+    :rtype: float
+    """
     return (initial_server_cost * n_servers) / depreciation_period_years
 
 
 def power_cost_per_year(
-    power_watts_per_server,
-    hours_per_year,
-    electricity_price_per_kwh,
-    n_servers,
-):
+    power_watts_per_server: float,
+    hours_per_year: int,
+    electricity_price_per_kwh: float,
+    n_servers: int,
+) -> float:
+    """
+    Calculate the annual electricity cost for running the
+    server infrastructure.
+
+    This includes the power consumption of each server, converted to kWh,
+    multiplied by the electricity price per kWh, and scaled by the number
+    of servers.
+
+    :param power_watts_per_server: Power consumption in watts per server.
+    :type power_watts_per_server: float
+    :param hours_per_year:
+        Number of hours the server is expected to run per year.
+    :type hours_per_year: int
+    :param electricity_price_per_kwh:
+        Price of electricity in dollars per kilowatt-hour (kWh).
+    :type electricity_price_per_kwh: float
+    :param n_servers: Number of servers in the infrastructure.
+    :type n_servers: int
+    :return: Annual power cost (in USD).
+    :rtype: float
+    """
     return (
         (power_watts_per_server * hours_per_year / 1000.0)
         * electricity_price_per_kwh
@@ -29,18 +70,55 @@ def power_cost_per_year(
 
 
 def tco_yearly(
-    initial_server_cost,
-    n_servers,
-    depreciation_period_years,
-    yearly_hosting_cost,
-    yearly_software_cost,
-    power_watts_per_server,
-    hours_per_year,
-    electricity_price_per_kwh,
-    personnel_annual_cost,
-    n_personnel,
-    other_yearly_opex,
-):
+    initial_server_cost: float,
+    n_servers: int,
+    depreciation_period_years: int,
+    yearly_hosting_cost: float,
+    yearly_software_cost: float,
+    power_watts_per_server: float,
+    hours_per_year: int,
+    electricity_price_per_kwh: float,
+    personnel_annual_cost: float,
+    n_personnel: float,
+    other_yearly_opex: float,
+) -> float:
+    """
+    Calculate the Total Cost of Ownership (TCO) for the server infrastructure.
+
+    TCO includes both capital and operational expenditures,
+    amortized over time.
+
+    :param initial_server_cost: Initial cost of a single server (e.g., in USD).
+    :type initial_server_cost: float
+    :param n_servers: Number of servers in the infrastructure.
+    :type n_servers: int
+    :param depreciation_period_years:
+        Number of years over which the server cost is amortized.
+    :type depreciation_period_years: int
+    :param yearly_hosting_cost:
+        Yearly hosting cost per server (e.g., cloud hosting fees).
+    :type yearly_hosting_cost: float
+    :param yearly_software_cost: Yearly software licensing cost per server.
+    :type yearly_software_cost: float
+    :param power_watts_per_server: Power consumption in watts per server.
+    :type power_watts_per_server: float
+    :param hours_per_year:
+        Number of hours the server is expected to run per year.
+    :type hours_per_year: int
+    :param electricity_price_per_kwh:
+        Price of electricity in dollars per kilowatt-hour (kWh).
+    :type electricity_price_per_kwh: float
+    :param personnel_annual_cost:
+        Annual salary for personnel managing the infrastructure.
+    :type personnel_annual_cost: float
+    :param n_personnel: Fraction of an FTE amortized per server.
+    :type n_personnel: float
+    :param other_yearly_opex:
+        Miscellaneous yearly operational expenses per server.
+    :type other_yearly_opex: float
+    :return: Total yearly cost of ownership (in USD).
+    :rtype: float
+    """
     capex_ann = annualized_capex(
         initial_server_cost, n_servers, depreciation_period_years
     )
@@ -62,30 +140,96 @@ def tco_yearly(
 
 
 def total_yearly_tasks_from_throughput(
-    rps_per_instance,
-    instances,
-    uptime_fraction,
-    seconds_per_year=365 * 24 * 3600,
-):
+    rps_per_instance: float,
+    instances: float,
+    uptime_fraction: float,
+    seconds_per_year: int = 365 * 24 * 3600,
+) -> float:
+    """
+    Calculate the total number of tasks handled by the system in a year.
+
+    This is based on the system's throughput (requests per second
+    per instance),
+    the number of instances, and the uptime fraction (fraction of time the
+    system is operational).
+
+    :param rps_per_instance: Requests per second per instance.
+    :type rps_per_instance: float
+    :param instances: Number of instances in the cluster.
+    :type instances: float
+    :param uptime_fraction:
+        Fraction of time the system is operational (e.g., 0.9 for 90% uptime).
+    :type uptime_fraction: float
+    :param seconds_per_year:
+        Total number of seconds in a year (default: 31,536,000).
+    :type seconds_per_year: int
+    :return: Total number of tasks handled in a year.
+    :rtype: float
+    """
     return rps_per_instance * instances * uptime_fraction * seconds_per_year
 
 
 def cpt_open_source(
-    rps_per_instance,
-    instances,
-    uptime_fraction,
-    initial_server_cost,
-    n_servers,
-    depreciation_period_years,
-    yearly_hosting_cost,
-    yearly_software_cost,
-    power_watts_per_server,
-    hours_per_year,
-    electricity_price_per_kwh,
-    personnel_annual_cost,
-    n_personnel,
-    other_yearly_opex,
-):
+    rps_per_instance: float,
+    instances: float,
+    uptime_fraction: float,
+    initial_server_cost: float,
+    n_servers: int,
+    depreciation_period_years: int,
+    yearly_hosting_cost: float,
+    yearly_software_cost: float,
+    power_watts_per_server: float,
+    hours_per_year: int,
+    electricity_price_per_kwh: float,
+    personnel_annual_cost: float,
+    n_personnel: float,
+    other_yearly_opex: float,
+) -> tuple[float, float, float]:
+    """
+    Calculate the Cost Per Task (CPT) for self-hosted open-source LLMs.
+
+    This function computes the CPT by normalizing the Total Cost of Ownership
+    (TCO) to a per-task basis, based on the system's throughput
+    and utilization.
+
+    :param rps_per_instance: Requests per second per instance.
+    :type rps_per_instance: float
+    :param instances: Number of instances in the cluster.
+    :type instances: float
+    :param uptime_fraction:
+        Fraction of time the system is operational (e.g., 0.9 for 90% uptime).
+    :type uptime_fraction: float
+    :param initial_server_cost: Initial cost of a single server (e.g., in USD).
+    :type initial_server_cost: float
+    :param n_servers: Number of servers in the infrastructure.
+    :type n_servers: int
+    :param depreciation_period_years:
+        Number of years over which the server cost is amortized.
+    :type depreciation_period_years: int
+    :param yearly_hosting_cost:
+        Yearly hosting cost per server (e.g., cloud hosting fees).
+    :type yearly_hosting_cost: float
+    :param yearly_software_cost: Yearly software licensing cost per server.
+    :type yearly_software_cost: float
+    :param power_watts_per_server: Power consumption in watts per server.
+    :type power_watts_per_server: float
+    :param hours_per_year:
+        Number of hours the server is expected to run per year.
+    :type hours_per_year: int
+    :param electricity_price_per_kwh:
+        Price of electricity in dollars per kilowatt-hour (kWh).
+    :type electricity_price_per_kwh: float
+    :param personnel_annual_cost:
+        Annual salary for personnel managing the infrastructure.
+    :type personnel_annual_cost: float
+    :param n_personnel: Fraction of an FTE amortized per server.
+    :type n_personnel: float
+    :param other_yearly_opex:
+        Miscellaneous yearly operational expenses per server.
+    :type other_yearly_opex: float
+    :return: A tuple containing (CPT, TCO, Total Tasks).
+    :rtype: tuple[float, float, float]
+    """
     tco = tco_yearly(
         initial_server_cost,
         n_servers,
@@ -107,32 +251,93 @@ def cpt_open_source(
     return tco / tasks, tco, tasks
 
 
-def human_cost_per_hour(w_gross, platform_fee_frac, qa_overhead_per_hour):
-    return w_gross * (1 + platform_fee_frac) + qa_overhead_per_hour
+def human_cost_per_hour(
+    human_wage_gross: float,
+    platform_fee_frac: float,
+    qa_overhead_per_hour: float,
+) -> float:
+    """
+    Calculate the effective hourly cost of human labor,
+    including platform fees and QA overhead.
+
+    :param human_wage_gross: Gross hourly wage of the worker (e.g., in USD).
+    :type human_wage_gross: float
+    :param platform_fee_frac:
+        Fraction of the wage taken by the platform (e.g., 0.33 for 33%).
+    :type platform_fee_frac: float
+    :param qa_overhead_per_hour:
+        Additional cost per hour for quality assurance.
+    :type qa_overhead_per_hour: float
+    :return: Effective hourly cost of human labor (in USD).
+    :rtype: float
+    """
+    return human_wage_gross * (1 + platform_fee_frac) + qa_overhead_per_hour
 
 
 def cpt_human(
-    human_wage_gross,
-    platform_fee_frac,
-    qa_overhead_per_hour,
-    time_per_task_seconds,
-    qa_amortized_per_task,
-):
+    human_wage_gross: float,
+    platform_fee_frac: float,
+    qa_overhead_per_hour: float,
+    time_per_task_seconds: float,
+    qa_amortized_per_task: float,
+) -> tuple[float, float]:
+    """
+    Calculate the Cost Per Task (CPT) for human labor,
+    including QA amortization.
+
+    :param human_wage_gross: Gross hourly wage of the worker (e.g., in USD).
+    :type human_wage_gross: float
+    :param platform_fee_frac:
+        Fraction of the wage taken by the platform (e.g., 0.33 for 33%).
+    :type platform_fee_frac: float
+    :param qa_overhead_per_hour:
+        Additional cost per hour for quality assurance.
+    :type qa_overhead_per_hour: float
+    :param time_per_task_seconds:
+        Estimated time (in seconds) to complete a task.
+    :type time_per_task_seconds: float
+    :param qa_amortized_per_task:
+        Amortized cost per task for quality assurance.
+    :type qa_amortized_per_task: float
+    :return: A tuple containing (CPT, Cost Per Hour).
+    :rtype: tuple[float, float]
+    """
     cph = human_cost_per_hour(
         human_wage_gross, platform_fee_frac, qa_overhead_per_hour
     )
-    cpt = time_per_task_seconds / 3600.0 * cph + qa_amortized_per_task
+    cpt = (time_per_task_seconds / 3600.0 * cph) + qa_amortized_per_task
     return cpt, cph
 
 
 def cpt_proprietary(
-    isl_tokens,
-    osl_tokens,
-    price_input_per_million,
-    price_output_per_million,
-    api_retry_overhead_fraction,
-    api_fixed_overhead_per_task,
-):
+    isl_tokens: float,
+    osl_tokens: float,
+    price_input_per_million: float,
+    price_output_per_million: float,
+    api_retry_overhead_fraction: float,
+    api_fixed_overhead_per_task: float,
+) -> tuple[float, float, float]:
+    """
+    Calculate the Cost Per Task (CPT) for proprietary LLM APIs.
+
+    This includes the cost of input and output tokens, plus API overhead.
+
+    :param isl_tokens: Number of input tokens per task.
+    :type isl_tokens: float
+    :param osl_tokens: Number of output tokens per task.
+    :type osl_tokens: float
+    :param price_input_per_million: Price per million input tokens (in USD).
+    :type price_input_per_million: float
+    :param price_output_per_million: Price per million output tokens (in USD).
+    :type price_output_per_million: float
+    :param api_retry_overhead_fraction: Fraction of cost attributed to retries.
+    :type api_retry_overhead_fraction: float
+    :param api_fixed_overhead_per_task:
+        Fixed overhead per task (e.g., API fees).
+    :type api_fixed_overhead_per_task: float
+    :return: A tuple containing (CPT, Base Token Cost, Overhead).
+    :rtype: tuple[float, float, float]
+    """
     base = (
         isl_tokens * price_input_per_million
         + osl_tokens * price_output_per_million
@@ -142,13 +347,32 @@ def cpt_proprietary(
 
 
 def effective_llm_wage_from_tokens(
-    rps_proprietary,
-    utilization_fraction,
-    isl_tokens,
-    osl_tokens,
-    price_input_per_million,
-    price_output_per_million,
-):
+    rps_proprietary: float,
+    utilization_fraction: float,
+    isl_tokens: float,
+    osl_tokens: float,
+    price_input_per_million: float,
+    price_output_per_million: float,
+) -> tuple[float, float]:
+    """
+    Calculate the effective wage of an LLM based on token throughput
+    and pricing.
+
+    :param rps_proprietary: Requests per second for the proprietary model.
+    :type rps_proprietary: float
+    :param utilization_fraction: Fraction of time the model is utilized.
+    :type utilization_fraction: float
+    :param isl_tokens: Number of input tokens per task.
+    :type isl_tokens: float
+    :param osl_tokens: Number of output tokens per task.
+    :type osl_tokens: float
+    :param price_input_per_million: Price per million input tokens (in USD).
+    :type price_input_per_million: float
+    :param price_output_per_million: Price per million output tokens (in USD).
+    :type price_output_per_million: float
+    :return: A tuple containing (tokens per hour, effective wage per hour).
+    :rtype: tuple[float, float]
+    """
     requests_per_hour = rps_proprietary * 3600.0 * utilization_fraction
     tokens_per_hour = requests_per_hour * (isl_tokens + osl_tokens)
     cost_per_token = (
@@ -165,7 +389,20 @@ def effective_llm_wage_from_tokens(
     return tokens_per_hour, effective_wage
 
 
-def quality_adjusted_cpt(raw_cpt, quality_score):
+def quality_adjusted_cpt(raw_cpt: float, quality_score: float) -> float:
+    """
+    Adjust the Cost Per Task (CPT) based on a quality score.
+
+    A higher quality score reduces the effective CPT, reflecting better
+    data quality or efficiency.
+
+    :param raw_cpt: Raw CPT (before quality adjustment).
+    :type raw_cpt: float
+    :param quality_score: Quality score (should be > 0).
+    :type quality_score: float
+    :return: Quality-adjusted CPT.
+    :rtype: float
+    """
     if quality_score <= 0:
         return float("inf")
     return raw_cpt / quality_score
