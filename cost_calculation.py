@@ -184,7 +184,7 @@ def cpt_open_source(
     personnel_annual_cost: float,
     n_personnel: float,
     other_yearly_opex: float,
-) -> tuple[float, float, float]:
+) -> float:
     """
     Calculate the Cost Per Task (CPT) for self-hosted open-source LLMs.
 
@@ -227,8 +227,8 @@ def cpt_open_source(
     :param other_yearly_opex:
         Miscellaneous yearly operational expenses per server.
     :type other_yearly_opex: float
-    :return: A tuple containing (CPT, TCO, Total Tasks).
-    :rtype: tuple[float, float, float]
+    :return: The Cost Per Task (CPT) for open-source LLMs
+    :rtype: float
     """
     tco = tco_yearly(
         initial_server_cost,
@@ -246,9 +246,7 @@ def cpt_open_source(
     tasks = total_yearly_tasks_from_throughput(
         rps_per_instance, instances, uptime_fraction
     )
-    if tasks <= 0:
-        return float("inf"), tco, tasks
-    return tco / tasks, tco, tasks
+    return tco / tasks
 
 
 def human_cost_per_hour(
@@ -280,7 +278,7 @@ def cpt_human(
     qa_overhead_per_hour: float,
     time_per_task_seconds: float,
     qa_amortized_per_task: float,
-) -> tuple[float, float]:
+) -> float:
     """
     Calculate the Cost Per Task (CPT) for human labor,
     including QA amortization.
@@ -299,14 +297,14 @@ def cpt_human(
     :param qa_amortized_per_task:
         Amortized cost per task for quality assurance.
     :type qa_amortized_per_task: float
-    :return: A tuple containing (CPT, Cost Per Hour).
-    :rtype: tuple[float, float]
+    :return: The human Cost Per Task (CPT).
+    :rtype: float
     """
     cph = human_cost_per_hour(
         human_wage_gross, platform_fee_frac, qa_overhead_per_hour
     )
     cpt = (time_per_task_seconds / 3600.0 * cph) + qa_amortized_per_task
-    return cpt, cph
+    return cpt
 
 
 def cpt_proprietary(
@@ -316,7 +314,7 @@ def cpt_proprietary(
     price_output_per_million: float,
     api_retry_overhead_fraction: float,
     api_fixed_overhead_per_task: float,
-) -> tuple[float, float, float]:
+) -> float:
     """
     Calculate the Cost Per Task (CPT) for proprietary LLM APIs.
 
@@ -335,58 +333,15 @@ def cpt_proprietary(
     :param api_fixed_overhead_per_task:
         Fixed overhead per task (e.g., API fees).
     :type api_fixed_overhead_per_task: float
-    :return: A tuple containing (CPT, Base Token Cost, Overhead).
-    :rtype: tuple[float, float, float]
+    :return: The Cost Per Task (CPT) for proprietary models.
+    :rtype: float
     """
     base = (
         isl_tokens * price_input_per_million
         + osl_tokens * price_output_per_million
     ) / 1_000_000.0
     overhead = base * api_retry_overhead_fraction + api_fixed_overhead_per_task
-    return base + overhead, base, overhead
-
-
-def effective_llm_wage_from_tokens(
-    rps_proprietary: float,
-    utilization_fraction: float,
-    isl_tokens: float,
-    osl_tokens: float,
-    price_input_per_million: float,
-    price_output_per_million: float,
-) -> tuple[float, float]:
-    """
-    Calculate the effective wage of an LLM based on token throughput
-    and pricing.
-
-    :param rps_proprietary: Requests per second for the proprietary model.
-    :type rps_proprietary: float
-    :param utilization_fraction: Fraction of time the model is utilized.
-    :type utilization_fraction: float
-    :param isl_tokens: Number of input tokens per task.
-    :type isl_tokens: float
-    :param osl_tokens: Number of output tokens per task.
-    :type osl_tokens: float
-    :param price_input_per_million: Price per million input tokens (in USD).
-    :type price_input_per_million: float
-    :param price_output_per_million: Price per million output tokens (in USD).
-    :type price_output_per_million: float
-    :return: A tuple containing (tokens per hour, effective wage per hour).
-    :rtype: tuple[float, float]
-    """
-    requests_per_hour = rps_proprietary * 3600.0 * utilization_fraction
-    tokens_per_hour = requests_per_hour * (isl_tokens + osl_tokens)
-    cost_per_token = (
-        (
-            price_input_per_million * isl_tokens
-            + price_output_per_million * osl_tokens
-        )
-        / (isl_tokens + osl_tokens)
-        / 1_000_000.0
-        if (isl_tokens + osl_tokens) > 0
-        else 0
-    )
-    effective_wage = tokens_per_hour * cost_per_token
-    return tokens_per_hour, effective_wage
+    return base + overhead
 
 
 def quality_adjusted_cpt(raw_cpt: float, quality_score: float) -> float:
@@ -409,8 +364,7 @@ def quality_adjusted_cpt(raw_cpt: float, quality_score: float) -> float:
 
 
 def main(args: argparse.Namespace):
-    # Open-source CPT
-    open_cpt, open_tco, open_tasks = cpt_open_source(
+    open_cpt = cpt_open_source(
         args.rps_per_instance,
         args.instances,
         args.uptime_fraction,
@@ -427,8 +381,7 @@ def main(args: argparse.Namespace):
         args.other_yearly_opex,
     )
 
-    # Human CPT
-    human_cpt, human_cph = cpt_human(
+    human_cpt = cpt_human(
         args.human_wage_gross,
         args.platform_fee_frac,
         args.qa_overhead_per_hour,
@@ -436,8 +389,7 @@ def main(args: argparse.Namespace):
         args.qa_amortized_per_task,
     )
 
-    # Proprietary CPT
-    prop_cpt, prop_base, prop_overhead = cpt_proprietary(
+    prop_cpt = cpt_proprietary(
         args.isl_tokens,
         args.osl_tokens,
         args.price_input_per_million,
@@ -446,79 +398,43 @@ def main(args: argparse.Namespace):
         args.api_fixed_overhead_per_task,
     )
 
-    # Effective LLM wage
-    tokens_per_hour_prop, eff_wage_prop = effective_llm_wage_from_tokens(
-        args.rps_proprietary,
-        args.utilization_fraction,
-        args.isl_tokens,
-        args.osl_tokens,
-        args.price_input_per_million,
-        args.price_output_per_million,
-    )
-
-    # QCPT
     qcpt_human = quality_adjusted_cpt(human_cpt, args.quality_human)
     qcpt_open = quality_adjusted_cpt(open_cpt, args.quality_open_source)
     qcpt_prop = quality_adjusted_cpt(prop_cpt, args.quality_proprietary)
 
-    # Summary
-    summary = pd.DataFrame(
-        [
-            {
-                "Resource": "Human (per task)",
-                "Raw CPT ($)": human_cpt,
-                "Cost Per Hour ($/h)": human_cph,
-                "QCPT ($, q adj)": qcpt_human,
-                "QualityScore": args.quality_human,
-            },
-            {
-                "Resource": "Open-Source Self-Hosted (per task)",
-                "Raw CPT ($)": open_cpt,
-                "Yearly TCO ($)": open_tco,
-                "Tasks/yr": open_tasks,
-                "QCPT ($, q adj)": qcpt_open,
-                "QualityScore": args.quality_open_source,
-            },
-            {
-                "Resource": "Proprietary API (per task)",
-                "Raw CPT ($)": prop_cpt,
-                "Base Token Cost ($)": prop_base,
-                "Overhead ($)": prop_overhead,
-                "QCPT ($, q adj)": qcpt_prop,
-                "QualityScore": args.quality_proprietary,
-            },
-        ]
-    )
-    print(summary)
+    data = {
+        "CPT (raw)": [human_cpt, open_cpt, prop_cpt],
+        "CPT (adjusted)": [qcpt_human, qcpt_open, qcpt_prop],
+        "Total cost": [
+            qcpt_human * args.num_tasks,
+            qcpt_open * args.num_tasks,
+            qcpt_prop * args.num_tasks,
+        ],
+        "q": [
+            args.quality_human,
+            args.quality_open_source,
+            args.quality_proprietary,
+        ],
+    }
 
-    # Print concise results
-    print("Concise results:")
-    print(
-        f"- Human CPT (raw): ${human_cpt:.4f} per task; effective hourly "
-        f" human cost ${human_cph:.2f}/h; QCPT (q={args.quality_human}): "
-        f"${qcpt_human:.4f}"
+    df = pd.DataFrame(
+        data, index=["Human", "Open-Source", "Proprietary"]  # type:ignore
     )
-    print(
-        f"- Open-source CPT (raw): ${open_cpt:.6f} per task; "
-        f"Yearly TCO: ${open_tco:,.2f}; Tasks/yr: {open_tasks:,.0f}; "
-        f"QCPT (q={args.quality_open_source}): ${qcpt_open:.6f}"
-    )
-    print(
-        f"- Proprietary CPT (raw): ${prop_cpt:.6f} per task "
-        f"(base ${prop_base:.6f} + overhead ${prop_overhead:.6f}); "
-        f"QCPT (q={args.quality_proprietary}): ${qcpt_prop:.6f}"
-    )
-    print(
-        f"- Proprietary effective tokens/hour: {tokens_per_hour_prop:,.0f}; "
-        f"effective LLM wage (equivalent $/hr by token throughput & token "
-        f"prices): ${eff_wage_prop:,.2f}/hr"
-    )
+
+    print(df)
 
 
 if __name__ == "__main__":
     # Define the argument parser
     parser = argparse.ArgumentParser(
         description="Process parameters for cost calculation."
+    )
+
+    parser.add_argument(
+        "--num-tasks",
+        type=int,
+        default=1,
+        help="The number of tasks to be executed",
     )
 
     # Add each parameter as a command-line argument
