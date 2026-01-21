@@ -9,13 +9,16 @@ python src/cost_calculation.py \
     --isl-tokens=31580 \
     --osl-tokens=7860
 
-python eval/toxicity.py \
+python src/generate_toxicity_ratings.py \
     --input-csv data/main_output/vmd.csv \
     --output-path data/eval_output/vmd.csv \
     --api-key-path perspective.key
 
-python eval/toxicity.py \
+python src/generate_toxicity_ratings.py \
     --input-csv data/main_output/ablation.csv \
     --output-path data/eval_output/ablation.csv \
     --api-key-path perspective.key
 
+python src/eval_moderation.py \
+    --input-csv data/main_output/vmd.csv \
+    --output-dir graphs
