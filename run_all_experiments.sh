@@ -26,7 +26,7 @@ for i in "${!models[@]}"; do
             file_base=$(basename "$mod_strat_file" .yaml)
             name="${pseudos[i]}_${turn_manager}_${file_base}_yesmod"
 
-            python run_experiment.py \
+            python src/run_experiment.py \
                 --config-file ./data/discussions_input/run_config.yml \
                 --model-url "${models[i]}" \
                 --model-pseudo "${pseudos[i]}" \
