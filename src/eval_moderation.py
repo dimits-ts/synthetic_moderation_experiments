@@ -2,7 +2,6 @@ import argparse
 from pathlib import Path
 
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -55,14 +54,14 @@ def intervention_plot(intervention_df: pd.DataFrame, groupby_col: str) -> None:
         .size()
         .unstack(fill_value=0)
     )
-    print(grouped)
+    #print(grouped) # debug
 
     # Prepare figure
     fig, ax = plt.subplots(figsize=(12, 6))
     x = np.arange(len(grouped))
     bottom = np.zeros(len(grouped))
 
-    colors = sns.color_palette("colorblind", n_colors=20)
+    colors = tasks.graphs.COLORBLIND_PALETTE
     hatches = tasks.constants.HATCHES
 
     # Plot stacked bars
@@ -91,7 +90,7 @@ def intervention_plot(intervention_df: pd.DataFrame, groupby_col: str) -> None:
     ax.set_title(
         "LLM facilitators almost always intervene in synthetic discussions"
     )
-    ax.legend(title="Strategy")
+    ax.legend()
 
     plt.tight_layout()
 
@@ -110,16 +109,24 @@ def moderation_analysis(
 
 def main(input_csv_path: Path, output_dir: Path):
     tasks.graphs.seaborn_setup()
+
     df = pd.read_csv(input_csv_path)
+    variant_name_dict = {
+        "constructive": "Facilitation",
+        "erulemaking.txt": "Moderation",
+        "vanilla.txt": "No instructions",
+    }
+    df.tag_2 = df.tag_2.replace(variant_name_dict)
+
     moderation_analysis(
         df=df,
         groupby_col="model",
-        graph_output_path=output_dir / "intervention_count.png",
+        graph_output_path=output_dir / "intervention_count_model.png",
     )
     moderation_analysis(
         df=df,
         groupby_col="tag_2",
-        graph_output_path=output_dir / "intervention_count.png",
+        graph_output_path=output_dir / "intervention_count_strategy.png",
     )
 
 
