@@ -2,16 +2,20 @@
 
 models=( 
     "unsloth/OLMo-2-0325-32B-Instruct-unsloth-bnb-4bit"
+    "unsloth/Olmo-3-7B-Instruct-unsloth-bnb-4bit"
     "unsloth/Qwen2.5-32B-Instruct-bnb-4bit"
+    "unsloth/Qwen2.5-7B-Instruct-bnb-4bit"
     "unsloth/Llama-3.3-70B-Instruct-bnb-4bit"
-    "unsloth/Mistral-Nemo-Instruct-2407-bnb-4bit"
+    "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
 )
 
 pseudos=(
     "olmo32b"
+    "olmo7b"
     "qwen32b"
+    "qwen7b"
     "llama70b"
-    "mistralnemo"
+    "llama8b"
 )
 
 turn_managers=( "round-robin" "random" "random-weighted" )
@@ -29,6 +33,8 @@ for i in "${!models[@]}"; do
                 --mod-strategy-file "${mod_strat_file}" \
                 --turn-manager "${turn_manager}" \
                 --output-dir  "./data/discussions_output/${name}" \
+                --user-persona-path "./data/discussions_input/personas/personas.json" \
+                --user-instruction-path "./data/discussions_input/user_instructions/vanilla.txt" \
                 --mod-active \
                 --trolls-active
         done
