@@ -225,8 +225,6 @@ def get_topics(topics_path: Path) -> list[list[str]]:
 
     return results
 
-    return results
-
 
 def get_users(
     model: syndisco.model.BaseModel,

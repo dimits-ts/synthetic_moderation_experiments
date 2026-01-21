@@ -82,7 +82,7 @@ Additionally, we note that LLM participants exhibit atypical tolerance for exces
         \label{fig:rougel_prompts}
     \end{subfigure}%
 
-    \caption{Diversity (\S\ref{ssec:related:quality}) distribution for each discussion by LLM (\S\ref{ssec:experimental:setup}), turn-taking function $t$, and prompting function $\phi$ used (\S\ref{ssec:methodology:us}). Comparison with the CeRI Regulation Room dataset (``Human''). Note that the x-axis starts from $0.6$.}
+    \caption{Diversity (\S\ref{ssec:related:quality}) distribution for each discussion by LLM (\S\ref{ssec:experimental:setup}), turn-taking function $t$, and prompting function $\phi$ used (\S\ref{ssec:methodology:us}). Comparison with the \ac{ceri} Regulation Room dataset (``Human''). Note that the x-axis starts from $0.6$.}
     \label{fig:diversity}
 \end{figure*}
 
@@ -93,7 +93,7 @@ Additionally, we note that LLM participants exhibit atypical tolerance for exces
 	\label{fig:toxicity_trolls}
 \end{figure}
 
-We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \S\ref{ssec:experimental:evaluation}) of these discussions with our broader synthetic dataset, as well as the CeRI “Regulation Room” dataset.\footnote{Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.} We pick this dataset because it is publicly available and comprised of facilitated online human discussions on ten diverse topics.
+We generate eight synthetic discussions per ablation experiment, using a single model (Qwen 2.5). We compare the diversity (cf. \S\ref{ssec:related:quality}, \S\ref{ssec:experimental:evaluation}) of these discussions with our broader synthetic dataset, as well as the \ac{ceri} “Regulation Room” dataset.\footnote{Disclaimer: Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the CeRI.} We pick this dataset because it is publicly available and comprised of facilitated online human discussions on ten diverse topics.
 
 \paragraph{Each component of our methodology surpasses baselines in data quality.} We compare our turn-taking function (\S\ref{ssec:methodology:us}) to two baselines: Round Robin (participants speaking one after the other, then repeating) and Random Selection (uniformly sampling another participant each turn). Fig.~\ref{fig:rougel_turns} demonstrates that although all distributions diverge from the human distribution, our function is the only one not exhibiting extremely high diversity (i.e., very limited participant interaction \S\ref{ssec:experimental:evaluation}). Fig.~\ref{fig:rougel_prompts} illustrates that each individual prompting design decision (SDBs, roles, and instruction prompts) results in diversity scores more closely aligned with human discussions.
 
