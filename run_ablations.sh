@@ -20,7 +20,7 @@ for i in "${!models[@]}"; do
     for turn_manager in "${turn_managers[@]}"; do
         name="${pseudos[i]}_${turn_manager}_nomod"
 
-        python run_experiment.py \
+        python src/run_experiment.py \
             --config-file ./data/discussions_input/run_config.yml \
             --model-url "${models[i]}" \
             --model-pseudo "${pseudos[i]}" \
@@ -36,7 +36,7 @@ for i in "${!models[@]}"; do
     for turn_manager in "${turn_managers[@]}"; do
         name="${pseudos[i]}_${turn_manager}_notrolls"
 
-        python run_experiment.py \
+        python src/run_experiment.py \
             --config-file ./data/discussions_input/run_config.yml \
             --model-url "${models[i]}" \
             --model-pseudo "${pseudos[i]}" \
