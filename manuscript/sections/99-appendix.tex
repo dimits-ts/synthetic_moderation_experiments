@@ -10,6 +10,7 @@
 	\acro{sdb}[SDB]{SocioDemographic Background}
 	\acro{ceri}[CeRI]{Cornell e-Rulemaking Initiative}
 	\acro{sdg}[SDG]{Synthetic Discussion Generation}
+	\acro{cpt}[CPT]{Cost Per Task}
 \end{acronym}
 
 
@@ -39,7 +40,7 @@ The nature of the costs involved in any of the three methods are completely diff
 	\item Human participants cost wages and platform fees.
 \end{itemize}
 
-Any cost comparison thus necessitates normalizing costs to a universal metric: the \textbf{Cost Per Task (CPT)}, which estimates the monetary cost of completing an arbitrary task.
+Any cost comparison thus necessitates normalizing costs to a universal metric: the \acf{cpt}, which estimates the monetary cost of completing an arbitrary task.
 
 \paragraph{Open-source models}
 Self-hosting open-source LLMs requires calculating the Total Cost of Ownership (TCO), which converts fixed and recurring expenditures into a variable cost per unit of output \citep{pan2025_cost_benefit}. TCO encompasses both Capital Expenditure (CapEx) and Operational Expenditure (OpEx) amortized over the asset's lifespan. This covers the case of self-hosting on-premises, as well as the case of using cloud hosting services (such as Amazon Bedrock).
@@ -63,7 +64,7 @@ To enable comparison with API models, the yearly TCO must be normalized to a cos
 
 
 \paragraph{Proprietary models}
-The task of calculating CPT for proprietary models is significantly easier, since their service has a clear pricing structure. The Cost Per Task for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL), using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
+The task of calculating \ac{cpt} for proprietary models is significantly easier, since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL), using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
 
 \[
 	\begin{aligned}
@@ -108,6 +109,11 @@ Our own experimental setup (\S\ref{sec:experimental}) uses only two GPUs (retail
 We compare our setup with an OpenAI GPT-5 instance for proprietary models. The GPT-5 pricing model as of the time of writing, is 1.25\$ per million input tokens and 10\$ per million output tokens. We assume no overhead due to technical or methodological errors. Getting exact token counts is futile due to the use of different tokenizers, however a general rule-of-thumb is that each word corresponds to 0.75 tokens. Since each discussion is made up of 40 comments (20 user-comments and 20 facilitator interventions), we can calculate that each discussion ...%TODO
 
 For the human participation comparison we assume a task using Prolific as a platform, which currently charges a 33\% overhead, and a fair wage of 12\$ per participant. We assume that no data are thrown out for data quality reasons in any of the tasks.
+
+
+\subsection{Experiment cost estimation}
+
+Each discussion is treated as a standalone task in our calculations. Our dataset contains a total of $2273$ discussions, each of which consists of $20$ comments each.\footnote{Except for the ablation experiment without a moderator. Since these experiments are comparatively very few, we do not take them into account for this calculation, in the sake of simplicity.} The mean comment length is $294$ words, or $393$ tokens when using the $0.75 \textit{ tokens} / \textit{word}$ rule. Assuming an instruction prompt of $300 \textit{ words}=400 \textit{ tokens}$, the LLM will output approximately $393$ tokens, and receive $393 \times 3 + 400 = 1579$ input tokens. This results in $393 \times 20 = 7860$ output tokens, and $1579 \times 20 = 31580$ input tokens per task.
  
 
 \section{Prompts Used}

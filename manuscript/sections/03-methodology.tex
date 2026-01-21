@@ -34,7 +34,23 @@ Finally, we posit the natural limitation that \emph{(3) \ac{sdg} should be cheap
 
 One of the defining arguments for the development and use of our framework is cost savings. It is thus natural that we should compare the price of our experiments with alternative options. An exact cost derivation is of course intractable, due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable when deciding which method to use. We assume that there are three main methods of generating such experiments: using proprietary models, open-source LLMs, and human participants.
 
-In order to minimize costs, we use open-source models hosted on-premise servers. We find that... .Details around the methodology, assumptions and code used for the generation of these figures can be found in Appendix~\ref{sec:appendix:cost}.
+In order to minimize costs, we use open-source models hosted on-premise servers. This setup allows us to drop the total costs of our experiments by two orders of magnitude compared with using a GPT-5o model, and three orders of magnitude had we used human participants (Table~\ref{tab:cost}). Details around the methodology and assumptions of this result can be found in Appendix~\ref{sec:appendix:cost}.
+
+
+\begin{table}[t]
+	\centering
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Type} & \textbf{CPT}  & \textbf{Total cost}\\
+		\midrule
+		Human & \$ 3.332 & \$ 7575 \\
+		Closed Source & \$ 0.1180 & \$ 268 \\
+		Open Source & \$ 0.003 & \$ 0.7 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Estimated \acf{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5o pricing, and our own, open-source, on-premises setup.}
+	\label{tab:cost}
+\end{table}
 
 
 
