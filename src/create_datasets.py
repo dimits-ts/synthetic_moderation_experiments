@@ -46,8 +46,8 @@ def get_normal_dataset(discussions_output_root: Path) -> pd.DataFrame:
     return pd.concat(discussion_df_ls, ignore_index=True)
 
 
-
 def main(discussions_output_root: Path, dataset_output_dir: Path):
+    dataset_output_dir.mkdir(exist_ok=True)
     get_ablation_dataset(discussions_output_root).to_csv(
         dataset_output_dir / "ablation.csv"
     )

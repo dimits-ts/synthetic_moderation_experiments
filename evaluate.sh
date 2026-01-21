@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python eval/create_datasets.py \
+python src/create_datasets.py \
     --discussions-root-dir data/discussions_output \
     --output-dir data/main_output
 
