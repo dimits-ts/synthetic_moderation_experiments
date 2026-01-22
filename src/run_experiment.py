@@ -14,6 +14,8 @@ import syndisco.logging_util
 import syndisco.turn_manager
 import syndisco.postprocessing
 
+TROLL_CHANCE = 0.3
+
 
 def main(
     config_file_path: Path,
@@ -145,7 +147,7 @@ def create_discussion_experiment(
             discussion_config["files"]["troll_instructions_path"]
         ).read_text(),
         trolls_active=trolls_active,
-        troll_chance=0.3,
+        troll_chance=TROLL_CHANCE,
         persona_file_path=user_persona_path,
     )
 
