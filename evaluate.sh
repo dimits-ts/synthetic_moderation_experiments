@@ -22,3 +22,8 @@ python src/generate_toxicity_ratings.py \
 python src/eval_moderation.py \
     --input-csv data/main_output/vmd.csv \
     --output-dir graphs
+
+python src/eval_toxicity.py \
+    --main-output-dir data/main_output \
+    --toxicity-rating-dir data/eval_output \
+    --graph-output-dir graphs
