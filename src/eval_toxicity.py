@@ -12,7 +12,11 @@ import tasks.graphs
 def get_toxicity_df(
     main_df_path: Path, toxicity_df_path: Path
 ) -> pd.DataFrame:
+def get_toxicity_df(
+    main_df_path: Path, toxicity_df_path: Path
+) -> pd.DataFrame:
     df = pd.read_csv(main_df_path)
+    df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
     toxicity_df = pd.read_csv(toxicity_df_path)
     toxicity_df = toxicity_df.loc[toxicity_df.error.isna()]
@@ -57,15 +61,27 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--toxicity-rating-dir",
+        "--main-output-dir",
         type=str,
+        help="Directory holding the VMD and ablation datasets",
+    )
+    parser.add_argument(
+        "--toxicity-rating-dir",
+        type=str,
+        help="Directory holding the VMD and ablation toxicity ratings",
         help="Directory holding the VMD and ablation toxicity ratings",
     )
     parser.add_argument(
+        "--graph-output-dir",
         "--graph-output-dir",
         type=str,
         help="Graph output directory",
     )
     args = parser.parse_args()
+    main(
+        main_output_dir=Path(args.main_output_dir),
+        toxicity_ratings_dir=Path(args.toxicity_rating_dir),
+    )
     main(
         main_output_dir=Path(args.main_output_dir),
         toxicity_ratings_dir=Path(args.toxicity_rating_dir),
