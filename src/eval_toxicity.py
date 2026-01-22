@@ -9,28 +9,41 @@ import tasks.constants
 import tasks.graphs
 
 
-def get_toxicity_df(main_df_path: Path, toxicity_df_path: Path) -> pd.DataFrame:
+def get_toxicity_df(
+    main_df_path: Path, toxicity_df_path: Path
+) -> pd.DataFrame:
     df = pd.read_csv(main_df_path)
-    df: pd.DataFrame = df.loc[
-        (df.intent != "Moderator") & (df.model != "hardcoded")
-    ]
-    variant_name_dict = {
-        "constructive": "Facilitation",
-        "erulemaking.txt": "Moderation",
-        "vanilla.txt": "No instructions",
-    }
-    df.tag_2 = df.tag_2.replace(variant_name_dict)
-    
+    df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
     toxicity_df = pd.read_csv(toxicity_df_path)
-    full_df = df.merge(right=toxicity_df, how="left", )
+    toxicity_df = toxicity_df.loc[toxicity_df.error.isna()]
+    toxicity_df = toxicity_df.loc[
+        :, ~toxicity_df.columns.str.contains("^Unnamed")
+    ]
+    full_df = df.merge(right=toxicity_df, how="inner", on="message_id")
+    full_df = full_df.loc[
+        (full_df.model != "hardcoded") & (~full_df.is_moderator),
+        [
+            "conv_id",
+            "message_id",
+            "toxicity",
+        ],
+    ]
+    return full_df
 
-def main(input_csv_path: Path, output_dir: Path):
+
+def main(main_output_dir: Path, toxicity_ratings_dir: Path):
     tasks.graphs.seaborn_setup()
-
-    
-    tasks.stats.mean_comp_test(
-        df=analysis_df, feature_col="conv_variant", score_col="Toxicity"
+    main_df = get_toxicity_df(
+        main_df_path=main_output_dir / "vmd.csv",
+        toxicity_df_path=toxicity_ratings_dir / "vmd.csv",
     )
+    print(main_df)
+    ablation_df = get_toxicity_df(
+        main_df_path=main_output_dir / "ablation.csv",
+        toxicity_df_path=toxicity_ratings_dir / "ablation.csv",
+    )
+    print(ablation_df)
+    
 
 
 if __name__ == "__main__":
@@ -38,14 +51,22 @@ if __name__ == "__main__":
         description="Run Perspective API scoring and save results to CSV."
     )
     parser.add_argument(
-        "--input-csv",
+        "--main-output-dir",
         type=str,
-        help="Path to input CSV file",
+        help="Directory holding the VMD and ablation datasets",
     )
     parser.add_argument(
-        "--output-dir",
+        "--toxicity-rating-dir",
+        type=str,
+        help="Directory holding the VMD and ablation toxicity ratings",
+    )
+    parser.add_argument(
+        "--graph-output-dir",
         type=str,
         help="Graph output directory",
     )
     args = parser.parse_args()
-    main(input_csv_path=Path(args.input_csv), output_dir=Path(args.output_dir))
+    main(
+        main_output_dir=Path(args.main_output_dir),
+        toxicity_ratings_dir=Path(args.toxicity_rating_dir),
+    )

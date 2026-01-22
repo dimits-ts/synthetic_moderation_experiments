@@ -250,7 +250,7 @@ def get_users(
         else:
             instructions = (
                 vanilla_instructions
-                if random.random() < troll_chance
+                if random.random() >= troll_chance
                 else troll_instructions
             )
 
