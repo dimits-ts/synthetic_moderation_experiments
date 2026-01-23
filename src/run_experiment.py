@@ -19,8 +19,10 @@ TROLL_CHANCE = 0.3
 
 def main(
     config_file_path: Path,
-    model_url: str,
-    model_name: str,
+    user_model_url: str,
+    user_model_name: str,
+    mod_model_url: str,
+    mod_model_name: str,
     turn_manager_type: str,
     num_experiments: int,
     mod_active: bool,
@@ -37,8 +39,7 @@ def main(
     dataset_export_dir = output_dir / "datasets"
 
     run_logger_name = (
-        f"strat"
-        f"run.{model_name}.{turn_manager_type}"
+        f"run.{user_model_name}.{turn_manager_type}"
         f".mod{'On' if mod_active else 'Off'}"
         f".trolls{'On' if trolls_active else 'Off'}"
     )
@@ -48,54 +49,63 @@ def main(
     already_executed = output_dir.is_dir() and any(
         item.is_file() for item in output_dir.rglob("*")
     )
-    arg_str = json.dumps(vars(args))
+
     logger.info(
         "================================================\n"
-        f"{json.loads(arg_str)}"
+        f"{json.dumps(vars(args), indent=2)}"
         "\n================================================"
     )
 
-    if not already_executed:
-        try:
-            model = syndisco.model.TransformersModel(
-                model_path=model_url,
-                name=model_name,
-                remove_string_list=[],
-                max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
-            )
-            discussion_exp = create_discussion_experiment(
-                llm=model,
-                discussion_config=yaml_data["discussions"],
-                include_mod=mod_active,
-                mod_strategy_path=mod_strategy_path,
-                user_instruction_path=user_instruction_path,
-                user_persona_path=user_persona_path,
-                turn_manager_type=turn_manager_type,
-                trolls_active=trolls_active,
-                num_experiments=num_experiments,
-            )
-            run_discussion_experiment(
-                experiment=discussion_exp,
-                output_dir=json_output_dir,
-                logger=logger,
-            )
-
-            export_dataset(
-                json_output_dir=json_output_dir,
-                dataset_export_dir=dataset_export_dir,
-                dataset_name="discussion.csv",
-                logger=logger,
-            )
-        except Exception as e:
-            logger.critical(
-                "Error while running experiment " + run_logger_name
-            )
-            logger.exception(e)
-    else:
+    if already_executed:
         logger.info(
-            "Skipping experiment since dir "
-            f'"{output_dir.resolve()}" already has experiments.'
+            f'Skipping experiment since "{output_dir.resolve()}" already exists.'
         )
+        return
+
+    try:
+        user_model = syndisco.model.TransformersModel(
+            model_path=user_model_url,
+            name=user_model_name,
+            remove_string_list=[],
+            max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
+        )
+
+        mod_model = syndisco.model.TransformersModel(
+            model_path=mod_model_url,
+            name=mod_model_name,
+            remove_string_list=[],
+            max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
+        )
+
+        discussion_exp = create_discussion_experiment(
+            llm=user_model,
+            mod_llm=mod_model,
+            discussion_config=yaml_data["discussions"],
+            include_mod=mod_active,
+            mod_strategy_path=mod_strategy_path,
+            user_instruction_path=user_instruction_path,
+            user_persona_path=user_persona_path,
+            turn_manager_type=turn_manager_type,
+            trolls_active=trolls_active,
+            num_experiments=num_experiments,
+        )
+
+        run_discussion_experiment(
+            experiment=discussion_exp,
+            output_dir=json_output_dir,
+            logger=logger,
+        )
+
+        export_dataset(
+            json_output_dir=json_output_dir,
+            dataset_export_dir=dataset_export_dir,
+            dataset_name="discussion.csv",
+            logger=logger,
+        )
+
+    except Exception as e:
+        logger.critical("Error while running experiment " + run_logger_name)
+        logger.exception(e)
 
 
 def export_dataset(
@@ -124,6 +134,7 @@ def setup_logging(logging_config: dict) -> None:
 
 def create_discussion_experiment(
     llm,
+    mod_llm,
     discussion_config: dict,
     include_mod: bool,
     mod_strategy_path: Path,
@@ -133,6 +144,7 @@ def create_discussion_experiment(
     trolls_active: bool,
     num_experiments: int,
 ) -> syndisco.experiments.DiscussionExperiment:
+
     context = discussion_config["experiment_variables"]["context_prompt"]
 
     topics = get_topics(
@@ -166,7 +178,7 @@ def create_discussion_experiment(
             personality_characteristics=["fair"],
         )
         moderator = get_mod(
-            model=llm,
+            model=mod_llm,
             mod_persona=mod_persona,
             context=context,
             mod_instructions_path=mod_strategy_path,
@@ -321,14 +333,30 @@ if __name__ == "__main__":
         help="Path to the YAML configuration file",
     )
     parser.add_argument(
-        "--model-url",
+        "--user-model-url",
         required=True,
-        help="HuggingFace url for the desired model. No GGUF support.",
+        help=(
+            "HuggingFace url for the desired participant (non-moderator) "
+            "model. No GGUF support."
+        ),
     )
     parser.add_argument(
-        "--model-pseudo",
+        "--user-model-pseudo",
         required=True,
-        help="Short-hand name for the model",
+        help="Short-hand name for the participant (non-moderator) model",
+    )
+    parser.add_argument(
+        "--mod-model-url",
+        required=True,
+        help=(
+            "HuggingFace url for the desired moderator "
+            "model. No GGUF support."
+        ),
+    )
+    parser.add_argument(
+        "--mod-model-pseudo",
+        required=True,
+        help="Short-hand name for the moderator model",
     )
     parser.add_argument(
         "--mod-strategy-file",
@@ -361,8 +389,10 @@ if __name__ == "__main__":
 
     main(
         config_file_path=Path(args.config_file),
-        model_url=args.model_url,
-        model_name=args.model_pseudo,
+        user_model_url=args.user_model_url,
+        user_model_name=args.user_model_pseudo,
+        mod_model_url=args.mod_model_url,
+        mod_model_name=args.mod_model_pseudo,
         mod_active=args.mod_active,
         turn_manager_type=args.turn_manager,
         mod_strategy_path=Path(args.mod_strategy_file),
