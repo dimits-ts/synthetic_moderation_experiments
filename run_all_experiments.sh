@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -uo pipefail
 
 
 mod_models=(
@@ -19,14 +19,14 @@ mod_pseudos=(
 )
 
 user_models=(
+    "unsloth/gemma-3n-E2B-it-unsloth-bnb-4bit"
     "unsloth/Llama-3.2-3B-Instruct-bnb-4bit"
     "unsloth/Qwen3-4B-unsloth-bnb-4bit"
-    "unsloth/Phi-4-mini-instruct-bnb-4bit"
 )
 user_pseudos=(
+    "gemma4b"
     "llama3b"
     "qwen4b"
-    "phi4b"
 )
 
 turn_managers=( "round-robin" "random" "random-weighted" )
@@ -60,7 +60,7 @@ for mod_strat_file in data/discussions_input/mod_instructions/*; do
                     --user-persona-path "./data/discussions_input/personas/personas.json" \
                     --user-instruction-path "./data/discussions_input/user_instructions/vanilla.txt" \
                     --mod-active \
-                    --num-experiments 5 \
+                    --num-experiments 10 \
                     --trolls-active
 
             done
