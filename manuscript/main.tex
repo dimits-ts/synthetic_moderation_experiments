@@ -1,16 +1,10 @@
-% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX,which is strongly recommended.
 \pdfoutput=1
-% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
+% In particular,the hyperref package requires pdfLaTeX in order to break URLs across lines.
 
-\documentclass[11pt]{article}
-
-% style packages
-\usepackage{times}
-\usepackage{latexsym}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{microtype}
-\usepackage{inconsolata}
+\documentclass[runningheads]{llncs}
+\usepackage[misc]{ifsym}
+\newcommand{\corr}{(\Letter)}
 
 % my packages
 \usepackage{graphicx}
@@ -27,15 +21,11 @@
 \usepackage{amsfonts}
 \usepackage{booktabs}
 \usepackage{xurl} % break url strings
-\usepackage{subcaption}
 \usepackage{xifthen}
 
 % Change this to switch between review/preprint versions
 \newboolean{review}
 \setboolean{review}{true}
-\ifthenelse{\boolean{review}}
-{\usepackage[review]{acl}}
-{\usepackage[preprint]{acl}}
 
 % table commands
 \renewcommand{\arraystretch}{1.2}
@@ -76,7 +66,7 @@
 }
 
 \newcommand{\asterisknote}{
-	$\cdot p<0.1$, \textsuperscript{*} $p<0.05$, \textsuperscript{**} $p<0.01$, \textsuperscript{***} $p<0.001$
+	$\cdot p<0.1$,\textsuperscript{*} $p<0.05$,\textsuperscript{**} $p<0.01$,\textsuperscript{***} $p<0.001$
 }
 
 \newcommand{\strategynomod}{No Moderator}
@@ -95,7 +85,7 @@
 
 \maketitle
 
-%\textWarning{Content warning: This paper contains samples of harmful text, including violent, toxic, controversial, and potentially illegal statements.}
+%\textWarning{Content warning: This paper contains samples of harmful text,including violent,toxic,controversial,and potentially illegal statements.}
 
 \input{sections/00-abstract}
 \input{sections/01-introduction}
@@ -114,6 +104,7 @@
    {}
    { \input{sections/12-acknowledgements}}
 
+\bibliographystyle{splncs04}
 \bibliography{refs}
 
 \clearpage
