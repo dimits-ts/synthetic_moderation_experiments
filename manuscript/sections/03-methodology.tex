@@ -17,11 +17,10 @@
 
 Many \ac{sdg} frameworks have been proposed in literature; both simple \cite{Tsai_Deliberate_Lab_Open-Source_2025,ulmer2024} and complex \cite{balog_2024,abdelnabi_negotiations,park2023game}. What makes these frameworks widely used by other people has not been explored in literature,despite many such implementations. In the field of \ac{cs},systems are designed on two related axes: \emph{functional} requirements,which dictate what the system must do,and \emph{non-functional} requirements,which describe how the system must implement its functionality. We will use this analysis to ``diagnose'' previous systems,and better design our own.
 
-\paragraph{Functionality}
+\subsubsection{Functionality}
 We posit that synthetic discussion methodologies need to necessarily implement the following components: \emph{(1) Context management}---since LLMs are stateless,and need to be fed information as prompts,\emph{(2) Turn-taking}---as LLMs are trained as chatbot assistants,and therefore cannot decide to \emph{not} speak,\emph{(3) Instructions given to the LLMs}---which may need to be diversified in multi-participant discussions. These represent the \emph{functional requirements} of our system.
 
-\paragraph{Implementation}
-
+\subsubsection{Implementation}
 In \ac{cs} there is a widely shared notion that simple systems are almost always better at performing their functions (``Keep It Simple Stupid''---KISS) \cite{beck2000extreme,thomas2025simplicity},which has been validated in real-world applications \cite{banker1989software,ogheneovo2014relationship}. Following this notion,we establish our first design rule: \emph{(1) The framework must be as simple as possible,while achieving its users' goals}. The violation of this rule could explain the frustrations of \cite{balog_2024} and the under-performance of Concordia~\cite{Vezhnevets2023GenerativeAM}; a generalized,complex framework which has failed to garner widespread adoption despite efforts to promote it,evidenced by most recent publications creating their own \ac{sdg} frameworks.  
 
 During our experiments,we also encountered a new limitation: \emph{(2) Complexity is directly related to researcher bias}; each new feature necessarily follows our own expectations with how human discussions work. The work of \cite{park2023game} managed to derive interesting insights,exactly because it did \emph{not} tamper with the way LLM users interacted.

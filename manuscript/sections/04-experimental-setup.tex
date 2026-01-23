@@ -4,10 +4,19 @@
 \subsection{Synthetic Discussion Generation}
 \label{ssec:appendix:discussion}
 
-We use a set of starting (``seed'') discussions taken from random points in escalated discussions featured in the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble} (see Appendix~\ref{TODO} for details). We then run $N_d=20$ discussions for each pair of facilitation strategies $S$ and LLM (\S\ref{ssec:experimental:setup}) with each discussion running for up to $30$ comments (including facilitator interventions). An overview of how the experiments are generated can be found in Alg.~\ref{alg:exp_generation}. The \textit{Sample} function returns a number of samples from a set following the uniform distribution,while the \textit{Actors} function creates an LLM agent using a model and a prompt.
+We use a set of starting (``seed'') discussions taken from random points in escalated discussions featured in the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble} (see Appendix~\ref{TODO} for details). We then run $N_d=10$ discussions for each possible configuration of LLMs, turn-taking function, and facilitation strategy. Each discussion is composed of up to $30$ comments, including facilitator interventions.
+
+We use different LLMs for participants (user-LLMs) and facilitators (mod-LLMs). While experimenting with different-sized LLMs we noticed that smaller LLMs (3-4B parameters) actually generated more varied, animated and direct speech, while larger models (8B-70B) respond in a more formulaic manner. Since the task of simulating a discussion is much easier compared to facilitating one, we decided to follow the paradigm proposed by~\cite{ulmer2024}, where a large model manages a scenario with specific goals and guidelines, while smaller models are used exclusively to interact with the former.
+An overview of how the experiments are generated can be found in Alg.~\ref{alg:exp_generation}.
+
+
 
 \begin{algorithm}[ht]
-	\caption{Our \ac{sdg} implementation}
+	\caption{Our \ac{sdg} implementation.
+	\textit{Sample}: uniform sampling from a set.
+	\textit{Actors}: instantiates an LLM agent given a model and a prompt.
+	\textit{Post}: generates a comment given an actor, truncated discussion history, and (if moderator) a facilitation strategy.}
+
 	\label{alg:exp_generation}
 	
 	\hspace*{\algorithmicindent} \textbf{Input:}
@@ -26,32 +35,34 @@ We use a set of starting (``seed'') discussions taken from random points in esca
 		\State $D \gets \emptyset$
 		
 		\For{$(user\_llm, mod\_llm, s, t) \in user\_llms \times mod\_llms \times S \times T$}
-		\For{$exp = 1,2,\ldots,N_e$}
-		
-		\Statex \textit{\# Generate discussion configuration}
-		\State $\hat{\Theta} \gets$ \Call{Sample}{$\Theta, 7$}
-		\State $users \gets$ \Call{Actors}{$user\_llm, \hat{\Theta}$}
-		\State $mod \gets$ \Call{Actors}{$mod\_llm, \theta_{mod}$}
-		\State $seed \gets$ \Call{Sample}{$S_d, N_{seed}$}
-		
-		\Statex \textit{\# Initialize discussion with seed comments}
-		\State $d \gets \emptyset$
-		\For{$i = 1,2,\ldots,N_{seed}$}
-		\State $(user, comment) \gets seed[i]$
-		\State $d \gets d \cup (user, comment, i)$
-		\EndFor
-		
-		\Statex \textit{\# Run discussion with LLM users}
-		\State $last\_user \gets user$
-		\For{$i = N_{seed}+1,\ldots,N_{seed}+N_d$}
-		\State $user \gets t(users, last\_user)$
-		\State $last\_user \gets user$
-		\State $comment \gets$ \Call{Post}{$user, d, s, i$}
-		\State $d \gets d \cup (user, comment, i)$
-		\EndFor
-		
-		\State $D \gets D \cup \{d\}$
-		\EndFor
+			\For{$exp = 1,2,\ldots,N_e$}
+			
+				\Statex \textit{\# Generate discussion configuration}
+				\State $\hat{\Theta} \gets$ \Call{Sample}{$\Theta, 7$}
+				\State $users \gets$ \Call{Actors}{$user\_llm, \hat{\Theta}$}
+				\State $mod \gets$ \Call{Actors}{$mod\_llm, \theta_{mod}$}
+				\State $seed \gets$ \Call{Sample}{$S_d, N_{seed}$}
+				
+				\Statex \textit{\# Initialize discussion with seed comments}
+				\State $d \gets \emptyset$
+				\For{$i = 1,2,\ldots,N_{seed}$}
+					\State $(user, comment) \gets seed[i]$
+					\State $d \gets d \cup (user, comment, i)$
+				\EndFor
+				
+				\Statex \textit{\# Run discussion with LLM users}
+				\State $last\_user \gets user$
+				\For{$i = N_{seed}+1, N_{seed}+3, \ldots,N_{seed}+N_d$}
+					\State $user \gets t(users, last\_user)$ \Comment{Pick next user}
+					\State $last\_user \gets user$
+					\State $comment \gets$ \Call{Post}{$user, d, i$} \Comment{User response}
+					\State $d \gets d \cup (user, comment, i)$
+					\State $comment \gets$ \Call{Post}{$mod, d, i+1, s$} \Comment{Optional facilitator intervention}
+					\State $d \gets d \cup (user, comment, i+1)$
+				\EndFor
+				
+				\State $D \gets D \cup \{d\}$
+			\EndFor
 		\EndFor
 		
 		\State \Return $D$
