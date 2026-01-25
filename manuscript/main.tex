@@ -26,11 +26,11 @@
 % Change this to switch between review/preprint versions
 \newboolean{review}
 \setboolean{review}{true}
-
+	
 % table commands
 \renewcommand{\arraystretch}{1.2}
 % graphix commands
-\graphicspath{ {./resources}  }
+\graphicspath{ {../graphs} {resources} } %TODO: remove resources folder after refactor
 
 
 \newcommand{\showifnotreview}[1]{%
