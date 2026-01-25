@@ -21,9 +21,9 @@ The latest version of our framework (\texttt{2.0.4a} at the time of writing) was
 
 We did not take any preprocessing steps when analyzing our own dataset besides excluding invalid annotations. This was necessary since the model did not always respond with a valid annotation score (we note that this refusal was rare). The only preprocessing performed on the \ac{ceri} Regulation Room dataset is the removal of HTML tags from the comment text. 
 
-For the seed discussions we use the CMV-Awry dataset \citep{chang-danescu-niculescu-mizil-2019-trouble}, as stated in the main text. We remove comments from deleted users. In order to select ``escalated'' discussions, we use the \texttt{derailment} values provided by the dataset. Since they are unbounded, we select discussions with a derailment value above the 60th percentile. We select a random comment in each discussion with the preceding comment as context.
+For the seed discussions we use the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble},as stated in the main text. We remove comments from deleted users. In order to select ``escalated'' discussions,we use the \texttt{derailment} values provided by the dataset. Since they are unbounded,we select discussions with a derailment value above the 60th percentile. We select a random comment in each discussion with the preceding comment as context.
 
-Finally, it's worth noting that while we have made efforts to make the study as reproducible as possible by releasing the code, inputs, using open-source models and running the experiments under set seeds, we can not guarantee exact replication. This is caused by inherent randomness in LLMs which can only be mitigated \citep{atil_2025, bisbee_2023}.
+Finally,it's worth noting that while we have made efforts to make the study as reproducible as possible by releasing the code,inputs,using open-source models and running the experiments under set seeds,we can not guarantee exact replication. This is caused by inherent randomness in LLMs which can only be mitigated \cite{atil_2025,bisbee_2023}.
 
 
 \section{Cost Comparison}
@@ -34,37 +34,37 @@ Finally, it's worth noting that while we have made efforts to make the study as 
 \label{ssec:appendix:cost:methodology}
 
 The nature of the costs involved in any of the three methods are completely different:
-\begin{itemize}[nosep, noitemsep]
-	\item Open-source models incur cost from utilization of core infrastracture , electricity consumption, and asset (GPU) depreciation. 
+\begin{itemize}[nosep,noitemsep]
+	\item Open-source models incur cost from utilization of core infrastracture ,electricity consumption,and asset (GPU) depreciation. 
 	\item Proprietary models charge a set amount of cost per input and output token.
 	\item Human participants cost wages and platform fees.
 \end{itemize}
 
-Any cost comparison thus necessitates normalizing costs to a universal metric: the \acf{cpt}, which estimates the monetary cost of completing an arbitrary task.
+Any cost comparison thus necessitates normalizing costs to a universal metric: the \acf{cpt},which estimates the monetary cost of completing an arbitrary task.
 
 \paragraph{Open-source models}
-Self-hosting open-source LLMs requires calculating the Total Cost of Ownership (TCO), which converts fixed and recurring expenditures into a variable cost per unit of output \citep{pan2025_cost_benefit}. TCO encompasses both Capital Expenditure (CapEx) and Operational Expenditure (OpEx) amortized over the asset's lifespan. This covers the case of self-hosting on-premises, as well as the case of using cloud hosting services (such as Amazon Bedrock).
+Self-hosting open-source LLMs requires calculating the Total Cost of Ownership (TCO),which converts fixed and recurring expenditures into a variable cost per unit of output \cite{pan2025_cost_benefit}. TCO encompasses both Capital Expenditure (CapEx) and Operational Expenditure (OpEx) amortized over the asset's lifespan. This covers the case of self-hosting on-premises,as well as the case of using cloud hosting services (such as Amazon Bedrock).
 
-The general formula for calculating the Total Cost of Ownership ($\text{TCO}_{\text{Self-Hosted}}$) over $N$ annual periods is defined as the sum of annualized capital and operational costs \citep{pan2025_cost_benefit}:
+The general formula for calculating the Total Cost of Ownership ($\text{TCO}_{\text{Self-Hosted}}$) over $N$ annual periods is defined as the sum of annualized capital and operational costs \cite{pan2025_cost_benefit}:
 
 \[
 	\text{TCO}_{\text{Self-Hosted}} = \sum_{n=1}^{N} \left[ \text{CapEx}_n + \text{OpEx}_n \right]
 \]
 
-\noindent Where $\text{CapEx}_n$ includes the initial hardware cost (e.g., GPU servers) amortized over a depreciation period (often 4 years), and $\text{OpEx}_n$ includes yearly hosting, power, cooling, and personnel maintenance costs \cite{nvidia_tco}.
+\noindent Where $\text{CapEx}_n$ includes the initial hardware cost (e.g.,GPU servers) amortized over a depreciation period (often 4 years),and $\text{OpEx}_n$ includes yearly hosting,power,cooling,and personnel maintenance costs \cite{nvidia_tco}.
 
-To enable comparison with API models, the yearly TCO must be normalized to a cost-per-volume metric (e.g., Cost Per 1000 Prompts). This calculation is contingent on the hardware's achieved performance, measured in Requests Per Second (RPS) or Tokens Per Hour ($\text{TPH}$) \cite{pan2025_cost_benefit}.
+To enable comparison with API models,the yearly TCO must be normalized to a cost-per-volume metric (e.g.,Cost Per 1000 Prompts). This calculation is contingent on the hardware's achieved performance,measured in Requests Per Second (RPS) or Tokens Per Hour ($\text{TPH}$) \cite{pan2025_cost_benefit}.
 
 \[
 	\begin{aligned}
 		& \text{Cost Per 1000 Prompts} = \\ &\frac{\text{TCO}_{\text{Yearly Server Cost}}}{\text{Total Yearly Requests per Server}} \times 1000
 	\end{aligned}
 \]
-\noindent The $\text{Total Yearly Requests per Server}$ is a function of the Optimal RPS adjusted by the system's expected uptime fraction, which reflects the financial viability being directly tied to utilization rates \cite{nvidia_tco}.
+\noindent The $\text{Total Yearly Requests per Server}$ is a function of the Optimal RPS adjusted by the system's expected uptime fraction,which reflects the financial viability being directly tied to utilization rates \cite{nvidia_tco}.
 
 
 \paragraph{Proprietary models}
-The task of calculating \ac{cpt} for proprietary models is significantly easier, since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL), using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
+The task of calculating \ac{cpt} for proprietary models is significantly easier,since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL),using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
 
 \[
 	\begin{aligned}
@@ -76,9 +76,9 @@ The task of calculating \ac{cpt} for proprietary models is significantly easier,
 
 \paragraph{Human participation}
 
-Human participation costs can not, and should not, be calculated in a vacuum. There are certainly ways to get participates with wages much lower than minimum wage for most countries, and there are even platforms such as Mechanical Turk which streamline this process. Besides the obvious and severe ethical implications of doing so, this often results in poor quality data \citep{Moss2023}.
+Human participation costs can not,and should not,be calculated in a vacuum. There are certainly ways to get participates with wages much lower than minimum wage for most countries,and there are even platforms such as Mechanical Turk which streamline this process. Besides the obvious and severe ethical implications of doing so,this often results in poor quality data \cite{Moss2023}.
 
-The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage, mandatory platform fees, and quality assurance overhead:
+The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage,mandatory platform fees,and quality assurance overhead:
 
 \[
 \begin{aligned}
@@ -89,9 +89,9 @@ The true cost of procuring human labor in a research context is calculated using
 
 \noindent Where:
 \begin{itemize}
-	\item $W_{\text{gross}}$ is the ethical gross hourly wage (e.g., minimum recommended rate of \$8.00–\$12.00/hour).
-	\item $F_{\text{platform}}$ is the commission charged by crowdsourcing platforms (e.g., $33.3\%$ for academic use on Prolific or $20-40\%$ on MTurk).
-	\item $C_{\text{QA-overhead}}$ is the amortized internal labor cost incurred by the research team for quality control, screening, and dropout management.
+	\item $W_{\text{gross}}$ is the ethical gross hourly wage (e.g.,minimum recommended rate of \$8.00–\$12.00/hour).
+	\item $F_{\text{platform}}$ is the commission charged by crowdsourcing platforms (e.g.,$33.3\%$ for academic use on Prolific or $20-40\%$ on MTurk).
+	\item $C_{\text{QA-overhead}}$ is the amortized internal labor cost incurred by the research team for quality control,screening,and dropout management.
 \end{itemize}
 
 The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time required to complete the specific research task:
@@ -104,16 +104,16 @@ The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time
 
 \subsection{Assumptions}
 
-Our own experimental setup (\S\ref{sec:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore, we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs, since our technologies are all open-source. Since the server utilization is extremely short (3 weeks) we do not account for operational costs other than electricity and GPU depreciation.
+Our own experimental setup (\S\ref{sec:experimental}) uses only two GPUs (retail cost 3000\$ /GPU),therefore,we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs,since our technologies are all open-source. Since the server utilization is extremely short (3 weeks) we do not account for operational costs other than electricity and GPU depreciation.
 
-We compare our setup with an OpenAI GPT-5 instance for proprietary models. The GPT-5 pricing model as of the time of writing, is 1.25\$ per million input tokens and 10\$ per million output tokens. We assume no overhead due to technical or methodological errors. Getting exact token counts is futile due to the use of different tokenizers, however a general rule-of-thumb is that each word corresponds to 0.75 tokens. Since each discussion is made up of 40 comments (20 user-comments and 20 facilitator interventions), we can calculate that each discussion ...%TODO
+We compare our setup with an OpenAI GPT-5 instance for proprietary models. The GPT-5 pricing model as of the time of writing,is 1.25\$ per million input tokens and 10\$ per million output tokens. We assume no overhead due to technical or methodological errors. Getting exact token counts is futile due to the use of different tokenizers,however a general rule-of-thumb is that each word corresponds to 0.75 tokens. Since each discussion is made up of 40 comments (20 user-comments and 20 facilitator interventions),we can calculate that each discussion ...%TODO
 
-For the human participation comparison we assume a task using Prolific as a platform, which currently charges a 33\% overhead, and a fair wage of 12\$ per participant. We assume that no data are thrown out for data quality reasons in any of the tasks.
+For the human participation comparison we assume a task using Prolific as a platform,which currently charges a 33\% overhead,and a fair wage of 12\$ per participant. We assume that no data are thrown out for data quality reasons in any of the tasks.
 
 
 \subsection{Experiment cost estimation}
 
-Each discussion is treated as a standalone task in our calculations. Our dataset contains a total of $2273$ discussions, each of which consists of $20$ comments each.\footnote{Except for the ablation experiment without a moderator. Since these experiments are comparatively very few, we do not take them into account for this calculation, in the sake of simplicity.} The mean comment length is $294$ words, or $393$ tokens when using the $0.75 \textit{ tokens} / \textit{word}$ rule. Assuming an instruction prompt of $300 \textit{ words}=400 \textit{ tokens}$, the LLM will output approximately $393$ tokens, and receive $393 \times 3 + 400 = 1579$ input tokens. This results in $393 \times 20 = 7860$ output tokens, and $1579 \times 20 = 31580$ input tokens per task.
+Each discussion is treated as a standalone task in our calculations. Our dataset contains a total of $2273$ discussions,each of which consists of $20$ comments each.\footnote{Except for the ablation experiment without a moderator. Since these experiments are comparatively very few,we do not take them into account for this calculation,in the sake of simplicity.} The mean comment length is $294$ words,or $393$ tokens when using the $0.75 \textit{ tokens} / \textit{word}$ rule. Assuming an instruction prompt of $300 \textit{ words}=400 \textit{ tokens}$,the LLM will output approximately $393$ tokens,and receive $393 \times 3 + 400 = 1579$ input tokens. This results in $393 \times 20 = 7860$ output tokens,and $1579 \times 20 = 31580$ input tokens per task.
  
 
 \section{Prompts Used}
@@ -123,57 +123,57 @@ Each discussion is treated as a standalone task in our calculations. Our dataset
 \subsection{User motivations}
 \label{sssec:appendix:roles}
 
-Below are the instructions for normal users and troll users respectively. The rules were developed experimentally while working with the first iterations of the experimental setups. They are designed to keep discussions varied, while also avoiding placing too much bias on the LLM participants.
+Below are the instructions for normal users and troll users respectively. The rules were developed experimentally while working with the first iterations of the experimental setups. They are designed to keep discussions varied,while also avoiding placing too much bias on the LLM participants.
 
 \paragraph{Normal users}
-\begin{itemize}[nosep, noitemsep]
-	\item Write short, natural comments similar to those of typical forum users.
+\begin{itemize}[nosep,noitemsep]
+	\item Write short,natural comments similar to those of typical forum users.
 	\item Refer to others using @username.
 	\item You may express strong opinions and frustration.
 	\item You may react more strongly if you feel repeatedly provoked.
 	\item You know that a moderator is present and can ban you.
-	\item If you want to continue participating, avoid behavior that would obviously lead to a ban.
+	\item If you want to continue participating,avoid behavior that would obviously lead to a ban.
 	\item  Do not restate the same arguments or phrases you have already used in the conversation.
 	
-	\item Output Format: Provide only your forum comment, with no additional explanations. If staying silent, output ``''.
+	\item Output Format: Provide only your forum comment,with no additional explanations. If staying silent,output ``''.
 \end{itemize}
 
 \paragraph{Troll users}
-\begin{itemize}[nosep, noitemsep]
+\begin{itemize}[nosep,noitemsep]
     \item Refer to others using @username.
-    \item Post comments intended to annoy, frustrate, or provoke other users.
-    \item Use sarcasm, exaggeration, or playful mockery.
+    \item Post comments intended to annoy,frustrate,or provoke other users.
+    \item Use sarcasm,exaggeration,or playful mockery.
     \item You may challenge other users’ opinions and push their buttons.
     \item Maintain the illusion of being a normal user while trolling.
-    \item Output Format: Provide only your forum comment, with no additional explanations. If staying silent, output ``''.
+    \item Output Format: Provide only your forum comment,with no additional explanations. If staying silent,output ``''.
 \end{itemize}
 
 \paragraph{Facilitators}
-\begin{itemize}[nosep, noitemsep]
+\begin{itemize}[nosep,noitemsep]
 	\item You are the moderator agent in an online forum discussion.
-	\item Your goals are to maintain civility, prevent escalation, and intervene only when required.
+	\item Your goals are to maintain civility,prevent escalation,and intervene only when required.
 	\item Remain impartial. Do not express personal opinions.
-	\item Respond only when intervention is necessary to maintain civility or enforce rules. If no response is needed, output an empty string ("").
-	\item When responding, write concise, natural-sounding messages. Refer to users as @username.
+	\item Respond only when intervention is necessary to maintain civility or enforce rules. If no response is needed,output an empty string ("").
+	\item When responding,write concise,natural-sounding messages. Refer to users as @username.
 	\item Do not repeat previous warnings or messages unless context requires reinforcement.
-	\item You may issue warnings. You may take disciplinary action (e.g., banning a user) only when strictly necessary to stop harmful behavior.
+	\item You may issue warnings. You may take disciplinary action (e.g.,banning a user) only when strictly necessary to stop harmful behavior.
 	\item Redirect or de-escalate when users attempt harmful content.
-	\item Output Format: Provide only your forum comment, with no additional explanations. If staying silent, output ``''.
+	\item Output Format: Provide only your forum comment,with no additional explanations. If staying silent,output ``''.
 \end{itemize}
 
 \subsection{Facilitation Strategies}
 \label{sssec:appendix:moderation_strategies}
 
 \begin{itemize}
-\item \textbf{\strategynoinstr}: Oversee the conversation. Be neutral. Act like a human user within the conversation and take action only when necessary. Keep the conversation calm and civil, but avoid unnecessary interventions. Do not repeat yourself. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username.
+\item \textbf{\strategynoinstr}: Oversee the conversation. Be neutral. Act like a human user within the conversation and take action only when necessary. Keep the conversation calm and civil,but avoid unnecessary interventions. Do not repeat yourself. Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username.
     
 \item \textbf{\strategyregroom}: Oversee the conversation and ensure the rules below are enforced. Follow the following guidelines: 
-    \begin{itemize}[noitemsep, nosep]
+    \begin{itemize}[noitemsep,nosep]
         \item \textbf{Encourage Informed Commenting}: Guide users to share knowledge and reasoning rather than just expressing opinions.
-        \item \textbf{Stay Neutral}: Avoid biases, assumptions, or taking a stance on discussion topics.
-        \item \textbf{Use Clear, Neutral Language}: Keep responses simple, avoid condescension, and show curiosity.
-        \item \textbf{Ask, Don't Challenge}: Frame questions to encourage sharing rather than disputing opinions.
-        \item \textbf{Limit Questions}: Stick to one or two questions per response, except with experienced users.
+        \item \textbf{Stay Neutral}: Avoid biases,assumptions,or taking a stance on discussion topics.
+        \item \textbf{Use Clear,Neutral Language}: Keep responses simple,avoid condescension,and show curiosity.
+        \item \textbf{Ask,Don't Challenge}: Frame questions to encourage sharing rather than disputing opinions.
+        \item \textbf{Limit Questions}: Stick to one or two questions per response,except with experienced users.
         \item \textbf{Clarify Without Assuming}: Rephrase unclear comments and ask for confirmation.
         \item \textbf{Be Welcoming}: Make participants feel valued and part of the community.
         \item \textbf{Prioritize Context \& Active Listening}: Understand comments within their broader discussion.
@@ -183,21 +183,21 @@ Below are the instructions for normal users and troll users respectively. The ru
         \item \textbf{Provide Information}: Help users find relevant details or clarify discussion goals.
         \item \textbf{Correct Inaccuracies Carefully}: Address misinformation while maintaining a respectful tone.
     \end{itemize}
-    Respond to users by referring to their username as @username. Keep responses concise and use simple, clear language.
+    Respond to users by referring to their username as @username. Keep responses concise and use simple,clear language.
     
 \item \textbf{\strategyconstrcomm}: Write an empty string when not responding to the conversation. Respond to users by referring to their username as @username.
-    \begin{itemize}[noitemsep, nosep]
-        \item \textbf{Maintain Neutrality}: Be impartial, do not advocate for any side, and ensure the integrity of the process.
+    \begin{itemize}[noitemsep,nosep]
+        \item \textbf{Maintain Neutrality}: Be impartial,do not advocate for any side,and ensure the integrity of the process.
         \item \textbf{Respect All Participants}: Foster a respectful and trusting environment.
-        \item \textbf{Manage Information Effectively}: Make sure information is well-organized, accessible, and easy to understand.
+        \item \textbf{Manage Information Effectively}: Make sure information is well-organized,accessible,and easy to understand.
         \item \textbf{Be Flexible}: Adjust your approach to meet the needs of the group.
         \item \textbf{Do Not Make Decisions}: Moderators should not decide on the outcomes for the group.
         \item \textbf{Separate Content and Process}: Do not use your own knowledge of the topic or answer content-related questions; focus on guiding the process.
         \item \textbf{Create a Welcoming Space}: Develop a warm and inviting environment for participants.
-        \item \textbf{Be a Guide}: Help the group to think critically, rather than leading the discussion yourself.
+        \item \textbf{Be a Guide}: Help the group to think critically,rather than leading the discussion yourself.
         \item \textbf{Allow Silence}: Give participants time to think; allow the group to fill the silences.
         \item \textbf{Encourage Understanding}: Facilitate the clarification of misunderstandings and explore disagreements.
-        \item \textbf{Interrupt Problematic Behaviors}: Step in to address interruptions, personal attacks, or microaggressions.
+        \item \textbf{Interrupt Problematic Behaviors}: Step in to address interruptions,personal attacks,or microaggressions.
         \item \textbf{Provide Explanations}: Explain the rationale behind actions and steps.
         \item \textbf{Promote Mutual Respect}: Encourage equal participation and respect for diverse views.
     \end{itemize}
