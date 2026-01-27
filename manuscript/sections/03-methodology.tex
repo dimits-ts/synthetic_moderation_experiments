@@ -27,18 +27,13 @@ In \ac{cs} there is a widely shared notion that simple systems are almost always
 \subsection{Our methodology}
 \label{ssec:methodology:us}
 
-\paragraph{Context Management} LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024},LLM self-critique \cite{yu_2024_fincon},or memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches \emph{should not be used} in \acp{sdg},as they necessarily discard important information such as writing style,exact wording and tone,are computationally expensive and less transparent/explainable. This violates
+\paragraph{Context Management} LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024}, LLM self-critique \cite{yu_2024_fincon},or memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches \emph{should not be used} in \acp{sdg}, as they necessarily discard important information such as writing style, exact wording and tone, are computationally expensive and less transparent/explainable. Instead, we assume that the $h$ most recent comments provide sufficient context for the LLM participants; a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}.
 
-Instead,we assume that the $h$ most recent comments provide sufficient context for the LLM participants; a technique that works well in the context of discussions \cite{pavlopoulos_2020_toxicity}.
+\paragraph{Turn Taking} In online fora users often create ``comment chains'' following-up on responses to their previous comments. For each discussion turn we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($60\%$). This probability was selected experimentally; larger values tend to create ``debate''-style discussions between only two or three participants, while lower values tend to create scenarios with minimal interaction between them.\footnote{It would be interesting to analyze quantitatively how discussions change when modifying this parameter, but this is outside of the scope of our work.} A facilitator can respond after every comment, or stay silent by emitting an empty string.
 
+\paragraph{Instruction Prompting} We use a standard instruction prompt for the participants instructing them to respond to repeatedly toxic comments. This was a necessary measure to bypass the extreme agreeableness of LLMs (as seen in \S\ref{ssec:results:ablation} and in literature---\cite{park2023game,anthis_2025}) and is an example of the trade-off between complexity and research bias v.s. the need to acquire meaningful data. Facilitators are instructed to respond only when necessary. Following the paradigm presented by \cite{abdelnabi_negotiations}, we also assign antagonistic motivations to a subset of participants (trolls), which leads to increased toxicity and variety in discussions \S\ref{ssec:results:ablation}.
 
-\paragraph{Turn Taking} In online fora users often create ``comment chains'' following-up on responses to their previous comments. Thus,for each discussion turn we either allow the previous user to respond (with a $40\%$ probability),or select another random participant ($60\%$). This probability was selected experimentally; larger values tend to create ``debate''-style discussions between only two or three participants,while lower values tend to create scenarios with minimal interaction between them.\footnote{It would be interesting to analyze quantitatively how discussions change when modifying this parameter,but this is outside of the scope of our work.} A facilitator can respond after every comment,or stay silent by emitting an empty string.
-
-
-\paragraph{Instruction Prompting} We use a standard instruction prompt for the participants instructing them to respond to repeatedly toxic comments. This was a necessary measure to bypass the extreme agreeableness of LLMs (as seen in \S\ref{ssec:results:ablation} and in literature---\cite{park2023game,anthis_2025}) and is an example of the trade-off between complexity and research bias v.s. the need to acquire meaningful data. Facilitators are instructed to respond only when necessary. Following the paradigm presented by \cite{abdelnabi_negotiations},we also assign antagonistic motivations to a subset of participants (trolls),which leads to increased toxicity and variety in discussions \S\ref{ssec:results:ablation}.
-
-
-\paragraph{LLM Personas} Including \acp{sdb} (e.g.,gender,age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large}. We pick personas from the PERSONA dataset \cite{castricato-etal-2025-persona}.\footnote{We use the public version of the dataset,since we were unable to establish contact with the authors.} Using these sociodemographic prompts,we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
+\paragraph{LLM Personas} Including \acp{sdb} (e.g., gender, age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large}. We pick personas from the PERSONA dataset \cite{castricato-etal-2025-persona} (see Appendix~\ref{ssec:app:sdbs} for details), and add them to the instruction prompt of each participant. Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
 
 
 \subsection{Cost savings}
@@ -59,6 +54,6 @@ In order to minimize costs, we use open-source models hosted on-premise servers.
 		Open Source & \$ 0.003 & \$ 0.7 \\
 		\bottomrule
 	\end{tabular}
-	\caption{Estimated \acf{cpt} and total experiment cost in U.S.D. for human participation,proprietary models with GPT-5o pricing,and our own,open-source,on-premises setup.}
+	\caption{Estimated \acf{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5o pricing, and our own, open-source, on-premises setup.}
 	\label{tab:cost}
 \end{table}

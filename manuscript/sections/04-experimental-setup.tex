@@ -15,15 +15,14 @@ An overview of how the experiments are generated can be found in Alg.~\ref{alg:e
 	\caption{Our \ac{sdg} implementation.
 	\textit{Sample}: uniform sampling from a set.
 	\textit{Actors}: instantiates an LLM agent given a model and a prompt.
-	\textit{Post}: generates a comment given an actor, truncated discussion history, and (if moderator) a facilitation strategy.}
-
+	\textit{Post}: generates a comment given an actor, truncated discussion history, and (if moderator) a facilitation strategy.
+	\textit{Next-speaker}: selects the next user to speak.}	
 	\label{alg:exp_generation}
 	
 	\hspace*{\algorithmicindent} \textbf{Input:}
 	\begin{itemize}[noitemsep,nosep]
 		\item User SDBs $\Theta = \{\theta_{mod}, \theta_1,\dots,\theta_{45}\}$
 		\item Strategies $S = \{s_1,s_2,s_3\}$
-		\item Turn-taking functions $T=\{t_1,t_2,t_3\}$
 		\item Seed discussions $S_d$
 		\item Set of mod-LLMs $mod\_llms$, and user-LLMs $user\_llms$
 		\item Number of experiments $N_e$, seed comments $N_{seed}$, discussion length $N_d$
@@ -34,7 +33,7 @@ An overview of how the experiments are generated can be found in Alg.~\ref{alg:e
 	\begin{algorithmic}[1]
 		\State $D \gets \emptyset$
 		
-		\For{$(user\_llm, mod\_llm, s, t) \in user\_llms \times mod\_llms \times S \times T$}
+		\For{$(user\_llm, mod\_llm, s) \in user\_llms \times mod\_llms \times S$}
 			\For{$exp = 1,2,\ldots,N_e$}
 			
 				\Statex \textit{\# Generate discussion configuration}
@@ -53,7 +52,7 @@ An overview of how the experiments are generated can be found in Alg.~\ref{alg:e
 				\Statex \textit{\# Run discussion with LLM users}
 				\State $last\_user \gets user$
 				\For{$i = N_{seed}+1, N_{seed}+3, \ldots,N_{seed}+N_d$}
-					\State $user \gets t(users, last\_user)$ \Comment{Pick next user}
+					\State $user \gets $\Call{Next-Speaker}{users, last\_user}
 					\State $last\_user \gets user$
 					\State $comment \gets$ \Call{Post}{$user, d, i$} \Comment{User response}
 					\State $d \gets d \cup (user, comment, i)$
@@ -73,16 +72,16 @@ An overview of how the experiments are generated can be found in Alg.~\ref{alg:e
 \subsection{Facilitation Strategies}
 \label{ssec:experimental:strategies}
 
-We test two facilitation strategies used in real-life and compare them with two baselines. Note that the process of turning sometimes extensive documents into short prompts,necessitated by open-source LLMs,is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.
+We test two facilitation strategies used in real-life and compare them with two baselines. We summarize both documents using a proprietary LLM (Google Gemini), since LLMs have been proven to work well in these tasks~\cite{ts2024}, manually inspected the output, and removed instructions not relevant for our scenario.\footnote{Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.}
 
 \begin{enumerate}[nosep,noitemsep]
     \item \textbf{\strategynomod}: A \emph{baseline} where no facilitator is present.
 
-    \item \textbf{\strategynoinstr}: A \emph{baseline} where a LLM facilitator is present,but is provided only with basic instructions. This approach is already being used in some platforms \cite{Tsai_Deliberate_Lab_Open-Source_2025}. Example: “You are a moderator,keep the discussion civil”. 
+    \item \textbf{\strategynoinstr}: A \emph{baseline} where a LLM facilitator is present, but is provided only with basic instructions e.g.,: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \cite{Tsai_Deliberate_Lab_Open-Source_2025}. 
 
-    \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \cite{Cornell_eRulemaking2017}. The instructions are suitable for online fora,where facilitators also engage in content moderation,and their effectiveness must be balanced by their throughput. Example: ``Stick to a maximum of two questions,use simple and clear language,deal with off-topic comments''.
+    \item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \cite{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their throughput e.g., ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
 
-    \item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy based on the human facilitation guidelines \cite{dimitra-book}. It approaches facilitation from a more personalized and indirect angle,forbidding facilitators from directly providing opinions or directions. This makes the strategy ideal for deliberative environments. Example: ``Do not make decisions,be a guide,provide explanations''.
+    \item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy~\cite{dimitra-guide} which approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions e.g., ``Do not make decisions, be a guide, provide explanations''. This makes the strategy ideal for deliberative environments.
 \end{enumerate}
 
 
@@ -90,12 +89,10 @@ We test two facilitation strategies used in real-life and compare them with two 
 \subsection{Evaluation}
 \label{ssec:experimental:evaluation}
 
-TODO
-
-In order to gauge the quality of our synthetic discussions,since we can not reliably measure ``realism'' (\S\ref{ssec:related:human-llm}),we use the ``diversity'' metric \cite{ulmer2024}. Low diversity points to pathological problems (e.g.,LLMs repeating previous comments). Conversely,extremely high diversity may indicate a lack of interaction between participants. A discussion where participants engage with each other will naturally feature some lexical overlap,including common terms or paraphrasing points made by others. We compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction. 
+In order to gauge the quality of our synthetic discussions, since we can not reliably measure ``realism'' (\S\ref{ssec:related:human-llm}), we use the ``diversity'' metric \cite{ulmer2024}. Low diversity points to pathological problems (e.g., LLMs repeating previous comments). Conversely, extremely high diversity may indicate a lack of interaction between participants---a discussion where participants engage with each other will naturally feature some lexical overlap, including common terms or paraphrasing points made by others. We compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction. 
 
 
 \subsection{Technical Details}
 \label{ssec:experimental:setup}
-
- We use four instruction-tuned,open-source models: LLaMa3.3 (70B),Qwen2.5 (33B),Mistral Nemo (12B) and OLMo2 (32B),quantized to 4 bits. All the experiments were collectively completed within four weeks of computational time,using two Quadro RTX 6000 GPUs. The execution script is available in the project's repository. We provide the $h=3$ last comments for context.
+%TODO: Add mod and non-mod llms
+All the experiments were collectively completed within four weeks of computational time,using two Quadro RTX 6000 GPUs. The execution script is available in the project's repository. We provide the $h=3$ last comments for context.
