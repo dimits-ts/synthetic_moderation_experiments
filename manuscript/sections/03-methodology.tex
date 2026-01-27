@@ -15,42 +15,13 @@
 \subsection{Design}
 \label{ssec:methodology:design}
 
-Many \ac{sdg} frameworks have been proposed in literature; both simple \cite{Tsai_Deliberate_Lab_Open-Source_2025,ulmer2024} and complex \cite{balog_2024,abdelnabi_negotiations,park2023game}. What makes these frameworks widely used by other people has not been explored in literature,despite many such implementations. In the field of \ac{cs},systems are designed on two related axes: \emph{functional} requirements,which dictate what the system must do,and \emph{non-functional} requirements,which describe how the system must implement its functionality. We will use this analysis to ``diagnose'' previous systems,and better design our own.
+Many \ac{sdg} frameworks have been proposed in literature; both simple \cite{Tsai_Deliberate_Lab_Open-Source_2025,ulmer2024} and complex \cite{balog_2024,abdelnabi_negotiations,park2023game}. What makes these frameworks widely used by other people has not been explored in literature,despite many such implementations. %In the field of \ac{cs}, systems are designed on two related axes: \emph{functional} requirements,which dictate what the system must do,and \emph{non-functional} requirements, which describe how the system must implement its functionality. We will use this analysis to ``diagnose'' previous systems,and better design our own.
 
 \subsubsection{Functionality}
-We posit that synthetic discussion methodologies need to necessarily implement the following components: \emph{(1) Context management}---since LLMs are stateless,and need to be fed information as prompts,\emph{(2) Turn-taking}---as LLMs are trained as chatbot assistants,and therefore cannot decide to \emph{not} speak,\emph{(3) Instructions given to the LLMs}---which may need to be diversified in multi-participant discussions. These represent the \emph{functional requirements} of our system.
+We posit that synthetic discussion methodologies need to necessarily implement the following components: \emph{(1) Context management}---since LLMs are stateless, and need to be fed all relevant information as prompts, \emph{(2) Turn-taking}---as LLMs are trained as chatbot assistants and ``taught'' to always respond, \emph{(3) Instructions given to the LLMs}---which include directions on how the agent should act (see section below for how specific these directions should be), as well as information that differentiate multiple users between each other. Without any of these three components, a \ac{sdg} methodology cannot fulfill its primary function.
 
 \subsubsection{Implementation}
-In \ac{cs} there is a widely shared notion that simple systems are almost always better at performing their functions (``Keep It Simple Stupid''---KISS) \cite{beck2000extreme,thomas2025simplicity},which has been validated in real-world applications \cite{banker1989software,ogheneovo2014relationship}. Following this notion,we establish our first design rule: \emph{(1) The framework must be as simple as possible,while achieving its users' goals}. The violation of this rule could explain the frustrations of \cite{balog_2024} and the under-performance of Concordia~\cite{Vezhnevets2023GenerativeAM}; a generalized,complex framework which has failed to garner widespread adoption despite efforts to promote it,evidenced by most recent publications creating their own \ac{sdg} frameworks.  
-
-During our experiments,we also encountered a new limitation: \emph{(2) Complexity is directly related to researcher bias}; each new feature necessarily follows our own expectations with how human discussions work. The work of \cite{park2023game} managed to derive interesting insights,exactly because it did \emph{not} tamper with the way LLM users interacted.
-
-Finally,we posit the natural limitation that \emph{(3) \ac{sdg} should be cheap}. The primary reason for designing and using \ac{sdg} methodologies is to bypass the cost of human experiments. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions,it is necessary to generate large quantities of data without compromising cost efficiency.
-
-
-\subsection{Cost savings}
-\label{ssec:methodologies:cost}
-
-One of the defining arguments for the development and use of our framework is cost savings. It is thus natural that we should compare the price of our experiments with alternative options. An exact cost derivation is of course intractable,due to the sheer amount of variables influencing LLM inference cost,but nevertheless,an estimation remains invaluable when deciding which method to use. We assume that there are three main methods of generating such experiments: using proprietary models,open-source LLMs,and human participants.
-
-In order to minimize costs,we use open-source models hosted on-premise servers. This setup allows us to drop the total costs of our experiments by two orders of magnitude compared with using a GPT-5o model,and three orders of magnitude had we used human participants (Table~\ref{tab:cost}). Details around the methodology and assumptions of this result can be found in Appendix~\ref{sec:appendix:cost}.
-
-
-\begin{table}[t]
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		\textbf{Type} & \textbf{CPT}  & \textbf{Total cost}\\
-		\midrule
-		Human & \$ 3.332 & \$ 7575 \\
-		Closed Source & \$ 0.1180 & \$ 268 \\
-		Open Source & \$ 0.003 & \$ 0.7 \\
-		\bottomrule
-	\end{tabular}
-	\caption{Estimated \acf{cpt} and total experiment cost in U.S.D. for human participation,proprietary models with GPT-5o pricing,and our own,open-source,on-premises setup.}
-	\label{tab:cost}
-\end{table}
-
+In \ac{cs} there is a widely shared notion that simple systems are almost always better at performing their functions (``Keep It Simple Stupid''---KISS) \cite{beck2000extreme,thomas2025simplicity}, which has been validated in real-world applications \cite{banker1989software,ogheneovo2014relationship}. Following this notion,we establish our first design rule: \emph{(1) The framework must be as simple as possible, while achieving its users' goals}. The violation of this rule could explain issues in other academic \ac{sdg} systems~\cite{balog_2024}. It also could explain the under-performance of Concordia~\cite{Vezhnevets2023GenerativeAM}; a generalized, complex framework which has failed to garner widespread adoption despite efforts to promote it, evidenced by most recent publications creating their own \ac{sdg} frameworks. During our experiments, we also encountered a new limitation: \emph{(2) Complexity is directly related to researcher bias}; each new feature necessarily follows our own expectations with how human discussions work. Indeed, recent work on LLM behaviors~\cite{park2023game} managed to derive interesting insights exactly because it did \emph{not} tamper with the way LLM users interacted. Finally, we add the natural limitation that \emph{(3) \ac{sdg} should be cheap}. The primary reason for designing and using \ac{sdg} methodologies is to bypass the cost of human experiments. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions, it is necessary to generate large quantities of data without compromising cost efficiency.
 
 
 \subsection{Our methodology}
@@ -69,23 +40,25 @@ Instead,we assume that the $h$ most recent comments provide sufficient context f
 
 \paragraph{LLM Personas} Including \acp{sdb} (e.g.,gender,age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large}. We pick personas from the PERSONA dataset \cite{castricato-etal-2025-persona}.\footnote{We use the public version of the dataset,since we were unable to establish contact with the authors.} Using these sociodemographic prompts,we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
 
+
+\subsection{Cost savings}
+\label{ssec:methodologies:cost}
+
+One of the defining arguments for the development and use of our framework is cost savings. It is thus natural that we should compare the price of our experiments with alternative options. An exact cost derivation is of course intractable due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable when deciding which method to use. We assume that there are three main methods of generating such experiments: using proprietary models, open-source LLMs, and human participants.
+
+In order to minimize costs, we use open-source models hosted on-premise servers. This setup allows us to drop the total costs of our experiments by two orders of magnitude compared with using a GPT-5o model, and three orders of magnitude had we used human participants (Table~\ref{tab:cost}). Details around the methodology and assumptions of this result can be found in Appendix~\ref{sec:appendix:cost}.
+
 \begin{table}[t]
 	\centering
-	\begin{tabular}{ll}
+	\begin{tabular}{lll}
 		\toprule
-		\textbf{Name} & \textbf{Type} \\
+		\textbf{Type} & \textbf{CPT}  & \textbf{Total cost}\\
 		\midrule
-		Username & string \\
-		Age & integer \\
-		Gender & string \\
-		Education Level & string \\
-		Sexual Orientation & string \\
-		Demographic Group & string \\
-		Current Employment & string \\
-		Political Alignment & string \\
-		Personality Characteristics & list of strings \\
+		Human & \$ 3.332 & \$ 7575 \\
+		Closed Source & \$ 0.1180 & \$ 268 \\
+		Open Source & \$ 0.003 & \$ 0.7 \\
 		\bottomrule
 	\end{tabular}
-	\caption{Sociodemographic information provided to the LLM participants and annotators. We defer the reader to the supplementary material for the actual values.\analysislink}
-	\label{tab:sdb}
+	\caption{Estimated \acf{cpt} and total experiment cost in U.S.D. for human participation,proprietary models with GPT-5o pricing,and our own,open-source,on-premises setup.}
+	\label{tab:cost}
 \end{table}

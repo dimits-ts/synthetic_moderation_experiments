@@ -48,7 +48,7 @@ Self-hosting open-source LLMs requires calculating the Total Cost of Ownership (
 The general formula for calculating the Total Cost of Ownership ($\text{TCO}_{\text{Self-Hosted}}$) over $N$ annual periods is defined as the sum of annualized capital and operational costs \cite{pan2025_cost_benefit}:
 
 \[
-	\text{TCO}_{\text{Self-Hosted}} = \sum_{n=1}^{N} \left[ \text{CapEx}_n + \text{OpEx}_n \right]
+\text{TCO}_{\text{Self-Hosted}} = \sum_{n=1}^{N} \left[ \text{CapEx}_n + \text{OpEx}_n \right]
 \]
 
 \noindent Where $\text{CapEx}_n$ includes the initial hardware cost (e.g.,GPU servers) amortized over a depreciation period (often 4 years),and $\text{OpEx}_n$ includes yearly hosting,power,cooling,and personnel maintenance costs \cite{nvidia_tco}.
@@ -56,9 +56,7 @@ The general formula for calculating the Total Cost of Ownership ($\text{TCO}_{\t
 To enable comparison with API models,the yearly TCO must be normalized to a cost-per-volume metric (e.g.,Cost Per 1000 Prompts). This calculation is contingent on the hardware's achieved performance,measured in Requests Per Second (RPS) or Tokens Per Hour ($\text{TPH}$) \cite{pan2025_cost_benefit}.
 
 \[
-	\begin{aligned}
-		& \text{Cost Per 1000 Prompts} = \\ &\frac{\text{TCO}_{\text{Yearly Server Cost}}}{\text{Total Yearly Requests per Server}} \times 1000
-	\end{aligned}
+ 	\text{Cost Per 1000 Prompts} = \frac{\text{TCO}_{\text{Yearly Server Cost}}}{\text{Total Yearly Requests per Server}} \times 1000
 \]
 \noindent The $\text{Total Yearly Requests per Server}$ is a function of the Optimal RPS adjusted by the system's expected uptime fraction,which reflects the financial viability being directly tied to utilization rates \cite{nvidia_tco}.
 
@@ -67,9 +65,7 @@ To enable comparison with API models,the yearly TCO must be normalized to a cost
 The task of calculating \ac{cpt} for proprietary models is significantly easier,since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL),using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
 
 \[
-	\begin{aligned}
-		&\text{CPT}_{\text{Proprietary}} = \\&\frac{(\text{ISL} \times P_{\text{in}} + \text{OSL} \times P_{\text{out}})}{1,000,000} + C_{\text{API Overhead}} 
-	\end{aligned}
+	\text{CPT}_{\text{Proprietary}} = \frac{(\text{ISL} \times P_{\text{in}} + \text{OSL} \times P_{\text{out}})}{1,000,000} + C_{\text{API Overhead}} 
 \]
 \noindent Where $C_{\text{API Overhead}}$ includes amortized costs from failed calls and vendor usage fees.
 
@@ -81,12 +77,8 @@ Human participation costs can not,and should not,be calculated in a vacuum. Ther
 The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage,mandatory platform fees,and quality assurance overhead:
 
 \[
-\begin{aligned}
-		&\text{Cost Per Hour}_{\text{Human}} = \\&W_{\text{gross}} \times (1 + F_{\text{platform}}) + C_{\text{QA-overhead}}
-	\end{aligned}
+	\text{Cost Per Hour}_{\text{Human}} = W_{\text{gross}} \times (1 + F_{\text{platform}}) + C_{\text{QA-overhead}}
 \]
-
-
 \noindent Where:
 \begin{itemize}
 	\item $W_{\text{gross}}$ is the ethical gross hourly wage (e.g.,minimum recommended rate of \$8.00–\$12.00/hour).
@@ -96,15 +88,13 @@ The true cost of procuring human labor in a research context is calculated using
 
 The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time required to complete the specific research task:
 \[
-	\begin{aligned}
-		&CPT_{\text{Human}} =\\& (\text{Time Per Task}_{\text{est}} \times W_{\text{gross}}) \times\\&(1 + F_{\text{platform}}) + C_{\text{QA per Task}}
-	\end{aligned}
+		CPT_{\text{Human}} =(\text{Time Per Task}_{\text{est}} \times W_{\text{gross}}) \times(1 + F_{\text{platform}}) + C_{\text{QA per Task}}
 \]
 
 
 \subsection{Assumptions}
 
-Our own experimental setup (\S\ref{sec:experimental}) uses only two GPUs (retail cost 3000\$ /GPU),therefore,we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs,since our technologies are all open-source. Since the server utilization is extremely short (3 weeks) we do not account for operational costs other than electricity and GPU depreciation.
+Our own experimental setup (\S\ref{sec:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore,we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs,since our technologies are all open-source. Since the server utilization is extremely short (3 weeks) we do not account for operational costs other than electricity and GPU depreciation.
 
 We compare our setup with an OpenAI GPT-5 instance for proprietary models. The GPT-5 pricing model as of the time of writing,is 1.25\$ per million input tokens and 10\$ per million output tokens. We assume no overhead due to technical or methodological errors. Getting exact token counts is futile due to the use of different tokenizers,however a general rule-of-thumb is that each word corresponds to 0.75 tokens. Since each discussion is made up of 40 comments (20 user-comments and 20 facilitator interventions),we can calculate that each discussion ...%TODO
 
@@ -118,6 +108,29 @@ Each discussion is treated as a standalone task in our calculations. Our dataset
 
 \section{Prompts Used}
 \label{ssec:appendix:prompts}
+
+\subsection{Personal user characteristics}
+
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{Name} & \textbf{Type} \\
+		\midrule
+		Username & string \\
+		Age & integer \\
+		Gender & string \\
+		Education Level & string \\
+		Sexual Orientation & string \\
+		Demographic Group & string \\
+		Current Employment & string \\
+		Political Alignment & string \\
+		Personality Characteristics & list of strings \\
+		\bottomrule
+	\end{tabular}
+	\caption{Sociodemographic information provided to the LLM participants and annotators. We defer the reader to the supplementary material for the actual values.\analysislink}
+	\label{tab:sdb}
+\end{table}
     
 
 \subsection{User motivations}
