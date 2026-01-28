@@ -9,64 +9,41 @@ We use a set of starting comments taken from random points in escalated discussi
 We use different LLMs for participants (user-LLMs) and facilitators (mod-LLMs). While experimenting with different-sized LLMs we noticed that smaller LLMs (3-4B parameters) actually generated more varied, animated and direct speech, while larger models (8B-70B) respond in a more formulaic manner. Since the task of simulating a discussion is much easier compared to facilitating one, we decided to follow the paradigm proposed by~\cite{ulmer2024}, where a large model manages a scenario with specific goals and guidelines, while smaller models are used exclusively to interact with the former.
 An overview of how the experiments are generated can be found in Alg.~\ref{alg:exp_generation}.
 
-
-
 \begin{algorithm}[ht]
-	\caption{Our \ac{sdg} implementation.
-	\textit{Sample}: uniform sampling from a set.
-	\textit{Actors}: instantiates an LLM agent given a model and a prompt.
-	\textit{Post}: generates a comment given an actor, truncated discussion history, and (if moderator) a facilitation strategy.
-	\textit{Next-speaker}: selects the next user to speak.}	
+	\caption{Synthetic discussion generation (\ac{sdg}).}
 	\label{alg:exp_generation}
 	
-	\hspace*{\algorithmicindent} \textbf{Input:}
-	\begin{itemize}[noitemsep,nosep]
-		\item User SDBs $\Theta = \{\theta_{mod}, \theta_1,\dots,\theta_{45}\}$
-		\item Strategies $S = \{s_1,s_2,s_3\}$
-		\item Seed discussions $S_d$
-		\item Set of mod-LLMs $mod\_llms$, and user-LLMs $user\_llms$
-		\item Number of experiments $N_e$, seed comments $N_{seed}$, discussion length $N_d$
-	\end{itemize}
+	\textbf{Input:}
+	User SDBs $\Theta$, strategies $S$, seed discussions $D_{seed}$, 
+	LLMs $user\_llms$, $mod\_llms$, experiments $N_e$, 
+	number of seed comments $N_{seed}$, discussion length $N_d$
 	
-	\hspace*{\algorithmicindent} \textbf{Output:} Set of discussions $D$
+	\textbf{Output:} Set of discussions $D$
 	
 	\begin{algorithmic}[1]
 		\State $D \gets \emptyset$
 		
-		\For{$(user\_llm, mod\_llm, s) \in user\_llms \times mod\_llms \times S$}
-			\For{$exp = 1,2,\ldots,N_e$}
+		\ForAll{$(user\_llm, mod\_llm, strat) \in user\_llms \times mod\_llms \times S$}
+			\For{$1,\ldots,N_e$}
 			
-				\Statex \textit{\# Generate discussion configuration}
-				\State $\hat{\Theta} \gets$ \Call{Sample}{$\Theta, 7$}
-				\State $users \gets$ \Call{Actors}{$user\_llm, \hat{\Theta}$}
-				\State $mod \gets$ \Call{Actors}{$mod\_llm, \theta_{mod}$}
-				\State $seed \gets$ \Call{Sample}{$S_d, N_{seed}$}
-				
-				\Statex \textit{\# Initialize discussion with seed comments}
-				\State $d \gets \emptyset$
-				\For{$i = 1,2,\ldots,N_{seed}$}
-					\State $(user, comment) \gets seed[i]$
-					\State $d \gets d \cup (user, comment, i)$
-				\EndFor
-				
-				\Statex \textit{\# Run discussion with LLM users}
-				\State $last\_user \gets user$
-				\For{$i = N_{seed}+1, N_{seed}+3, \ldots,N_{seed}+N_d$}
-					\State $user \gets $\Call{Next-Speaker}{users, last\_user}
-					\State $last\_user \gets user$
-					\State $comment \gets$ \Call{Post}{$user, d, i$} \Comment{User response}
-					\State $d \gets d \cup (user, comment, i)$
-					\State $comment \gets$ \Call{Post}{$mod, d, i+1, s$} \Comment{Optional facilitator intervention}
-					\State $d \gets d \cup (user, comment, i+1)$
-				\EndFor
-				
-				\State $D \gets D \cup \{d\}$
+			\State $(users, mod) \gets$ \Call{AssignParticipants}{$\Theta, user\_llm, mod\_llm, strat$}
+			\State $d \gets $ \Call{InitializeDiscussion}{$D_{seed}, N_{seed}$}
+			
+			\For{$1,\ldots,N_d$}
+				\State $last\_user \gets $ \Call{LastUser}{$d$}
+				\State $user \gets$ \Call{Next-Speaker}{users, last\_user}
+				\State $d \gets d \cup$ \Call{Post}{user, d}
+				\State $d \gets d \cup$ \Call{Post}{mod, d, s} \Comment{Facilitator decides whether to intervene}
+			\EndFor
+			
+			\State $D \gets D \cup \{d\}$
 			\EndFor
 		\EndFor
 		
 		\State \Return $D$
 	\end{algorithmic}
 \end{algorithm}
+
 
 
 \subsection{Facilitation Strategies}
