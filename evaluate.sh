@@ -5,9 +5,13 @@ python src/create_datasets.py \
     --output-dir data/main_output
 
 python src/cost_calculation.py \
-    --num-tasks=2273 \
-    --isl-tokens=31580 \
-    --osl-tokens=7860
+    --num-tasks 2273 \
+    --isl-tokens 31580 \
+    --osl-tokens 7860 \
+    --experiment-duration-days 4 \
+    --requests-per-task 21 \
+    --time-per-task-seconds 300
+    
 
 python src/generate_toxicity_ratings.py \
     --input-csv data/main_output/vmd.csv \
