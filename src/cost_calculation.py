@@ -356,56 +356,62 @@ def quality_adjusted_cpt(raw_cpt: float, quality_score: float) -> float:
 
 def main(args: argparse.Namespace):
 
-    open_cpt = cpt_open_source(
-        args.rps_per_instance,
-        args.instances,
-        args.uptime_fraction,
-        args.requests_per_task,
-        args.initial_server_cost,
-        args.n_servers,
-        args.depreciation_period_years,
-        args.power_watts_per_server,
-        args.electricity_price_per_kwh,
-        args.experiment_duration_days,
-    )
+    match args.mode:
+        case "open-source":
+            cpt = cpt_open_source(
+                args.rps_per_instance,
+                args.instances,
+                args.uptime_fraction,
+                args.requests_per_task,
+                args.initial_server_cost,
+                args.n_servers,
+                args.depreciation_period_years,
+                args.power_watts_per_server,
+                args.electricity_price_per_kwh,
+                args.experiment_duration_days,
+            )
 
-    human_cpt = cpt_human(
-        args.human_wage_gross,
-        args.platform_fee_frac,
-        args.qa_overhead_per_hour,
-        args.time_per_task_seconds,
-        args.qa_amortized_per_task,
-    )
+        case "human":
+            cpt = cpt_human(
+                args.human_wage_gross,
+                args.platform_fee_frac,
+                args.qa_overhead_per_hour,
+                args.time_per_task_seconds,
+                args.qa_amortized_per_task,
+            )
 
-    prop_cpt = cpt_proprietary(
-        args.isl_tokens,
-        args.osl_tokens,
-        args.price_input_per_million,
-        args.price_output_per_million,
-        args.api_retry_overhead_fraction,
-        args.api_fixed_overhead_per_task,
-    )
+        case "proprietary":
+            cpt = cpt_proprietary(
+                args.isl_tokens,
+                args.osl_tokens,
+                args.price_input_per_million,
+                args.price_output_per_million,
+                args.api_retry_overhead_fraction,
+                args.api_fixed_overhead_per_task,
+            )
 
-    df = pd.DataFrame(
-        {
-            "CPT": [human_cpt, open_cpt, prop_cpt],
-            "Total cost": [
-                human_cpt * args.num_tasks,
-                open_cpt * args.num_tasks,
-                prop_cpt * args.num_tasks,
-            ],
-        },
-        index=["Human", "Open-Source", "Proprietary"],
-    )
+        case _:
+            raise ValueError(f"Unknown mode: {args.mode}")
 
-    print(df)
+    print(f"CPT ({args.mode}): {cpt:.6f} USD")
+
+    if args.num_tasks > 1:
+        print(
+            f"Total cost ({args.num_tasks} tasks): {cpt * args.num_tasks:.2f} USD"
+        )
 
 
 if __name__ == "__main__":
-
+    
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--num-tasks", type=int, default=1)
+    parser.add_argument(
+        "--mode",
+        choices=["open-source", "human", "proprietary"],
+        required=True,
+        help="Which cost model to compute",
+    )
 
     # Experiment structure
     parser.add_argument("--requests-per-task", type=int, default=1)

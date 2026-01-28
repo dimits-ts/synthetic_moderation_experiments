@@ -5,12 +5,32 @@ python src/create_datasets.py \
     --output-dir data/main_output
 
 python src/cost_calculation.py \
-    --num-tasks 2273 \
-    --isl-tokens 31580 \
-    --osl-tokens 7860 \
-    --experiment-duration-days 4 \
-    --requests-per-task 21 \
-    --time-per-task-seconds 300
+  --mode proprietary \
+  --num-tasks 2273 \
+  --isl-tokens 31580 \
+  --osl-tokens 7860
+
+python src/cost_calculation.py \
+  --mode human \
+  --num-tasks 2273 \
+  --time-per-task-seconds 300
+
+
+python src/cost_calculation.py \
+  --mode open-source \
+  --num-tasks 2273 \
+  --requests-per-task 21 \
+  --experiment-duration-days 4
+
+python src/cost_calculation.py \
+  --mode open-source \
+  --num-tasks 2273 \
+  --requests-per-task 21 \
+  --initial-server-cost 0 \
+  --experiment-duration-days 4 \
+  --power-watts-per-server 2000
+
+
     
 
 python src/generate_toxicity_ratings.py \
