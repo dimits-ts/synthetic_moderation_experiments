@@ -26,11 +26,11 @@
 % Change this to switch between review/preprint versions
 \newboolean{review}
 \setboolean{review}{true}
-
+	
 % table commands
 \renewcommand{\arraystretch}{1.2}
 % graphix commands
-\graphicspath{ {./resources}  }
+\graphicspath{ {../graphs} {resources} } %TODO: remove resources folder after refactor
 
 
 \newcommand{\showifnotreview}[1]{%
@@ -79,7 +79,7 @@
 \newcommand{\minus}{\scalebox{0.75}[1.0]{$-$}}
 
 
-\title{Debugging Facilitation through Synthetic Discussion Generation}
+\title{Debugging LLM Facilitation through Synthetic Discussion Generation}
 
 \begin{document}
 
