@@ -17,13 +17,13 @@
 \section{Replication Notes}
 \label{ssec:appendix:replication}
 
-The latest version of our framework (\texttt{2.0.4a} at the time of writing) was the one used in our experiments. Researchers replicating this work should downgrade to this version. 
+The latest version of our framework (\texttt{2.0.7} at the time of writing) was the one used in our experiments. Researchers replicating this work should downgrade to this version. 
 
 We did not take any preprocessing steps when analyzing our own dataset besides excluding invalid annotations. This was necessary since the model did not always respond with a valid annotation score (we note that this refusal was rare). The only preprocessing performed on the \ac{ceri} Regulation Room dataset is the removal of HTML tags from the comment text. 
 
-For the seed discussions we use the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble},as stated in the main text. We remove comments from deleted users. In order to select ``escalated'' discussions,we use the \texttt{derailment} values provided by the dataset. Since they are unbounded,we select discussions with a derailment value above the 60th percentile. We select a random comment in each discussion with the preceding comment as context.
+For the seed discussions we use the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble}, as stated in the main text. We remove comments from deleted users. In order to select ``escalated'' discussions, we use the \texttt{derailment} values provided by the dataset. Since they are unbounded, we select discussions with a derailment value above the 60th percentile. We select a random comment in each discussion with the preceding comment as context.
 
-Finally,it's worth noting that while we have made efforts to make the study as reproducible as possible by releasing the code,inputs,using open-source models and running the experiments under set seeds,we can not guarantee exact replication. This is caused by inherent randomness in LLMs which can only be mitigated \cite{atil_2025,bisbee_2023}.
+Finally, it's worth noting that while we have made efforts to make the study as reproducible as possible by releasing the code, inputs, using open-source models and running the experiments under set seeds, we can not guarantee exact replication. This is caused by inherent randomness in LLMs which can only be mitigated \cite{atil_2025,bisbee_2023}.
 
 
 \section{Cost Calculation}
@@ -35,15 +35,15 @@ Finally,it's worth noting that while we have made efforts to make the study as r
 
 The nature of the costs involved in any of the three methods are completely different:
 \begin{itemize}[nosep,noitemsep]
-	\item Open-source models incur cost from utilization of core infrastracture ,electricity consumption,and asset (GPU) depreciation. 
+	\item Open-source models incur cost from utilization of core infrastructure, electricity consumption,and asset (GPU) depreciation. 
 	\item Proprietary models charge a set amount of cost per input and output token.
 	\item Human participants cost wages and platform fees.
 \end{itemize}
 
-Any cost comparison thus necessitates normalizing costs to a universal metric: the \acf{cpt},which estimates the monetary cost of completing an arbitrary task. In our experimental setup, a task corresponds to the completion of one full discussion, which may consist of multiple sequential model requests.
+Any cost comparison thus necessitates normalizing costs to a universal metric: the \acf{cpt}, which estimates the monetary cost of completing an arbitrary task. In our experimental setup, a task corresponds to the completion of one full discussion, which may consist of multiple sequential model requests.
 
 \paragraph{Open-source models}
-Self-hosting open-source LLMs requires calculating the Total Cost of Ownership (TCO),which converts fixed and recurring expenditures into a variable cost per unit of output \cite{pan2025_cost_benefit}. TCO encompasses both Capital Expenditure (CapEx) and Operational Expenditure (OpEx) amortized over the asset's lifespan. This covers the case of self-hosting on-premises,as well as the case of using cloud hosting services (such as Amazon Bedrock).
+Self-hosting open-source LLMs requires calculating the Total Cost of Ownership (TCO), which converts fixed and recurring expenditures into a variable cost per unit of output \cite{pan2025_cost_benefit}. TCO encompasses both Capital Expenditure (CapEx) and Operational Expenditure (OpEx) amortized over the asset's lifespan. This covers the case of self-hosting on-premises, as well as the case of using cloud hosting services (such as Amazon Bedrock).
 
 The general formula for calculating the Total Cost of Ownership ($\text{TCO}_{\text{Self-Hosted}}$) over $N$ annual periods is defined as the sum of annualized capital and operational costs \cite{pan2025_cost_benefit}:
 
@@ -51,18 +51,18 @@ The general formula for calculating the Total Cost of Ownership ($\text{TCO}_{\t
 \text{TCO}_{\text{Self-Hosted}} = \sum_{n=1}^{N} \left[ \text{CapEx}_n + \text{OpEx}_n \right]
 \]
 
-\noindent Where $\text{CapEx}_n$ includes the initial hardware cost (e.g.,GPU servers) amortized over a depreciation period (often 4 years),and $\text{OpEx}_n$ includes yearly hosting,power,cooling,and personnel maintenance costs \cite{nvidia_tco}.
+\noindent Where $\text{CapEx}_n$ includes the initial hardware cost (e.g., GPU servers) amortized over a depreciation period (often 4 years),and $\text{OpEx}_n$ includes yearly hosting, power,  cooling, and personnel maintenance costs \cite{nvidia_tco}.
 
-To enable comparison with API models,the yearly TCO must be normalized to a cost-per-volume metric (e.g.,Cost Per 1000 Prompts). This calculation is contingent on the hardware's achieved performance,measured in Requests Per Second (RPS) or Tokens Per Hour ($\text{TPH}$) \cite{pan2025_cost_benefit}. In our experiments, the cost per request is converted to cost per task by accounting for the number of model requests required to complete a full discussion.
+To enable comparison with API models,the yearly TCO must be normalized to a cost-per-volume metric (e.g., Cost Per 1000 Prompts). This calculation is contingent on the hardware's achieved performance, measured in Requests Per Second (RPS) or Tokens Per Hour ($\text{TPH}$) \cite{pan2025_cost_benefit}. In our experiments, the cost per request is converted to cost per task by accounting for the number of model requests required to complete a full discussion.
 
 \[
  	\text{Cost per Request} = \frac{\text{TCO}_{\text{Yearly Server Cost}}}{\text{Total Yearly Requests per Server}} \times 1000
 \]
-\noindent The $\text{Total Yearly Requests per Server}$ is a function of the Optimal RPS adjusted by the system's expected uptime fraction,which reflects the financial viability being directly tied to utilization rates \cite{nvidia_tco}. Although TCO is traditionally defined over annual periods, we amortize capital costs only over the actual experimental utilization window, resulting in a conservative estimate for short-term research deployments.
+\noindent The $\text{Total Yearly Requests per Server}$ is a function of the Optimal RPS adjusted by the system's expected uptime fraction, which reflects the financial viability being directly tied to utilization rates \cite{nvidia_tco}. Although TCO is traditionally defined over annual periods, we amortize capital costs only over the actual experimental utilization window, resulting in a conservative estimate for short-term research deployments.
 
 
 \paragraph{Proprietary models}
-The task of calculating \ac{cpt} for proprietary models is significantly easier,since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL),using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
+The task of calculating \ac{cpt} for proprietary models is significantly easier, since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL), using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
 
 \[
 	\text{CPT}_{\text{Proprietary}} = \frac{(\text{ISL} \times P_{\text{in}} + \text{OSL} \times P_{\text{out}})}{1,000,000} + C_{\text{API Overhead}} 
@@ -72,18 +72,18 @@ The task of calculating \ac{cpt} for proprietary models is significantly easier,
 
 \paragraph{Human participation}
 
-Human participation costs can not,and should not,be calculated in a vacuum. There are certainly ways to get participates with wages much lower than minimum wage for most countries,and there are even platforms such as Mechanical Turk which streamline this process. Besides the obvious and severe ethical implications of doing so,this often results in poor quality data \cite{Moss2023}.
+Human participation costs can not, and should not, be calculated in a vacuum. There are certainly ways to get participates with wages much lower than minimum wage for most countries, and there are even platforms such as Mechanical Turk which streamline this process. Besides the obvious and severe ethical implications of doing so, this often results in poor quality data \cite{Moss2023}.
 
-The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage, mandatory platform fees,and quality assurance overhead:
+The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage , mandatory platform fees, and quality assurance overhead:
 
 \[
 	\text{Cost Per Hour}_{\text{Human}} = W_{\text{gross}} \times (1 + F_{\text{platform}}) + C_{\text{QA-overhead}}
 \]
 \noindent Where:
 \begin{itemize}
-	\item $W_{\text{gross}}$ is the ethical gross hourly wage (e.g.,minimum recommended rate of \$8.00–\$12.00/hour).
-	\item $F_{\text{platform}}$ is the commission charged by crowdsourcing platforms (e.g.,$33.3\%$ for academic use on Prolific or $20-40\%$ on MTurk).
-	\item $C_{\text{QA-overhead}}$ is the amortized internal labor cost incurred by the research team for quality control,screening,and dropout management.
+	\item $W_{\text{gross}}$ is the ethical gross hourly wage (e.g., minimum recommended rate of \$8.00–\$12.00/hour).
+	\item $F_{\text{platform}}$ is the commission charged by crowdsourcing platforms (e.g., $33.3\%$ for academic use on Prolific or $20-40\%$ on MTurk).
+	\item $C_{\text{QA-overhead}}$ is the amortized internal labor cost incurred by the research team for quality control, screening, and dropout management.
 \end{itemize}
 
 The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time required to complete the specific research task:
