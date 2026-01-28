@@ -15,7 +15,6 @@ python src/cost_calculation.py \
   --num-tasks 2273 \
   --time-per-task-seconds 300
 
-
 python src/cost_calculation.py \
   --mode open-source \
   --num-tasks 2273 \
@@ -30,9 +29,6 @@ python src/cost_calculation.py \
   --experiment-duration-days 4 \
   --power-watts-per-server 2000
 
-
-    
-
 python src/generate_toxicity_ratings.py \
     --input-csv data/main_output/vmd.csv \
     --output-path data/eval_output/vmd.csv \
@@ -46,6 +42,10 @@ python src/generate_toxicity_ratings.py \
 python src/eval_moderation.py \
     --input-csv data/main_output/vmd.csv \
     --output-dir graphs
+
+python src/eval_dataset_analysis.py \
+    --input-csv data/main_output/vmd.csv \
+    --output-dir graphs   
 
 python src/eval_toxicity.py \
     --main-output-dir data/main_output \

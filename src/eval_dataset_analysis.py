@@ -1,0 +1,50 @@
+import argparse
+from pathlib import Path
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+import tasks.graphs
+
+
+def plot_dataset_length(df: pd.DataFrame, y_col: str) -> None:
+    len_df = df.loc[:, ["message", y_col]]
+    len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
+    sns.histplot(
+        data=len_df,
+        x="comment_length",
+        hue=y_col,
+        common_norm=False,
+        stat="density",
+    )
+    plt.xlim(0, 400)
+    plt.ylabel("Number of comments")
+    plt.xlabel(r"Comment length (\# words)")
+
+
+def main(input_csv_path: Path, output_dir: Path):
+    tasks.graphs.seaborn_setup()
+    df = pd.read_csv(input_csv_path)
+
+    plot_dataset_length(df=df, y_col="model")
+    tasks.graphs.save_plot(output_dir / "comment_len_model.png")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Run Perspective API scoring and save results to CSV."
+    )
+    parser.add_argument(
+        "--input-csv",
+        type=str,
+        help="Path to input CSV file",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        help="Graph output directory",
+    )
+    args = parser.parse_args()
+    main(input_csv_path=Path(args.input_csv), output_dir=Path(args.output_dir))
