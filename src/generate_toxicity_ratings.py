@@ -2,6 +2,7 @@ import json
 import time
 import requests
 import argparse
+from urllib.parse import urlparse
 from pathlib import Path
 
 import pandas as pd
@@ -71,10 +72,13 @@ def get_perspective_scores(
             }
 
         except requests.exceptions.RequestException as e:
+            parsed = urlparse(getattr(e.request, "url", ""))
+            safe_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
+
             row_out = {
                 "message_id": msg_id,
                 "toxicity": None,
-                "error": str(e),
+                "error": f"{type(e).__name__}: request to {safe_url} failed",
             }
 
         batch.append(row_out)
