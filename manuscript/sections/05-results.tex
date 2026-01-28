@@ -4,8 +4,16 @@
 \section{Results}
 \label{sec:results}
 
+\subsection{LLM facilitators constantly intervene}
 
-TODO
+ \begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.45\linewidth]{intervention_count_model.png}
+	\includegraphics[width=0.45\linewidth]{intervention_count_strategy.png}
+	\caption{Percentage of unmoderated comments for each discussion according to model (left) and facilitation strategy (right). LLM facilitators are way too eager to intervene, choosing to do so even when explicitly instructed not to unless necessary.}
+	\label{fig:interventions}
+\end{figure}
 
+Fig.~\ref{fig:interventions} demonstrates that LLM facilitators intervene at almost any opportunity,  even though they are instructed to only do so when necessary (see \ref{ssec:appendix:moderation_strategies}). This confirms that LLMs generally can not decide not to speak even when instructed to do so (\S\ref{ssec:methodology:us}). This behavior is consistent across model families, model sizes and facilitative instructions. This has not been reported in relevant literature to our knowledge, and \emph{is an example of ``debugging'' problems with LLMs}---a core motivation of our work.
 
 
