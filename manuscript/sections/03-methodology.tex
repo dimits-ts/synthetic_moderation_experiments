@@ -41,9 +41,8 @@ In \ac{cs} there is a widely shared notion that simple systems are almost always
 
 One of the defining arguments for the development and use of \ac{sdg} frameworks is the ability to scale up experiments. This is achieved in two ways; speed and cost. The former is intuitive, since we no longer need to recruit, orient and instruct human participants. Unlike humans, LLMs also can completely forget previous experiments, making successive experiment runs independent between each other. The latter is also mostly achieved by removing human participants from the loop. However, we need to take into account that the data we get from synthetic discussions are of strictly worse ``quality'' and less utility than human discussions. To partially offset this inherent limitation, we should try minimizing the costs associated with these experiments.
 
-%It is thus natural that we should compare the price of our experiments with alternative options. An exact cost derivation is of course intractable due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable when deciding which method to use. We assume that there are three main methods of generating such experiments: using proprietary models, open-source LLMs, and human participants.
 
-In order to minimize costs, we use open-source models hosted on on-premise servers. This setup allows us to drop the total costs of our experiments by two orders of magnitude compared with using a cheap GPT-5o model, and three orders of magnitude had we used human participants (Table~\ref{tab:cost}). Additionally, using smaller, quantized LLMs~(\S\ref{ssec:experimental:setup}) allows us to run experiments on a single, consumer-grade GPU, nullifying the usual restriction of self-hosted LLMs.\footnote{Note that we use more resources for the experiments in this paper, as our approach is partly exploratory, e.g., using different models for facilitators and users.}. 
+In order to minimize costs, we use open-source models hosted on on-premise servers. This setup allows us to drop the total costs of our experiments by two orders of magnitude compared with using a cheap human participants, and three times compared with closed source models (Table~\ref{tab:cost}). Additionally, using smaller, quantized LLMs~(\S\ref{ssec:experimental:setup}) allows us to run experiments on a single, consumer-grade GPU, nullifying the usual restriction of self-hosted LLMs.Note that we use more resources for the experiments in this paper, as our approach is partly exploratory, e.g., using different models for facilitators and users. Consequently, the open-source costs in Table~\ref{tab:cost} can be easily halved in practice.
 
 Details around the methodology and assumptions of this result can be found in Appendix~\ref{sec:appendix:cost}. An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design.
 
@@ -51,13 +50,14 @@ Details around the methodology and assumptions of this result can be found in Ap
 	\centering
 	\begin{tabular}{ccccc}
 		\toprule
-		\textbf{Type} & \textbf{CPT}  & \textbf{Total cost} & \textbf{Capital Costs} & \textbf{Realistic} \\
+		\textbf{Participant Type} & \textbf{CPT}  & \textbf{Total cost} & \textbf{Infrastructure} & \textbf{Behavioral Analysis} \\
 		\midrule
 		Human & \$ 3.332 & \$ 7575 & Depends & Yes\\
 		Closed Source & \$ 0.1180 & \$ 268 & No & No\\
-		Open Source & \$ 0.003 & \$ 0.7 & Consumer-grade & No \\
+		Open Source (Extensive) & \$ 0.036 & \$ 81 & Basic GPU server & No \\
+		Open Source (Budget) & \$ 0.008 & \$ 18 & Consumer-grade & No \\
 		\bottomrule
 	\end{tabular}
-	\caption{Estimated \acf{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5o pricing, and our own, open-source, on-premises setup. While capital costs are factored in the CPT calculation (see~\ref{sec:appendix:cost}), we also include them separately in this table. Note that synthetic discussions should never be used to gauge human behavior~(\S\ref{ssec:related:human-llm}).}
+	\caption{Estimated \acf{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5o pricing, our own experimental setup, and a production-stage setup with a single consumer-grade GPU. While capital costs are factored in the CPT calculation (see~\ref{sec:appendix:cost}), we also include them separately in this table. Note that synthetic discussions should never be used to gauge human behavior~(\S\ref{ssec:related:human-llm}).}
 	\label{tab:cost}
 \end{table}
