@@ -69,9 +69,18 @@ def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
     result = model.fit()
     print(result.summary())
 
-    latex_table = result.summary().as_latex()
+    latex = result.summary().as_latex()
+    replacements = {
+        "C(strategy, Treatment(reference='No Instructions'))[T.Constr. Comms]": "CC",
+        "C(strategy, Treatment(reference='No Instructions'))[T.E-Rulemaking]": "ER",
+        "C(strategy, Treatment(reference='No Instructions'))[T.Constr. Comms]:message_order": "CC × order",
+        "C(strategy, Treatment(reference='No Instructions'))[T.E-Rulemaking]:message_order": "ER × order",
+    }
+
+    for old, new in replacements.items():
+        latex = latex.replace(old, new)
     with open(graph_dir / "toxicity_regression.tex", "w") as f:
-        f.write(latex_table)
+        f.write(latex)
 
 
 def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
