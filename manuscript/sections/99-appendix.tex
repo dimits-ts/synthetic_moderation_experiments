@@ -74,12 +74,12 @@ The task of calculating \ac{cpt} for proprietary models is significantly easier,
 
 Human participation costs can not, and should not, be calculated in a vacuum. There are certainly ways to get participates with wages much lower than minimum wage for most countries, and there are even platforms such as Mechanical Turk which streamline this process. Besides the obvious and severe ethical implications of doing so, this often results in poor quality data \cite{Moss2023}.
 
-The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage , mandatory platform fees, and quality assurance overhead:
+The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage, mandatory platform fees, and quality assurance overhead:
 
 \[
 	\text{Cost Per Hour}_{\text{Human}} = W_{\text{gross}} \times (1 + F_{\text{platform}}) + C_{\text{QA-overhead}}
 \]
-\noindent Where:
+\noindent where:
 \begin{itemize}
 	\item $W_{\text{gross}}$ is the ethical gross hourly wage (e.g., minimum recommended rate of \$8.00–\$12.00/hour).
 	\item $F_{\text{platform}}$ is the commission charged by crowdsourcing platforms (e.g., $33.3\%$ for academic use on Prolific or $20-40\%$ on MTurk).
@@ -94,9 +94,11 @@ The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time
 
 \subsection{Assumptions}
 
-Our own experimental setup (\S\ref{sec:experimental}) uses only two GPUs (retail cost 3000\$ /GPU),  therefore, we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs, since our technologies are all open-source. Since the server utilization is extremely short (5 days) we do not account for operational costs other than electricity and GPU depreciation. We compare our setup with an OpenAI GPT-5 instance for proprietary models. The GPT-5 pricing model as of the time of writing (Q1 2026), is 1.25\$ per million input tokens and 10\$ per million output tokens. The budget setup assumes a consumer-grade computer with on-board GPU which costs no additional expenses to the researchers, which draws half the power of a GPU server.
+We assume that no data are thrown out for data quality reasons in any of the tasks. Our own experimental setup (\S\ref{sec:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore, we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs, since our technologies are all open-source. Since the server utilization is extremely short (5 days) we do not account for operational costs other than electricity and GPU depreciation. The budget setup assumes a consumer-grade computer with on-board GPU which costs no additional expenses to the researchers, which draws half the power of a GPU server.
 
-For the human participation comparison we assume a task using Prolific as a platform, which currently charges a 33\% overhead, and a fair wage of 12\$ per hour, per participant. We assume that no data are thrown out for data quality reasons in any of the tasks.
+We compare our setup with an OpenAI GPT-5.2 instance for proprietary models. The GPT-5 pricing model as of the time of writing (Q1 2026), is 1.77\$ per million input tokens and 14\$ per million output tokens. The costs can be adjusted depending on the model and future pricing changes. We selected this specific model as a good compromise between model capability and cost considerations---cheaper models are explicitly marketed as competent in ``well-defined tasks''~\cite{openai-pricing}, which ours is not.
+
+For the human participation comparison we assume a task using Prolific as a platform, which currently charges a 33\% overhead, and a fair wage of 12\$ per hour, per participant. In our experiments, we used 7 participants per discussion, hence the total number of tasks changes proportionally. We also assume that each discussion takes five real-world minutes to complete.
 
 
 \subsection{Experiment cost estimation}
@@ -105,7 +107,7 @@ Each discussion is treated as a standalone task in our calculations. Our dataset
 
 
 \section{Prompts Used}
-\label{ssec:appendix:prompts}
+\label{sec:appendix:prompts}
 
 
 \subsection{Personal user characteristics}
@@ -188,7 +190,7 @@ Below are the instructions for normal users and troll users respectively. The ru
 
 
 \subsection{Facilitation Strategies}
-\label{sssec:appendix:moderation_strategies}
+\label{ssec:appendix:moderation_strategies}
 
 
 \subsubsection{Constructive communications}

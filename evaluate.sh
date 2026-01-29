@@ -8,11 +8,13 @@ python src/cost_calculation.py \
   --mode proprietary \
   --num-tasks 2273 \
   --isl-tokens 31580 \
-  --osl-tokens 7860
+  --osl-tokens 7860 \
+  --price-input-per-million 1.75 \
+  --price-output-per-million 14
 
 python src/cost_calculation.py \
   --mode human \
-  --num-tasks 2273 \
+  --num-tasks 15911 \
   --time-per-task-seconds 300
 
 python src/cost_calculation.py \

@@ -402,7 +402,7 @@ def main(args: argparse.Namespace):
 
 
 if __name__ == "__main__":
-    
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--num-tasks", type=int, default=1)
