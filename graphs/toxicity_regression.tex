@@ -1,0 +1,33 @@
+\begin{table}
+\caption{Mixed Linear Model Regression Results}
+\label{}
+\begin{center}
+\begin{tabular}{llll}
+\hline
+Model:            & MixedLM & Dependent Variable: & toxicity   \\
+No. Observations: & 9923    & Method:             & REML       \\
+No. Groups:       & 599     & Scale:              & 0.0121     \\
+Min. group size:  & 15      & Log-Likelihood:     & 7257.5684  \\
+Max. group size:  & 87      & Converged:          & Yes        \\
+Mean group size:  & 16.6    &                     &            \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{lrrrrrr}
+\hline
+                                                                                    &  Coef. & Std.Err. &      z & P$> |$z$|$ & [0.025 & 0.975]  \\
+\hline
+Intercept                                                                           &  0.245 &    0.006 & 39.822 &       0.000 &  0.233 &  0.257  \\
+C(strategy, Treatment(reference='No Instructions'))[T.Constr. Comms]                & -0.019 &    0.009 & -2.182 &       0.029 & -0.036 & -0.002  \\
+C(strategy, Treatment(reference='No Instructions'))[T.E-Rulemaking]                 & -0.018 &    0.009 & -2.052 &       0.040 & -0.035 & -0.001  \\
+message\_order                                                                      & -0.001 &    0.000 & -2.344 &       0.019 & -0.001 & -0.000  \\
+C(strategy, Treatment(reference='No Instructions'))[T.Constr. Comms]:message\_order & -0.000 &    0.000 & -0.392 &       0.695 & -0.001 &  0.001  \\
+C(strategy, Treatment(reference='No Instructions'))[T.E-Rulemaking]:message\_order  &  0.000 &    0.000 &  0.449 &       0.653 & -0.000 &  0.001  \\
+Group Var                                                                           &  0.004 &    0.003 &        &             &        &         \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\bigskip

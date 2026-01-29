@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import statsmodels.formula.api as smf
 
 import tasks.constants
 import tasks.graphs
@@ -31,6 +32,7 @@ def get_toxicity_df(
             "toxicity",
             "is_troll",
             "strategy",
+            "message_order"
         ],
     ]
 
@@ -58,6 +60,20 @@ def toxicity_by_dimension(
     plt.close()
 
 
+def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
+    model = smf.mixedlm(
+        "toxicity ~ C(strategy, Treatment(reference='No Instructions')) * message_order",
+        data=df,
+        groups=df["conv_id"],
+    )
+    result = model.fit()
+    print(result.summary())
+
+    latex_table = result.summary().as_latex()
+    with open(graph_dir / "toxicity_regression.tex", "w") as f:
+        f.write(latex_table)
+
+
 def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
     tasks.graphs.seaborn_setup()
     df = get_toxicity_df(
@@ -72,6 +88,7 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
     )
     toxicity_by_dimension(df, graph_dir, "role")
     toxicity_by_dimension(df, graph_dir, "strategy")
+    toxicity_regression(df[~df.is_moderator], graph_dir=graph_dir)
 
 
 if __name__ == "__main__":
