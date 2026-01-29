@@ -126,12 +126,6 @@ def main(input_csv_path: Path, output_dir: Path):
     tasks.graphs.seaborn_setup()
 
     df = pd.read_csv(input_csv_path)
-    variant_name_dict = {
-        "constructive": "Facilitation",
-        "erulemaking.txt": "Moderation",
-        "vanilla.txt": "No instructions",
-    }
-    df.tag_2 = df.tag_2.replace(variant_name_dict)
 
     moderation_analysis(
         df=df,
@@ -140,7 +134,7 @@ def main(input_csv_path: Path, output_dir: Path):
     )
     moderation_analysis(
         df=df,
-        groupby_col="tag_2",
+        groupby_col="strategy",
         graph_output_path=output_dir / "intervention_count_strategy.png",
     )
 

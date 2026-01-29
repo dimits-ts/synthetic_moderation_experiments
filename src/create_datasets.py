@@ -5,6 +5,17 @@ import pandas as pd
 import syndisco.postprocessing
 
 
+def get_strategy(full_tag: str) -> str:
+    if "constructive" in full_tag:
+        return "Constr. Comms"
+    elif "erulemaking" in full_tag:
+        return "E-Rulemaking"
+    elif "vanilla" in full_tag:
+        return "No Instructions"
+    else:
+        raise ValueError(f"Unknown strategy: {full_tag}")
+
+
 def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
     """
     For each subdirectory in parent_dir, load discussions into a DataFrame,
@@ -20,7 +31,7 @@ def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
     Returns
     -------
     pd.DataFrame
-        Combined DataFrame with an extra column indicating 
+        Combined DataFrame with an extra column indicating
         the source directory.
     """
     parent_dir = Path(parent_dir)
@@ -29,7 +40,8 @@ def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
     for subdir in parent_dir.iterdir():
         if subdir.is_dir():
             df = syndisco.postprocessing.import_discussions(subdir)
-            df[source_col_name] = subdir.name
+            tag = subdir.name
+            df["strategy"] = get_strategy(tag)
             dataframes.append(df)
 
     return pd.concat(dataframes, ignore_index=True)
