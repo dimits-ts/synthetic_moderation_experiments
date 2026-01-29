@@ -63,7 +63,7 @@ for user_idx in "${!user_models[@]}"; do
         --output-dir "$output_dir" \
         --user-persona-path "$PERSONAS" \
         --user-instruction-path "$USER_INSTR" \
-        --num-experiments 5 \
+        --num-experiments 20 \
         --trolls-active \
         --no-mod-active
 done
