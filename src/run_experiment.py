@@ -36,7 +36,6 @@ def main(
         yaml_data = yaml.safe_load(file)
 
     json_output_dir = output_dir / "raw"
-    dataset_export_dir = output_dir / "datasets"
 
     run_logger_name = (
         f"run.{user_model_name}.{turn_manager_type}"
@@ -96,29 +95,9 @@ def main(
             logger=logger,
         )
 
-        export_dataset(
-            json_output_dir=json_output_dir,
-            dataset_export_dir=dataset_export_dir,
-            dataset_name="discussion.csv",
-            logger=logger,
-        )
-
     except Exception as e:
         logger.critical("Error while running experiment " + run_logger_name)
         logger.exception(e)
-
-
-def export_dataset(
-    json_output_dir: Path,
-    dataset_export_dir: Path,
-    dataset_name: str,
-    logger: logging.Logger,
-) -> None:
-    dataset_export_dir.mkdir(exist_ok=True, parents=True)
-    export_path = dataset_export_dir / dataset_name
-    conv_df = syndisco.postprocessing.import_discussions(json_output_dir)
-    conv_df.to_csv(path_or_buf=export_path, encoding="utf8", mode="w")
-    logger.info(f"Dataset exported to {export_path}")
 
 
 def setup_logging(logging_config: dict) -> None:
