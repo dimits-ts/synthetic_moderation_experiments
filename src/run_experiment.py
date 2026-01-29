@@ -35,7 +35,7 @@ def main(
     with open(config_file_path, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
 
-    json_output_dir = output_dir / "raw"
+    json_output_dir = output_dir
 
     run_logger_name = (
         f"run.{user_model_name}.{turn_manager_type}"
@@ -69,12 +69,15 @@ def main(
             max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
         )
 
-        mod_model = syndisco.model.TransformersModel(
-            model_path=mod_model_url,
-            name=mod_model_name,
-            remove_string_list=[],
-            max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
-        )
+        if mod_active:
+            mod_model = syndisco.model.TransformersModel(
+                model_path=mod_model_url,
+                name=mod_model_name,
+                remove_string_list=[],
+                max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
+            )
+        else:
+            mod_model = None
 
         discussion_exp = create_discussion_experiment(
             llm=user_model,

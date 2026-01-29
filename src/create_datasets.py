@@ -3,55 +3,49 @@ import argparse
 
 from tqdm.auto import tqdm
 import pandas as pd
+import syndisco.postprocessing
 
 ABLATION_TAGS = ["nomod", "notrolls", "noinstr", "nosdbs"]
 
 
-def get_ablation_dataset(discussions_output_root: Path) -> pd.DataFrame:
-    discussion_df_ls = []
-    for discussion_file in tqdm(list(discussions_output_root.rglob("*.csv"))):
-        full_tag = discussion_file.parent.parent.name
-        tags = full_tag.split("_")
-        final_tag = tags[-1]
+def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
+    """
+    For each subdirectory in parent_dir, load discussions into a DataFrame,
+    add the subdirectory name as the last column, and combine all DataFrames.
 
-        if final_tag in ABLATION_TAGS:
-            discussion_df = pd.read_csv(discussion_file)
-            discussion_df["ablation"] = final_tag
-            discussion_df_ls.append(discussion_df)
-    return pd.concat(discussion_df_ls, ignore_index=True)
+    Parameters
+    ----------
+    parent_dir : str or Path
+        Directory containing subdirectories with JSON outputs.
+    source_col_name : str
+        Name of the column that will store the subdirectory name.
 
+    Returns
+    -------
+    pd.DataFrame
+        Combined DataFrame with an extra column indicating the source directory.
+    """
+    parent_dir = Path(parent_dir)
+    dataframes = []
 
-def get_normal_dataset(discussions_output_root: Path) -> pd.DataFrame:
-    discussion_df_ls = []
+    for subdir in parent_dir.iterdir():
+        if subdir.is_dir():
+            df = syndisco.postprocessing.import_discussions(subdir)
 
-    for discussion_file in tqdm(list(discussions_output_root.rglob("*.csv"))):
-        full_tag = discussion_file.parent.parent.name
-        tags = full_tag.split("_")
-        final_tag = tags[-1]
+            if df is not None and not df.empty:
+                df[source_col_name] = subdir.name
+                dataframes.append(df)
 
-        # skip ablation tags
-        if final_tag not in ABLATION_TAGS:
-            discussion_df = pd.read_csv(discussion_file)
+    if not dataframes:
+        return pd.DataFrame()
 
-            # add each tag as a separate column
-            for i, tag in enumerate(tags):
-                discussion_df[f"tag_{i}"] = tag
-
-            # also add full tag and final tag if useful
-            discussion_df["full_tag"] = full_tag
-            discussion_df["final_tag"] = final_tag
-
-            discussion_df_ls.append(discussion_df)
-
-    return pd.concat(discussion_df_ls, ignore_index=True)
+    return pd.concat(dataframes, ignore_index=True)
 
 
 def main(discussions_output_root: Path, dataset_output_dir: Path):
     dataset_output_dir.mkdir(exist_ok=True)
-    get_ablation_dataset(discussions_output_root).to_csv(
-        dataset_output_dir / "ablation.csv"
-    )
-    get_normal_dataset(discussions_output_root).to_csv(
+
+    load_and_combine_discussions(discussions_output_root).to_csv(
         dataset_output_dir / "vmd.csv"
     )
 

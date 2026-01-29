@@ -1,7 +1,7 @@
 #!/bin/bash
 
 python src/create_datasets.py \
-    --discussions-root-dir data/discussions_output \
+    --discussions-root-dir data/discussions_output/main \
     --output-dir data/main_output
 
 python src/cost_calculation.py \
