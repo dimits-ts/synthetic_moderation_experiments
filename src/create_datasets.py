@@ -1,11 +1,8 @@
 from pathlib import Path
 import argparse
 
-from tqdm.auto import tqdm
 import pandas as pd
 import syndisco.postprocessing
-
-ABLATION_TAGS = ["nomod", "notrolls", "noinstr", "nosdbs"]
 
 
 def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
@@ -23,7 +20,8 @@ def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
     Returns
     -------
     pd.DataFrame
-        Combined DataFrame with an extra column indicating the source directory.
+        Combined DataFrame with an extra column indicating 
+        the source directory.
     """
     parent_dir = Path(parent_dir)
     dataframes = []
@@ -31,13 +29,8 @@ def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
     for subdir in parent_dir.iterdir():
         if subdir.is_dir():
             df = syndisco.postprocessing.import_discussions(subdir)
-
-            if df is not None and not df.empty:
-                df[source_col_name] = subdir.name
-                dataframes.append(df)
-
-    if not dataframes:
-        return pd.DataFrame()
+            df[source_col_name] = subdir.name
+            dataframes.append(df)
 
     return pd.concat(dataframes, ignore_index=True)
 
