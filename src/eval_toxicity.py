@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 import tasks.constants
 import tasks.graphs
@@ -16,35 +17,52 @@ def get_toxicity_df(
 
     toxicity_df = pd.read_csv(toxicity_df_path)
     toxicity_df = toxicity_df.loc[toxicity_df.error.isna()]
+    toxicity_df.toxicity = pd.to_numeric(toxicity_df.toxicity)
 
     full_df = df.merge(right=toxicity_df, how="inner", on="message_id")
-    full_df["is_troll"] = full_df["0"].str.contains("troll")
+    full_df["is_troll"] = full_df.prompt.str.contains("troll")
+
     full_df = full_df.loc[
-        (full_df.model != "hardcoded") & (~full_df.is_moderator),
-        [
-            "conv_id",
-            "message_id",
-            "is_moderator",
-            "toxicity",
-            "is_troll"
-        ],
+        (full_df.model != "hardcoded"),
+        ["conv_id", "message_id", "is_moderator", "toxicity", "is_troll"],
     ]
-    
+
     return full_df
 
 
-def main(main_output_dir: Path, toxicity_ratings_dir: Path):
+def toxicity_by_role_plot(df: pd.DataFrame, graph_dir: Path) -> None:
+    plot_df = df.copy()
+
+    plot_df["role"] = np.where(
+        plot_df.is_moderator,
+        "Moderator",
+        np.where(plot_df.is_troll, "Troll", "Non-troll user"),
+    )
+
+    plt.figure(figsize=(6, 4))
+    ax = sns.barplot(
+        data=plot_df,
+        x="role",
+        y="toxicity",
+        estimator=np.mean,
+        errorbar=("ci", 95),
+    )
+
+    ax.set_ylabel("Average toxicity")
+    ax.set_xlabel("")
+    ax.set_title("Average toxicity by role")
+
+    plt.tight_layout()
+    tasks.graphs.save_plot(graph_dir / "role_mean_toxicity.png")
+
+
+def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
     tasks.graphs.seaborn_setup()
     main_df = get_toxicity_df(
         main_df_path=main_output_dir / "vmd.csv",
         toxicity_df_path=toxicity_ratings_dir / "vmd.csv",
     )
-    print(main_df)
-    #ablation_df = get_toxicity_df(
-    #    main_df_path=main_output_dir / "ablation.csv",
-    #    toxicity_df_path=toxicity_ratings_dir / "ablation.csv",
-    #)
-    #print(ablation_df)
+    toxicity_by_role_plot(main_df, graph_dir)
 
 
 if __name__ == "__main__":
@@ -70,4 +88,5 @@ if __name__ == "__main__":
     main(
         main_output_dir=Path(args.main_output_dir),
         toxicity_ratings_dir=Path(args.toxicity_rating_dir),
+        graph_dir=Path(args.graph_output_dir)
     )
