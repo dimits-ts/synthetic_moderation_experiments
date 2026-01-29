@@ -24,45 +24,54 @@ def get_toxicity_df(
 
     full_df = full_df.loc[
         (full_df.model != "hardcoded"),
-        ["conv_id", "message_id", "is_moderator", "toxicity", "is_troll"],
+        [
+            "conv_id",
+            "message_id",
+            "is_moderator",
+            "toxicity",
+            "is_troll",
+            "strategy",
+        ],
     ]
 
     return full_df
 
 
-def toxicity_by_role_plot(df: pd.DataFrame, graph_dir: Path) -> None:
-    plot_df = df.copy()
-
-    plot_df["role"] = np.where(
-        plot_df.is_moderator,
-        "Moderator",
-        np.where(plot_df.is_troll, "Troll", "Non-troll user"),
-    )
-
+def toxicity_by_dimension(
+    plot_df: pd.DataFrame, graph_dir: Path, dimension: str
+) -> None:
     plt.figure(figsize=(6, 4))
     ax = sns.barplot(
         data=plot_df,
-        x="role",
-        y="toxicity",
+        x="toxicity",
+        y=dimension,
         estimator=np.mean,
         errorbar=("ci", 95),
     )
 
     ax.set_ylabel("Average toxicity")
     ax.set_xlabel("")
-    ax.set_title("Average toxicity by role")
+    ax.set_title(f"Average toxicity by {dimension}")
 
     plt.tight_layout()
-    tasks.graphs.save_plot(graph_dir / "role_mean_toxicity.png")
+    tasks.graphs.save_plot(graph_dir / f"{dimension}_mean_toxicity.png")
+    plt.close()
 
 
 def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
     tasks.graphs.seaborn_setup()
-    main_df = get_toxicity_df(
+    df = get_toxicity_df(
         main_df_path=main_output_dir / "vmd.csv",
         toxicity_df_path=toxicity_ratings_dir / "vmd.csv",
     )
-    toxicity_by_role_plot(main_df, graph_dir)
+
+    df["role"] = np.where(
+        df.is_moderator,
+        "Moderator",
+        np.where(df.is_troll, "Troll", "Non-troll user"),
+    )
+    toxicity_by_dimension(df, graph_dir, "role")
+    toxicity_by_dimension(df, graph_dir, "strategy")
 
 
 if __name__ == "__main__":
@@ -88,5 +97,5 @@ if __name__ == "__main__":
     main(
         main_output_dir=Path(args.main_output_dir),
         toxicity_ratings_dir=Path(args.toxicity_rating_dir),
-        graph_dir=Path(args.graph_output_dir)
+        graph_dir=Path(args.graph_output_dir),
     )
