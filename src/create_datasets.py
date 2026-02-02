@@ -6,7 +6,9 @@ import syndisco.postprocessing
 
 
 def get_strategy(full_tag: str) -> str:
-    if "constructive" in full_tag:
+    if "nomod" in full_tag:
+        return "No Facilitator"
+    elif "constructive" in full_tag:
         return "Constr. Comms"
     elif "erulemaking" in full_tag:
         return "E-Rulemaking"

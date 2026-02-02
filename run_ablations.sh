@@ -34,40 +34,6 @@ PERSONAS="./data/discussions_input/personas/personas_employed.json"
 USER_INSTR="./data/discussions_input/user_instructions/vanilla.txt"
 OUTPUT_DIR="./data/discussions_output/ablations"
 
-# =====================================================
-# 1. NO-MOD BASELINES
-# =====================================================
-
-for user_idx in "${!user_models[@]}"; do
-    USER_MODEL_URL="${user_models[$user_idx]}"
-    USER_MODEL_PSEUDO="${user_pseudos[$user_idx]}"
-
-    name="${USER_MODEL_PSEUDO}_nomod"
-    output_dir="${OUTPUT_DIR}/${name}"
-
-    if [[ -d "$output_dir" ]]; then
-        echo "Skipping (exists): $output_dir"
-        continue
-    fi
-
-    echo "Running NO-MOD: user=$USER_MODEL_PSEUDO"
-
-    python src/run_experiment.py \
-        --config-file "$CONFIG" \
-        --user-model-url "$USER_MODEL_URL" \
-        --user-model-pseudo "$USER_MODEL_PSEUDO" \
-        --mod-model-url "none" \
-        --mod-model-pseudo "none" \
-        --mod-strategy-file "data/discussions_input/mod_instructions/vanilla.txt" \
-        --turn-manager "random-weighted" \
-        --output-dir "$output_dir" \
-        --user-persona-path "$PERSONAS" \
-        --user-instruction-path "$USER_INSTR" \
-        --num-experiments 20 \
-        --trolls-active \
-        --no-mod-active
-done
-
 
 # =====================================================
 # 2. NO-TROLL BASELINES

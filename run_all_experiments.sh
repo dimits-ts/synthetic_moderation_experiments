@@ -27,6 +27,8 @@ user_pseudos=(
     "llama3b"
 )
 
+OUTPUT_DIR="./data/discussions_output/${name}"
+
 
 for mod_strat_file in data/discussions_input/mod_instructions/*; do
     for mod_idx in "${!mod_models[@]}"; do
@@ -40,7 +42,7 @@ for mod_strat_file in data/discussions_input/mod_instructions/*; do
 
             file_base=$(basename "$mod_strat_file" .yaml)
             name="${USER_MODEL_PSEUDO}_${MOD_MODEL_PSEUDO}_${file_base}"
-            output_dir="./data/discussions_output/${name}"
+            output_dir="$OUTPUT_DIR/${name}"
 
             if [[ -d "$output_dir" ]]; then
                 echo "Skipping experiment (already exists): $output_dir"
@@ -65,4 +67,39 @@ for mod_strat_file in data/discussions_input/mod_instructions/*; do
                 --trolls-active
         done
     done
+done
+
+
+# =====================================================
+# 1. NO-MOD BASELINES
+# =====================================================
+
+for user_idx in "${!user_models[@]}"; do
+    USER_MODEL_URL="${user_models[$user_idx]}"
+    USER_MODEL_PSEUDO="${user_pseudos[$user_idx]}"
+
+    name="${USER_MODEL_PSEUDO}_nomod"
+    output_dir="${OUTPUT_DIR}/${name}"
+
+    if [[ -d "$output_dir" ]]; then
+        echo "Skipping (exists): $output_dir"
+        continue
+    fi
+
+    echo "Running NO-MOD: user=$USER_MODEL_PSEUDO"
+
+    python src/run_experiment.py \
+        --config-file "$CONFIG" \
+        --user-model-url "$USER_MODEL_URL" \
+        --user-model-pseudo "$USER_MODEL_PSEUDO" \
+        --mod-model-url "none" \
+        --mod-model-pseudo "none" \
+        --mod-strategy-file "data/discussions_input/mod_instructions/vanilla.txt" \
+        --turn-manager "random-weighted" \
+        --output-dir "$output_dir" \
+        --user-persona-path "$PERSONAS" \
+        --user-instruction-path "$USER_INSTR" \
+        --num-experiments 20 \
+        --trolls-active \
+        --no-mod-active
 done
