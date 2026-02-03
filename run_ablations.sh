@@ -52,11 +52,6 @@ for mod_strat_file in data/discussions_input/mod_instructions/*; do
             name="${USER_MODEL_PSEUDO}_${MOD_MODEL_PSEUDO}_${file_base}_notroll"
             output_dir="${OUTPUT_DIR}/${name}"
 
-            if [[ -d "$output_dir" ]]; then
-                echo "Skipping (exists): $output_dir"
-                continue
-            fi
-
             echo "Running MOD: user=$USER_MODEL_PSEUDO mod=$MOD_MODEL_PSEUDO strategy=$file_base"
 
             python src/run_experiment.py \
@@ -95,11 +90,6 @@ for mod_strat_file in data/discussions_input/mod_instructions/*; do
 
             name="${USER_MODEL_PSEUDO}_${MOD_MODEL_PSEUDO}_${file_base}_nosdbs"
             output_dir="${OUTPUT_DIR}/${name}"
-
-            if [[ -d "$output_dir" ]]; then
-                echo "Skipping (exists): $output_dir"
-                continue
-            fi
 
             echo "Running MOD: user=$USER_MODEL_PSEUDO mod=$MOD_MODEL_PSEUDO strategy=$file_base"
 
@@ -142,11 +132,6 @@ for mod_strat_file in data/discussions_input/mod_instructions/*; do
 
                 name="${USER_MODEL_PSEUDO}_${MOD_MODEL_PSEUDO}_${turn_manager}_${file_base}"
                 output_dir="${OUTPUT_DIR}/${name}"
-
-                if [[ -d "$output_dir" ]]; then
-                    echo "Skipping (exists): $output_dir"
-                    continue
-                fi
 
                 echo "Running MOD: user=$USER_MODEL_PSEUDO mod=$MOD_MODEL_PSEUDO strategy=$file_base tm=$turn_manager"
 
