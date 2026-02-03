@@ -12,7 +12,6 @@ import syndisco.actors
 import syndisco.experiments
 import syndisco.logging_util
 import syndisco.turn_manager
-import syndisco.postprocessing
 
 TROLL_CHANCE = 0.3
 
@@ -45,21 +44,25 @@ def main(
     logger = logging.getLogger(run_logger_name)
     setup_logging(logging_config=yaml_data["logging"])
 
-    already_executed = output_dir.is_dir() and any(
-        item.is_file() for item in output_dir.rglob("*")
+    existing_experiments = count_existing_experiments(output_dir)
+    missing_experiments = num_experiments - existing_experiments
+
+    logger.info(
+        f"Found {existing_experiments} existing experiments in "
+        f"{output_dir.resolve()} (requested {num_experiments})."
     )
+
+    if missing_experiments <= 0:
+        logger.info("All experiments already completed. Skipping run.")
+        return
+
+    logger.info(f"Running {missing_experiments} missing experiments.")
 
     logger.info(
         "================================================\n"
         f"{json.dumps(vars(args), indent=2)}"
         "\n================================================"
     )
-
-    if already_executed:
-        logger.info(
-            f'Skipping experiment since "{output_dir.resolve()}" already exists.'
-        )
-        return
 
     try:
         user_model = syndisco.model.TransformersModel(
@@ -89,7 +92,7 @@ def main(
             user_persona_path=user_persona_path,
             turn_manager_type=turn_manager_type,
             trolls_active=trolls_active,
-            num_experiments=num_experiments,
+            num_experiments=missing_experiments,
         )
 
         run_discussion_experiment(
@@ -292,6 +295,14 @@ def get_turn_manager(
             raise ValueError(
                 f"Unrecognizable turn manager type: {turn_manager_type}"
             )
+
+
+def count_existing_experiments(output_dir: Path) -> int:
+    if not output_dir.exists():
+        return 0
+
+    # Count files OR subdirectories directly under output_dir
+    return sum(1 for p in output_dir.iterdir() if p.is_file() or p.is_dir())
 
 
 def run_discussion_experiment(
