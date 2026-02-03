@@ -49,17 +49,15 @@ def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
     return pd.concat(dataframes, ignore_index=True)
 
 
-def main(discussions_output_root: Path, dataset_output_dir: Path):
-    dataset_output_dir.mkdir(exist_ok=True)
+def main(discussions_output_root: Path, output_path: Path):
+    output_path.parent.mkdir(exist_ok=True)
 
-    load_and_combine_discussions(discussions_output_root).to_csv(
-        dataset_output_dir / "vmd.csv"
-    )
+    load_and_combine_discussions(discussions_output_root).to_csv(output_path)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Combine output discussions to main and ablation datasets."
+        description="Combine output discussions to CSV."
     )
     parser.add_argument(
         "--discussions-root-dir",
@@ -67,12 +65,12 @@ if __name__ == "__main__":
         help="Root output dir for all exported discussions",
     )
     parser.add_argument(
-        "--output-dir",
+        "--output-path",
         required=True,
-        help="Output dir for the combined datasets",
+        help="Output path for the combined dataset",
     )
     args = parser.parse_args()
     main(
         discussions_output_root=Path(args.discussions_root_dir),
-        dataset_output_dir=Path(args.output_dir),
+        output_path=Path(args.output_path),
     )

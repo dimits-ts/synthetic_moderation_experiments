@@ -2,7 +2,11 @@
 
 python src/create_datasets.py \
     --discussions-root-dir data/discussions_output/main \
-    --output-dir data/main_output
+    --output-path data/main_output/vmd.csv
+
+python src/create_datasets.py \
+    --discussions-root-dir data/discussions_output/ablations \
+    --output-path data/main_output/ablation.csv
 
 python src/cost_calculation.py \
   --mode proprietary \
