@@ -11,10 +11,33 @@ import tasks.constants
 import tasks.graphs
 
 
+def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
+    tasks.graphs.seaborn_setup()
+    df = get_toxicity_df(
+        main_df_path=main_output_dir / "vmd.csv",
+        toxicity_df_path=toxicity_ratings_dir / "vmd.csv",
+    )
+
+    df["role"] = np.where(
+        df.is_moderator,
+        "Moderator",
+        np.where(df.is_troll, "Troll", "Non-troll user"),
+    )
+    toxicity_by_dimension(df, graph_dir, "role")
+    toxicity_by_dimension(df, graph_dir, "strategy")
+    toxicity_regression(df[~df.is_moderator], graph_dir=graph_dir)
+
+    ablation_df = get_toxicity_df(
+        main_df_path=main_output_dir / "ablation.csv",
+        toxicity_df_path=toxicity_ratings_dir / "ablation.csv",
+    )
+
+
 def get_toxicity_df(
     main_df_path: Path, toxicity_df_path: Path
 ) -> pd.DataFrame:
     df = pd.read_csv(main_df_path)
+    print(df)
 
     toxicity_df = pd.read_csv(toxicity_df_path)
     toxicity_df = toxicity_df.loc[toxicity_df.error.isna()]
@@ -32,7 +55,7 @@ def get_toxicity_df(
             "toxicity",
             "is_troll",
             "strategy",
-            "message_order"
+            "message_order",
         ],
     ]
 
@@ -81,23 +104,6 @@ def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
         latex = latex.replace(old, new)
     with open(graph_dir / "toxicity_regression.tex", "w") as f:
         f.write(latex)
-
-
-def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
-    tasks.graphs.seaborn_setup()
-    df = get_toxicity_df(
-        main_df_path=main_output_dir / "vmd.csv",
-        toxicity_df_path=toxicity_ratings_dir / "vmd.csv",
-    )
-
-    df["role"] = np.where(
-        df.is_moderator,
-        "Moderator",
-        np.where(df.is_troll, "Troll", "Non-troll user"),
-    )
-    toxicity_by_dimension(df, graph_dir, "role")
-    toxicity_by_dimension(df, graph_dir, "strategy")
-    toxicity_regression(df[~df.is_moderator], graph_dir=graph_dir)
 
 
 if __name__ == "__main__":
