@@ -86,21 +86,24 @@ def toxicity_by_dimension(
 
 
 def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
+    df["message_order_c"] = df["message_order"] - df["message_order"].mean()
+
     model = smf.mixedlm(
-        "toxicity ~ C(strategy, Treatment(reference='No Instructions')) * message_order",
+        "toxicity ~ C(strategy, Treatment(reference='No Facilitator')) * message_order_c",
         data=df,
         groups=df["conv_id"],
     )
     result = model.fit()
 
     latex = result.summary().as_latex()
+
     replacements = {
-        "C(strategy, Treatment(reference='No Instructions'))[T.Constr. Comms]": "CC",
-        "C(strategy, Treatment(reference='No Instructions'))[T.E-Rulemaking]": "ER",
-        "C(strategy, Treatment(reference='No Instructions'))[T.Constr. Comms]:message_order": "CC × order",
-        "C(strategy, Treatment(reference='No Instructions'))[T.E-Rulemaking]:message_order": "ER × order",
-        "C(strategy, Treatment(reference='No Instructions'))[T.No Facilitator]": "NoMod",
-        "C(strategy, Treatment(reference='No Instructions'))[T.No Facilitator]": "NoMod × order",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]": "CC",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]": "ER",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.No Facilitator]": "NoMod",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]:message_order": "CC × order",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]:message_order": "ER × order",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.No Facilitator]:message_order": "NoMod × order",
     }
 
     for old, new in replacements.items():
