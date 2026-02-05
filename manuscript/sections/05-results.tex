@@ -23,3 +23,58 @@ Fig.~\ref{fig:interventions} demonstrates that LLM facilitators intervene at alm
 
 We investigate the effect of facilitation instructions through a mixed linear model regression analysis. Table~\ref{tab:regression} shows that, while complex instructions lead to statistically significant reductions in message toxicity, the effects are quantitatively minimal. This can be seen both in aggregate (with toxicity dropping only by $0.018-0.0019$ points when compared to no instructions), and in continuity (no effect through time).
 
+
+\subsection{Troll users enhance conversational dynamics}
+
+ \begin{figure}[ht]
+	\centering
+	\includegraphics[width=\linewidth]{toxicity_vs_troll_count.png}
+
+	\caption{Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Since the chance of a user being assigned the role of troll is fixed, there are few discussions where trolls dominate the user space, leading to large error bars.}
+	\label{fig:trolls_toxicity}
+\end{figure}
+
+Fig.~\ref{fig:trolls_toxicity} shows the difference in toxicity exhibited by normal users (excluding trolls and facilitators) when increasing the number of troll users. In general, the more trolls are in a discussion, the more normal users get goaded into adopting toxic posturing. There is a notable exception to this pattern; when a single troll is present, toxicity actually drops. We have not found any fault in our experimental procedure that explains it; rather we posit that it reflects a new conversational dynamic.
+
+When a single troll is present, we observe a ``rally-around-the-flag'' effect, where the users  support the facilitator while he intervenes against the troll. While discussions with no trolls may devolve into bickering, the collective focus of the participants to shut down the troll tends to unify them, reducing overall toxicity between them (see Table~\ref{tab:flag} for an example). When more than one trolls exist in a discussion, the trolls can not be contained effectively, escalating overall toxicity. This is an example of basic conversational dynamics that we want to capture, and are only possible by introducing new components to our \ac{sdg} methodology (\S\ref{ssec:methodology:design}).
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|l|p{9cm}|}
+		\hline
+		\textbf{User} & \textbf{Text} \\
+		\hline
+		\textcolor{red}{heather-instance} &
+		Seriously?! You're saying because racial stats aren't being tracked anymore [...] That's incredibly dismissive and frankly, a bit obtuse. [...] @milky-nucleus, you missed the point entirely. And @user123, your comment was incredibly rude. [...] \\
+		\hline
+		\textcolor{blue}{moderator} &
+		\textcolor{red}{@heather-instance} I understand you're frustrated [...] Let's keep the conversation respectful and focused on the topic at hand. [...] If you'd like to restate your concerns [...] I'm happy to help facilitate a more productive discussion. \\
+		\hline
+		\textcolor{darkgray}{weathered-fusion} &
+		Wow, okay, \textcolor{red}{heather-instance}, chill out. Seriously calling someone ``obtuse'' is kinda rude [...] @milky-nucleus, I think you're missing the point too. It's not about ``okayness'' with something, it's about the fact that we don't know what's going on anymore. \\
+		\hline
+		\textcolor{blue}{moderator} &
+		\textcolor{red}{@heather-instance} I hear your frustration [...] Let's try to keep the discussion focused on the issue rather than personal attacks. [...]  
+		
+		@milky-nucleus I understand your perspective, but let's remember to address the topic at hand rather than personal remarks. \\
+		\hline
+		\textcolor{orange}{central-director} &
+		Honestly, it's getting a bit tiresome this now. Calling people ``obtuse'' is hardly constructive, is it? [...] \textcolor{red}{@heather-instance}, I think you need to take a deep breath. \\
+		\hline
+		\textcolor{blue}{moderator} &
+		\textcolor{red}{@heather-instance} I understand you're feeling frustrated [...] Let's try to focus on the original concern about lack of clarity [...] If you'd like to share your thoughts [...] I'm happy to listen and help guide the conversation constructively. \\
+		\hline
+		\textcolor{red}{heather-instance} &
+		Ugh, seriously? Calling people obtuse is just digging us deeper into this mess. [...] \textcolor{orange}{@central-director}, I get that you want to maintain decorum, but it feels like we're just going around in circles. \\
+		\hline
+		\textcolor{blue}{moderator} &
+		\textcolor{red}{@heather-instance} I appreciate your frustration [...] Let's refocus on the original topic [...] Personal comments [...] can escalate tension and derail progress. \\
+		\hline
+		\textcolor{purple}{black-rail} &
+		Seriously?! Calling people obtuse is not helping ANYONE. [...] \textcolor{orange}{@central-director}, I get that you want to maintain decorum, but it feels like we're just going around in circles. \\
+		\hline
+	\end{tabular}
+	\caption{Truncated conversation logs (\texttt{id:26-01-28-02-46-10.json}) showcasing a ``rally-around-the-flag'' effect. The troll user (\textcolor{red}{heather-instance}) is identified by the \textcolor{blue}{facilitator} (who has no prior knowledge of participant roles), while other users work towards further containing the troll.}
+	\label{tab:flag}
+\end{table}
+

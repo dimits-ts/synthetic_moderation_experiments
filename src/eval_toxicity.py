@@ -99,6 +99,8 @@ def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
         "C(strategy, Treatment(reference='No Instructions'))[T.E-Rulemaking]": "ER",
         "C(strategy, Treatment(reference='No Instructions'))[T.Constr. Comms]:message_order": "CC × order",
         "C(strategy, Treatment(reference='No Instructions'))[T.E-Rulemaking]:message_order": "ER × order",
+        "C(strategy, Treatment(reference='No Instructions'))[T.No Facilitator]": "NoMod",
+        "C(strategy, Treatment(reference='No Instructions'))[T.No Facilitator]": "NoMod × order",
     }
 
     for old, new in replacements.items():
