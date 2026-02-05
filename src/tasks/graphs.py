@@ -55,7 +55,7 @@ def seaborn_setup() -> None:
             "savefig.pad_inches": 0.02,
             # Fonts
             "font.family": "serif",
-            "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
+            "font.serif": ["Liberation Serif", "Nimbus Roman"],
             "font.size": 18,
             "axes.titlesize": 18,
             "axes.labelsize": 16,

@@ -31,13 +31,14 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
         main_df_path=main_output_dir / "ablation.csv",
         toxicity_df_path=toxicity_ratings_dir / "ablation.csv",
     )
+    full_df = pd.concat([df, ablation_df], ignore_index=True)
+    toxicity_vs_troll_count(df=full_df, graph_dir=graph_dir)
 
 
 def get_toxicity_df(
     main_df_path: Path, toxicity_df_path: Path
 ) -> pd.DataFrame:
     df = pd.read_csv(main_df_path)
-    print(df)
 
     toxicity_df = pd.read_csv(toxicity_df_path)
     toxicity_df = toxicity_df.loc[toxicity_df.error.isna()]
@@ -51,6 +52,7 @@ def get_toxicity_df(
         [
             "conv_id",
             "message_id",
+            "user",
             "is_moderator",
             "toxicity",
             "is_troll",
@@ -90,7 +92,6 @@ def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
         groups=df["conv_id"],
     )
     result = model.fit()
-    print(result.summary())
 
     latex = result.summary().as_latex()
     replacements = {
@@ -104,6 +105,53 @@ def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
         latex = latex.replace(old, new)
     with open(graph_dir / "toxicity_regression.tex", "w") as f:
         f.write(latex)
+
+
+def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
+    # Non-troll, non-moderator messages
+    non_troll_df = df.loc[(~df.is_troll) & (~df.is_moderator)]
+
+    avg_toxicity = (
+        non_troll_df.groupby("conv_id")["toxicity"]
+        .mean()
+        .rename("avg_non_troll_toxicity")
+    )
+
+    # Count distinct troll users per conversation
+    troll_counts = (
+        df.loc[df.is_troll]
+        .groupby("conv_id")["user"]
+        .nunique()
+        .rename("n_distinct_trolls")
+    )
+
+    plot_df = (
+        pd.concat([avg_toxicity, troll_counts], axis=1).fillna(0).reset_index()
+    )
+    plot_df["troll_bin"] = plot_df["n_distinct_trolls"].clip(upper=6)
+    plot_df["troll_bin"] = plot_df["troll_bin"].astype(str)
+    plot_df.loc[plot_df["troll_bin"] == "6", "troll_bin"] = "6+"
+
+    plot_toxicity_vs_trolls(plot_df, graph_dir)
+
+
+def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
+    plt.figure(figsize=(7, 4))
+
+    ax = sns.pointplot(
+        data=plot_df,
+        x="n_distinct_trolls",
+        y="avg_non_troll_toxicity",
+        estimator=np.mean,
+        errorbar=("ci", 95),
+    )
+
+    ax.set_xlabel("Number of distinct troll users")
+    ax.set_ylabel("Avg. toxicity")
+
+    plt.tight_layout()
+    tasks.graphs.save_plot(graph_dir / "toxicity_vs_troll_count.png")
+    plt.close()
 
 
 if __name__ == "__main__":
