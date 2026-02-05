@@ -21,7 +21,7 @@ Fig.~\ref{fig:interventions} demonstrates that LLM facilitators intervene at alm
 
 \input{../graphs/toxicity_regression.tex}
 
-We investigate the effect of facilitation instructions through a mixed linear model regression analysis. Table~\ref{tab:regression} shows that, while complex instructions lead to statistically significant reductions in message toxicity, the effects are quantitatively minimal. This can be seen both in aggregate (with toxicity dropping only by $0.018-0.0019$ points when compared to no instructions), and in continuity (no effect through time).
+We used a mixed-effects linear regression model, which unlike regular linear regression, accounts for the fact that comments from the same discussion tend to resemble one another.  Table~\ref{tab:regression} shows that, while complex instructions lead to statistically significant reductions in message toxicity, the effects are quantitatively minimal. This can be seen both in aggregate (with toxicity dropping only by $0.018-0.0019$ points when compared to no instructions), and in continuity (no effect through time).
 
 
 \subsection{Troll users enhance conversational dynamics}
@@ -30,13 +30,15 @@ We investigate the effect of facilitation instructions through a mixed linear mo
 	\centering
 	\includegraphics[width=\linewidth]{toxicity_vs_troll_count.png}
 
-	\caption{Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Since the chance of a user being assigned the role of troll is fixed, there are few discussions where trolls dominate the user space, leading to large error bars.}
+	\caption{Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. Since the chance of a user being assigned the role of troll is fixed, there are few discussions where trolls dominate the discussion space (there are eight total participants in each discussion), leading to large error bars.}
 	\label{fig:trolls_toxicity}
 \end{figure}
 
-Fig.~\ref{fig:trolls_toxicity} shows the difference in toxicity exhibited by normal users (excluding trolls and facilitators) when increasing the number of troll users. In general, the more trolls are in a discussion, the more normal users get goaded into adopting toxic posturing. There is a notable exception to this pattern; when a single troll is present, toxicity actually drops. We have not found any fault in our experimental procedure that explains it; rather we posit that it reflects a new conversational dynamic.
+Fig.~\ref{fig:trolls_toxicity} shows the difference in toxicity exhibited by normal users (excluding trolls and facilitators) when increasing the number of troll users. In general, the more trolls are in a discussion, the more normal users get goaded into adopting toxic posturing. There is a notable exception to this pattern; when a single troll is present, toxicity does not increase in a statistically significant way. We have not found any fault in our experimental procedure that explains this; rather we posit that it reflects a new conversational dynamic also encountered in human discussions.
 
-When a single troll is present, we observe a ``rally-around-the-flag'' effect, where the users  support the facilitator while he intervenes against the troll. While discussions with no trolls may devolve into bickering, the collective focus of the participants to shut down the troll tends to unify them, reducing overall toxicity between them (see Table~\ref{tab:flag} for an example). When more than one trolls exist in a discussion, the trolls can not be contained effectively, escalating overall toxicity. This is an example of basic conversational dynamics that we want to capture, and are only possible by introducing new components to our \ac{sdg} methodology (\S\ref{ssec:methodology:design}).
+When a single troll is present, we may observe collective action from the rest of the participants, who support the facilitator while he intervenes against the troll. In human discussions, this would be observed as collective group action against a perceived threat; in online communities, against trolls~\cite{sun2021would,jakubowicz2017cyber,coles2016trolling}. While discussions with no trolls may devolve into bickering, the collective focus of the participants to shut down the troll tends to unify them, reducing overall toxicity between them (see Table~\ref{tab:flag} for an example of such a discussion). This pattern has been shown to increase community cohesion in human discussions~\cite{hopkinson2013trolling}. When more than one trolls exist in a discussion, the trolls can not be contained effectively, escalating overall toxicity. While we cannot qualitatively prove this for the entire dataset, since it is composed of many hundreds of discussions and observing behavioral patterns is inherently subjective, we confirm the presence of similar discussions to Table~\ref{tab:flag} across multiple discussions.
+
+While can not make the claim that LLMs follow these human behaviors(\S\ref{ssec:related:human-llm}), this is an example of basic conversational dynamics that we want to capture, and are only possible by introducing new components to our \ac{sdg} methodology (\S\ref{ssec:methodology:design}).  Without the inclusion of trolls, we would likely not have any data on how the LLM facilitator would react to the presence of collective action supporting them.
 
 \begin{table}[h!]
 	\centering
