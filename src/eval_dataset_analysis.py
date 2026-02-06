@@ -4,13 +4,15 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
 from tqdm.auto import tqdm
 
 import tasks.graphs
+import tasks.stats
 
 
-def plot_dataset_length(df: pd.DataFrame, y_col: str) -> None:
+def plot_dataset_length(
+    df: pd.DataFrame, y_col: str, graph_output_dir: Path
+) -> None:
     len_df = df.loc[:, ["message", y_col]]
     len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
     sns.histplot(
@@ -22,9 +24,13 @@ def plot_dataset_length(df: pd.DataFrame, y_col: str) -> None:
     )
     plt.xlim(0, 400)
     plt.xlabel(r"Comment length (\# words)")
+    tasks.graphs.save_plot(output_dir / "comment_len_model.png")
+    plt.close()
 
 
-def plot_dataset_diversity(df: pd.DataFrame, y_col: str):
+def plot_dataset_diversity(
+    df: pd.DataFrame, y_col: str, graph_output_dir: Path
+):
     similarity_df = (
         df.groupby(["conv_id", y_col])["message"].apply(list).reset_index()
     )
@@ -43,20 +49,24 @@ def plot_dataset_diversity(df: pd.DataFrame, y_col: str):
         common_norm=False,
     )
     plt.xlabel("Diversity")
-
-
-def main(input_csv_path: Path, output_dir: Path):
-    tasks.graphs.seaborn_setup()
-    tqdm.pandas()
-    df = pd.read_csv(input_csv_path)
-
-    plot_dataset_length(df=df, y_col="model")
-    tasks.graphs.save_plot(output_dir / "comment_len_model.png")
-    plt.close()
-
-    plot_dataset_diversity(df=df, y_col="model")
     tasks.graphs.save_plot(output_dir / "comment_diversity_model.png")
     plt.close()
+
+
+def main(main_csv_path: Path, ablation_csv_path: Path, graph_output_dir: Path):
+    tasks.graphs.seaborn_setup()
+    tqdm.pandas()
+    main_df = pd.read_csv(main_csv_path)
+
+    plot_dataset_length(
+        df=main_df, y_col="model", graph_output_dir=graph_output_dir
+    )
+    plot_dataset_diversity(
+        df=main_df, y_col="model", graph_output_dir=graph_output_dir
+    )
+
+    ablation_df = pd.read_csv(ablation_csv_path)
+    
 
 
 if __name__ == "__main__":
@@ -67,14 +77,18 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "--input-csv",
+        "--main-output-dir",
         type=str,
-        help="Path to input CSV file",
+        help="Directory holding the VMD and ablation datasets",
     )
     parser.add_argument(
-        "--output-dir",
+        "--graph-output-dir",
         type=str,
         help="Graph output directory",
     )
     args = parser.parse_args()
-    main(input_csv_path=Path(args.input_csv), output_dir=Path(args.output_dir))
+    main(
+        main_csv_path=Path(args.main_output_dir) / "vmd.csv",
+        ablation_csv_path=Path(args.main_output_dir) / "ablation.csv",
+        graph_output_dir=Path(args.graph_output_dir),
+    )
