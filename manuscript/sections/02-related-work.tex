@@ -2,27 +2,52 @@
 %
 \section{Related Work}
 
-\paragraph{Synthetic Discussions}
-\label{ssec:related:discussions}
-While studies exist for simulating user interactions in social media \cite{park_simulacra,mou_2024,tornberg_2023,y_social},and for using LLM facilitators \cite{kim_et_al_chatbot,cho-etal-2024-language}, none so far have combined the two approaches. One approach~\cite{balog_2024} extracts topics and comments from online human discussions and prompt an LLM to continue them. However, it does not use LLM-based user agents to simulate conversational dynamics, nor does it include facilitator agents. Another approach~\cite{ulmer2024} creates synthetic discussions between two roles: an agent controlling a fictional environment and a client interacting with it. These discussions are filtered and used to finetune the agent LLM for a specific task. Our methodology generalizes this framework: an agent (facilitator) interacts with multiple clients (non-facilitator users). Our work also takes inspiration from synthetic negotiations involving multiple agents with unique agendas and responsibilities~\cite{abdelnabi_negotiations}, as our discussions also feature agents with different motivations (normal users, trolls) and agents with veto power (facilitators).
+\subsection{Synthetic Discussions}
+\label{sec:related:discussions}
+
+\subsubsection{Specialized Frameworks}
+\label{sec:related:discussions:specialized}
+
+Synthetic discussion systems include synthetic clones of Reddit \cite{park_simulacra}, Twitter/X \cite{mou_2024}, generic social media sites \cite{tornberg_2023,y_social}, games \cite{Park2023GenerativeAI}, and social experiments \cite{zhou_2024_sotopia}. One approach~\cite{balog_2024} extracts topics and comments from online human discussions and prompt an LLM to continue them. However, it does not use LLM-based user agents to simulate conversational dynamics, nor does it include facilitator agents. Another approach~\cite{ulmer2024} creates synthetic discussions between two roles: an agent controlling a fictional environment and a client interacting with it. These discussions are filtered and used to finetune the agent LLM for a specific task. Finally, a third approach  \cite{abdelnabi_negotiations} generates synthetic negotiations involving multiple agents with different agendas and responsibilities. Our work can be seen as a domain shift of this approach---from negotiation to discussion facilitation---where various user types (e.g., normal users, trolls) engage in discussion overseen by a facilitator with veto power.
 
 
-\paragraph{LLM Facilitation}
+\subsubsection{General Frameworks}
+
+While \acf{sdg} is a mechanism frequently used in research, very few generalized tools have been developed to facilitate researchers. Concordia~\cite{concordia} is one of the very few frameworks dedicated to managing interactions between LLMs. However, it has to our knowledge been used in exactly one study~\cite{navarro2024} and one competition~\cite{neurips_concordia} since its initial release in 2023---most research is built on purpose-built tools (\S\ref{sec:related:discussions:specialized}).
+
+Given that the ecosystem around \ac{sdg} is maturing rapidly after the introduction of LLMs in 2022, it is noteworthy that standardized tooling has not been adopted at any large scale by the research community. An explanation for the non-proliferation of frameworks such as Concordia may be due to a complex and inflexible architecture, as well as initial computational requirements and running costs~\cite{neurips_concordia}.
+
+
+\subsection{LLM Facilitation}
 
 Unlike classification models traditionally used in online platforms, LLMs can actively facilitate discussions \cite{korre2025evaluation}. 
-%They can warn users for rule violations \cite{Kumar_AbuHashem_Durumeric_2024}, monitor engagement \cite{schroeder-etal-2024-fora}, aggregate diverse opinions \cite{small-polis-llm}, and provide translations and writing tips---which is especially useful for marginalized groups \cite{Tsai2024Generative}. These capabilities suggest that LLMs may be able to assist or even replace human facilitators in many tasks \cite{small-polis-llm,korre2025evaluation}.
+They can warn users for rule violations \cite{Kumar_AbuHashem_Durumeric_2024}, monitor engagement \cite{schroeder-etal-2024-fora}, aggregate diverse opinions \cite{small-polis-llm}, and provide translations and writing tips---which is especially useful for marginalized groups \cite{Tsai2024Generative}. These capabilities suggest that LLMs may be able to assist or even replace human facilitators in many tasks \cite{small-polis-llm,korre2025evaluation}.
+
 Simple rule-based models can enhance discussions~\cite{kim_et_al_chatbot}, although their approach was largely confined to organizing according to a specific social science (not facilitative) strategy, and balancing user activity. LLM facilitators have been used in human discussions~\cite{cho-etal-2024-language} providing high-quality feedback to users, although they struggle to make them more respectful and cooperative. In contrast to both works, ours uses exclusively LLM participants and LLM facilitators, and tests the latter in an explicitly toxic and challenging environment.
 
 
-\paragraph{Discussion Quality}
+\subsection{Discussion Quality}
 \label{ssec:related:quality}
 
-When creating \acp{sdg} we need to evaluate \emph{synthetic data quality}, as discussions without human involvement tend to deteriorate quickly, often becoming repetitive and low-quality \cite{ulmer2024}. Despite this, methods for quantifying the quality of synthetic data remain limited. One approach~\cite{balog_2024} attempts to solve this through metrics that either depend on human datasets with similar discussion topics or lack theoretical grounding, while another~\cite{kim_et_al_chatbot} assess quality through post-discussion surveys and by measuring lexical diversity. \emph{``Diversity''}~\cite{ulmer2024} is a discussion-level metric called which penalizes repeated text sequences between comments using average pairwise ROUGE-L \cite{lin-2004-rouge} scores. While it suffers from the limitations of ROUGE scores (mainly the use of exact-word matching), it is computationally efficient, explainable, and independent of any specific domain and dataset.
+When creating \acp{sdg} we need to evaluate \emph{synthetic data quality}, as discussions without human involvement tend to deteriorate quickly, often becoming repetitive and low-quality \cite{ulmer2024}. Despite the need for such metrics, methods for quantifying the quality of synthetic data remain limited~\cite{ulmer2024}. 
+
+One approach~\cite{balog_2024} uses a mix of graph-based, methodology-specific, and lexical similarity metrics, many of which depend on human discussion datasets for comparison. The authors also propose a loosely defined “coherence” score, which is LLM-annotated without theoretical grounding. Another approach assesses quality through post-discussion surveys with humans, and by measuring lexical diversity to approximate the variety of opinions expressed~\cite{kim_et_al_chatbot}. 
+
+\emph{``Diversity''}~\cite{ulmer2024} is a discussion-level metric called which penalizes repeated text sequences between comments using average pairwise ROUGE-L \cite{lin-2004-rouge} scores. Low diversity points to pathological problems (e.g., LLMs repeating previous comments). On the other hand, extremely high diversity may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants). Diversity is defined as:
+
+\small
+\begin{equation}
+	\label{eq:variety}
+	\textit{diversity}(d) = 1 - \frac{2}{N_d(N_d-1)}
+	\sum_{i=1}^{N_d-1} \sum_{\substack{j=i+1}}^{N_d} ROUGE-L(c(i,d), c(j,d))
+\end{equation}
+\normalsize
+\noindent where $N_d$ the length (in comments) of discussion $d$. While the metric suffers from the limitations of ROUGE scores (mainly the use of exact-word matching), it is computationally efficient, explainable, and independent of any specific domain and dataset. We will be employing this metric in our analysis, although we note that more robust synthetic quality metrics are needed.
 
 
-\paragraph{LLMs as Human Subjects}
+\subsection{LLMs as Human Subjects}
 \label{ssec:related:human-llm}
 
-While there is always a desire for synthetic simulation systems to be ``realistic'' w.r.t. human behavior \cite{grossman_2023,tornberg_2023,argyle2023}, this can not be claimed nor reliably measured by using LLM agents in lieu of humans \cite{rossi_2024}.
-% It is true that LLMs have demonstrated complex,emergent social behaviors \cite{park2023game,demarzo_2023,leng_2024,abdelnabi_negotiations,abramski_2023,hewitt2024predicting,park2024generativeagentsimulations1000}. However,
-Significant limitations of LLMs remain in the context of Social Science experiments such as behavioral hallucinations \cite{rossi_2024}; sociodemographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024,Taubenfeld2024SystematicBI}; non-deterministic outputs \cite{atil_2025,bisbee_2023}; and excessive agreeableness \cite{Park2023GenerativeAI,anthis_2025,rossi_2024}. Thus, \emph{no study based on LLM agents} can claim that it generates ``realistic'' discussions.
+Some academics \cite{grossman_2023} argue that synthetic agents have the potential to eventually replace human participants, a perspective shared by other researchers \cite{tornberg_2023,argyle2023}. Indeed, LLMs have demonstrated complex, emergent social behaviors. In a simulated setting, LLM actors have been observed diffusing information through social interaction as well as planning and organizing spontaneous social events without human interaction \cite{Park2023GenerativeAI}. In settings where LLM actors represent distinct factions with goals and agendas, they were shown to execute basic social strategies and adapt their plans in response to the other LLM actors \cite{abdelnabi_negotiations}. Additionally, substituting sociodemographic backgrounds with information from personal interviews enables LLMs to reliably predict further survey responses from interviewed humans~\cite{park2024generativeagentsimulations1000}. While this finding indicates that LLMs can extrapolate data points relating to human preferences, this approach is not usable in experimental settings at scale, since it relies on extensive human interviews and computational resources.
+
+However, significant limitations of LLMs remain in the context of Social Science experiments. Issues include undetectable behavioral hallucinations \cite{rossi_2024}; sociodemographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024,Taubenfeld2024SystematicBI}; unreliable annotations \cite{jansen_2023,bisbee_2023,neumann_2025,Gligoric2024CanUL}; non-deterministic outputs \cite{atil_2025,bisbee_2023}; and excessive agreeableness \cite{Park2023GenerativeAI,anthis_2025,rossi_2024}. Even if LLMs can mimic some human behaviors, they are ultimately at most a statistical estimate of the ``average'' human encountered in their training data; and thus we can not claim that any such behavior can be indicative of human behavioral patterns without extensive replication studies~\cite{rossi_2024}. Thus, \emph{no study based on LLM agents} can claim that it generates ``realistic'' discussions.
