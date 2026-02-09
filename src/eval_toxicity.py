@@ -7,7 +7,6 @@ import numpy as np
 import seaborn as sns
 import statsmodels.formula.api as smf
 
-import tasks.constants
 import tasks.graphs
 
 
@@ -23,6 +22,8 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
         "Moderator",
         np.where(df.is_troll, "Troll", "Non-troll user"),
     )
+
+    toxicity_overall(df[~df.is_moderator], graph_dir)
     toxicity_by_dimension(df, graph_dir, "role")
     toxicity_by_dimension(df, graph_dir, "strategy")
     toxicity_regression(df[~df.is_moderator], graph_dir=graph_dir)
@@ -45,7 +46,7 @@ def get_toxicity_df(
     toxicity_df.toxicity = pd.to_numeric(toxicity_df.toxicity)
 
     full_df = df.merge(right=toxicity_df, how="inner", on="message_id")
-    full_df["is_troll"] = full_df.prompt.str.contains("troll")
+    full_df["is_troll"] = full_df.prompt.str.contains("trolling")
 
     full_df = full_df.loc[
         (full_df.model != "hardcoded"),
@@ -62,6 +63,12 @@ def get_toxicity_df(
     ]
 
     return full_df
+
+
+def toxicity_overall(df: pd.DataFrame, graph_dir: Path) -> None:
+    sns.histplot(df.toxicity)
+    tasks.graphs.save_plot(graph_dir / "overall_toxicity.png")
+    plt.close()
 
 
 def toxicity_by_dimension(
@@ -134,8 +141,13 @@ def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
         pd.concat([avg_toxicity, troll_counts], axis=1).fillna(0).reset_index()
     )
     plot_df["troll_bin"] = plot_df["n_distinct_trolls"].clip(upper=4)
-    plot_df["troll_bin"] = plot_df["troll_bin"].astype(str)
-    plot_df.loc[plot_df["troll_bin"] == "4", "troll_bin"] = "4+"
+    plot_df["troll_bin"] = (
+        plot_df["troll_bin"]
+        .astype(int)
+        .astype(str)
+        .apply(lambda x: x if x != "4" else "4+")
+    )
+    print(plot_df.troll_bin.unique())
 
     plot_toxicity_vs_trolls(plot_df, graph_dir)
 
@@ -145,7 +157,8 @@ def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
 
     ax = sns.pointplot(
         data=plot_df,
-        x="n_distinct_trolls",
+        x="troll_bin",
+        order=["0", "1", "2", "3", "4+"],
         y="avg_non_troll_toxicity",
         estimator=np.mean,
         errorbar=("ci", 95),
