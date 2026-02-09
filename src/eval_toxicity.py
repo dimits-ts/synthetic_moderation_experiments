@@ -133,9 +133,9 @@ def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
     plot_df = (
         pd.concat([avg_toxicity, troll_counts], axis=1).fillna(0).reset_index()
     )
-    plot_df["troll_bin"] = plot_df["n_distinct_trolls"].clip(upper=6)
+    plot_df["troll_bin"] = plot_df["n_distinct_trolls"].clip(upper=4)
     plot_df["troll_bin"] = plot_df["troll_bin"].astype(str)
-    plot_df.loc[plot_df["troll_bin"] == "6", "troll_bin"] = "6+"
+    plot_df.loc[plot_df["troll_bin"] == "4", "troll_bin"] = "4+"
 
     plot_toxicity_vs_trolls(plot_df, graph_dir)
 

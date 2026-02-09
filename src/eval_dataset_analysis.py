@@ -24,7 +24,7 @@ def plot_dataset_length(
     )
     plt.xlim(0, 400)
     plt.xlabel(r"Comment length (\# words)")
-    tasks.graphs.save_plot(output_dir / "comment_len_model.png")
+    tasks.graphs.save_plot(graph_output_dir / "comment_len_model.png")
     plt.close()
 
 
@@ -49,7 +49,7 @@ def plot_dataset_diversity(
         common_norm=False,
     )
     plt.xlabel("Diversity")
-    tasks.graphs.save_plot(output_dir / "comment_diversity_model.png")
+    tasks.graphs.save_plot(graph_output_dir / "comment_diversity_model.png")
     plt.close()
 
 

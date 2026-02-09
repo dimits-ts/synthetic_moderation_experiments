@@ -50,8 +50,8 @@ python src/eval_moderation.py \
     --output-dir graphs
 
 python src/eval_dataset_analysis.py \
-    --input-csv data/main_output/vmd.csv \
-    --output-dir graphs
+    --main-output-dir data/main_output \
+    --graph-output-dir graphs
 
 python src/eval_toxicity.py \
     --main-output-dir data/main_output \
