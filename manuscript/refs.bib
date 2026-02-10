@@ -990,16 +990,25 @@ year = {2024}
 	url="https://doi.org/10.1007/978-3-642-04898-2_616"
 }
 
-
-@article{Taubenfeld2024SystematicBI,
-	title={Systematic Biases in LLM Simulations of Debates},
-	author={Amir Taubenfeld and Yaniv Dover and Roi Reichart and Ariel Goldstein},
-	journal={ArXiv},
-	year={2024},
-	volume={abs/2402.04049},
-	url={https://api.semanticscholar.org/CorpusID:267499945}
+@inproceedings{Taubenfeld2024SystematicBI,
+	title = "Systematic Biases in {LLM} Simulations of Debates",
+	author = "Taubenfeld, Amir  and
+	Dover, Yaniv  and
+	Reichart, Roi  and
+	Goldstein, Ariel",
+	editor = "Al-Onaizan, Yaser  and
+	Bansal, Mohit  and
+	Chen, Yun-Nung",
+	booktitle = "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",
+	month = nov,
+	year = "2024",
+	address = "Miami, Florida, USA",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/2024.emnlp-main.16/",
+	doi = "10.18653/v1/2024.emnlp-main.16",
+	pages = "251--267",
+	abstract = "The emergence of Large Language Models (LLMs), has opened exciting possibilities for constructing computational simulations designed to replicate human behavior accurately. Current research suggests that LLM-based agents become increasingly human-like in their performance, sparking interest in using these AI agents as substitutes for human participants in behavioral studies. However, LLMs are complex statistical learners without straightforward deductive rules, making them prone to unexpected behaviors. Hence, it is crucial to study and pinpoint the key behavioral distinctions between humans and LLM-based agents. In this study, we highlight the limitations of LLMs in simulating human interactions, particularly focusing on LLMs' ability to simulate political debates on topics that are important aspects of people{'}s day-to-day lives and decision-making processes. Our findings indicate a tendency for LLM agents to conform to the model{'}s inherent social biases despite being directed to debate from certain political perspectives. This tendency results in behavioral patterns that seem to deviate from well-established social dynamics among humans. We reinforce these observations using an automatic self-fine-tuning method, which enables us to manipulate the biases within the LLM and demonstrate that agents subsequently align with the altered biases. These results underscore the need for further research to develop methods that help agents overcome these biases, a critical step toward creating more realistic simulations."
 }
-
 @inproceedings{Zhong2019ExploringTR,
 	title={Exploring the Roles and Facilitation Strategies of Online Peer Moderators},
 	author={Qunyan Maggie Zhong and Howard Norton},
@@ -2241,4 +2250,175 @@ abstract = {Large Language Models (LLMs) are rapidly evolving, demonstrating imp
 	booktitle={NeurIPS 2024 Competition Track},
 	year={2024},
 	url={https://openreview.net/forum?id=dfeFy1PSSw}
+}
+
+@inproceedings{chen-etal-2025-llamapie,
+	title = "{L}lama{PIE}: Proactive In-Ear Conversation Assistants",
+	author = "Chen, Tuochao  and
+	Batchelder, Nicholas Scott  and
+	Liu, Alisa  and
+	Smith, Noah A.  and
+	Gollakota, Shyamnath",
+	editor = "Che, Wanxiang  and
+	Nabende, Joyce  and
+	Shutova, Ekaterina  and
+	Pilehvar, Mohammad Taher",
+	booktitle = "Findings of the Association for Computational Linguistics: ACL 2025",
+	month = jul,
+	year = "2025",
+	address = "Vienna, Austria",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/2025.findings-acl.710/",
+	doi = "10.18653/v1/2025.findings-acl.710",
+	pages = "13801--13824",
+	ISBN = "979-8-89176-256-5",
+	abstract = "We introduce LlamaPIE, the first real-time proactive assistant designed to enhance human conversations through discreet, concise guidance delivered via hearable devices. Unlike traditional language models that require explicit user invocation, this assistant operates in the background, anticipating user needs without interrupting conversations. We address several challenges, including determining when to respond, crafting concise responses that enhance conversations, leveraging knowledge of the user for context-aware assistance, and real-time, on-device processing. To achieve this, we construct a semi-synthetic dialogue dataset and propose a two-model pipeline: a small model that decides when to respond and a larger model that generates the response. We evaluate our approach on real-world datasets, demonstrating its effectiveness in providing helpful, unobtrusive assistance. User studies with our assistant, implemented on Apple Silicon M2 hardware, show a strong preference for the proactive assistant over both a baseline with no assistance and a reactive AI assistant, highlighting the potential of LlamaPIE to enhance live conversations."
+}
+
+
+@ARTICLE{frai_turn_taking,
+	AUTHOR={Nonomura, Ryota  and Mori, Hiroki },
+	TITLE={Who speaks next? Multi-party AI discussion leveraging the systematics of turn-taking in Murder Mystery games},
+	JOURNAL={Frontiers in Artificial Intelligence},
+	VOLUME={Volume 8 - 2025},
+	YEAR={2025},
+	URL={https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2025.1582287},
+	DOI={10.3389/frai.2025.1582287},
+	ISSN={2624-8212},
+	ABSTRACT={IntroductionMulti-agent systems utilizing large language models (LLMs) have shown great promise in achieving natural dialogue. However, smooth dialogue control and autonomous decision making among agents still remain challenging.MethodsIn this study, we focus on conversational norms such as adjacency pairs and turn-taking found in conversation analysis and propose a new framework called “Murder Mystery Agents” that applies these norms to AI agents' dialogue control. As an evaluation target, we employed the “Murder Mystery” game, a reasoning-type table-top role-playing game that requires complex social reasoning and information manipulation. The proposed framework integrates next speaker selection based on adjacency pairs and a self-selection mechanism that takes agents' internal states into account to achieve more natural and strategic dialogue.ResultsTo verify the effectiveness of this new approach, we analyzed utterances that led to dialogue breakdowns and conducted automatic evaluation using LLMs, as well as human evaluation using evaluation criteria developed for the Murder Mystery game. Experimental results showed that the implementation of the next speaker selection mechanism significantly reduced dialogue breakdowns and improved the ability of agents to share information and perform logical reasoning.DiscussionThe results of this study demonstrate that the systematics of turn-taking in human conversation are also effective in controlling dialogue among AI agents, and provide design guidelines for more advanced multi-agent dialogue systems.}
+}
+
+@inproceedings{sap-etal-2022-annotators,
+	title = "Annotators with Attitudes: How Annotator Beliefs And Identities Bias Toxic Language Detection",
+	author = "Sap, Maarten  and
+	Swayamdipta, Swabha  and
+	Vianna, Laura  and
+	Zhou, Xuhui  and
+	Choi, Yejin  and
+	Smith, Noah A.",
+	editor = "Carpuat, Marine  and
+	de Marneffe, Marie-Catherine  and
+	Meza Ruiz, Ivan Vladimir",
+	booktitle = "Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+	month = jul,
+	year = "2022",
+	address = "Seattle, United States",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/2022.naacl-main.431/",
+	doi = "10.18653/v1/2022.naacl-main.431",
+	pages = "5884--5906",
+	abstract = "The perceived toxicity of language can vary based on someone{'}s identity and beliefs, but this variation is often ignored when collecting toxic language datasets, resulting in dataset and model biases. We seek to understand the *who*, *why*, and *what* behind biases in toxicity annotations. In two online studies with demographically and politically diverse participants, we investigate the effect of annotator identities (*who*) and beliefs (*why*), drawing from social psychology research about hate speech, free speech, racist beliefs, political leaning, and more. We disentangle *what* is annotated as toxic by considering posts with three characteristics: anti-Black language, African American English (AAE) dialect, and vulgarity. Our results show strong associations between annotator identity and beliefs and their ratings of toxicity. Notably, more conservative annotators and those who scored highly on our scale for racist beliefs were less likely to rate anti-Black language as toxic, but more likely to rate AAE as toxic. We additionally present a case study illustrating how a popular toxicity detection system{'}s ratings inherently reflect only specific beliefs and perspectives. Our findings call for contextualizing toxicity labels in social variables, which raises immense implications for toxic language annotation and detection."
+}
+
+@article{goyal2022_toxicity,
+	author = {Goyal, Nitesh and Kivlichan, Ian D. and Rosen, Rachel and Vasserman, Lucy},
+	title = {Is Your Toxicity My Toxicity? Exploring the Impact of Rater Identity on Toxicity Annotation},
+	year = {2022},
+	issue_date = {November 2022},
+	publisher = {Association for Computing Machinery},
+	address = {New York, NY, USA},
+	volume = {6},
+	number = {CSCW2},
+	url = {https://doi.org/10.1145/3555088},
+	doi = {10.1145/3555088},
+	abstract = {Machine learning models are commonly used to detect toxicity in online conversations. These models are trained on datasets annotated by human raters. We explore how raters' self-described identities impact how they annotate toxicity in online comments. We first define the concept of Specialized Rater Pools: rater pools formed based on raters' self-described identities, rather than at random. We formed three such rater pools for this study - specialized rater pools of raters from the U.S. who identify as African American, LGBTQ, and those who identify as neither. Each of these rater pools annotated the same set of comments, which contains many references to these identity groups. We found that rater identity is a statistically significant factor in how raters will annotate toxicity for identity-related annotations. Using preliminary content analysis, we examined the comments with the most disagreement between rater pools and found nuanced differences in the toxicity annotations. Next, we trained models on the annotations from each of the different rater pools, and compared the scores of these models on comments from several test sets. Finally, we discuss how using raters that self-identify with the subjects of comments can create more inclusive machine learning models, and provide more nuanced ratings than those by random raters.},
+	journal = {Proc. ACM Hum.-Comput. Interact.},
+	month = nov,
+	articleno = {363},
+	numpages = {28},
+	keywords = {African American, LGBTQ, data annotation, harassment, human annotations, identity, machine learning, moderation, raters, subjectivity, toxicity}
+}
+
+@article{gallegos-etal-2024-bias,
+	title = "Bias and Fairness in Large Language Models: A Survey",
+	author = "Gallegos, Isabel O.  and
+	Rossi, Ryan A.  and
+	Barrow, Joe  and
+	Tanjim, Md Mehrab  and
+	Kim, Sungchul  and
+	Dernoncourt, Franck  and
+	Yu, Tong  and
+	Zhang, Ruiyi  and
+	Ahmed, Nesreen K.",
+	journal = "Computational Linguistics",
+	volume = "50",
+	number = "3",
+	month = sep,
+	year = "2024",
+	address = "Cambridge, MA",
+	publisher = "MIT Press",
+	url = "https://aclanthology.org/2024.cl-3.8/",
+	doi = "10.1162/coli_a_00524",
+	pages = "1097--1179",
+	abstract = "Rapid advancements of large language models (LLMs) have enabled the processing, understanding, and generation of human-like text, with increasing integration into systems that touch our social sphere. Despite this success, these models can learn, perpetuate, and amplify harmful social biases. In this article, we present a comprehensive survey of bias evaluation and mitigation techniques for LLMs. We first consolidate, formalize, and expand notions of social bias and fairness in natural language processing, defining distinct facets of harm and introducing several desiderata to operationalize fairness for LLMs. We then unify the literature by proposing three intuitive taxonomies, two for bias evaluation, namely, metrics and datasets, and one for mitigation. Our first taxonomy of metrics for bias evaluation disambiguates the relationship between metrics and evaluation datasets, and organizes metrics by the different levels at which they operate in a model: embeddings, probabilities, and generated text. Our second taxonomy of datasets for bias evaluation categorizes datasets by their structure as counterfactual inputs or prompts, and identifies the targeted harms and social groups; we also release a consolidation of publicly available datasets for improved access. Our third taxonomy of techniques for bias mitigation classifies methods by their intervention during pre-processing, in-training, intra-processing, and post-processing, with granular subcategories that elucidate research trends. Finally, we identify open problems and challenges for future work. Synthesizing a wide range of recent research, we aim to provide a clear guide of the existing literature that empowers researchers and practitioners to better understand and prevent the propagation of bias in LLMs."
+}
+
+@inproceedings{santukar_2023,
+	author = {Santurkar, Shibani and Durmus, Esin and Ladhak, Faisal and Lee, Cinoo and Liang, Percy and Hashimoto, Tatsunori},
+	title = {Whose opinions do language models reflect?},
+	year = {2023},
+	publisher = {JMLR.org},
+	abstract = {Language models (LMs) are increasingly being used in open-ended contexts, where the opinions they reflect in response to subjective queries can have a profound impact, both on user satisfaction, and shaping the views of society at large. We put forth a quantitative framework to investigate the opinions reflected by LMs – by leveraging high-quality public opinion polls. Using this framework, we create OpinionQA, a dataset for evaluating the alignment of LM opinions with those of 60 US demographic groups over topics ranging from abortion to automation. Across topics, we find substantial misalignment between the views reflected by current LMs and those of US demographic groups: on par with the Democrat-Republican divide on climate change. Notably, this misalignment persists even after explicitly steering the LMs towards particular groups. Our analysis not only confirms prior observations about the left-leaning tendencies of some human feedback-tuned LMs, but also surfaces groups whose opinions are poorly reflected by current LMs (e.g., 65+ and widowed individuals).},
+	booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+	articleno = {1244},
+	numpages = {34},
+	location = {Honolulu, Hawaii, USA},
+	series = {ICML'23}
+}
+
+@inproceedings{lutz-etal-2025-prompt,
+	title = "The Prompt Makes the Person(a): A Systematic Evaluation of Sociodemographic Persona Prompting for Large Language Models",
+	author = "Lutz, Marlene  and
+	Sen, Indira  and
+	Ahnert, Georg  and
+	Rogers, Elisa  and
+	Strohmaier, Markus",
+	editor = "Christodoulopoulos, Christos  and
+	Chakraborty, Tanmoy  and
+	Rose, Carolyn  and
+	Peng, Violet",
+	booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2025",
+	month = nov,
+	year = "2025",
+	address = "Suzhou, China",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/2025.findings-emnlp.1261/",
+	doi = "10.18653/v1/2025.findings-emnlp.1261",
+	pages = "23212--23237",
+	ISBN = "979-8-89176-335-7",
+	abstract = "Persona prompting is increasingly used in large language models (LLMs) to simulate views of various sociodemographic groups. However, how a persona prompt is formulated can significantly affect outcomes, raising concerns about the fidelity of such simulations. Using five open-source LLMs, we systematically examine how different persona prompt strategies, specifically role adoption formats and demographic priming strategies, influence LLM simulations across 15 intersectional demographic groups in both open- and closed-ended tasks. Our findings show that LLMs struggle to simulate marginalized groups but that the choice of demographic priming and role adoption strategy significantly impacts their portrayal. Specifically, we find that prompting in an interview-style format and name-based priming can help reduce stereotyping and improve alignment. Surprisingly, smaller models like OLMo-2-7B outperform larger ones such as Llama-3.3-70B.Our findings offer actionable guidance for designing sociodemographic persona prompts in LLM-based simulation studies."
+}
+
+@inproceedings{liu_2024_bias,
+	author = {Liu, Yiran and Yang, Ke and Qi, Zehan and Liu, Xiao and Yu, Yang and Zhai, ChengXiang},
+	booktitle = {Advances in Neural Information Processing Systems},
+	doi = {10.52202/079017-3495},
+	editor = {A. Globerson and L. Mackey and D. Belgrave and A. Fan and U. Paquet and J. Tomczak and C. Zhang},
+	pages = {110131--110155},
+	publisher = {Curran Associates, Inc.},
+	title = {Bias and Volatility: A Statistical Framework for Evaluating Large Language Model\textquotesingle s Stereotypes and the Associated Generation Inconsistency},
+	url = {https://proceedings.neurips.cc/paper_files/paper/2024/file/c6ec4a25a11393f277cfd64b7ea4d106-Paper-Datasets_and_Benchmarks_Track.pdf},
+	volume = {37},
+	year = {2024}
+}
+
+@inproceedings{sommerauer-etal-2025-simulating,
+	title = "Simulating Identity, Propagating Bias: Abstraction and Stereotypes in {LLM}-Generated Text",
+	author = "Sommerauer, Pia  and
+	Rambelli, Giulia  and
+	Caselli, Tommaso",
+	editor = "Christodoulopoulos, Christos  and
+	Chakraborty, Tanmoy  and
+	Rose, Carolyn  and
+	Peng, Violet",
+	booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2025",
+	month = nov,
+	year = "2025",
+	address = "Suzhou, China",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/2025.findings-emnlp.1080/",
+	doi = "10.18653/v1/2025.findings-emnlp.1080",
+	pages = "19812--19831",
+	ISBN = "979-8-89176-335-7",
+	abstract = "Persona-prompting is a growing strategy to steer LLMs toward simulating particular perspectives or linguistic styles through the lens of a specified identity. While this method is often used to personalize outputs, its impact on how LLMs represent social groups remains underexplored. In this paper, we investigate whether persona-prompting leads to different levels of linguistic abstraction{---}an established marker of stereotyping{---}when generating short texts linking socio-demographic categories with stereotypical or non-stereotypical attributes. Drawing on the Linguistic Expectancy Bias framework, we analyze outputs from six open-weight LLMs under three prompting conditions, comparing 11 persona-driven responses to those of a generic AI assistant. To support this analysis, we introduce Self-Stereo, a new dataset of self-reported stereotypes from Reddit. We measure abstraction through three metrics: concreteness, specificity, and negation. Our results highlight the limits of persona-prompting in modulating abstraction in language, confirming criticisms about the ecology of personas as representative of socio-demographic groups and raising concerns about the risk of propagating stereotypes even when seemingly evoking the voice of a marginalized groups."
 }

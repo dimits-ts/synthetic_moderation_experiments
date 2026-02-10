@@ -5,17 +5,7 @@
 \subsection{Synthetic Discussions}
 \label{sec:related:discussions}
 
-\subsubsection{Specialized Frameworks}
-\label{sec:related:discussions:specialized}
-
 Synthetic discussion systems include synthetic clones of Reddit \cite{park_simulacra}, Twitter/X \cite{mou_2024}, generic social media sites \cite{tornberg_2023,y_social}, games \cite{Park2023GenerativeAI}, and social experiments \cite{zhou_2024_sotopia}. One approach~\cite{balog_2024} extracts topics and comments from online human discussions and prompt an LLM to continue them. However, it does not use LLM-based user agents to simulate conversational dynamics, nor does it include facilitator agents. Another approach~\cite{ulmer2024} creates synthetic discussions between two roles: an agent controlling a fictional environment and a client interacting with it. These discussions are filtered and used to finetune the agent LLM for a specific task. Finally, a third approach  \cite{abdelnabi_negotiations} generates synthetic negotiations involving multiple agents with different agendas and responsibilities. Our work can be seen as a domain shift of this approach---from negotiation to discussion facilitation---where various user types (e.g., normal users, trolls) engage in discussion overseen by a facilitator with veto power.
-
-
-\subsubsection{General Frameworks}
-
-While \acf{sdg} is a mechanism frequently used in research, very few generalized tools have been developed to facilitate researchers. Concordia~\cite{concordia} is one of the very few frameworks dedicated to managing interactions between LLMs. However, it has to our knowledge been used in exactly one study~\cite{navarro2024} and one competition~\cite{neurips_concordia} since its initial release in 2023---most research is built on purpose-built tools (\S\ref{sec:related:discussions:specialized}).
-
-Given that the ecosystem around \ac{sdg} is maturing rapidly after the introduction of LLMs in 2022, it is noteworthy that standardized tooling has not been adopted at any large scale by the research community. An explanation for the non-proliferation of frameworks such as Concordia may be due to a complex and inflexible architecture, as well as initial computational requirements and running costs~\cite{neurips_concordia}.
 
 
 \subsection{LLM Facilitation}
