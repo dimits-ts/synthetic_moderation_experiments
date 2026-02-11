@@ -1,34 +1,34 @@
 % !TEX root = ../main.tex
 %
 
-\section{\ac{sdg} Frameworks}
+\section{Designing robust \ac{sdg} frameworks}
 \label{sec:methodology}
 
 
 \subsection{Design Rules}
 \label{sec:methodology:designrules}
 
-While \acf{sdg} is a mechanism frequently used in research, very few generalized tools have been developed to facilitate researchers in generating discussions. Concordia~\cite{concordia} is one of the very few frameworks dedicated to managing interactions between LLMs. However, it has to our knowledge been used in exactly one study~\cite{navarro2024} and one competition~\cite{neurips_concordia} since its initial release in 2023---most research is built on purpose-built tools (\S\ref{sec:related:discussions}). Given that the ecosystem around \ac{sdg} is maturing rapidly after the introduction of LLMs in 2022, it is noteworthy that standardized tooling has not been adopted at any large scale by the research community. What makes these frameworks widely used by other people has not been explored in literature, despite many such implementations. By observing which systems worked and which failed, we propose the following design rules:
+While \acf{sdg} is a mechanism frequently used in research, very few generalized tools have been developed to facilitate researchers in generating discussions. Concordia~\cite{concordia} is one of the very few frameworks dedicated to managing interactions between LLMs. However, it has to our knowledge been used in exactly one study~\cite{navarro2024} and one competition~\cite{neurips_concordia} since its initial release in 2023---most research is built on purpose-built tools (\S\ref{sec:related:discussions}). Given that the ecosystem around \ac{sdg} is maturing rapidly after the introduction of LLMs in 2022~\cite{adornetto2025_gabms}, it is noteworthy that standardized tooling has not been adopted at any large scale by the research community. What makes these frameworks widely used by other people has not been explored in literature, despite many such implementations. By observing which systems worked and which failed, we propose the following design rules:
 
 \begin{enumerate}
 	\item \textbf{The framework must be as simple as possible, while achieving the researchers' goals}. In \ac{cs} there is a widely shared notion that simple systems are almost always better at performing their functions (``Keep It Simple Stupid''---KISS) \cite{beck2000extreme,thomas2025simplicity}, which has been validated in real-world applications \cite{banker1989software,ogheneovo2014relationship}. The violation of this rule could explain issues in other academic \ac{sdg} systems~\cite{balog_2024}. Complex and inflexible architecture, as well as initial computational requirements and running costs have also been mentioned as a limiting factor for Concordia~\cite{neurips_concordia}.
 	
-	\item \textbf{Complexity is directly related to researcher bias}. Each new feature necessarily follows our own expectations with how human discussions work. Indeed, recent work on LLM behaviors~\cite{park2023game} managed to derive interesting insights exactly because it did \emph{not} tamper with the way LLM users interacted.
+	\item \textbf{Complexity is directly related to researcher bias}. Each new feature necessarily follows our own expectations with how human discussions work. Indeed, recent work on LLM behaviors~\cite{park2023game} managed to derive interesting insights exactly because it did \emph{not} tamper with the way LLM users interacted. This is generally supported by \ac{gabm} literature~\cite{adornetto2025_gabms}.
 	
-	\item \textbf{\ac{sdg} should be cheap} The primary reason for designing and using \ac{sdg} methodologies is to bypass the cost of human experiments~\cite{rossi_2024}. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions, it is necessary to generate large quantities of data without compromising cost efficiency.
+	\item \textbf{\ac{sdg} should be cheap} The primary reason for designing and using \ac{sdg} methodologies is to bypass the monetary and time cost of human experiments~\cite{rossi_2024}. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions, it is necessary to generate large quantities of data without compromising cost efficiency, and thus scalability.
 \end{enumerate}
 
 
-\subsection{Context Management} 
-LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024,park2023game}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches may be sufficient for specialized tasks, but not for every task. These approaches however are not explainable, and require substantial computational resources either due to repeated generation~\cite{balog_2024}, or due to the loading of specialized modules in (very valuable) GPU VRAM memory~\cite{Vezhnevets2023GenerativeAM}, rendering them inadequate for tasks where scalability and capital intensity are limiting factors.
+\subsection{Context Management}
+LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024,park2023game}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches however are not explainable, and require substantial computational resources either due to repeated generation~\cite{balog_2024,adornetto2025_gabms}, or due to the loading of specialized modules in (very valuable) GPU VRAM memory~\cite{Vezhnevets2023GenerativeAM}, rendering them inadequate for tasks where scalability and capital intensity are limiting factors.
 
-Prior work in discussions has shown that including the $h$ most recent comments in a discussion provides sufficient context for the LLM participants \cite{pavlopoulos_2020_toxicity}. We argue that while this may not be an optimal solution for all tasks, it is necessary for some, and adequate for many. In the case of online discussions, these approaches \emph{should not be used}, as they necessarily discard important information such as writing style, exact wording and tone, which are essential in understanding participant posturing. More generally, pasting the contents of previous interactions ensures scalability (assuming relatively small context windows), explainability and no information loss.
+These approaches may be appropriate for highly specialized settings, but they are not necessary for every task. Prior work on online discussions has demonstrated that providing the $h$ most recent comments as context is sufficient for LLM participants to engage meaningfully \cite{pavlopoulos_2020_toxicity}. While this strategy may not be universally optimal, we argue that it is necessary in certain cases and adequate in many. In online discussions in particular, the aforementioned context-management techniques \emph{should not be used}, as they inevitably abstract away critical elements such as writing style, precise wording, and tone—features that are central to interpreting participant stance and posturing. More broadly, directly including the contents of prior interactions preserves all available information while maintaining scalability (assuming relatively small context windows) and ensuring transparency and explainability.
 
 
 \subsection{Turn Taking} 
 Turn-taking refers to the process with which humans take turns speaking in a discussion. The goal is typically to minimize idle time in discussions, while letting most participants participate. This process is poorly understood---only experimental coarse-grained solutions have been devised for automated systems~\cite{frai_turn_taking}. While humans typically learn when to speak after years of constant social interaction~\cite{frai_turn_taking}, this process must be implemented for LLM agents which are trained as chatbot assistants---and therefore to always respond. 
 
-One solution is to use a dedicated smaller model whose only task is to decide whether a larger model should speak, but this approach has been only demonstrated in narrow application settings~\cite{chen-etal-2025-llamapie}. Concordia~\cite{Vezhnevets2023GenerativeAM} uses a centralized system where a single agent (''the Game Master'') determines who should speak, ignoring input from the participants themselves. This leads to some computational overhead, as the Game Master has to decide the next course of action using prompting. Deliberate Lab~\cite{Tsai_Deliberate_Lab_Open-Source_2025} uses a system where each agent is assigned a typing speed, which determines priority. These approaches showcase the necessity of a turn-taking system when using LLMs as participants.
+One solution is to use a dedicated smaller model whose only task is to decide whether a larger model should speak, but this approach has been only demonstrated in narrow application settings~\cite{chen-etal-2025-llamapie}. Concordia~\cite{Vezhnevets2023GenerativeAM} uses a centralized system where a single agent (``the Game Master'') determines who should speak, ignoring input from the participants themselves. This leads to some computational overhead, as the Game Master has to decide the next course of action using prompting. Deliberate Lab~\cite{Tsai_Deliberate_Lab_Open-Source_2025} uses a system where each agent is assigned a typing speed, which determines priority. These approaches showcase the necessity of a turn-taking system when using LLMs as participants.
 
 In online fora users often create ``comment chains'' following-up on responses to their previous comments. For each discussion turn we either allow the previous user to respond (with a $40\%$ probability), or select another random participant ($60\%$). This probability was selected experimentally; larger values tend to create ``debate''-style discussions between only two or three participants, while lower values tend to create scenarios with minimal interaction between them.\footnote{It would be interesting to analyze quantitatively how discussions change when modifying this parameter, but this is outside the scope of our work.} Our turn-taking function is thus defined as:
 \[
@@ -61,7 +61,68 @@ We could instead use prompting by instructing participants to respond to repeate
  
  Including \acp{sdb} (e.g., gender, age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large,sommerauer-etal-2025-simulating}. These ``persona'' prompts essentially shift the distribution of output tokens, hence producing content of larger variety when using multiple distinct personas~\cite{liu_2024_bias}. It is worth noting that these shifts in speech do not necessarily correlate to the actual human groups these prompts are modeling~\cite{lutz-etal-2025-prompt,liu_2024_bias}, but this is not concerning for our use-case since we cannot claim to simulate human behaviors with LLMs (\S\ref{ssec:related:human-llm}).
 
-The creation of these personas is sometimes implemented by randomly selecting sociodemographic attributes from a number of dimensions such as age, gender, employment etc. We instead pick personas from the PERSONA dataset~\cite{castricato-etal-2025-persona}, which includes a curated set of personas based on US census data (see Appendix~\ref{ssec:app:sdbs} for details).\footnote{We use the public version of the dataset, since we were unable to establish contact with the authors for gaining access to the full dataset.} We add random employment information to these personas, since we experimentally discovered that doing so improves discussion variety. Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
+The creation of these personas is sometimes implemented by randomly selecting sociodemographic attributes from a number of dimensions such as age, gender, employment etc.~\cite{adornetto2025_gabms} We instead pick personas from the PERSONA dataset~\cite{castricato-etal-2025-persona}, which includes a curated set of personas based on US census data (see Appendix~\ref{ssec:app:sdbs} for details).\footnote{We use the public version of the dataset, since we were unable to establish contact with the authors for gaining access to the full dataset.} We add random employment information to these personas, since we experimentally discovered that doing so improves discussion variety. Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
+
+
+\subsection{Evaluation}
+\label{ssec:experimental:evaluation}
+
+\begin{table}[t]
+	\centering
+	\small
+	\begin{tabular}{>{\bfseries}p{3cm} c c p{5cm}}
+		\toprule
+		\multicolumn{1}{c}{\textbf{Name}} & 
+		\multicolumn{1}{c}{\textbf{Needs humans}} & 
+		\multicolumn{1}{c}{\textbf{Usable in \ac{sdg}}} & 
+		\multicolumn{1}{c}{\textbf{Reason}} \\
+		\midrule
+		Data analytics & $\times$ & \checkmark & Used extensively to extract quantitative statistics from simulations and assess system-level properties. \\
+		
+		Docking & $\times$ & $\times$ & No established state-of-the-art \ac{gabm} for \ac{sdg} exists to serve as a comparison benchmark. \\
+		
+		Empirical validation & $\times$ & $\triangle$ & Computational metrics (e.g., Diversity) can be compared to human discussions; however, limited real-world data on facilitation restricts full validation. \\
+		
+		Sampling & $\times$ & $\times$ & Requires extensive repeated simulations, leading to prohibitive computational costs. \\
+		
+		Visualization & $\times$ & $\triangle$ & Provides qualitative insights but is prone to subjective interpretation and bias. \\
+		
+		Survey-based validation & \checkmark & $\times$ & Large number of dynamically prompted agents makes interviewing impractical and analytically unclear. \\
+		
+		Observational studies & \checkmark & \checkmark & Enables comparison of emergent behaviors with well-documented human social dynamics. \\
+		
+		Expert reviews & \checkmark & $\times$ & High cost and difficulty in recruiting facilitation and social interaction experts; not scalable. \\
+		\bottomrule
+	\end{tabular}
+	\caption{Evaluation strategies for \ac{gabm} systems and their applicability to \ac{sdg}. \checkmark: yes, $\times$: no, $\triangle$: limited/partial applicability.}
+	\label{tab:evaluation_sdg}
+\end{table}
+
+
+
+In general, a \ac{gabm} system should be validated based on its purposes and goals, as well as the availability of relevant data~\cite{collins2024}; \cite{adornetto2025_gabms} posit that systems that only exist to further research should not be held to the same standard as those used for policy-making or medicine for example.
+
+There is currently no consensus on how a \acp{gabm} system should be evaluated~\cite{adornetto2025_gabms}. We can however use a subset of foundational methods from non-generative agent-based models~\cite{collins2024}. We can also use ``face validation''~\cite{rand2011_rigor}, which employs humans to judge observed behaviors and dynamics. Specifically, since the original procedures were designed with Machine Learning and rules-based models in mind, we use the adapted guidelines proposed by~\cite{adornetto2025_gabms} for generative agents. A list of possible evaluation foundational (1-4) and face-validation (5-7) strategies with the viability for \ac{sdg} is given below:
+
+\begin{enumerate}
+	% Foundational
+	\item \textbf{Data analytics} is used extensively throughout our evaluation pipeline to extract useful statistics from our simulations.
+	
+	\item \textbf{Docking} compares the outputs of the evaluated \ac{gabm} to a state-of-the-art \ac{gabm}. Since we are one of the first to propose a generalized framework for \ac{sdg}, there is no apparent ``state-of-the-art'' model to be compared against.
+	
+	\item \textbf{Empirical validation} compares real-world data to ensure to the model's predictions. We can certainly use computational metrics such as \textit{Diversity}~\cite{ulmer2024} (\S\ref{sec:related:quality}) to gauge the quality of our synthetic discussions. Low diversity points to pathological problems (e.g., LLMs repeating previous comments). Conversely, extremely high diversity may indicate a lack of interaction between participants---a discussion where participants engage with each other will naturally feature some lexical overlap, including common terms or paraphrasing points made by others. We can thus compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions to estimate the former approximate real-world content variety and participant interaction. In our case, there is also a general lack of data for online discussion facilitation~\cite{korre2025evaluation}; thus we can not examine the behavior of LLM facilitators besides some general trends.
+	
+	\item \textbf{Sampling} and \textbf{visualization} lead to prohibitive computational costs in the case of the former, and subjective biases for the latter~\cite{adornetto2025_gabms}.
+	
+	% Face validation
+	\item \textbf{Survey-based validation} interviews the agents themselves. We do not follow this approach, because the large amount of agents (44 agents, 7 active at any time, with randomly assigned role prompts) used makes evaluation and analysis impractical from the perspective of time and complexity. It is also unclear what information we could derive from these agents.
+	
+	\item \textbf{Observational studies} analyze human behavior in similar settings, and compare them with the generative agents. We use this technique by observing emergent social behaviors that are well-accounted for in literature.
+	
+	\item \textbf{Expert reviews} are not used, since the difficulty and cost of finding experts in the field of facilitation and social interactions is time consuming and non-scalable. 
+\end{enumerate}
+
+The selection of a subset of validation methods for \textit{inferential} agents (who only make decisions) based on the system's goals and limitations is often used in literature, and usually accepted by the research community~\cite{adornetto2025_gabms}.
 
 
 \section{Scalability}
