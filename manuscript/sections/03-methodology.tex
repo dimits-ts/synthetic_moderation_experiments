@@ -4,6 +4,14 @@
 \section{Designing robust \ac{sdg} frameworks}
 \label{sec:methodology}
 
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\columnwidth]{research_goal.drawio.png}
+	\caption{We design \ac{sdg} systems through three main components; the creation of LLM participants in lieu of humans; simple synthetic systems that handle conversational dynamics; and scalable evaluation methodologies grounded in literature which avoiding human validation as much as possible.}
+	\label{fig:sdg}
+\end{figure}
+
+
 \subsection{Design Rules}
 \label{sec:methodology:designrules}
 
@@ -56,7 +64,7 @@ We could instead use prompting by instructing participants to respond to repeate
 	\label{fig::example}
 \end{figure}
 
- It is well known that LLMs tend to align more closely with WEIRD (Western, Educated, Industrialized, Rich, and Democratic) and socially prominent groups, while diverging from minorities~\cite{sap-etal-2022-annotators,goyal2022_toxicity,gallegos-etal-2024-bias} due to their nature as statistical models that adopt the bias of their training data during pretraining. These biases are further shaped by alignment procedures and prompt sensitivity~\cite{liu2023,santukar_2023}. Thus, synthetic discussions with out-of-the-box LLMs typically result in similar opinions and arguments, with no variance. 
+ It is well known that LLMs tend to align more closely with WEIRD (Western, Educated, Industrialized, Rich, and Democratic) and socially prominent groups, while diverging from minorities~\cite{sap-etal-2022-annotators,goyal2022_toxicity,gallegos-etal-2024-bias} due to their nature as statistical models that adopt the bias of their training data during pretraining. These biases are further shaped by alignment procedures and prompt sensitivity~\cite{liu_2024_bias,santukar_2023}. Thus, synthetic discussions with out-of-the-box LLMs typically result in similar opinions and arguments, with no variance. 
  
  Including \acp{sdb} (e.g., gender, age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large,sommerauer-etal-2025-simulating}. These ``persona'' prompts essentially shift the distribution of output tokens, hence producing content of larger variety when using multiple distinct personas~\cite{liu_2024_bias}. It is worth noting that these shifts in speech do not necessarily correlate to the actual human groups these prompts are modeling~\cite{lutz-etal-2025-prompt,liu_2024_bias}, but this is not concerning for our use-case since we cannot claim to simulate human behaviors with LLMs (\S\ref{ssec:related:human-llm}).
 
@@ -64,36 +72,37 @@ The creation of these personas is sometimes implemented by randomly selecting so
 
 
 \subsection{Evaluation}
-\label{ssec:experimental:evaluation}
+\label{ssec:methodology:evaluation}
 
-\begin{table}[t]
+\begin{table}[h	t]
 	\centering
 	\small
-	\begin{tabular}{>{\bfseries}p{3cm} c c p{5cm}}
+	\begin{tabular}{>{\bfseries}p{3cm} c c c p{5cm}}
 		\toprule
 		\multicolumn{1}{c}{\textbf{Name}} & 
 		\multicolumn{1}{c}{\textbf{Needs humans}} & 
-		\multicolumn{1}{c}{\textbf{Usable in \ac{sdg}}} & 
+		\multicolumn{1}{c}{\textbf{\ac{sdg}}} & 
+		\multicolumn{1}{c}{\textbf{Facil.}} & 
 		\multicolumn{1}{c}{\textbf{Reason}} \\
 		\midrule
-		Data analytics & $\times$ & \checkmark & Used extensively to extract quantitative statistics from simulations and assess system-level properties. \\
+		Data analytics & $\times$ & \checkmark & \checkmark & Statistics and aggregated information give us insight into system-wide properties. \\
 		
-		Docking & $\times$ & $\times$ & No established state-of-the-art \ac{gabm} for \ac{sdg} exists to serve as a comparison benchmark. \\
+		Docking & $\times$ & $\times$ &  $\times$ & No established state-of-the-art \ac{gabm} for \ac{sdg} exists to serve as a comparison benchmark. \\
 		
-		Empirical validation & $\times$ & $\triangle$ & Computational metrics (e.g., Diversity) can be compared to human discussions; however, limited real-world data on facilitation restricts full validation. \\
+		Empirical validation & $\times$ & \checkmark & $\times$ &  ``Diversity'' can be used for comparisons with human discussions. However, limited real-world data on facilitation restricts full validation. \\
 		
-		Sampling & $\times$ & $\times$ & Requires extensive repeated simulations, leading to prohibitive computational costs. \\
+		Sampling & $\times$ & $\times$ & $\times$ & Requires extensive repeated simulations, leading to prohibitive computational costs. \\
 		
-		Visualization & $\times$ & $\triangle$ & Provides qualitative insights but is prone to subjective interpretation and bias. \\
+		Visualization & $\times$ & $\triangle$ & $\triangle$ & Used for some extreme cases of aberrant behavior. However, the need for subjective interpretation restricts use-cases.\\
 		
-		Survey-based validation & \checkmark & $\times$ & Large number of dynamically prompted agents makes interviewing impractical and analytically unclear. \\
+		Survey-based validation & \checkmark & $\times$ &  $\times$ & Large number of dynamically prompted agents makes interviewing impractical and analytically unclear. \\
 		
-		Observational studies & \checkmark & \checkmark & Enables comparison of emergent behaviors with well-documented human social dynamics. \\
+		Observational studies & \checkmark & $\triangle$ &$\triangle$ & Enables comparison of emergent behaviors with well-documented human social dynamics, but can only be applied on random samples. \\
 		
-		Expert reviews & \checkmark & $\times$ & High cost and difficulty in recruiting facilitation and social interaction experts; not scalable. \\
+		Expert reviews & \checkmark & $\times$ & $\times$ & High cost and difficulty in recruiting social interaction experts; not scalable. \\
 		\bottomrule
 	\end{tabular}
-	\caption{Evaluation strategies for \ac{gabm} systems and their applicability to \ac{sdg}. \checkmark: yes, $\times$: no, $\triangle$: limited/partial applicability.}
+	\caption{Evaluation strategies for \ac{gabm} systems and their applicability to \ac{sdg} and investigative tasks on facilitation. \checkmark: yes, $\times$: no, $\triangle$: limited/partial applicability.}
 	\label{tab:evaluation_sdg}
 \end{table}
 
