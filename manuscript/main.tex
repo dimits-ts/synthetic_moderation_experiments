@@ -2,7 +2,7 @@
 \pdfoutput=1
 % In particular,the hyperref package requires pdfLaTeX in order to break URLs across lines.
 
-\documentclass[runningheads]{llncs}
+\documentclass[manuscript,screen,review]{acmart}
 \usepackage[misc]{ifsym}
 \newcommand{\corr}{(\Letter)}
 
@@ -85,11 +85,10 @@
 
 \begin{document}
 
+\input{sections/00-abstract}
+
 \maketitle
 
-%\textWarning{Content warning: This paper contains samples of harmful text,including violent,toxic,controversial,and potentially illegal statements.}
-
-\input{sections/00-abstract}
 \input{sections/01-introduction}
 \input{sections/02-related-work}
 \input{sections/03-methodology}
