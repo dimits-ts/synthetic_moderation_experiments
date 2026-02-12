@@ -248,16 +248,16 @@ In order to minimize costs, we use open-source models hosted on on-premise serve
 
 \begin{table}[t]
 	\centering
-	\begin{tabular}{ccccc}
+	\begin{tabular}{cccc}
 		\toprule
-		\textbf{Participant Type} & \textbf{CPT}  & \textbf{Total cost} & \textbf{Infrastructure} & \textbf{Behavioral Analysis} \\
+		\textbf{Participant Type} & \ac{cpt}  & \textbf{Total cost} & \textbf{Infrastructure}  \\
 		\midrule
-		Human (7 participants) & \$ 1.667 & \$ 26,513 & Depends & Yes\\
-		Closed Source (GPT-5.1) & \$ 0.165 & \$ 376 & No & No\\
-		Open Source (Extensive) & \$ 0.036 & \$ 81 & Basic GPU server & No \\
-		Open Source (Budget) & \$ 0.008 & \$ 18 & Consumer-grade & No \\
+		Humans & \$ 1.667 & \$ 26,513 & No \\
+		Proprietary (GPT-5.1) & \$ 0.165 & \$ 376 & No \\
+		Open Source (Our setup) & \$ 0.036 & \$ 81 & Basic GPU server \\
+		Open Source (Small models only) & \$ 0.008 & \$ 18 & Consumer-grade computers  \\
 		\bottomrule
 	\end{tabular}
-	\caption{Estimated \acf{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5o pricing, our own experimental setup, and a production-stage setup with a single consumer-grade GPU. While capital costs are factored in the CPT calculation (see~\ref{sec:appendix:cost}), we also include them separately in this table. Note that synthetic discussions should never be used to gauge human behavior~(\S\ref{ssec:related:human-llm}).}
+	\caption{Estimated \ac{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5.1 pricing, our own experimental setup, and a production-stage setup with a single consumer-grade GPU. While capital costs are factored in the \ac{cpt} calculation (see~\ref{sec:appendix:cost}), we also include them separately in this table.}
 	\label{tab:cost}
 \end{table}
