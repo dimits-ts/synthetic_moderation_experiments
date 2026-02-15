@@ -14,7 +14,7 @@ import syndisco.logging_util
 import syndisco.turn_manager
 
 TROLL_CHANCE = 0.3
-
+MAX_COMMENT_LENGTH_CHARS = 500
 
 def main(
     config_file_path: Path,
@@ -196,6 +196,7 @@ def get_topics(topics_path: Path) -> list[list[str]]:
     ]
 
     df = df.sort_values(["conv_id"]).reset_index(drop=True)
+    df.text = df.text.str.slice(0, MAX_COMMENT_LENGTH_CHARS)
 
     # Create a positional index within each conversation
     df["pos"] = df.groupby("conv_id").cumcount()

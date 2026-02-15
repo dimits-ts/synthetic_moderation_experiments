@@ -1,11 +1,12 @@
 #!/bin/bash
-
 set -uo pipefail
 
-
+# =====================================================
+# MODELS
+# =====================================================
 models=(
   "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit"
-  "unsloth/Mistral-Small-3.1-24B-Instruct-2503-bnb-4bit"
+  "unsloth/Mistral-Small-24B-Instruct-2501-bnb-4bit"
   "unsloth/Qwen2.5-32B-Instruct-bnb-4bit"
   "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
   "unsloth/mistral-7b-instruct-v0.3-bnb-4bit"
@@ -21,166 +22,66 @@ pseudos=(
     "qwen7b"
 )
 
-
+# =====================================================
+# PATHS
+# =====================================================
 CONFIG="./data/discussions_input/run_config.yml"
+
 PERSONAS="./data/discussions_input/personas/personas_employed.json"
+NO_SDBS_PERSONAS="./data/discussions_input/personas/no_sdbs.json"
+
 USER_INSTR="./data/discussions_input/user_instructions/vanilla.txt"
+NO_USER_INSTR="./data/discussions_input/user_instructions/no_instructions.txt"
+
 OUTPUT_DIR="./data/discussions_output/ablations"
 
 # =====================================================
-# 1. NO-USER INSTRUCTION BASELINES
+# ABLATIONS
+# name | turn-manager | persona-path | user-instr-path | trolls-flag
 # =====================================================
-for mod_strat_file in data/discussions_input/mod_instructions/*; do
-    file_base=$(basename "$mod_strat_file" .yaml)
+ablations=(
+  "noinstructions|random-weighted|$PERSONAS|$NO_USER_INSTR|--trolls-active"
+  "notroll|random-weighted|$PERSONAS|$USER_INSTR|--no-trolls-active"
+  "nosdbs|random-weighted|$NO_SDBS_PERSONAS|$USER_INSTR|--trolls-active"
+  "roundrobin|round-robin|$PERSONAS|$USER_INSTR|--trolls-active"
+  "random|random|$PERSONAS|$USER_INSTR|--trolls-active"
+)
 
-    for mod_idx in "${!mod_models[@]}"; do
-        for user_idx in "${!user_models[@]}"; do
+# =====================================================
+# MAIN LOOP
+# =====================================================
+for model_idx in "${!models[@]}"; do
+    MODEL_URL="${models[$model_idx]}"
+    MODEL_PSEUDO="${pseudos[$model_idx]}"
 
-            MOD_MODEL_URL="${mod_models[$mod_idx]}"
-            MOD_MODEL_PSEUDO="${mod_pseudos[$mod_idx]}"
+    for mod_strat_file in data/discussions_input/mod_instructions/*; do
+        file_base=$(basename "$mod_strat_file" .yaml)
 
-            USER_MODEL_URL="${user_models[$user_idx]}"
-            USER_MODEL_PSEUDO="${user_pseudos[$user_idx]}"
+        for ablation in "${ablations[@]}"; do
+            IFS="|" read -r \
+                ablation_name \
+                turn_manager \
+                persona_path \
+                user_instr_path \
+                troll_flag <<< "$ablation"
 
-            name="${USER_MODEL_PSEUDO}_${MOD_MODEL_PSEUDO}_${file_base}_noinstructions"
+            name="${MODEL_PSEUDO}_${file_base}_${ablation_name}"
             output_dir="${OUTPUT_DIR}/${name}"
 
-            echo "Running MOD: user=$USER_MODEL_PSEUDO mod=$MOD_MODEL_PSEUDO strategy=$file_base"
+            echo "Running model=$MODEL_PSEUDO strategy=$file_base ablation=$ablation_name"
 
             python src/run_experiment.py \
                 --config-file "$CONFIG" \
-                --user-model-url "$USER_MODEL_URL" \
-                --user-model-pseudo "$USER_MODEL_PSEUDO" \
-                --mod-model-url "$MOD_MODEL_URL" \
-                --mod-model-pseudo "$MOD_MODEL_PSEUDO" \
+                --model-url "$MODEL_URL" \
+                --model-pseudo "$MODEL_PSEUDO" \
                 --mod-strategy-file "$mod_strat_file" \
-                --turn-manager "random-weighted" \
+                --turn-manager "$turn_manager" \
                 --output-dir "$output_dir" \
-                --user-persona-path "$PERSONAS" \
-                --user-instruction-path "./data/discussions_input/user_instructions/no_instructions.txt" \
+                --user-persona-path "$persona_path" \
+                --user-instruction-path "$user_instr_path" \
                 --mod-active \
                 --num-experiments 5 \
-                --trolls-active
-        done
-    done
-done
-
-
-# =====================================================
-# 2. NO-TROLL BASELINES
-# =====================================================
-for mod_strat_file in data/discussions_input/mod_instructions/*; do
-    file_base=$(basename "$mod_strat_file" .yaml)
-
-    for mod_idx in "${!mod_models[@]}"; do
-        for user_idx in "${!user_models[@]}"; do
-            MOD_MODEL_URL="${mod_models[$mod_idx]}"
-            MOD_MODEL_PSEUDO="${mod_pseudos[$mod_idx]}"
-
-            USER_MODEL_URL="${user_models[$user_idx]}"
-            USER_MODEL_PSEUDO="${user_pseudos[$user_idx]}"
-
-            name="${USER_MODEL_PSEUDO}_${MOD_MODEL_PSEUDO}_${file_base}_notroll"
-            output_dir="${OUTPUT_DIR}/${name}"
-
-            echo "Running MOD: user=$USER_MODEL_PSEUDO mod=$MOD_MODEL_PSEUDO strategy=$file_base"
-
-            python src/run_experiment.py \
-                --config-file "$CONFIG" \
-                --user-model-url "$USER_MODEL_URL" \
-                --user-model-pseudo "$USER_MODEL_PSEUDO" \
-                --mod-model-url "$MOD_MODEL_URL" \
-                --mod-model-pseudo "$MOD_MODEL_PSEUDO" \
-                --mod-strategy-file "$mod_strat_file" \
-                --turn-manager "random-weighted" \
-                --output-dir "$output_dir" \
-                --user-persona-path "$PERSONAS" \
-                --user-instruction-path "$USER_INSTR" \
-                --mod-active \
-                --num-experiments 5 \
-                --no-trolls-active
-        done
-    done
-done
-
-
-# =====================================================
-# 3. NO-SDBS BASELINES
-# =====================================================
-for mod_strat_file in data/discussions_input/mod_instructions/*; do
-    file_base=$(basename "$mod_strat_file" .yaml)
-
-    for mod_idx in "${!mod_models[@]}"; do
-        for user_idx in "${!user_models[@]}"; do
-
-            MOD_MODEL_URL="${mod_models[$mod_idx]}"
-            MOD_MODEL_PSEUDO="${mod_pseudos[$mod_idx]}"
-
-            USER_MODEL_URL="${user_models[$user_idx]}"
-            USER_MODEL_PSEUDO="${user_pseudos[$user_idx]}"
-
-            name="${USER_MODEL_PSEUDO}_${MOD_MODEL_PSEUDO}_${file_base}_nosdbs"
-            output_dir="${OUTPUT_DIR}/${name}"
-
-            echo "Running MOD: user=$USER_MODEL_PSEUDO mod=$MOD_MODEL_PSEUDO strategy=$file_base"
-
-            python src/run_experiment.py \
-                --config-file "$CONFIG" \
-                --user-model-url "$USER_MODEL_URL" \
-                --user-model-pseudo "$USER_MODEL_PSEUDO" \
-                --mod-model-url "$MOD_MODEL_URL" \
-                --mod-model-pseudo "$MOD_MODEL_PSEUDO" \
-                --mod-strategy-file "$mod_strat_file" \
-                --turn-manager "random-weighted" \
-                --output-dir "$output_dir" \
-                --user-persona-path "data/discussions_input/personas/no_sdbs.json" \
-                --user-instruction-path "$USER_INSTR" \
-                --mod-active \
-                --num-experiments 5 \
-                --trolls-active
-        done
-    done
-done
-
-
-# =====================================================
-# 4. TURN-MANAGERS BASELINES
-# =====================================================
-turn_managers=( "round-robin" "random" )
-
-for mod_strat_file in data/discussions_input/mod_instructions/*; do
-    file_base=$(basename "$mod_strat_file" .yaml)
-
-    for mod_idx in "${!mod_models[@]}"; do
-        for user_idx in "${!user_models[@]}"; do
-            for turn_manager in "${turn_managers[@]}"; do
-
-                MOD_MODEL_URL="${mod_models[$mod_idx]}"
-                MOD_MODEL_PSEUDO="${mod_pseudos[$mod_idx]}"
-
-                USER_MODEL_URL="${user_models[$user_idx]}"
-                USER_MODEL_PSEUDO="${user_pseudos[$user_idx]}"
-
-                name="${USER_MODEL_PSEUDO}_${MOD_MODEL_PSEUDO}_${turn_manager}_${file_base}"
-                output_dir="${OUTPUT_DIR}/${name}"
-
-                echo "Running MOD: user=$USER_MODEL_PSEUDO mod=$MOD_MODEL_PSEUDO strategy=$file_base tm=$turn_manager"
-
-                python src/run_experiment.py \
-                    --config-file "$CONFIG" \
-                    --user-model-url "$USER_MODEL_URL" \
-                    --user-model-pseudo "$USER_MODEL_PSEUDO" \
-                    --mod-model-url "$MOD_MODEL_URL" \
-                    --mod-model-pseudo "$MOD_MODEL_PSEUDO" \
-                    --mod-strategy-file "$mod_strat_file" \
-                    --turn-manager "$turn_manager" \
-                    --output-dir "$output_dir" \
-                    --user-persona-path "$PERSONAS" \
-                    --user-instruction-path "$USER_INSTR" \
-                    --mod-active \
-                    --num-experiments 5 \
-                    --trolls-active
-            done
+                $troll_flag
         done
     done
 done
