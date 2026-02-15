@@ -1,6 +1,15 @@
 \section{Experimental Setup}
 \label{sec:experimental}
 
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\columnwidth]{experiments.drawio.png}
+	\caption{We simulate online discussions using exclusively LLM participants. Some of them attempt to sabotage the discussion, while the LLM facilitator monitors and intervenes when appropriate. Then, we test different LLMs and human facilitation strategies through the LLM facilitator.}
+	\label{fig:experiments}
+\end{figure}
+
+
 \subsection{Synthetic Discussion Generation}
 \label{ssec:appendix:discussion}
 
@@ -10,34 +19,41 @@ We use different LLMs for participants (user-LLMs) and facilitators (mod-LLMs). 
 An overview of how the experiments are generated can be found in Alg.~\ref{alg:exp_generation}.
 
 \begin{algorithm}[ht]
-	\caption{Synthetic discussion generation (\ac{sdg}).}
+	\caption{Experimental procedure for the facilitation experiments using our \ac{sdg} framework.}
 	\label{alg:exp_generation}
-	
-	\textbf{Input:}
-	User SDBs $\Theta$, strategies $S$, seed discussions $D_{seed}$, 
-	LLMs $user\_llms$, $mod\_llms$, experiments $N_e$, 
-	number of seed comments $N_{seed}$, discussion length $N_d$
-	
-	\textbf{Output:} Set of discussions $D$
+	\begin{flushleft}
+		\textbf{Input:}
+		\begin{itemize}
+			\item \textit{User modeling:} user SDBs $\Theta$, number of participants $N_{users}$
+			\item \textit{Moderation:} strategies $S$
+			\item \textit{Seeding:} seed discussions $D_{\text{seed}}$, number of seed comments $N_{\text{seed}}$
+			\item \textit{Models:} LLMs $llms$
+			\item \textit{Experiment control:} number of experiments $N_e$, discussion length $N_d$
+		\end{itemize}
+		\textbf{Output:} set of generated discussions $D$
+	\end{flushleft}
 	
 	\begin{algorithmic}[1]
 		\State $D \gets \emptyset$
 		
-		\ForAll{$(user\_llm, mod\_llm, strat) \in user\_llms \times mod\_llms \times S$}
-			\For{$1,\ldots,N_e$}
-			
-			\State $(users, mod) \gets$ \Call{AssignParticipants}{$\Theta, user\_llm, mod\_llm, strat$}
-			\State $d \gets $ \Call{InitializeDiscussion}{$D_{seed}, N_{seed}$}
-			
-			\For{$1,\ldots,N_d$}
-				\State $last\_user \gets $ \Call{LastUser}{$d$}
-				\State $user \gets$ \Call{Next-Speaker}{users, last\_user}
-				\State $d \gets d \cup$ \Call{Post}{user, d}
-				\State $d \gets d \cup$ \Call{Post}{mod, d, s} \Comment{Facilitator decides whether to intervene}
-			\EndFor
-			
-			\State $D \gets D \cup \{d\}$
-			\EndFor
+		\ForAll{$llm \in llms$}
+		\ForAll{$strat \in S$}
+		\For{$1,\ldots,N_e$}
+		
+		\State $users \gets$ \Call{InitializeParticipants}{$llm, \Theta, N_{users}$}
+		\State $mod \gets$ \Call{InitializeMod}{$llm, strat$}
+		\State $d \gets$ \Call{InitializeDiscussion}{$D_{\text{seed}}, N_{\text{seed}}$}
+		
+		\For{$1,\ldots,N_d$}
+		\State $last\_user \gets$ \Call{LastUser}{$d$}
+		\State $user \gets$ \Call{NextSpeaker}{$users, last\_user$}
+		\State $d \gets d \cup$ \Call{Post}{$user, d$}
+		\State $d \gets d \cup$ \Call{Post}{$mod, d, strat$}
+		\EndFor
+		
+		\State $D \gets D \cup \{d\}$
+		\EndFor
+		\EndFor
 		\EndFor
 		
 		\State \Return $D$
@@ -61,12 +77,6 @@ We test two facilitation strategies used in real-life and compare them with two 
     \item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy~\cite{dimitra-guide} which approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions e.g., ``Do not make decisions, be a guide, provide explanations''. This makes the strategy ideal for deliberative environments.
 \end{enumerate}
 
-
-
-\subsection{Evaluation}
-\label{ssec:experimental:evaluation}
-
-In order to gauge the quality of our synthetic discussions, since we can not reliably measure ``realism'' (\S\ref{ssec:related:human-llm}), we use the ``diversity'' metric \cite{ulmer2024}. Low diversity points to pathological problems (e.g., LLMs repeating previous comments). Conversely, extremely high diversity may indicate a lack of interaction between participants---a discussion where participants engage with each other will naturally feature some lexical overlap, including common terms or paraphrasing points made by others. We compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions. This allows us to estimate the extent to which synthetic discussions approximate real-world content variety and participant interaction. 
 
 
 \subsection{Technical Details}
