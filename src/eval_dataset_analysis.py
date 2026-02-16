@@ -31,6 +31,7 @@ def plot_dataset_length(
 def plot_dataset_diversity(
     df: pd.DataFrame, y_col: str, graph_output_dir: Path
 ):
+    df = df.loc[df.model != "hardcoded"]
     similarity_df = (
         df.groupby(["conv_id", y_col])["message"].apply(list).reset_index()
     )
