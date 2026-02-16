@@ -26,6 +26,7 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
     toxicity_overall(df[~df.is_moderator], graph_dir)
     toxicity_by_dimension(df, graph_dir, "role")
     toxicity_by_dimension(df, graph_dir, "strategy")
+    toxicity_by_dimension(df, graph_dir, "model")
     toxicity_regression(df[~df.is_moderator], graph_dir=graph_dir)
 
     ablation_df = get_toxicity_df(
@@ -42,7 +43,7 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
         ),
         "message_id",
     ]
-    
+
     ablation_df = ablation_df[ablation_df.message_id.isin(valid_ids)]
     ablation_df["dataset"] = "Basic Prompt"
     df["dataset"] = "Provocation-Reactive Prompt"
@@ -74,6 +75,7 @@ def get_toxicity_df(
             "is_troll",
             "strategy",
             "message_order",
+            "model"
         ],
     ]
 
