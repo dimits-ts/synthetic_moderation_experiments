@@ -13,7 +13,7 @@ import tasks.stats
 def plot_dataset_length(
     df: pd.DataFrame, y_col: str, graph_output_dir: Path
 ) -> None:
-    len_df = df.loc[:, ["message", y_col]]
+    len_df = df.loc[df.model != "hardcoded", ["message", y_col]]
     len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
     sns.histplot(
         data=len_df,
@@ -31,7 +31,7 @@ def plot_dataset_length(
 def plot_dataset_diversity(
     df: pd.DataFrame,
     y_col: str,
-    graph_output_dir: Path,
+    graph_output_path: Path,
     cache_path: Path,
 ):
     cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -66,10 +66,13 @@ def plot_dataset_diversity(
         hue=y_col,
         stat="density",
         common_norm=False,
+        multiple="dodge",
+        kde=True,
+        bins=20
     )
     plt.xlim(0.6, 1)
     plt.xlabel("Diversity")
-    tasks.graphs.save_plot(graph_output_dir / "comment_diversity_model.png")
+    tasks.graphs.save_plot(graph_output_path)
     plt.close()
 
 
@@ -119,10 +122,11 @@ def main(
     human_df = pd.read_csv(human_csv_path)
     human_df = human_df.rename(columns={"text": "message"})
     human_df["model"] = "human"
+    human_df["variant"] = "Human"
+    human_df["user_prompts"] = "Human"
+    human_df["turn_taking"] = "Human"
 
     combined_df = pd.concat([main_df, human_df], ignore_index=True)
-
-    cache_path = cache_dir / "diversity_combined.csv"
 
     plot_dataset_length(
         df=combined_df,
@@ -133,14 +137,34 @@ def main(
     plot_dataset_diversity(
         df=combined_df,
         y_col="model",
-        graph_output_dir=graph_output_dir,
-        cache_path=cache_path,
+        graph_output_path=graph_output_dir / "diversity_main_model.png",
+        cache_path=cache_dir / "diversity_main_model.csv",
+    )
+    plot_dataset_diversity(
+        df=combined_df,
+        y_col="variant",
+        graph_output_path=graph_output_dir / "diversity_main_variant.png",
+        cache_path=cache_dir / "diversity_main_variant.csv",
     )
 
     dataset_stats(main_df, main_csv_path)
 
     ablation_df = pd.read_csv(ablation_csv_path)
     dataset_stats(ablation_df, ablation_csv_path)
+    full_df = pd.concat([main_df, ablation_df, human_df], ignore_index=True)
+
+    plot_dataset_diversity(
+        df=full_df,
+        y_col="user_prompts",
+        graph_output_path=graph_output_dir / "diversity_full_userprompts.png",
+        cache_path=cache_dir / "diversity_full_userprompts.csv",
+    )
+    plot_dataset_diversity(
+        df=full_df,
+        y_col="turn_taking",
+        graph_output_path=graph_output_dir / "diversity_full_turntaking.png",
+        cache_path=cache_dir / "diversity_full_turntaking.csv",
+    )
 
 
 if __name__ == "__main__":
