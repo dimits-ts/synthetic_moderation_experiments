@@ -73,6 +73,37 @@ def plot_dataset_diversity(
     plt.close()
 
 
+def dataset_stats(df: pd.DataFrame, csv_path: Path):
+    print("*" * 25)
+    print("Comments per discussion:")
+    print(df.groupby("conv_id").size().describe())
+
+    print("#Comments:", len(df))
+
+    print("#Discussions:", df["conv_id"].nunique())
+
+    print("Word count per comment:")
+    print(
+        df.message.astype(str)
+        .apply(lambda x: x.split())
+        .apply(len)
+        .astype(int)
+        .describe()
+    )
+    print(f"Dataset total size: {_convert_bytes(csv_path.stat().st_size)}")
+    print("*" * 25)
+
+
+def _convert_bytes(num):
+    """
+    this function will convert bytes to MB.... GB... etc
+    """
+    for x in ["bytes", "KB", "MB", "GB", "TB"]:
+        if num < 1024.0:
+            return "%3.1f %s" % (num, x)
+        num /= 1024.0
+
+
 def main(
     main_csv_path: Path,
     ablation_csv_path: Path,
@@ -106,8 +137,10 @@ def main(
         cache_path=cache_path,
     )
 
-    # Optional: still load ablation if needed later
+    dataset_stats(main_df, main_csv_path)
+
     ablation_df = pd.read_csv(ablation_csv_path)
+    dataset_stats(ablation_df, ablation_csv_path)
 
 
 if __name__ == "__main__":
