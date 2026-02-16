@@ -46,7 +46,7 @@ def get_toxicity_df(
     toxicity_df.toxicity = pd.to_numeric(toxicity_df.toxicity)
 
     full_df = df.merge(right=toxicity_df, how="inner", on="message_id")
-    full_df["is_troll"] = full_df.prompt.str.contains("trolling")
+    full_df["is_troll"] = full_df.prompt.str.contains("troll")
 
     full_df = full_df.loc[
         (full_df.model != "hardcoded"),
