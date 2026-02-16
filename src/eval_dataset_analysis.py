@@ -54,20 +54,41 @@ def plot_dataset_diversity(
     plt.close()
 
 
-def main(main_csv_path: Path, ablation_csv_path: Path, graph_output_dir: Path):
+def main(
+    main_csv_path: Path,
+    ablation_csv_path: Path,
+    human_csv_path: Path,
+    graph_output_dir: Path,
+):
     tasks.graphs.seaborn_setup()
     tqdm.pandas()
+
+    # Load model data
     main_df = pd.read_csv(main_csv_path)
 
+    # Load human data and label it like a model
+    human_df = pd.read_csv(human_csv_path)
+    human_df = human_df.rename(columns={"text": "message"})
+    human_df["model"] = "human"
+
+    # Combine
+    combined_df = pd.concat([main_df, human_df], ignore_index=True)
+
+    # Plot using combined dataset
     plot_dataset_length(
-        df=main_df, y_col="model", graph_output_dir=graph_output_dir
-    )
-    plot_dataset_diversity(
-        df=main_df, y_col="model", graph_output_dir=graph_output_dir
+        df=combined_df,
+        y_col="model",
+        graph_output_dir=graph_output_dir,
     )
 
+    plot_dataset_diversity(
+        df=combined_df,
+        y_col="model",
+        graph_output_dir=graph_output_dir,
+    )
+
+    # Optional: still load ablation if needed later
     ablation_df = pd.read_csv(ablation_csv_path)
-    
 
 
 if __name__ == "__main__":
@@ -83,6 +104,12 @@ if __name__ == "__main__":
         help="Directory holding the VMD and ablation datasets",
     )
     parser.add_argument(
+        "--human-csv",
+        type=str,
+        help="CSV file containing human responses",
+    )
+
+    parser.add_argument(
         "--graph-output-dir",
         type=str,
         help="Graph output directory",
@@ -91,5 +118,6 @@ if __name__ == "__main__":
     main(
         main_csv_path=Path(args.main_output_dir) / "vmd.csv",
         ablation_csv_path=Path(args.main_output_dir) / "ablation.csv",
+        human_csv_path=Path(args.human_csv),
         graph_output_dir=Path(args.graph_output_dir),
     )
