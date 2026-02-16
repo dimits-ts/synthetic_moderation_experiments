@@ -32,6 +32,21 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
         main_df_path=main_output_dir / "ablation.csv",
         toxicity_df_path=toxicity_ratings_dir / "ablation.csv",
     )
+
+    # Keep only rows where prompt does NOT contain "strong opinions"
+    # aka where instruction prompt is no_instructions.txt
+    ablation_raw = pd.read_csv(main_output_dir / "ablation.csv")
+    valid_ids = ablation_raw.loc[
+        ~ablation_raw.prompt.str.contains(
+            "strong opinions", case=False, na=False
+        ),
+        "message_id",
+    ]
+    
+    ablation_df = ablation_df[ablation_df.message_id.isin(valid_ids)]
+    ablation_df["dataset"] = "Basic Prompt"
+    df["dataset"] = "Provocation-Reactive Prompt"
+
     full_df = pd.concat([df, ablation_df], ignore_index=True)
     toxicity_vs_troll_count(df=full_df, graph_dir=graph_dir)
 
@@ -120,19 +135,17 @@ def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
 
 
 def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
-    # Non-troll, non-moderator messages
     non_troll_df = df.loc[(~df.is_troll) & (~df.is_moderator)]
 
     avg_toxicity = (
-        non_troll_df.groupby("conv_id")["toxicity"]
+        non_troll_df.groupby(["conv_id", "dataset"])["toxicity"]
         .mean()
         .rename("avg_non_troll_toxicity")
     )
 
-    # Count distinct troll users per conversation
     troll_counts = (
         df.loc[df.is_troll]
-        .groupby("conv_id")["user"]
+        .groupby(["conv_id", "dataset"])["user"]
         .nunique()
         .rename("n_distinct_trolls")
     )
@@ -140,14 +153,11 @@ def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
     plot_df = (
         pd.concat([avg_toxicity, troll_counts], axis=1).fillna(0).reset_index()
     )
+
     plot_df["troll_bin"] = plot_df["n_distinct_trolls"].clip(upper=4)
     plot_df["troll_bin"] = (
-        plot_df["troll_bin"]
-        .astype(int)
-        .astype(str)
-        .apply(lambda x: x if x != "4" else "4+")
+        plot_df["troll_bin"].astype(int).astype(str).replace({"4": "4+"})
     )
-    print(plot_df.troll_bin.unique())
 
     plot_toxicity_vs_trolls(plot_df, graph_dir)
 
@@ -160,12 +170,15 @@ def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
         x="troll_bin",
         order=["0", "1", "2", "3", "4+"],
         y="avg_non_troll_toxicity",
+        hue="dataset",
         estimator=np.mean,
         errorbar=("ci", 95),
     )
 
-    ax.set_xlabel("Number of distinct troll users")
+    ax.set_title("Toxicity of non-troll users by instruction prompt")
+    ax.set_xlabel("#Active troll users")
     ax.set_ylabel("Avg. toxicity")
+    ax.legend(title="")
 
     plt.tight_layout()
     tasks.graphs.save_plot(graph_dir / "toxicity_vs_troll_count.png")
