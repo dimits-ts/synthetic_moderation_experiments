@@ -29,18 +29,36 @@ def plot_dataset_length(
 
 
 def plot_dataset_diversity(
-    df: pd.DataFrame, y_col: str, graph_output_dir: Path
+    df: pd.DataFrame,
+    y_col: str,
+    graph_output_dir: Path,
+    cache_path: Path,
 ):
-    df = df.loc[df.model != "hardcoded"]
-    similarity_df = (
-        df.groupby(["conv_id", y_col])["message"].apply(list).reset_index()
-    )
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
 
-    similarity_df["rougel_similarity"] = similarity_df[
-        "message"
-    ].progress_apply(tasks.stats.rougel_similarity)
+    # Load cache if available
+    if cache_path.exists():
+        print(f"Loading cached similarities from {cache_path}")
+        similarity_df = pd.read_csv(cache_path)
 
-    similarity_df = similarity_df.dropna(subset=["rougel_similarity"])
+    else:
+        print("Computing similarities (cache miss)")
+        working_df = df.loc[df.model != "hardcoded"]
+
+        similarity_df = (
+            working_df.groupby(["conv_id", y_col])["message"]
+            .apply(list)
+            .reset_index()
+        )
+
+        similarity_df["rougel_similarity"] = similarity_df[
+            "message"
+        ].progress_apply(tasks.stats.rougel_similarity)
+
+        similarity_df = similarity_df.dropna(subset=["rougel_similarity"])
+
+        similarity_df.to_csv(cache_path, index=False)
+        print(f"Saved cache → {cache_path}")
 
     sns.histplot(
         data=similarity_df,
@@ -49,6 +67,7 @@ def plot_dataset_diversity(
         stat="density",
         common_norm=False,
     )
+    plt.xlim(0.6, 1)
     plt.xlabel("Diversity")
     tasks.graphs.save_plot(graph_output_dir / "comment_diversity_model.png")
     plt.close()
@@ -59,22 +78,21 @@ def main(
     ablation_csv_path: Path,
     human_csv_path: Path,
     graph_output_dir: Path,
+    cache_dir: Path,
 ):
     tasks.graphs.seaborn_setup()
     tqdm.pandas()
 
-    # Load model data
     main_df = pd.read_csv(main_csv_path)
 
-    # Load human data and label it like a model
     human_df = pd.read_csv(human_csv_path)
     human_df = human_df.rename(columns={"text": "message"})
     human_df["model"] = "human"
 
-    # Combine
     combined_df = pd.concat([main_df, human_df], ignore_index=True)
 
-    # Plot using combined dataset
+    cache_path = cache_dir / "diversity_combined.csv"
+
     plot_dataset_length(
         df=combined_df,
         y_col="model",
@@ -85,6 +103,7 @@ def main(
         df=combined_df,
         y_col="model",
         graph_output_dir=graph_output_dir,
+        cache_path=cache_path,
     )
 
     # Optional: still load ablation if needed later
@@ -108,11 +127,15 @@ if __name__ == "__main__":
         type=str,
         help="CSV file containing human responses",
     )
-
     parser.add_argument(
         "--graph-output-dir",
         type=str,
         help="Graph output directory",
+    )
+    parser.add_argument(
+        "--cache-dir",
+        type=str,
+        help="Directory to store similarity caches",
     )
     args = parser.parse_args()
     main(
@@ -120,4 +143,5 @@ if __name__ == "__main__":
         ablation_csv_path=Path(args.main_output_dir) / "ablation.csv",
         human_csv_path=Path(args.human_csv),
         graph_output_dir=Path(args.graph_output_dir),
+        cache_dir=Path(args.cache_dir),
     )
