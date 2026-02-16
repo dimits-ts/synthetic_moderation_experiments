@@ -136,15 +136,13 @@ def plot_dataset_diversity(
         similarity_df.to_csv(cache_path, index=False)
         print(f"Saved cache → {cache_path}")
 
-    sns.histplot(
+    sns.kdeplot(
         data=similarity_df,
         x="rougel_similarity",
         hue=y_col,
-        stat="density",
+        fill=True,
         common_norm=False,
-        multiple="dodge",
-        kde=True,
-        bins=20,
+        multiple="layer"
     )
     plt.xlim(0.6, 1)
     plt.xlabel("Diversity")
