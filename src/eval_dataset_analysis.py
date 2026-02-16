@@ -10,6 +10,82 @@ import tasks.graphs
 import tasks.stats
 
 
+def main(
+    main_csv_path: Path,
+    ablation_csv_path: Path,
+    human_csv_path: Path,
+    graph_output_dir: Path,
+    cache_dir: Path,
+):
+    tasks.graphs.seaborn_setup()
+    tqdm.pandas()
+
+    main_df = pd.read_csv(main_csv_path)
+
+    human_df = pd.read_csv(human_csv_path)
+    human_df = human_df.rename(columns={"text": "message"})
+    human_df["model"] = "Human"
+    human_df["variant"] = "Human"
+    human_df["user_prompts"] = "Human"
+    human_df["turn_taking"] = "Human"
+
+    combined_df = pd.concat([main_df, human_df], ignore_index=True)
+
+    plot_dataset_length(
+        df=combined_df,
+        y_col="model",
+        graph_output_dir=graph_output_dir,
+    )
+
+    plot_dataset_diversity(
+        df=combined_df,
+        y_col="model",
+        graph_output_path=graph_output_dir / "diversity_main_model.png",
+        cache_path=cache_dir / "diversity_main_model.csv",
+    )
+    plot_dataset_diversity(
+        df=combined_df,
+        y_col="variant",
+        graph_output_path=graph_output_dir / "diversity_main_variant.png",
+        cache_path=cache_dir / "diversity_main_variant.csv",
+    )
+
+    dataset_stats(main_df, main_csv_path)
+
+    ablation_df = pd.read_csv(ablation_csv_path)
+    dataset_stats(ablation_df, ablation_csv_path)
+    full_df = pd.concat([main_df, ablation_df, human_df], ignore_index=True)
+
+    plot_dataset_diversity(
+        df=full_df,
+        y_col="user_prompts",
+        graph_output_path=graph_output_dir / "diversity_full_userprompts.png",
+        cache_path=cache_dir / "diversity_full_userprompts.csv",
+    )
+    plot_dataset_diversity(
+        df=full_df,
+        y_col="turn_taking",
+        graph_output_path=graph_output_dir / "diversity_full_turntaking.png",
+        cache_path=cache_dir / "diversity_full_turntaking.csv",
+    )
+
+    optimal_model_df = full_df.loc[full_df.model.isin(["qwen7b", "Human"])]
+    plot_dataset_diversity(
+        df=optimal_model_df,
+        y_col="user_prompts",
+        graph_output_path=graph_output_dir
+        / "diversity_optimal_userprompts.png",
+        cache_path=cache_dir / "diversity_optimal_userprompts.csv",
+    )
+    plot_dataset_diversity(
+        df=optimal_model_df,
+        y_col="turn_taking",
+        graph_output_path=graph_output_dir
+        / "diversity_optimal_turntaking.png",
+        cache_path=cache_dir / "diversity_optimal_turntaking.csv",
+    )
+
+
 def plot_dataset_length(
     df: pd.DataFrame, y_col: str, graph_output_dir: Path
 ) -> None:
@@ -68,7 +144,7 @@ def plot_dataset_diversity(
         common_norm=False,
         multiple="dodge",
         kde=True,
-        bins=20
+        bins=20,
     )
     plt.xlim(0.6, 1)
     plt.xlabel("Diversity")
@@ -105,66 +181,6 @@ def _convert_bytes(num):
         if num < 1024.0:
             return "%3.1f %s" % (num, x)
         num /= 1024.0
-
-
-def main(
-    main_csv_path: Path,
-    ablation_csv_path: Path,
-    human_csv_path: Path,
-    graph_output_dir: Path,
-    cache_dir: Path,
-):
-    tasks.graphs.seaborn_setup()
-    tqdm.pandas()
-
-    main_df = pd.read_csv(main_csv_path)
-
-    human_df = pd.read_csv(human_csv_path)
-    human_df = human_df.rename(columns={"text": "message"})
-    human_df["model"] = "human"
-    human_df["variant"] = "Human"
-    human_df["user_prompts"] = "Human"
-    human_df["turn_taking"] = "Human"
-
-    combined_df = pd.concat([main_df, human_df], ignore_index=True)
-
-    plot_dataset_length(
-        df=combined_df,
-        y_col="model",
-        graph_output_dir=graph_output_dir,
-    )
-
-    plot_dataset_diversity(
-        df=combined_df,
-        y_col="model",
-        graph_output_path=graph_output_dir / "diversity_main_model.png",
-        cache_path=cache_dir / "diversity_main_model.csv",
-    )
-    plot_dataset_diversity(
-        df=combined_df,
-        y_col="variant",
-        graph_output_path=graph_output_dir / "diversity_main_variant.png",
-        cache_path=cache_dir / "diversity_main_variant.csv",
-    )
-
-    dataset_stats(main_df, main_csv_path)
-
-    ablation_df = pd.read_csv(ablation_csv_path)
-    dataset_stats(ablation_df, ablation_csv_path)
-    full_df = pd.concat([main_df, ablation_df, human_df], ignore_index=True)
-
-    plot_dataset_diversity(
-        df=full_df,
-        y_col="user_prompts",
-        graph_output_path=graph_output_dir / "diversity_full_userprompts.png",
-        cache_path=cache_dir / "diversity_full_userprompts.csv",
-    )
-    plot_dataset_diversity(
-        df=full_df,
-        y_col="turn_taking",
-        graph_output_path=graph_output_dir / "diversity_full_turntaking.png",
-        cache_path=cache_dir / "diversity_full_turntaking.csv",
-    )
 
 
 if __name__ == "__main__":
