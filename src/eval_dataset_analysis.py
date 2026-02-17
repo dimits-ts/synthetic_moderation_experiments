@@ -54,52 +54,41 @@ def main(
 
     ablation_df = pd.read_csv(ablation_csv_path)
     dataset_stats(ablation_df, ablation_csv_path)
+
     full_df = pd.concat([main_df, ablation_df, human_df], ignore_index=True)
+    for dimension in ["user_prompts", "turn_taking", "initialization"]:
+        plot_dataset_diversity(
+            df=full_df,
+            y_col=dimension,
+            graph_output_path=graph_output_dir
+            / f"diversity_full_{dimension}.png",
+            cache_path=cache_dir / f"diversity_full_{dimension}.csv",
+        )
 
-    plot_dataset_diversity(
-        df=full_df,
-        y_col="user_prompts",
-        graph_output_path=graph_output_dir / "diversity_full_userprompts.png",
-        cache_path=cache_dir / "diversity_full_userprompts.csv",
-    )
-    plot_dataset_diversity(
-        df=full_df,
-        y_col="turn_taking",
-        graph_output_path=graph_output_dir / "diversity_full_turntaking.png",
-        cache_path=cache_dir / "diversity_full_turntaking.csv",
-    )
-    plot_dataset_diversity(
-        df=full_df,
-        y_col="initialization",
-        graph_output_path=graph_output_dir
-        / "diversity_full_initialization.png",
-        cache_path=cache_dir / "diversity_full_initialization.csv",
-    )
+        optimal_model_df = full_df.loc[
+            full_df.model.isin(["qwen7b", "Human", "mistral24b", "llama70b"])
+        ]
+        plot_dataset_diversity(
+            df=optimal_model_df,
+            y_col=dimension,
+            graph_output_path=graph_output_dir
+            / f"diversity_optimal_{dimension}.png",
+            cache_path=cache_dir / f"diversity_optimal_{dimension}.csv",
+        )
 
-    optimal_model_df = full_df.loc[
-        full_df.model.isin(["qwen7b", "Human", "mistral24b", "llama70b"])
-    ]
-    plot_dataset_diversity(
-        df=optimal_model_df,
-        y_col="user_prompts",
-        graph_output_path=graph_output_dir
-        / "diversity_optimal_userprompts.png",
-        cache_path=cache_dir / "diversity_optimal_userprompts.csv",
-    )
-    plot_dataset_diversity(
-        df=optimal_model_df,
-        y_col="turn_taking",
-        graph_output_path=graph_output_dir
-        / "diversity_optimal_turntaking.png",
-        cache_path=cache_dir / "diversity_optimal_turntaking.csv",
-    )
-    plot_dataset_diversity(
-        df=optimal_model_df,
-        y_col="initialization",
-        graph_output_path=graph_output_dir
-        / "diversity_optimal_initialization.png",
-        cache_path=cache_dir / "diversity_optimal_initialization.csv",
-    )
+        for model in full_df.model.unique():
+            if model != "hardcoded":
+                single_model_df = full_df.loc[
+                    full_df.model.isin([model, "Human"])
+                ]
+                plot_dataset_diversity(
+                    df=single_model_df,
+                    y_col=dimension,
+                    graph_output_path=graph_output_dir
+                    / f"diversity_{model}_{dimension}.png",
+                    cache_path=cache_dir
+                    / f"diversity_{model}_{dimension}.csv",
+                )
 
 
 def plot_dataset_length(
