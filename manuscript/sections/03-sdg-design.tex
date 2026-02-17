@@ -25,17 +25,17 @@ While \acf{sdg} is a mechanism frequently used in research, very few generalized
 	\item \textbf{\ac{sdg} should be cheap} The primary reason for designing and using \ac{sdg} methodologies is to bypass the monetary and time cost of human experiments~\cite{rossi_2024}. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions, it is necessary to generate large quantities of data without compromising cost efficiency, and thus scalability.
 \end{enumerate}
 
+
 \subsection{Discussion Initialization}
 
 \subsubsection{LLM Personas}
-
 It is well known that LLMs tend to align more closely with WEIRD (Western, Educated, Industrialized, Rich, and Democratic) and socially prominent groups, while diverging from minorities~\cite{sap-etal-2022-annotators,goyal2022_toxicity,gallegos-etal-2024-bias} due to their nature as statistical models that adopt the bias of their training data during pretraining. These biases are further shaped by alignment procedures and prompt sensitivity~\cite{liu_2024_bias,santukar_2023}. Thus, synthetic discussions with out-of-the-box LLMs typically result in similar opinions and arguments, with no variance. 
 
 Including \acp{sdb} (e.g., gender, age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large,sommerauer-etal-2025-simulating}. These ``persona'' prompts essentially shift the distribution of output tokens, hence producing content of larger variety when using multiple distinct personas~\cite{liu_2024_bias}. It is worth noting that these shifts in speech do not necessarily correlate to the actual human groups these prompts are modeling~\cite{lutz-etal-2025-prompt,liu_2024_bias}, but this is not concerning for our use-case since we cannot claim to simulate human behaviors with LLMs (\S\ref{ssec:related:human-llm}).
 
 The creation of these personas is sometimes implemented by randomly selecting sociodemographic attributes from a number of dimensions such as age, gender, employment etc.~\cite{adornetto2025_gabms} We instead pick personas from the PERSONA dataset~\cite{castricato-etal-2025-persona}, which includes a curated set of personas based on US census data (see Appendix~\ref{ssec:app:sdbs} for details).\footnote{We use the public version of the dataset, since we were unable to establish contact with the authors for gaining access to the full dataset.} We add random employment information to these personas, since we experimentally discovered that doing so improves discussion variety. 
 
-Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information. Below is an excerpt from a synthetic discussion,\footnote{Unique discussion ID: \texttt{26-02-12-02-24-42.json}} where both the facilitator and another user intervene against perceived toxicity. The LLM participants use their sociodemographic prompts to insert personal anecdotes and justify their perspectives in the discussion (text in italics). User \textcolor{olive}{seasoned-union} is also a part of the discussion; not a hallucination.
+Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information. Below is an excerpt from a synthetic discussion,\footnote{Unique discussion ID: \texttt{26-02-12-02-24-42.json}.} where both the facilitator and another user intervene against perceived toxicity. The LLM participants use their sociodemographic prompts to insert personal anecdotes and justify their perspectives in the discussion (text in italics). User \textcolor{olive}{seasoned-union} is also a part of the discussion; not a hallucination.
 
 \begin{quote}
 	\textcolor{orange}{[pallid-river]} Are you kidding me with this whole ``trans rights'' nonsense? \emph{ I've been a doctor for decades} and I can tell you, it's just a fad. People are just trying to get attention and special treatment. And don't even get me started on the so-called ``medical care'' they're fighting for --- it's just a bunch of unnecessary procedures and hormones. Mark my words, this is just a phase, and soon people will realize it's all just a bunch of hooey. \textcolor{olive}{@seasoned-union}, you're just drinking the Kool-Aid, aren't you?
@@ -48,14 +48,13 @@ Using these sociodemographic prompts, we observe that LLM users are able to crea
 \end{quote}
 
 
-
 \subsubsection{Instructions}
 
  \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.45\linewidth]{diversity_optimal_userprompts.png}
 	\includegraphics[width=0.45\linewidth]{toxicity_vs_troll_count.png}
-	\caption{\textbf{Left}: Diversity of synthetic discussions. Including \acp{sdb} and instructing participants to react to provocations leads to a distribution of content variety closest to human discussions when compared with random turns, or participants talking in a predetermined order. Text was generated by a Qwen2.5-7B model; for results including all models, refer to Fig.~\ref{fig:supplemental-diversity} in Appendix~\S\ref{sec:appendix:findings}. \textbf{Right}: Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. Our setup is essential to elicit the behaviors we want to study in the context of facilitation. See \S\ref{sec:scalability:setup} for experimental details.}
+	\caption{\textbf{Left}: Diversity of synthetic and human discussions by prompt setup, excluding models with divergent speaking patterns (\S\ref{sec:scalability:model}). The comparison with all models can be found in Appendix~\ref{sec:appendix:findings}. Including \acp{sdb} and instructing participants to react to provocations (``Main'') leads to slightly more diverging speaking patterns when compared with human discussions. \textbf{Right}: Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. Our setup is essential to elicit the behaviors we want to study in the context of facilitation. See \S\ref{sec:scalability:setup} for experimental details.}
 	\label{fig:diversity-instructions-trolls}
 \end{figure}
 
@@ -63,7 +62,27 @@ Playing out scenarios is not a task typically encountered during LLM instruction
 
 We could instead use prompting by instructing participants to respond to repeatedly toxic comments. This is an example of the trade-off between complexity and research bias v.s. the need to acquire meaningful data (\S\ref{sec:methodology:designrules}). Facilitators are only instructed to respond only when necessary, besides specialized instructions following established facilitation strategies (see \S\ref{ssec:experimental:strategies}). We also assign antagonistic motivations to a subset of participants (trolls), as different ``factions'' in discussions can lead to interesting and less repetitive emergent conversational dynamics~\cite{abdelnabi_negotiations}.
 
-We run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). Fig~\ref{fig:diversity-instructions-trolls} shows that the text variety diverges from human discussions ... The text was generated using a Qwen2.5-7B model, as only this model approaches human content variety in text~...
+We run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). We use \emph{``Diversity''} to measure content variety within each individual discussion, as discussed in \S\ref{sec:related:quality}. The closer the diversity distribution of our experiments are to human discussions in the same dataset as our initial comments (presented later in \S\ref{sec:methodology:seed}), the better. Distributions to the right of the human curve (high diversity) indicate insufficient engagement between the participants, while distributions to the left (low diversity), to stereotypical LLM speech.
+\footnote{While we use multiple models in this study (\S\ref{sec:scalability:model}), the texts for this specific experiment were generated using a subset of these models (Qwen-7B, LLaMa-70B, Mistral-24B), since some diverge wildly from the human content variety (\S\ref{sec:scalability:model}). Since the model used influences content variety in a disproportionate manner to any other variable, the results are visually inconclusive when not removing models with extreme distributional shifts.The full results can nevertheless be found in Appendix~\ref{sec:appendix:findings}.}
+
+Fig~\ref{fig:diversity-instructions-trolls} shows that the text variety diverges from human discussions in all cases. In fact, the experiments conducted with the use of our provocation-reactive prompt and full \acp{sdb} seem to slightly \emph{lower} diversity. However, the figure also showcases that our prompts are necessary for participants to react negatively to trolls; one of the prerequisites for later experiments.
+
+
+\subsubsection{Seed opinions}
+\label{sec:methodology:seed}
+
+Researchers often include some initial comments to kick-start discussions---defined as ``seed comments'' by~\cite{small-polis-llm}. While LLMs were initially proposed as generators of initial content for human discussions, they proved inferior to Information Retrieval systems used on human discussion corpora~\cite{small-polis-llm}. This process was however inverted in the field of \ac{sdg}, as some recent work uses human seed comments to kick-start synthetic discussions~\cite{balog_2024}. 
+
+Using human comments provides numerous benefits. Firstly, these comments can be used by researchers to shift the focus of synthetic discussions to a certain direction; nudging LLM participants to talk about specific topics, adopt certain positions, or talk with a specific tone. Secondly, human-generated text does not suffer from the limitations inherent in LLM output; namely fixation on unorthodox phrasing~\cite{cabanac2021_torturedphrases} and overt politeness and agreeableness~\cite{park2023game,anthis_2025,rossi_2024}. This forces the simulation into scenarios that would not be possible had the discussions begun with LLM outputs. Thirdly, LLM outputs tend to have low content variety~\cite{ulmer2024}, which may ordinarily limit the subjects and rhetorical approaches of LLM participants even when focusing on a specific topic. Human discussions on that topic may spur LLMs into considering different rhetorical avenues~\cite{balog_2024}.
+
+Our frameworks natively supports the inclusion of randomized seed opinions. We use a set of starting comments taken from random points in escalated discussions featured in the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble}.\footnote{We mark a discussion as escalated when the derailment value (from the official dataset) is in the 60th upper percentile, since the escalation values in the original paper are non-interpretable model outputs.} Fig.~\ref{fig:diversity_initialization} shows that including seed opinions seems to have a significant, positive shift in the content variety of synthetic discussions, as hypothesized.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\linewidth]{diversity_optimal_initialization.png}
+	\caption{Diversity of synthetic and human discussions with and without seed opinions, excluding models with divergent speaking patterns (\S\ref{sec:scalability:model}). The comparison with all models can be found in Appendix~\ref{sec:appendix:findings}. See \S\ref{sec:scalability:setup} for experimental details. Seed comments were excluded from the calculation}
+	\label{fig:diversity_initialization}
+\end{figure}
 
 
 \subsection{Discussion management}
@@ -80,7 +99,7 @@ These approaches may be appropriate for highly specialized settings, but they ar
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\linewidth]{diversity_optimal_turntaking.png}
-	\caption{Diversity of synthetic discussions. Our method (``response-enabled'') leads to a distribution of content variety closest to human discussions when compared with random turns (``random''), or participants talking in a predetermined order (``round-robin''). Text was generated by a Qwen2.5-7B model; for results including all models, refer to Fig.~\ref{fig:supplemental-diversity} in Appendix~\S\ref{sec:appendix:findings}. See \S\ref{sec:scalability:setup} for experimental details.}
+	\caption{Diversity of synthetic and human discussions by prompt setup, excluding models with divergent speaking patterns (\S\ref{sec:scalability:model}). The comparison with all models can be found in Appendix~\ref{sec:appendix:findings}. Including \acp{sdb} and instructing participants to react to provocations (``Main'') leads to slightly more diverging speaking patterns when compared with human discussions. Our method (``response-enabled'') leads to a distribution of content variety closest to human discussions when compared with random turns (``random''), or participants talking in a predetermined order (``round-robin''). See \S\ref{sec:scalability:setup} for experimental details.}
 	\label{fig:diversity_turntaking}
 \end{figure}
 

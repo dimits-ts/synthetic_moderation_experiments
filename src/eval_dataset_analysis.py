@@ -72,11 +72,13 @@ def main(
         df=full_df,
         y_col="initialization",
         graph_output_path=graph_output_dir
-        / "diversity_optimal_initialization.png",
+        / "diversity_full_initialization.png",
         cache_path=cache_dir / "diversity_full_initialization.csv",
     )
 
-    optimal_model_df = full_df.loc[full_df.model.isin(["qwen7b", "Human"])]
+    optimal_model_df = full_df.loc[
+        full_df.model.isin(["qwen7b", "Human", "mistral24b", "llama70b"])
+    ]
     plot_dataset_diversity(
         df=optimal_model_df,
         y_col="user_prompts",
@@ -98,7 +100,6 @@ def main(
         / "diversity_optimal_initialization.png",
         cache_path=cache_dir / "diversity_optimal_initialization.csv",
     )
-
 
 
 def plot_dataset_length(
@@ -157,7 +158,7 @@ def plot_dataset_diversity(
         hue=y_col,
         fill=True,
         common_norm=False,
-        multiple="layer"
+        multiple="layer",
     )
     plt.xlim(0.6, 1)
     plt.xlabel("Diversity")
