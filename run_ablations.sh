@@ -45,6 +45,7 @@ ablations=(
   "nosdbs|random-weighted|$NO_SDBS_PERSONAS|$USER_INSTR|--trolls-active"
   "roundrobin|round-robin|$PERSONAS|$USER_INSTR|--trolls-active"
   "random|random|$PERSONAS|$USER_INSTR|--trolls-active"
+  "noseeds|random-weighted|$PERSONAS|$USER_INSTR|--trolls-active|--no-include-seed-comments"
 )
 
 # =====================================================
@@ -63,7 +64,8 @@ for model_idx in "${!models[@]}"; do
                 turn_manager \
                 persona_path \
                 user_instr_path \
-                troll_flag <<< "$ablation"
+                troll_flag \
+                seed_flag <<< "$ablation"
 
             name="${MODEL_PSEUDO}_${file_base}_${ablation_name}"
             output_dir="${OUTPUT_DIR}/${name}"
@@ -81,7 +83,8 @@ for model_idx in "${!models[@]}"; do
                 --user-instruction-path "$user_instr_path" \
                 --mod-active \
                 --num-experiments 5 \
-                $troll_flag
+                $troll_flag \
+                $seed_flag
         done
     done
 done
