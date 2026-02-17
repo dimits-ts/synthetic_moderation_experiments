@@ -205,8 +205,7 @@ def toxicity_through_time_plot(
     graph_output_path: Path,
 ) -> None:
     # --- Step 1: copy and filter out moderators ---
-    plot_df = df.copy()
-    plot_df = plot_df[~plot_df.is_moderator]
+    plot_df = df[~df.is_moderator].copy()
 
     # --- Step 2: remove duplicate messages per conversation ---
     plot_df = plot_df.drop_duplicates(subset=["conv_id", "message_id"])
@@ -225,23 +224,16 @@ def toxicity_through_time_plot(
         .reset_index(level=0, drop=True)
     )
 
-    # --- Step 6: average across conversations for each turn index ---
-    summary = (
-        plot_df.groupby([groupby_col, "turn_index"])["cum_avg_toxicity"]
-        .mean()
-        .reset_index()
-    )
-
-    # --- Step 7: seaborn lineplot ---
+    # --- Step 6: seaborn lineplot with errorbar ---
     plt.figure(figsize=(12, 6))
     sns.lineplot(
-        data=summary,
+        data=plot_df,
         x="turn_index",
         y="cum_avg_toxicity",
         hue=groupby_col,
         marker="o",
         palette=tasks.graphs.COLORBLIND_PALETTE,
-        errorbar=None,  # already aggregated
+        errorbar=("ci", 95),  # <-- shows 95% confidence interval
     )
 
     plt.xlabel("#User messages in conversation")
@@ -249,7 +241,7 @@ def toxicity_through_time_plot(
     plt.legend(title="")
     plt.tight_layout()
 
-    # --- Step 8: save the plot ---
+    # --- Step 7: save the plot ---
     tasks.graphs.save_plot(graph_output_path)
     plt.close()
 

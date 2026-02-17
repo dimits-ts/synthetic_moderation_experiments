@@ -35,17 +35,26 @@ We test two facilitation strategies used in real-life and compare them with two 
  \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.45\linewidth]{intervention_count_model.png}
-	\includegraphics[width=0.45\linewidth]{model_mean_toxicity.png}
-
-	\caption{Percentage of unmoderated comments for each discussion according to model (left) and mean toxicity in discussions using each model (right). LLM facilitators are way too eager to intervene, choosing to do so even when explicitly instructed not to unless necessary.}
-	\label{fig:interventions}
+	\includegraphics[width=0.45\linewidth]{toxicity_through_time_model.png}
+	\caption{Percentage of unmoderated comments for each discussion according to model (left) and mean (cumulative) toxicity in discussions using each model (right). LLM facilitators are way too eager to intervene, choosing to do so even when explicitly instructed not to unless necessary. There appears to be no correlation between toxicity and interventions.}
+	\label{fig:facilitation-model}
 \end{figure}
 
-Fig.~\ref{fig:interventions} demonstrates that LLM facilitators intervene at almost any opportunity,  even though they are instructed to only do so when necessary (see \ref{ssec:appendix:moderation_strategies}). This confirms that LLMs generally can not decide not to speak even when instructed to do so (\S\ref{ssec:methodology:us}). This behavior is consistent across model families, model sizes and facilitative instructions. This has not been reported in relevant literature to our knowledge, and \emph{is an example of ``debugging'' problems with LLMs}---a core motivation of our work.
+Fig.~\ref{fig:facilitation-model} demonstrates that LLM facilitators intervene at almost any opportunity,  even though they are instructed to only do so when necessary (see \ref{ssec:appendix:moderation_strategies}). The only notable difference is the Qwen-32B model, which however features very low comparative toxicity. This is likely not caused by the LLM facilitator working effectively; since we know that this specific model features unusual speech patterns (Fig.~\ref{fig:models}). Using multiple evaluation criteria, we are thus able to discern genuine behavioral findings, from limitations in the \ac{sdg} simulations (\S\ref{sec:methodology:evaluation}).
+
+Our results confirm that LLMs generally can not decide to not speak even when instructed to do so (\S\ref{sec:methodology:turn-taking}). This behavior is consistent across model families, model sizes and facilitative instructions. The inability to keep silent has not been reported in relevant literature to our knowledge, and \emph{is an example of ``debugging'' problems with LLMs}---a core motivation of our work.
 
 
 \subsection{LLM facilitators cannot effectively utilize complex instructions}%\includegraphics[width=0.45\linewidth]{intervention_count_strategy.png}
 \input{../graphs/toxicity_regression.tex}
+
+ \begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.45\linewidth]{intervention_count_strategy.png}
+	\includegraphics[width=0.45\linewidth]{toxicity_through_time_strategy.png}
+	\caption{Percentage of unmoderated comments for each discussion according to model (left) and mean (cumulative) toxicity in discussions using each model (right). LLM facilitators are way too eager to intervene, choosing to do so even when explicitly instructed not to unless necessary. There appears to be no correlation between toxicity and interventions.}
+	\label{fig:facilitation-strategy}
+\end{figure}
 
 We used a mixed-effects linear regression model, which unlike regular linear regression, accounts for the fact that comments from the same discussion tend to resemble one another.  Table~\ref{tab:regression} shows that, while complex instructions lead to statistically significant reductions in message toxicity, the effects are quantitatively minimal. This can be seen both in aggregate (with toxicity dropping only by $0.018-0.0019$ points when compared to no instructions), and in continuity (no effect through time).
 
