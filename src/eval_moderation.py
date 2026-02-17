@@ -76,9 +76,7 @@ def intervention_through_time_plot(df: pd.DataFrame, groupby_col: str) -> None:
     df = df[df.is_moderator]
     df = df[df.model != "hardcoded"]
 
-    # Ensure messages are ordered within conversation
-    if "turn_index" not in df.columns:
-        df["turn_index"] = df.groupby("conv_id").cumcount()
+    df["turn_index"] = df.groupby("conv_id").cumcount() + 1
 
     # Detect intervention (empty moderator reply)
     df["is_intervention"] = df.message.astype(str).str.strip() != '""'
@@ -104,7 +102,6 @@ def intervention_through_time_plot(df: pd.DataFrame, groupby_col: str) -> None:
     markers = ["o", "s", "D", "^", "v", "P", "X"]
 
     for i, (group, group_df) in enumerate(summary.groupby(groupby_col)):
-        group_df["turn_index"] = group_df["turn_index"] + 1
         ax.plot(
             group_df["turn_index"],
             group_df["cum_intervention_pct"],
