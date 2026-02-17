@@ -4,7 +4,7 @@
 \section{Designing robust \ac{sdg} frameworks}
 \label{sec:methodology}
 
-\begin{figure}[t]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=\columnwidth]{research_goal.drawio.png}
 	\caption{We design \ac{sdg} systems through three main components; the creation of LLM participants in lieu of humans; simple synthetic systems that handle conversational dynamics; and scalable evaluation methodologies grounded in literature which avoiding human validation as much as possible.}
@@ -25,14 +25,9 @@ While \acf{sdg} is a mechanism frequently used in research, very few generalized
 	\item \textbf{\ac{sdg} should be cheap} The primary reason for designing and using \ac{sdg} methodologies is to bypass the monetary and time cost of human experiments~\cite{rossi_2024}. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions, it is necessary to generate large quantities of data without compromising cost efficiency, and thus scalability.
 \end{enumerate}
 
+\subsection{Discussion Initialization}
 
-\subsection{Context Management}
-LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024,park2023game}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches however are not explainable, and require substantial computational resources either due to repeated generation~\cite{balog_2024,adornetto2025_gabms}, or due to the loading of specialized modules in (very valuable) GPU VRAM memory~\cite{Vezhnevets2023GenerativeAM}, rendering them inadequate for tasks where scalability and capital intensity are limiting factors.
-
-These approaches may be appropriate for highly specialized settings, but they are not necessary for every task. Prior work on online discussions has demonstrated that providing the $h$ most recent comments as context is sufficient for LLM participants to engage meaningfully \cite{pavlopoulos_2020_toxicity}. While this strategy may not be universally optimal, we argue that it is necessary in certain cases and adequate in many. In online discussions in particular, the aforementioned context-management techniques \emph{should not be used}, as they inevitably abstract away critical elements such as writing style, precise wording, and tone—features that are central to interpreting participant stance and posturing. More broadly, directly including the contents of prior interactions preserves all available information while maintaining scalability (assuming relatively small context windows) and ensuring transparency and explainability.
-
-
-\subsection{LLM Personas}
+\subsubsection{LLM Personas}
 
 \begin{figure}[ht]
 	\centering
@@ -48,8 +43,7 @@ Including \acp{sdb} (e.g., gender, age and education) in prompts has proven prom
 The creation of these personas is sometimes implemented by randomly selecting sociodemographic attributes from a number of dimensions such as age, gender, employment etc.~\cite{adornetto2025_gabms} We instead pick personas from the PERSONA dataset~\cite{castricato-etal-2025-persona}, which includes a curated set of personas based on US census data (see Appendix~\ref{ssec:app:sdbs} for details).\footnote{We use the public version of the dataset, since we were unable to establish contact with the authors for gaining access to the full dataset.} We add random employment information to these personas, since we experimentally discovered that doing so improves discussion variety. Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Fig.~\ref{fig::example}). 
 
 
-\subsection{Instructions}
-
+\subsubsection{Instructions}
 
  \begin{figure}[ht]
 	\centering
@@ -63,12 +57,18 @@ Playing out scenarios is not a task typically encountered during LLM instruction
 
 We could instead use prompting by instructing participants to respond to repeatedly toxic comments. This is an example of the trade-off between complexity and research bias v.s. the need to acquire meaningful data (\S\ref{sec:methodology:designrules}). Facilitators are only instructed to respond only when necessary, besides specialized instructions following established facilitation strategies (see \S\ref{ssec:experimental:strategies}). We also assign antagonistic motivations to a subset of participants (trolls), as different ``factions'' in discussions can lead to interesting and less repetitive emergent conversational dynamics~\cite{abdelnabi_negotiations}.
 
-We run an ablation study comparing discussions where the instructions do not include responding to toxic comments ``
-
- The text was generated using a Qwen2.5-7B model, as only this model approaches human content variety in text~
+We run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). Fig~\ref{fig:diversity-instructions-trolls} shows that the text variety diverges from human discussions ... The text was generated using a Qwen2.5-7B model, as only this model approaches human content variety in text~...
 
 
-\subsection{Turn Taking}
+\subsection{Discussion management}
+
+\subsubsection{Context Management}
+LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024,park2023game}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches however are not explainable, and require substantial computational resources either due to repeated generation~\cite{balog_2024,adornetto2025_gabms}, or due to the loading of specialized modules in (very valuable) GPU VRAM memory~\cite{Vezhnevets2023GenerativeAM}, rendering them inadequate for tasks where scalability and capital intensity are limiting factors.
+
+These approaches may be appropriate for highly specialized settings, but they are not necessary for every task. Prior work on online discussions has demonstrated that providing the $h$ most recent comments as context is sufficient for LLM participants to engage meaningfully \cite{pavlopoulos_2020_toxicity}. While this strategy may not be universally optimal, we argue that it is necessary in certain cases and adequate in many. In online discussions in particular, the aforementioned context-management techniques \emph{should not be used}, as they inevitably abstract away critical elements such as writing style, precise wording, and tone—features that are central to interpreting participant stance and posturing. More broadly, directly including the contents of prior interactions preserves all available information while maintaining scalability (assuming relatively small context windows) and ensuring transparency and explainability.
+
+
+\subsubsection{Turn Taking}
 
 \begin{figure}[ht]
 	\centering
@@ -166,7 +166,7 @@ The selection of a subset of validation methods for \textit{inferential} agents 
 	\centering
 	\includegraphics[width=0.45\columnwidth]{diversity_main_model.png}
 	\includegraphics[width=0.45\columnwidth]{comment_len_model.png}
-	\caption{\textbf{Left}: Diversity of synthetic discussions by model.  \textbf{Right}: Comment length of human and LLM discussions by model. We find that only the Qwen-7B model matches human discussion variety to a reasonable degree. Other models such as Mistral-7B, LLaMa-8B and Qwen-32B feature significantly divergent content-variety distributions.}
+	\caption{\textbf{Left}: Diversity of synthetic discussions by model. We find that only the Qwen-7B model matches human discussion variety to a reasonable degree. Other models such as Mistral-7B, LLaMa-8B and Qwen-32B feature significantly divergent content-variety distributions. \textbf{Right}: Comment length of human and LLM discussions by model. The Qwen-32B is the only model that occasionally chooses not to speak---see \S\ref{} for an explanation. Some human comments are extremely long, but they generally have similar length as LLM comments.}
 	\label{fig:models}
 \end{figure}
 
