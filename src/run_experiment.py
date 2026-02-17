@@ -16,6 +16,7 @@ import syndisco.turn_manager
 TROLL_CHANCE = 0.3
 MAX_COMMENT_LENGTH_CHARS = 500
 
+
 def main(
     config_file_path: Path,
     model_url: str,
@@ -28,6 +29,7 @@ def main(
     user_persona_path: Path,
     output_dir: Path,
     trolls_active: bool,
+    include_seed_comments: bool,
 ) -> None:
     with open(config_file_path, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
@@ -86,6 +88,7 @@ def main(
             turn_manager_type=turn_manager_type,
             trolls_active=trolls_active,
             num_experiments=missing_experiments,
+            include_seed_comments=include_seed_comments,
         )
 
         run_discussion_experiment(
@@ -121,12 +124,15 @@ def create_discussion_experiment(
     turn_manager_type: str,
     trolls_active: bool,
     num_experiments: int,
+    include_seed_comments: bool,
 ) -> syndisco.experiments.DiscussionExperiment:
 
     context = discussion_config["experiment_variables"]["context_prompt"]
 
-    topics = get_topics(
-        topics_path=Path(discussion_config["files"]["topics_path"])
+    topics = (
+        get_topics(Path(discussion_config["files"]["topics_path"]))
+        if include_seed_comments
+        else None
     )
 
     users = get_users(
@@ -359,6 +365,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mod-active", action=argparse.BooleanOptionalAction, default=True
     )
+    parser.add_argument(
+        "--include-seed-comments",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Include seed comments at the start of discussions",
+    )
     args = parser.parse_args()
 
     main(
@@ -373,4 +385,5 @@ if __name__ == "__main__":
         trolls_active=args.trolls_active,
         user_instruction_path=Path(args.user_instruction_path),
         user_persona_path=Path(args.user_persona_path),
+        include_seed_comments=args.include_seed_comments,
     )
