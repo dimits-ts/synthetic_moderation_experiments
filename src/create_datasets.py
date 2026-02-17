@@ -6,7 +6,7 @@ import syndisco.postprocessing
 
 
 def get_initialization(full_tag: str) -> str:
-    return "No seeds" if "no_seeds" in full_tag else "Main"
+    return "No seeds" if "noseeds" in full_tag else "Main"
 
 
 def get_strategy(full_tag: str) -> str:

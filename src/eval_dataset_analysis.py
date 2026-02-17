@@ -28,6 +28,7 @@ def main(
     human_df["variant"] = "Human"
     human_df["user_prompts"] = "Human"
     human_df["turn_taking"] = "Human"
+    human_df["initialization"] = "Human"
 
     combined_df = pd.concat([main_df, human_df], ignore_index=True)
 
@@ -49,7 +50,6 @@ def main(
         graph_output_path=graph_output_dir / "diversity_main_variant.png",
         cache_path=cache_dir / "diversity_main_variant.csv",
     )
-
     dataset_stats(main_df, main_csv_path)
 
     ablation_df = pd.read_csv(ablation_csv_path)
@@ -68,6 +68,13 @@ def main(
         graph_output_path=graph_output_dir / "diversity_full_turntaking.png",
         cache_path=cache_dir / "diversity_full_turntaking.csv",
     )
+    plot_dataset_diversity(
+        df=full_df,
+        y_col="initialization",
+        graph_output_path=graph_output_dir
+        / "diversity_optimal_initialization.png",
+        cache_path=cache_dir / "diversity_full_initialization.csv",
+    )
 
     optimal_model_df = full_df.loc[full_df.model.isin(["qwen7b", "Human"])]
     plot_dataset_diversity(
@@ -84,6 +91,14 @@ def main(
         / "diversity_optimal_turntaking.png",
         cache_path=cache_dir / "diversity_optimal_turntaking.csv",
     )
+    plot_dataset_diversity(
+        df=optimal_model_df,
+        y_col="initialization",
+        graph_output_path=graph_output_dir
+        / "diversity_optimal_initialization.png",
+        cache_path=cache_dir / "diversity_optimal_initialization.csv",
+    )
+
 
 
 def plot_dataset_length(
