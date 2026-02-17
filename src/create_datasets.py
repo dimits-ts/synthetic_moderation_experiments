@@ -5,6 +5,10 @@ import pandas as pd
 import syndisco.postprocessing
 
 
+def get_initialization(full_tag: str) -> str:
+    return "No seeds" if "no_seeds" in full_tag else "Main"
+
+
 def get_strategy(full_tag: str) -> str:
     if "nomod" in full_tag:
         return "No Facilitator"
@@ -37,7 +41,7 @@ def get_userprompts(full_tag: str) -> str:
         case "noinstructions":
             return "Minimal instructions"
         case _:
-            return "Full SDBs & provocation-reactive instr."
+            return "Main"
 
 
 def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
@@ -68,6 +72,7 @@ def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
             df["strategy"] = get_strategy(tag)
             df["turn_taking"] = get_turntaking(tag)
             df["user_prompts"] = get_userprompts(tag)
+            df["initialization"] = get_initialization(tag)
             dataframes.append(df)
 
     return pd.concat(dataframes, ignore_index=True)
