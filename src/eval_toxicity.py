@@ -26,12 +26,40 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
     toxicity_overall(df[~df.is_moderator], graph_dir)
     toxicity_by_dimension(df, graph_dir, "role")
     toxicity_by_dimension(df, graph_dir, "strategy")
+    toxicity_by_dimension(df, graph_dir, "model")
     toxicity_regression(df[~df.is_moderator], graph_dir=graph_dir)
+
+    toxicity_through_time_plot(
+        df=df,
+        groupby_col="model",
+        graph_output_path=graph_dir / "toxicity_through_time_model.png",
+    )
+
+    toxicity_through_time_plot(
+        df=df,
+        groupby_col="strategy",
+        graph_output_path=graph_dir / "toxicity_through_time_strategy.png",
+    )
 
     ablation_df = get_toxicity_df(
         main_df_path=main_output_dir / "ablation.csv",
         toxicity_df_path=toxicity_ratings_dir / "ablation.csv",
     )
+
+    # Keep only rows where prompt does NOT contain "strong opinions"
+    # aka where instruction prompt is no_instructions.txt
+    ablation_raw = pd.read_csv(main_output_dir / "ablation.csv")
+    valid_ids = ablation_raw.loc[
+        ~ablation_raw.prompt.str.contains(
+            "strong opinions", case=False, na=False
+        ),
+        "message_id",
+    ]
+
+    ablation_df = ablation_df[ablation_df.message_id.isin(valid_ids)]
+    ablation_df["dataset"] = "Basic Prompt"
+    df["dataset"] = "Provocation-Reactive Prompt"
+
     full_df = pd.concat([df, ablation_df], ignore_index=True)
     toxicity_vs_troll_count(df=full_df, graph_dir=graph_dir)
 
@@ -46,7 +74,7 @@ def get_toxicity_df(
     toxicity_df.toxicity = pd.to_numeric(toxicity_df.toxicity)
 
     full_df = df.merge(right=toxicity_df, how="inner", on="message_id")
-    full_df["is_troll"] = full_df.prompt.str.contains("trolling")
+    full_df["is_troll"] = full_df.prompt.str.contains("troll")
 
     full_df = full_df.loc[
         (full_df.model != "hardcoded"),
@@ -59,6 +87,7 @@ def get_toxicity_df(
             "is_troll",
             "strategy",
             "message_order",
+            "model",
         ],
     ]
 
@@ -120,19 +149,17 @@ def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
 
 
 def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
-    # Non-troll, non-moderator messages
     non_troll_df = df.loc[(~df.is_troll) & (~df.is_moderator)]
 
     avg_toxicity = (
-        non_troll_df.groupby("conv_id")["toxicity"]
+        non_troll_df.groupby(["conv_id", "dataset"])["toxicity"]
         .mean()
         .rename("avg_non_troll_toxicity")
     )
 
-    # Count distinct troll users per conversation
     troll_counts = (
         df.loc[df.is_troll]
-        .groupby("conv_id")["user"]
+        .groupby(["conv_id", "dataset"])["user"]
         .nunique()
         .rename("n_distinct_trolls")
     )
@@ -140,14 +167,11 @@ def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
     plot_df = (
         pd.concat([avg_toxicity, troll_counts], axis=1).fillna(0).reset_index()
     )
+
     plot_df["troll_bin"] = plot_df["n_distinct_trolls"].clip(upper=4)
     plot_df["troll_bin"] = (
-        plot_df["troll_bin"]
-        .astype(int)
-        .astype(str)
-        .apply(lambda x: x if x != "4" else "4+")
+        plot_df["troll_bin"].astype(int).astype(str).replace({"4": "4+"})
     )
-    print(plot_df.troll_bin.unique())
 
     plot_toxicity_vs_trolls(plot_df, graph_dir)
 
@@ -160,15 +184,65 @@ def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
         x="troll_bin",
         order=["0", "1", "2", "3", "4+"],
         y="avg_non_troll_toxicity",
+        hue="dataset",
         estimator=np.mean,
         errorbar=("ci", 95),
     )
 
-    ax.set_xlabel("Number of distinct troll users")
+    ax.set_title("Toxicity of non-troll users by instruction prompt")
+    ax.set_xlabel("#Active troll users")
     ax.set_ylabel("Avg. toxicity")
+    ax.legend(title="")
 
     plt.tight_layout()
     tasks.graphs.save_plot(graph_dir / "toxicity_vs_troll_count.png")
+    plt.close()
+
+
+def toxicity_through_time_plot(
+    df: pd.DataFrame,
+    groupby_col: str,
+    graph_output_path: Path,
+) -> None:
+    # --- Step 1: copy and filter out moderators ---
+    plot_df = df[~df.is_moderator].copy()
+
+    # --- Step 2: remove duplicate messages per conversation ---
+    plot_df = plot_df.drop_duplicates(subset=["conv_id", "message_id"])
+
+    # --- Step 3: sort messages by conversation and message order ---
+    plot_df = plot_df.sort_values(["conv_id", "message_order"])
+
+    # --- Step 4: reconstruct turn index within each conversation ---
+    plot_df["turn_index"] = plot_df.groupby("conv_id").cumcount() + 1
+
+    # --- Step 5: compute cumulative average toxicity per conversation ---
+    plot_df["cum_avg_toxicity"] = (
+        plot_df.groupby("conv_id")["toxicity"]
+        .expanding()
+        .mean()
+        .reset_index(level=0, drop=True)
+    )
+
+    # --- Step 6: seaborn lineplot with errorbar ---
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(
+        data=plot_df,
+        x="turn_index",
+        y="cum_avg_toxicity",
+        hue=groupby_col,
+        marker="o",
+        palette=tasks.graphs.COLORBLIND_PALETTE,
+        errorbar=("ci", 95),  # <-- shows 95% confidence interval
+    )
+
+    plt.xlabel("#User messages in conversation")
+    plt.ylabel("Cumulative average toxicity")
+    plt.legend(title="")
+    plt.tight_layout()
+
+    # --- Step 7: save the plot ---
+    tasks.graphs.save_plot(graph_output_path)
     plt.close()
 
 

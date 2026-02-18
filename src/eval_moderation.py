@@ -3,13 +3,27 @@ from pathlib import Path
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 
 import tasks.graphs
 
 
+def main(input_csv_path: Path, output_dir: Path):
+    tasks.graphs.seaborn_setup()
+
+    df = pd.read_csv(input_csv_path)
+
+    intervention_through_time_plot(df=df, groupby_col="model")
+    tasks.graphs.save_plot(output_dir / "intervention_count_model.png")
+    plt.close()
+
+    intervention_through_time_plot(df=df, groupby_col="strategy")
+    tasks.graphs.save_plot(output_dir / "intervention_count_strategy.png")
+    plt.close()
+
+
 def build_moderation_summary(
-    df: pd.DataFrame, groupby_col: str
+    df: pd.DataFrame,
+    groupby_col: str,
 ) -> pd.DataFrame:
     """
     Returns one row per conversation with:
@@ -55,88 +69,51 @@ def build_moderation_summary(
     ).reset_index(drop=True)
 
 
-def intervention_plot(summary_df: pd.DataFrame, groupby_col: str) -> None:
-    # Create bins 0–10, 10–20, ..., 90–100
-    bins = np.arange(0, 110, 10)
-    summary_df["intervention_bin"] = pd.cut(
-        summary_df["intervention_pct"],
-        bins=bins,
-        right=False,
-        include_lowest=True,
+def intervention_through_time_plot(df: pd.DataFrame, groupby_col: str) -> None:
+    df = df.copy()
+
+    # Keep only moderator messages
+    df = df[df.is_moderator]
+    df = df[df.model != "hardcoded"]
+
+    df["turn_index"] = df.groupby("conv_id").cumcount() + 1
+
+    # Detect intervention (empty moderator reply)
+    df["is_intervention"] = df.message.astype(str).str.strip() != '""'
+
+    # Compute cumulative intervention rate per conversation
+    df["cum_interventions"] = df.groupby("conv_id")["is_intervention"].cumsum()
+    df["cum_messages"] = df.groupby("conv_id").cumcount() + 1
+    df["cum_intervention_pct"] = (
+        df["cum_interventions"] / df["cum_messages"] * 100
     )
 
-    # Count discussions per (bin × group)
-    grouped = (
-        summary_df.groupby(["intervention_bin", groupby_col])
-        .size()
-        .unstack(fill_value=0)
+    # Average across conversations for each model and turn index
+    summary = (
+        df.groupby([groupby_col, "turn_index"])["cum_intervention_pct"]
+        .mean()
+        .reset_index()
     )
 
+    # Plot
     fig, ax = plt.subplots(figsize=(12, 6))
-    x = np.arange(len(grouped))
-    bottom = np.zeros(len(grouped))
 
     colors = tasks.graphs.COLORBLIND_PALETTE
-    hatches = tasks.constants.HATCHES
+    markers = ["o", "s", "D", "^", "v", "P", "X"]
 
-    for i, group in enumerate(grouped.columns):
-        counts = grouped[group].values
-        ax.bar(
-            x,
-            counts,
-            bottom=bottom,
+    for i, (group, group_df) in enumerate(summary.groupby(groupby_col)):
+        ax.plot(
+            group_df["turn_index"],
+            group_df["cum_intervention_pct"],
             label=group,
             color=colors[i % len(colors)],
-            edgecolor="black",
-            hatch=hatches[i % len(hatches)],
+            marker=markers[i % len(markers)],
         )
-        bottom += counts
 
-    ax.set_xticks(x)
-    ax.set_xticklabels(
-        [f"{int(iv.left)}-{int(iv.right)}%" for iv in grouped.index],
-        rotation=45,
-    )
-
-    ax.set_xlabel("Percentage of unmoderated comments")
-    ax.set_ylabel("Number of discussions")
+    ax.set_xlabel("#Comments (start -> end)")
+    ax.set_ylabel("% Interventions")
     ax.legend()
-
     plt.tight_layout()
-
-
-def moderation_analysis(
-    df: pd.DataFrame, groupby_col: str, graph_output_path: Path
-) -> None:
-    summary_df = build_moderation_summary(
-        df=df,
-        groupby_col=groupby_col,
-    )
-
-    intervention_plot(
-        summary_df=summary_df,
-        groupby_col=groupby_col,
-    )
-
-    tasks.graphs.save_plot(graph_output_path)
-    plt.close()
-
-
-def main(input_csv_path: Path, output_dir: Path):
-    tasks.graphs.seaborn_setup()
-
-    df = pd.read_csv(input_csv_path)
-
-    moderation_analysis(
-        df=df,
-        groupby_col="model",
-        graph_output_path=output_dir / "intervention_count_model.png",
-    )
-    moderation_analysis(
-        df=df,
-        groupby_col="strategy",
-        graph_output_path=output_dir / "intervention_count_strategy.png",
-    )
 
 
 if __name__ == "__main__":
