@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tqdm.auto import tqdm
@@ -76,19 +77,111 @@ def main(
             cache_path=cache_dir / f"diversity_optimal_{dimension}.csv",
         )
 
-        for model in full_df.model.unique():
-            if model != "hardcoded":
-                single_model_df = full_df.loc[
-                    full_df.model.isin([model, "Human"])
-                ]
-                plot_dataset_diversity(
-                    df=single_model_df,
-                    y_col=dimension,
-                    graph_output_path=graph_output_dir
-                    / f"diversity_{model}_{dimension}.png",
-                    cache_path=cache_dir
-                    / f"diversity_{model}_{dimension}.csv",
+        kl_df = compute_kl_divergence_to_human(
+            df=full_df,
+            dimensions=["user_prompts", "turn_taking", "initialization"],
+            cache_dir=cache_dir
+        )
+
+        output_path = eval_output / "kl_divergence.csv"
+        kl_df.to_csv(output_path)
+
+
+def compute_kl_divergence_to_human(
+    df: pd.DataFrame,
+    dimensions: list[str],
+    cache_dir: Path,
+    bins: int = 50,
+):
+    """
+    Produces a hierarchical CSV:
+        level 1 → dimension
+        level 2 → value within dimension
+        rows    → model names
+        cells   → KL(model || Human)
+    """
+
+    eval_output.mkdir(parents=True, exist_ok=True)
+    results = {}
+
+    working_df = df.loc[df.model != "hardcoded"]
+
+    for dimension in dimensions:
+        print(f"Computing KL for dimension: {dimension}")
+
+        cache_path = cache_dir / f"diversity_full_{dimension}.csv"
+
+        if cache_path.exists():
+            similarity_df = pd.read_csv(cache_path)
+        else:
+            grouped = (
+                working_df.groupby(["conv_id", "model", dimension])["message"]
+                .apply(list)
+                .reset_index()
+            )
+            grouped["rougel_similarity"] = grouped["message"].progress_apply(
+                tasks.stats.rougel_similarity
+            )
+            similarity_df = grouped.dropna(subset=["rougel_similarity"])
+            similarity_df.to_csv(cache_path, index=False)
+
+        dim_results = {}
+
+        for value in similarity_df[dimension].unique():
+            subset = similarity_df[similarity_df[dimension] == value]
+
+            human_vals = subset.loc[
+                subset.model == "Human", "rougel_similarity"
+            ].values
+
+            if len(human_vals) == 0:
+                continue
+
+            hist_range = (0.6, 1.0)
+            human_hist, edges = np.histogram(
+                human_vals, bins=bins, range=hist_range, density=True
+            )
+            human_hist += 1e-10  # smoothing
+
+            value_results = {}
+
+            for model in subset.model.unique():
+                if model == "Human":
+                    continue
+
+                model_vals = subset.loc[
+                    subset.model == model, "rougel_similarity"
+                ].values
+
+                if len(model_vals) == 0:
+                    continue
+
+                model_hist, _ = np.histogram(
+                    model_vals, bins=bins, range=hist_range, density=True
                 )
+                model_hist += 1e-10
+
+                kl = np.sum(model_hist * np.log(model_hist / human_hist))
+                value_results[model] = kl
+
+            dim_results[value] = value_results
+
+        results[dimension] = dim_results
+
+    # Convert to hierarchical dataframe
+    records = []
+    for dimension, values in results.items():
+        for value, model_scores in values.items():
+            row = {
+                "dimension": dimension,
+                "value": value,
+                **model_scores,
+            }
+            records.append(row)
+
+    out_df = pd.DataFrame(records)
+    out_df = out_df.set_index(["dimension", "value"]).sort_index()
+    return out_df
 
 
 def plot_dataset_length(
