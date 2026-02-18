@@ -53,7 +53,8 @@ python src/eval_dataset_analysis.py \
     --main-output-dir data/main_output \
     --graph-output-dir graphs \
     --human-csv data/cmv_awry2.csv \
-    --cache-dir data/cache
+    --cache-dir data/cache \
+    --stats-output-dir data/eval_output
 
 python src/eval_toxicity.py \
     --main-output-dir data/main_output \

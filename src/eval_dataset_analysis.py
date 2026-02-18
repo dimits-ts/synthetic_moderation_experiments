@@ -6,6 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tqdm.auto import tqdm
+from scipy.spatial.distance import jensenshannon
+from scipy.stats import gaussian_kde
 
 import tasks.graphs
 import tasks.stats
@@ -16,6 +18,7 @@ def main(
     ablation_csv_path: Path,
     human_csv_path: Path,
     graph_output_dir: Path,
+    stats_output_dir: Path,
     cache_dir: Path,
 ):
     tasks.graphs.seaborn_setup()
@@ -31,7 +34,7 @@ def main(
     human_df["turn_taking"] = "Human"
     human_df["initialization"] = "Human"
 
-    combined_df = pd.concat([main_df, human_df], ignore_index=True)
+    combined_df = pd.concat([main_df, human_df])
 
     plot_dataset_length(
         df=combined_df,
@@ -57,131 +60,142 @@ def main(
     dataset_stats(ablation_df, ablation_csv_path)
 
     full_df = pd.concat([main_df, ablation_df, human_df], ignore_index=True)
-    for dimension in ["user_prompts", "turn_taking", "initialization"]:
-        plot_dataset_diversity(
-            df=full_df,
-            y_col=dimension,
-            graph_output_path=graph_output_dir
-            / f"diversity_full_{dimension}.png",
-            cache_path=cache_dir / f"diversity_full_{dimension}.csv",
+    compute_js_divergence_to_human(
+        df=full_df,
+        dimensions=["user_prompts", "turn_taking", "initialization"],
+        cache_dir=cache_dir,
+        stats_output_path=Path(stats_output_dir)
+        / "js_divergence_to_human.csv",
+    )
+
+
+def compute_js_divergence(
+    dist1: np.ndarray, dist2: np.ndarray, bins: int = 50
+) -> float:
+    """
+    Compute Jensen-Shannon divergence between two distributions of ROUGE-L similarity scores.
+    Uses KDE to estimate continuous distributions, then evaluates on a shared grid.
+    """
+    # Filter NaNs
+    dist1 = dist1[~np.isnan(dist1)]
+    dist2 = dist2[~np.isnan(dist2)]
+
+    if len(dist1) < 2 or len(dist2) < 2:
+        return np.nan
+
+    # Shared evaluation grid over [0, 1]
+    grid = np.linspace(0, 1, bins)
+
+    kde1 = gaussian_kde(dist1)
+    kde2 = gaussian_kde(dist2)
+
+    p = kde1(grid)
+    q = kde2(grid)
+
+    # Normalize to sum to 1 (make proper probability mass vectors)
+    p = p / p.sum()
+    q = q / q.sum()
+
+    # jensenshannon returns the square root of JS divergence; square it for the divergence itself
+    return jensenshannon(p, q) ** 2
+
+
+def compute_rougel_similarities_for_group(
+    df: pd.DataFrame,
+    y_col: str,
+    group_value: str,
+    cache_dir: Path,
+) -> np.ndarray:
+    """
+    Compute ROUGE-L intra-conversation similarities for a specific group (e.g. one model).
+    Returns a flat array of similarity scores.
+    """
+    cache_path = (
+        cache_dir / f"rougel_{y_col}_{group_value.replace('/', '_')}.csv"
+    )
+
+    if cache_path.exists():
+        similarity_df = pd.read_csv(cache_path)
+    else:
+        working_df = df.loc[df[y_col] == group_value]
+        similarity_df = (
+            working_df.groupby("conv_id")["message"].apply(list).reset_index()
         )
+        similarity_df["rougel_similarity"] = similarity_df[
+            "message"
+        ].progress_apply(tasks.stats.rougel_similarity)
+        similarity_df = similarity_df.dropna(subset=["rougel_similarity"])
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        similarity_df.to_csv(cache_path, index=False)
 
-        optimal_model_df = full_df.loc[
-            full_df.model.isin(["qwen7b", "Human", "mistral24b", "llama70b"])
-        ]
-        plot_dataset_diversity(
-            df=optimal_model_df,
-            y_col=dimension,
-            graph_output_path=graph_output_dir
-            / f"diversity_optimal_{dimension}.png",
-            cache_path=cache_dir / f"diversity_optimal_{dimension}.csv",
-        )
-
-        kl_df = compute_kl_divergence_to_human(
-            df=full_df,
-            dimensions=["user_prompts", "turn_taking", "initialization"],
-            cache_dir=cache_dir
-        )
-
-        output_path = eval_output / "kl_divergence.csv"
-        kl_df.to_csv(output_path)
+    return similarity_df["rougel_similarity"].dropna().values
 
 
-def compute_kl_divergence_to_human(
+def compute_js_divergence_to_human(
     df: pd.DataFrame,
     dimensions: list[str],
     cache_dir: Path,
+    stats_output_path: Path,
     bins: int = 50,
-):
+) -> pd.DataFrame:
     """
-    Produces a hierarchical CSV:
-        level 1 → dimension
-        level 2 → value within dimension
-        rows    → model names
-        cells   → KL(model || Human)
+    For each (model, dimension) pair, compute the JS divergence between the model's
+    ROUGE-L similarity distribution and the Human distribution.
+
+    Outputs a CSV to stats_output_path with columns:
+        model | dimension | js_divergence
     """
+    records = []
 
-    eval_output.mkdir(parents=True, exist_ok=True)
-    results = {}
-
-    working_df = df.loc[df.model != "hardcoded"]
+    human_similarities = {}
 
     for dimension in dimensions:
-        print(f"Computing KL for dimension: {dimension}")
+        print(f"\n[JS Divergence] Dimension: {dimension}")
 
-        cache_path = cache_dir / f"diversity_full_{dimension}.csv"
+        # Pre-compute Human distribution for this dimension
+        human_sim = compute_rougel_similarities_for_group(
+            df=df,
+            y_col=dimension,
+            group_value="Human",
+            cache_dir=cache_dir / "js_divergence" / dimension,
+        )
+        human_similarities[dimension] = human_sim
+        print(f"  Human samples: {len(human_sim)}")
 
-        if cache_path.exists():
-            similarity_df = pd.read_csv(cache_path)
-        else:
-            grouped = (
-                working_df.groupby(["conv_id", "model", dimension])["message"]
-                .apply(list)
-                .reset_index()
+        non_human_values = df.loc[
+            (df[dimension] != "Human") & (df["model"] != "hardcoded"),
+            dimension,
+        ].unique()
+
+        for value in non_human_values:
+            model_sim = compute_rougel_similarities_for_group(
+                df=df,
+                y_col=dimension,
+                group_value=value,
+                cache_dir=cache_dir / "js_divergence" / dimension,
             )
-            grouped["rougel_similarity"] = grouped["message"].progress_apply(
-                tasks.stats.rougel_similarity
+
+            js_div = compute_js_divergence(model_sim, human_sim, bins=bins)
+            print(
+                f"  {value}: JS divergence = {js_div:.4f} (n={len(model_sim)})"
             )
-            similarity_df = grouped.dropna(subset=["rougel_similarity"])
-            similarity_df.to_csv(cache_path, index=False)
 
-        dim_results = {}
-
-        for value in similarity_df[dimension].unique():
-            subset = similarity_df[similarity_df[dimension] == value]
-
-            human_vals = subset.loc[
-                subset.model == "Human", "rougel_similarity"
-            ].values
-
-            if len(human_vals) == 0:
-                continue
-
-            hist_range = (0.6, 1.0)
-            human_hist, edges = np.histogram(
-                human_vals, bins=bins, range=hist_range, density=True
+            records.append(
+                {
+                    "dimension": dimension,
+                    "value": value,
+                    "n_model_samples": len(model_sim),
+                    "n_human_samples": len(human_sim),
+                    "js_divergence": js_div,
+                }
             )
-            human_hist += 1e-10  # smoothing
 
-            value_results = {}
+    results_df = pd.DataFrame(records)
+    stats_output_path.parent.mkdir(parents=True, exist_ok=True)
+    results_df.to_csv(stats_output_path, index=False)
+    print(f"\nSaved JS divergence results → {stats_output_path}")
 
-            for model in subset.model.unique():
-                if model == "Human":
-                    continue
-
-                model_vals = subset.loc[
-                    subset.model == model, "rougel_similarity"
-                ].values
-
-                if len(model_vals) == 0:
-                    continue
-
-                model_hist, _ = np.histogram(
-                    model_vals, bins=bins, range=hist_range, density=True
-                )
-                model_hist += 1e-10
-
-                kl = np.sum(model_hist * np.log(model_hist / human_hist))
-                value_results[model] = kl
-
-            dim_results[value] = value_results
-
-        results[dimension] = dim_results
-
-    # Convert to hierarchical dataframe
-    records = []
-    for dimension, values in results.items():
-        for value, model_scores in values.items():
-            row = {
-                "dimension": dimension,
-                "value": value,
-                **model_scores,
-            }
-            records.append(row)
-
-    out_df = pd.DataFrame(records)
-    out_df = out_df.set_index(["dimension", "value"]).sort_index()
-    return out_df
+    return results_df
 
 
 def plot_dataset_length(
@@ -302,6 +316,11 @@ if __name__ == "__main__":
         help="Graph output directory",
     )
     parser.add_argument(
+        "--stats-output-dir",
+        type=str,
+        help="KL stats output directory",
+    )
+    parser.add_argument(
         "--cache-dir",
         type=str,
         help="Directory to store similarity caches",
@@ -312,5 +331,6 @@ if __name__ == "__main__":
         ablation_csv_path=Path(args.main_output_dir) / "ablation.csv",
         human_csv_path=Path(args.human_csv),
         graph_output_dir=Path(args.graph_output_dir),
+        stats_output_dir=Path(args.stats_output_dir),
         cache_dir=Path(args.cache_dir),
     )
