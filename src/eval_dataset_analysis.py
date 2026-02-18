@@ -61,7 +61,7 @@ def main(
 
     full_df = pd.concat([main_df, ablation_df, human_df], ignore_index=True)
     compute_js_divergence_to_human(
-        df=full_df,
+        full_df=full_df,
         dimensions=["user_prompts", "turn_taking", "initialization"],
         cache_dir=cache_dir,
         stats_output_path=Path(stats_output_dir)
@@ -132,7 +132,7 @@ def compute_rougel_similarities_for_group(
 
 
 def compute_js_divergence_to_human(
-    df: pd.DataFrame,
+    full_df: pd.DataFrame,
     dimensions: list[str],
     cache_dir: Path,
     stats_output_path: Path,
@@ -146,49 +146,59 @@ def compute_js_divergence_to_human(
         model | dimension | js_divergence
     """
     records = []
-
     human_similarities = {}
 
-    for dimension in dimensions:
-        print(f"\n[JS Divergence] Dimension: {dimension}")
+    models = set(full_df.model.unique()).union({"All"})
+    for model in models:
+        if model == "Human" or model == "hardcoded":
+            continue
+        elif model == "All":
+            df = full_df
+        else:
+            df = full_df.loc[full_df.model.isin([model, "Human"])]
 
-        # Pre-compute Human distribution for this dimension
-        human_sim = compute_rougel_similarities_for_group(
-            df=df,
-            y_col=dimension,
-            group_value="Human",
-            cache_dir=cache_dir / "js_divergence" / dimension,
-        )
-        human_similarities[dimension] = human_sim
-        print(f"  Human samples: {len(human_sim)}")
+        print("Model: ", model)
+        for dimension in dimensions:
+            print(f"\n[JS Divergence] Dimension: {dimension}")
+            model_cache_dir = cache_dir / "js_divergence" / dimension / model
 
-        non_human_values = df.loc[
-            (df[dimension] != "Human") & (df["model"] != "hardcoded"),
-            dimension,
-        ].unique()
-
-        for value in non_human_values:
-            model_sim = compute_rougel_similarities_for_group(
+            # Pre-compute Human distribution for this dimension
+            human_sim = compute_rougel_similarities_for_group(
                 df=df,
                 y_col=dimension,
-                group_value=value,
-                cache_dir=cache_dir / "js_divergence" / dimension,
+                group_value="Human",
+                cache_dir=model_cache_dir,
             )
+            human_similarities[dimension] = human_sim
+            print(f"  Human samples: {len(human_sim)}")
 
-            js_div = compute_js_divergence(model_sim, human_sim, bins=bins)
-            print(
-                f"  {value}: JS divergence = {js_div:.4f} (n={len(model_sim)})"
-            )
+            non_human_values = df.loc[
+                (df[dimension] != "Human") & (df["model"] != "hardcoded"),
+                dimension,
+            ].unique()
 
-            records.append(
-                {
-                    "dimension": dimension,
-                    "value": value,
-                    "n_model_samples": len(model_sim),
-                    "n_human_samples": len(human_sim),
-                    "js_divergence": js_div,
-                }
-            )
+            for value in non_human_values:
+                model_sim = compute_rougel_similarities_for_group(
+                    df=df,
+                    y_col=dimension,
+                    group_value=value,
+                    cache_dir=model_cache_dir,
+                )
+
+                js_div = compute_js_divergence(model_sim, human_sim, bins=bins)
+                print(
+                    f"{model} {value}: JS divergence = "
+                    f"{js_div:.4f} (n={len(model_sim)})"
+                )
+
+                records.append(
+                    {
+                        "dimension": dimension,
+                        "model": model,
+                        "value": value,
+                        "js_divergence": js_div,
+                    }
+                )
 
     results_df = pd.DataFrame(records)
     stats_output_path.parent.mkdir(parents=True, exist_ok=True)
