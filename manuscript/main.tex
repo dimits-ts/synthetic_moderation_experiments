@@ -20,67 +20,15 @@
 \usepackage{enumitem}
 \usepackage{amsfonts}
 \usepackage{booktabs}
-\usepackage{xurl} % break url strings
-\usepackage{xifthen}
 \usepackage{xcolor}
 
-
-
-% Change this to switch between review/preprint versions
-\newboolean{review}
-\setboolean{review}{true}
-	
-% table commands
-\renewcommand{\arraystretch}{1.2}
 % graphix commands
-\graphicspath{ {../graphs} {resources} } %TODO: remove resources folder after refactor
+\graphicspath{ {../graphs} }
 
-
-\newcommand{\showifnotreview}[1]{%
-  \ifthenelse{\boolean{review}}{}{#1\unskip}%
-}
-
-\newcommand{\vmd}{\showifnotreview{the ``\ac{VMD}'' }}
-
-\newcommand{\syndisco}{%
-    \ifthenelse{\boolean{review}}%
-        {}%
-        {SynDisco}%
-}
-
-\newcommand{\syndiscolink}{%
-    \ifthenelse{\boolean{review}}%
-        {}
-        {\footnote{}}
-}
-
-\newcommand{\pip}{%
-    \ifthenelse{\boolean{review}}%
-        {}%
-        {\texttt{(pip install syndisco)}}%
-}
-
-\newcommand{\datasetlink}{}
-
-\newcommand{\analysislink}{}
-
-\newcommand{\concat}{%
-  \mathbin{{+}\mspace{-8mu}{+}}%
-}
 
 \newcommand{\asterisknote}{
 	$\cdot p<0.1$,\textsuperscript{*} $p<0.05$,\textsuperscript{**} $p<0.01$,\textsuperscript{***} $p<0.001$
 }
-
-\newcommand{\strategynomod}{No Moderator}
-\newcommand{\strategynoinstr}{No Instructions}
-\newcommand{\strategyrules}{Rules Only}
-\newcommand{\strategymodgame}{Moderation Game}
-\newcommand{\strategyregroom}{Regulation Room}
-\newcommand{\strategyconstrcomm}{Constructive Communications}
-
-\newcommand{\minus}{\scalebox{0.75}[1.0]{$-$}}
-
 
 \title{Designing Synthetic Discussion Generation Systems: A Case Study for Online Facilitation}
 
@@ -102,14 +50,11 @@
 \input{sections/10-limitations}
 \input{sections/11-ethical}
 
-\ifthenelse{\boolean{review}}
-   {}
-   { \input{sections/12-acknowledgements}}
+%\input{sections/12-acknowledgements}
 
 \bibliographystyle{splncs04}
 \bibliography{refs}
 
-\clearpage
 \appendix
 \input{sections/99-appendix}
 

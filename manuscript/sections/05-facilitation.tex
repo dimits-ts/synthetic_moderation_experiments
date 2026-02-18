@@ -20,13 +20,13 @@
 We test two facilitation strategies used in real-life and compare them with two baselines. We summarize both documents using a proprietary LLM (Google Gemini), since LLMs have been proven to work well in these tasks~\cite{ts2024}, manually inspected the output, and removed instructions not relevant for our scenario.\footnote{Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.}
 
 \begin{enumerate}[nosep,noitemsep]
-	\item \textbf{\strategynomod}: A \emph{baseline} where no facilitator is present.
+	\item \textbf{No Facilitator}: A \emph{baseline} where no facilitator is present.
 	
-	\item \textbf{\strategynoinstr}: A \emph{baseline} where a LLM facilitator is present, but is provided only with basic instructions e.g.,: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \cite{Tsai_Deliberate_Lab_Open-Source_2025}. 
+	\item \textbf{No Instructions}: A \emph{baseline} where a LLM facilitator is present, but is provided only with basic instructions e.g.,: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \cite{Tsai_Deliberate_Lab_Open-Source_2025}. 
 	
-	\item \textbf{\strategyregroom}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \cite{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their throughput e.g., ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
+	\item \textbf{Moderation Guidelines}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \cite{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their throughput e.g., ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
 	
-	\item \textbf{\strategyconstrcomm}: A \emph{real-life} strategy~\cite{dimitra-guide} which approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions e.g., ``Do not make decisions, be a guide, provide explanations''. This makes the strategy ideal for deliberative environments.
+	\item \textbf{Constructive Communications}: A \emph{real-life} strategy~\cite{dimitra-guide} which approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions e.g., ``Do not make decisions, be a guide, provide explanations''. This makes the strategy ideal for deliberative environments.
 \end{enumerate}
 
 
