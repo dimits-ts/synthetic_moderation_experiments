@@ -1,7 +1,7 @@
 % !TEX root = ../main.tex
 %
 
-\section{Designing robust \ac{sdg} frameworks}
+\section{Designing robust SDG frameworks}
 \label{sec:methodology}
 
 \begin{figure}[ht]
@@ -24,6 +24,8 @@ While \acf{sdg} is a mechanism frequently used in research, very few generalized
 	
 	\item \textbf{\ac{sdg} should be scalable} The primary reason for designing and using \ac{sdg} methodologies is to bypass the monetary and time cost of human experiments~\cite{rossi_2024}. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions, it is necessary to generate large quantities of data without compromising cost efficiency, and thus scalability.
 \end{enumerate}
+
+Indeed, most components of our framework are not as simple as they could be. We justify each intervention and assumption in our framework by documenting our goals, limitations, assumptions and end-results.
 
 
 \subsection{Discussion Initialization}
@@ -48,42 +50,97 @@ Using these sociodemographic prompts, we observe that LLM users are able to crea
 \end{quote}
 
 
-\subsubsection{Instructions}
+\subsubsection{Assigning participant roles and instructions}
+
+\begin{table}[ht]
+	\centering
+	\caption{Justification and effects of inserting ``troll'' users in the synthetic discussions, as well as instructing other users to respond to toxicity.}
+	\label{tab:llm_toxicity_setup}
+	\begin{tabular}{p{3cm} p{9cm}}
+		\toprule
+		\textbf{Component} & \textbf{Description} \\
+		\midrule
+		Goal 
+		& Evaluate the performance of an LLM facilitator in a challenging, toxicity-prone discussion environment. \\
+		
+		Problem 
+		& Aligned LLMs do not naturally produce toxic speech, even when exposed to toxic prompts. \\
+		
+		Assumptions 
+		& Facilitation becomes more difficult as conversational toxicity increases. \\
+		& Human participants tend to exhibit increased toxicity when exposed to toxic online discourse. \\
+		
+		Design Choices 
+		& A subset of participants is assigned adversarial (trolling) behavior. \\
+		& Non-adversarial participants are instructed to respond to toxic speech. \\
+		
+		Results 
+		& LLM participants both produced and responded to toxic speech. \\
+		&  - The use of specialized instructions degraded the believability of generated content.\\
+		&  + The new environment enabled the emergence of complex social behaviors previously documented in online spaces. \\
+		
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Playing out scenarios is not a task typically encountered during LLM instruction-tuning---therefore we need to give explicit instructions on how they should behave. We outline two tools that help us ``push'' LLM participants to a direction conducive for later facilitation experiments, and show the effects of our interventions (Table~\ref{tab:llm_toxicity_setup}). 
+
+A simple prompt would be to instruct the LLM to behave as a human would; this however is insufficient by itself. Due to alignment procedures LLMs exhibit extreme agreeableness~\cite{park2023game,anthis_2025}, which leads to repetitive scenarios where agents show a narrow band of ``behaviors''. LLM finetuning could be used to alter this behavior, as was the case in political science studies using LLMs~\cite{Taubenfeld2024SystematicBI}. This however is expensive in two main ways; first, the process itself requires extensive computational resources, and secondly, we would require both the original and the finetuned model loaded in memory, leading to significant capital requirements for researchers (\S\ref{sec:scalability:setup}).
+
+We could instead use prompting by instructing participants to respond to repeatedly toxic comments. This is an example of the trade-off between complexity and research bias v.s. the need to acquire meaningful data (\S\ref{sec:methodology:designrules}). Facilitators are instructed to respond only when necessary, besides specialized instructions following established facilitation strategies (see \S\ref{sec:facilitation:strategies}). We also assign antagonistic motivations to a subset of participants (trolls), as different ``factions'' in discussions can lead to interesting and less repetitive emergent conversational dynamics~\cite{abdelnabi_negotiations}. This assumption is validated in our experiments (\S\ref{sec:facilitation:behaviors}).
+
+We run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). We use \emph{``Diversity''} to measure content variety within each individual discussion, as discussed in \S\ref{sec:related:quality}. The closer the diversity distribution of our experiments are to human discussions in the same dataset as our initial comments (presented later in \S\ref{sec:methodology:seed}), the better. We can use the Jensen-Shannon divergence metric, which quantifies how ``far apart'' two distributions are from each other. We use this metric since unlike its most famous predecessor, the Kullback–Leibler divergence, it is symmetric, and thus punishes discussions that have too little \textit{and} too much content variety compared to human discussions. Fig~\ref{fig:instructions-trolls} shows that our prompts are necessary for participants to react negatively to trolls---one of the prerequisites for later experiments---even though content variety slightly diverges from human discussions (Table~\ref{tab:divergence-user_prompts}).
 
  \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.45\linewidth]{toxicity_vs_troll_count.png}
 	\caption{Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. Our setup is essential to elicit the behaviors we want to study in the context of facilitation. See \S\ref{sec:scalability:setup} for experimental details.}
-	\label{fig:diversity-instructions-trolls}
+	\label{fig:instructions-trolls}
 \end{figure}
-
-Playing out scenarios is not a task typically encountered during LLM instruction-tuning---therefore we need to give explicit instructions on how they should behave. A simple prompt would be to instruct the LLM to behave as a human would; this however is insufficient by itself. Due to alignment procedures LLMs exhibit extreme agreeableness~\cite{park2023game,anthis_2025}, which leads to repetitive scenarios where agents show a narrow band of ``behaviors''. LLM finetuning could be used to alter this behavior, as was the case in political science studies using LLMs~\cite{Taubenfeld2024SystematicBI}. This however is expensive in two main ways; first, the process itself requires extensive computational researchers, and secondly, both the finetuned model and another model for the facilitator would need to be loaded in memory, leading to significant capital requirements for researchers.
-
-We could instead use prompting by instructing participants to respond to repeatedly toxic comments. This is an example of the trade-off between complexity and research bias v.s. the need to acquire meaningful data (\S\ref{sec:methodology:designrules}). Facilitators are only instructed to respond only when necessary, besides specialized instructions following established facilitation strategies (see \S\ref{ssec:experimental:strategies}). We also assign antagonistic motivations to a subset of participants (trolls), as different ``factions'' in discussions can lead to interesting and less repetitive emergent conversational dynamics~\cite{abdelnabi_negotiations}.
-
-We run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). We use \emph{``Diversity''} to measure content variety within each individual discussion, as discussed in \S\ref{sec:related:quality}. The closer the diversity distribution of our experiments are to human discussions in the same dataset as our initial comments (presented later in \S\ref{sec:methodology:seed}), the better. Distributions to the right of the human curve (high diversity) indicate insufficient engagement between the participants, while distributions to the left (low diversity), to stereotypical LLM speech.
-\footnote{While we use multiple models in this study (\S\ref{sec:scalability:model}), the texts for this specific experiment were generated using a subset of these models (Qwen-7B, LLaMa-70B, Mistral-24B), since some diverge wildly from the human content variety (\S\ref{sec:scalability:model}). Since the model used influences content variety in a disproportionate manner to any other variable, the results are visually inconclusive when not removing models with extreme distributional shifts.The full results can nevertheless be found in Appendix~\ref{sec:appendix:findings}.}
-
-Fig~\ref{fig:diversity-instructions-trolls} shows that the text variety diverges from human discussions in all cases. In fact, the experiments conducted with the use of our provocation-reactive prompt and full \acp{sdb} seem to slightly \emph{lower} diversity. However, the figure also showcases that our prompts are necessary for participants to react negatively to trolls; one of the prerequisites for later experiments.
 
 \input{../data/eval_output/divergence_user_prompts.tex}
 
+
 \subsubsection{Seed opinions}
 \label{sec:methodology:seed}
+
+\begin{table}[ht]
+	\centering
+	\caption{Justification and effects of inserting human-made comments at the beginning of synthetic discussions.}
+	\label{tab:setup_seeds}
+	\begin{tabular}{p{3cm} p{9cm}}
+		\toprule
+		\textbf{Component} & \textbf{Description} \\
+		\midrule
+		
+		Goal 
+		& Hold discussions with controversial topics. \\
+		
+		Problem 
+		& LLMs are shown to be less capable at finding good starting points for discussions than traditional Information Retrieval systems. \\
+		
+		Assumptions 
+		& Discussions that escalated in actual human discussions are good starting points for LLMs \\
+		
+		Design Choices 
+		& Use Reddit threats to kick-start synthetic discussions. \\
+		
+		Results 
+		& + Synthetic discussions now explore a more diverse set of topics. \\ %TODO this may need more justification
+		&  - The use of seed comments degraded the believability of generated content in most models.\\
+		
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 Researchers often include some initial comments to kick-start discussions---defined as ``seed comments'' by~\cite{small-polis-llm}. While LLMs were initially proposed as generators of initial content for human discussions, they proved inferior to Information Retrieval systems used on human discussion corpora~\cite{small-polis-llm}. This process was however inverted in the field of \ac{sdg}, as some recent work uses human seed comments to kick-start synthetic discussions~\cite{balog_2024}. 
 
 Using human comments provides numerous benefits. Firstly, these comments can be used by researchers to shift the focus of synthetic discussions to a certain direction; nudging LLM participants to talk about specific topics, adopt certain positions, or talk with a specific tone. Secondly, human-generated text does not suffer from the limitations inherent in LLM output; namely fixation on unorthodox phrasing~\cite{cabanac2021_torturedphrases} and overt politeness and agreeableness~\cite{park2023game,anthis_2025,rossi_2024}. This forces the simulation into scenarios that would not be possible had the discussions begun with LLM outputs. Thirdly, LLM outputs tend to have low content variety~\cite{ulmer2024}, which may ordinarily limit the subjects and rhetorical approaches of LLM participants even when focusing on a specific topic. Human discussions on that topic may spur LLMs into considering different rhetorical avenues~\cite{balog_2024}.
 
-Our frameworks natively supports the inclusion of randomized seed opinions. We use a set of starting comments taken from random points in escalated discussions featured in the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble}.\footnote{We mark a discussion as escalated when the derailment value (from the official dataset) is in the 60th upper percentile, since the escalation values in the original paper are non-interpretable model outputs.} Fig.~\ref{fig:diversity_initialization} shows that including seed opinions seems to have a significant, positive shift in the content variety of synthetic discussions, as hypothesized.
-
-\begin{figure}[ht]
-	\centering
-	\caption{Diversity of synthetic and human discussions with and without seed opinions, excluding models with divergent speaking patterns (\S\ref{sec:scalability:model}). The comparison with all models can be found in Appendix~\ref{sec:appendix:findings}. See \S\ref{sec:scalability:setup} for experimental details. Seed comments were excluded from the calculation}
-	\label{fig:diversity_initialization}
-\end{figure}
+Our frameworks natively supports the inclusion of randomized seed opinions. We use a set of starting comments taken from random points in escalated discussions featured in the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble}.\footnote{We mark a discussion as escalated when the derailment value (from the official dataset) is in the 60th upper percentile, since the escalation values in the original paper are non-interpretable model outputs.} Table.~\ref{tab:divergence-initialization} shows that including seed opinions seems to align the Qwen family of models better with human discussions, but not other models. This may suggest that the effect of each intervention in \ac{sdg} systems may be model-specific, or that seed comments do not significantly alter content variety in synthetic discussions.
 
 \input{../data/eval_output/divergence_initialization.tex}
+
 
 \subsection{Discussion management}
 
@@ -95,6 +152,37 @@ These approaches may be appropriate for highly specialized settings, but they ar
 
 \subsubsection{Turn Taking}
 \label{sec:methodology:turn-taking}
+
+\begin{table}[ht]
+	\centering
+	\caption{Justification and effects of using an algorithm that picks participants at random, but also allows users to respond immediately.}
+	\label{tab:setup-turn-taking}
+	\begin{tabular}{p{3cm} p{9cm}}
+		\toprule
+		\textbf{Component} & \textbf{Description} \\
+		\midrule
+		
+		Goal 
+		& Pick LLM turn-taking order in a way that encourages both interaction and overall participation. \\
+		
+		Problem 
+		& LLMs always respond when prompted to. \\ %TODO: show participant response rate
+		& Current turn-taking systems are either prohibitively expensive for our purposes, or rely on naive assumptions. \\
+		
+		
+		Assumptions 
+		& Humans may not be always available online to respond.  \\
+		
+		Design Choices 
+		& Pick between a random participant to continue the discussion, and the previous participant. \\
+		
+		Results 
+		& + Our approach enabled both exploration of different opinions, and meaningful interaction between participants. \\ %TODO this may need more justification
+		&  + The use of our turn-taking function shows significant alignment with human discussion variety. \\
+		
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 Turn-taking refers to the process with which humans take turns speaking in a discussion. The goal is typically to minimize idle time in discussions, while letting most participants participate. This process is poorly understood---only experimental coarse-grained solutions have been devised for automated systems~\cite{frai_turn_taking}. While humans typically learn when to speak after years of constant social interaction~\cite{frai_turn_taking}, this process must be implemented for LLM agents which are trained as chatbot assistants---and therefore to always respond. 
 
@@ -111,6 +199,8 @@ t(i) = \left\{
 \right.
 \]
 \noindent where $U$ is the set of all non-facilitator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the corresponding option being selected. When a facilitator is present, $t$ alternates between picking a normal user and the facilitator, who can respond after every comment, or stay silent by emitting an empty string. 
+
+We find that using this turn-taking function aligns LLM discussions with human content variety to a significant degree for all models except for LLaMa-8B. It also leads to unique conversational dynamics, as evidenced by LLM users requesting responses from users with controversial posts (\S\ref{sec:facilitation:behaviors}).
 
 \input{../data/eval_output/divergence_turn_taking.tex}
 

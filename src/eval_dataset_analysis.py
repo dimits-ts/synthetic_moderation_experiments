@@ -86,6 +86,7 @@ def output_divergence_results(df: pd.DataFrame, output_dir: Path) -> None:
             "Jensen-Shannon divergence between the diversity "
             "distributions  of human and synthetic discussions by "
             f"{dimension.replace("_", " ")}."
+            "Smaller is better."
         )
         dim_df.to_latex(
             buf=output_dir / f"divergence_{dimension}.tex",
