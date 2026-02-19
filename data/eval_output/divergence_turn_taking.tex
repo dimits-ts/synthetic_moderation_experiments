@@ -1,0 +1,14 @@
+\begin{table}[ht]
+\caption{Jensen-Shannon divergence between the diversity distributions  of human and synthetic discussions by turn taking.}
+\label{tab:divergence-turn_taking}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Model & All & llama70b & llama8b & mistral24b & mistral7b & qwen32b & qwen7b \\
+Ablation &  &  &  &  &  &  &  \\
+\midrule
+Random & 0.099 & 0.130 & 0.407 & 0.317 & 0.487 & 0.464 & 0.091 \\
+Response-enabled & 0.110 & 0.122 & 0.415 & 0.311 & 0.406 & 0.288 & 0.056 \\
+Round-robin & 0.082 & 0.228 & 0.441 & 0.321 & 0.437 & 0.371 & 0.150 \\
+\bottomrule
+\end{tabular}
+\end{table}

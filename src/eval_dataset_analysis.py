@@ -59,14 +59,43 @@ def main(
     ablation_df = pd.read_csv(ablation_csv_path)
     dataset_stats(ablation_df, ablation_csv_path)
 
-    full_df = pd.concat([main_df, ablation_df, human_df], ignore_index=True)
-    compute_js_divergence_to_human(
-        full_df=full_df,
+    results_df = compute_js_divergence_to_human(
+        full_df=pd.concat([main_df, ablation_df, human_df], ignore_index=True),
         dimensions=["user_prompts", "turn_taking", "initialization"],
         cache_dir=cache_dir,
-        stats_output_path=Path(stats_output_dir)
-        / "js_divergence_to_human.csv",
     )
+    output_divergence_results(df=results_df, output_dir=stats_output_dir)
+
+
+def output_divergence_results(df: pd.DataFrame, output_dir: Path) -> None:
+    for dimension in df.dimension.unique():
+        dim_df = df[df.dimension == dimension]
+        dim_df = dim_df.rename(
+            columns={
+                "js_divergence": "Divergence",
+                "model": "Model",
+                "value": "Ablation",
+            }
+        )
+        dim_df = dim_df.pivot(
+            index="Ablation", columns="Model", values="Divergence"
+        )
+        dim_df = dim_df.squeeze()
+
+        caption = (
+            "Jensen-Shannon divergence between the diversity "
+            "distributions  of human and synthetic discussions by "
+            f"{dimension.replace("_", " ")}."
+        )
+        dim_df.to_latex(
+            buf=output_dir / f"divergence_{dimension}.tex",
+            caption=caption,
+            label=f"tab:divergence-{dimension}",
+            position="ht",
+            float_format="%.3f"
+        )
+
+    print(f"\nSaved JS divergence results → {output_dir}")
 
 
 def compute_js_divergence(
@@ -135,7 +164,6 @@ def compute_js_divergence_to_human(
     full_df: pd.DataFrame,
     dimensions: list[str],
     cache_dir: Path,
-    stats_output_path: Path,
     bins: int = 50,
 ) -> pd.DataFrame:
     """
@@ -199,12 +227,7 @@ def compute_js_divergence_to_human(
                         "js_divergence": js_div,
                     }
                 )
-
     results_df = pd.DataFrame(records)
-    stats_output_path.parent.mkdir(parents=True, exist_ok=True)
-    results_df.to_csv(stats_output_path, index=False)
-    print(f"\nSaved JS divergence results → {stats_output_path}")
-
     return results_df
 
 

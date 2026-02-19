@@ -52,9 +52,8 @@ Using these sociodemographic prompts, we observe that LLM users are able to crea
 
  \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.45\linewidth]{diversity_optimal_userprompts.png}
 	\includegraphics[width=0.45\linewidth]{toxicity_vs_troll_count.png}
-	\caption{\textbf{Left}: Diversity of synthetic and human discussions by prompt setup, excluding models with divergent speaking patterns (\S\ref{sec:scalability:model}). The comparison with all models can be found in Appendix~\ref{sec:appendix:findings}. Including \acp{sdb} and instructing participants to react to provocations (``Main'') leads to slightly more diverging speaking patterns when compared with human discussions. \textbf{Right}: Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. Our setup is essential to elicit the behaviors we want to study in the context of facilitation. See \S\ref{sec:scalability:setup} for experimental details.}
+	\caption{Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. Our setup is essential to elicit the behaviors we want to study in the context of facilitation. See \S\ref{sec:scalability:setup} for experimental details.}
 	\label{fig:diversity-instructions-trolls}
 \end{figure}
 
@@ -67,6 +66,7 @@ We run an ablation study comparing discussions where the instructions do not inc
 
 Fig~\ref{fig:diversity-instructions-trolls} shows that the text variety diverges from human discussions in all cases. In fact, the experiments conducted with the use of our provocation-reactive prompt and full \acp{sdb} seem to slightly \emph{lower} diversity. However, the figure also showcases that our prompts are necessary for participants to react negatively to trolls; one of the prerequisites for later experiments.
 
+\input{../data/eval_output/divergence_user_prompts.tex}
 
 \subsubsection{Seed opinions}
 \label{sec:methodology:seed}
@@ -79,11 +79,11 @@ Our frameworks natively supports the inclusion of randomized seed opinions. We u
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.6\linewidth]{diversity_optimal_initialization.png}
 	\caption{Diversity of synthetic and human discussions with and without seed opinions, excluding models with divergent speaking patterns (\S\ref{sec:scalability:model}). The comparison with all models can be found in Appendix~\ref{sec:appendix:findings}. See \S\ref{sec:scalability:setup} for experimental details. Seed comments were excluded from the calculation}
 	\label{fig:diversity_initialization}
 \end{figure}
 
+\input{../data/eval_output/divergence_initialization.tex}
 
 \subsection{Discussion management}
 
@@ -95,13 +95,6 @@ These approaches may be appropriate for highly specialized settings, but they ar
 
 \subsubsection{Turn Taking}
 \label{sec:methodology:turn-taking}
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=0.6\linewidth]{diversity_optimal_turntaking.png}
-	\caption{Diversity of synthetic and human discussions by prompt setup, excluding models with divergent speaking patterns (\S\ref{sec:scalability:model}). The comparison with all models can be found in Appendix~\ref{sec:appendix:findings}. Including \acp{sdb} and instructing participants to react to provocations (``Main'') leads to slightly more diverging speaking patterns when compared with human discussions. Our method (``response-enabled'') leads to a distribution of content variety closest to human discussions when compared with random turns (``random''), or participants talking in a predetermined order (``round-robin''). See \S\ref{sec:scalability:setup} for experimental details.}
-	\label{fig:diversity_turntaking}
-\end{figure}
 
 Turn-taking refers to the process with which humans take turns speaking in a discussion. The goal is typically to minimize idle time in discussions, while letting most participants participate. This process is poorly understood---only experimental coarse-grained solutions have been devised for automated systems~\cite{frai_turn_taking}. While humans typically learn when to speak after years of constant social interaction~\cite{frai_turn_taking}, this process must be implemented for LLM agents which are trained as chatbot assistants---and therefore to always respond. 
 
@@ -119,6 +112,7 @@ t(i) = \left\{
 \]
 \noindent where $U$ is the set of all non-facilitator users, \textit{unif} is a function sampling from the uniform distribution, and $p$ represents the probability of the corresponding option being selected. When a facilitator is present, $t$ alternates between picking a normal user and the facilitator, who can respond after every comment, or stay silent by emitting an empty string. 
 
+\input{../data/eval_output/divergence_turn_taking.tex}
 
 \subsection{Evaluation}
 \label{sec:methodology:evaluation}

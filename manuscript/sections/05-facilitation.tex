@@ -44,9 +44,11 @@ We used a mixed-effects linear regression model, which accounts for the fact tha
 	\label{fig:facilitation-model}
 \end{figure}
 
-Fig.~\ref{fig:facilitation-model} demonstrates that LLM facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary (see \ref{ssec:appendix:moderation_strategies}). The only notable difference is the Qwen-32B model, which however features very low comparative toxicity. This is likely not caused by the LLM facilitator working effectively; since we know that this specific model features unusual speech patterns (Fig.~\ref{fig:models}). Using multiple evaluation criteria, we are thus able to discern genuine behavioral findings, from limitations in the \ac{sdg} simulations (\S\ref{sec:methodology:evaluation}).
+Fig.~\ref{fig:facilitation-model} demonstrates that LLM facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary (see \ref{ssec:appendix:moderation_strategies}), a behavior that persists across time, model family, model size and facilitation strategy. The only notable difference is the Qwen-32B model, which however features very low comparative toxicity. This is likely not caused by the LLM facilitator working effectively; since we know that this specific model features unusual speech patterns (Fig.~\ref{fig:models}). Using multiple evaluation criteria, we are thus able to discern genuine behavioral findings, from limitations in the \ac{sdg} simulations (\S\ref{sec:methodology:evaluation}).
 
-Our results confirm that LLMs generally can not decide to not speak even when instructed to do so (\S\ref{sec:methodology:turn-taking}). This behavior is consistent across model families, model sizes and facilitative instructions. The inability to keep silent has not been reported in relevant literature to our knowledge, and \emph{is an example of ``debugging'' problems with LLMs}---a core motivation of our work.
+Our results confirm that LLMs generally can not decide to not speak even when instructed to do so (\S\ref{sec:methodology:turn-taking}).
+Notably, giving any specific instructions to the LLM seems to significantly increase its tendency to intervene. The fact that interventions remain constant throughout the discussion without toxicity being lowered, may imply that 
+ The inability to keep silent has not been reported in relevant literature to our knowledge, and \emph{is an example of ``debugging'' problems with LLMs}---a core motivation of our work.
 
 
 \subsection{LLM users replicate some human behaviors encountered in online spaces}
