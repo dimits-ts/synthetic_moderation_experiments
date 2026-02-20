@@ -81,7 +81,18 @@ def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
 def main(discussions_output_root: Path, output_path: Path):
     output_path.parent.mkdir(exist_ok=True)
 
-    load_and_combine_discussions(discussions_output_root).to_csv(output_path)
+    df = load_and_combine_discussions(discussions_output_root)
+    df.model = df.model.replace(
+        {
+            "llama70b": "LLaMa-70B",
+            "mistral24b": "Mistral-24B",
+            "qwen32b": "Qwen-32B",
+            "llama8b": "LLaMa-8B",
+            "mistral7b": "Mistral-7B",
+            "qwen7b": "Qwen-7B",
+        }
+    )
+    df.to_csv(output_path)
 
 
 if __name__ == "__main__":
