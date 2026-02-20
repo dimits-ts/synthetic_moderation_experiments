@@ -29,8 +29,10 @@ Indeed, most components of our framework are not as simple as they could be. We 
 
 
 \subsection{Discussion Initialization}
+\label{sec:methodology:initialization}
 
 \subsubsection{LLM Personas}
+\label{sec:methodology:initialization:sdbs}
 It is well known that LLMs tend to align more closely with WEIRD (Western, Educated, Industrialized, Rich, and Democratic) and socially prominent groups, while diverging from minorities~\cite{sap-etal-2022-annotators,goyal2022_toxicity,gallegos-etal-2024-bias} due to their nature as statistical models that adopt the bias of their training data during pretraining. These biases are further shaped by alignment procedures and prompt sensitivity~\cite{liu_2024_bias,santukar_2023}. Thus, synthetic discussions with out-of-the-box LLMs typically result in similar opinions and arguments, with no variance. 
 
 Including \acp{sdb} (e.g., gender, age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large,sommerauer-etal-2025-simulating}. These ``persona'' prompts essentially shift the distribution of output tokens, hence producing content of larger variety when using multiple distinct personas~\cite{liu_2024_bias}. It is worth noting that these shifts in speech do not necessarily correlate to the actual human groups these prompts are modeling~\cite{lutz-etal-2025-prompt,liu_2024_bias}, but this is not concerning for our use-case since we cannot claim to simulate human behaviors with LLMs (\S\ref{ssec:related:human-llm}).
@@ -51,6 +53,7 @@ Using these sociodemographic prompts, we observe that LLM users are able to crea
 
 
 \subsubsection{Assigning participant roles and instructions}
+\label{sec:methodology:initialization:trolls}
 
 \begin{table}[ht]
 	\centering
@@ -199,7 +202,7 @@ In online fora users often create ``comment chains'' following-up on responses t
 \[
 t(i) = \left\{
 \begin{array}{ll}
-	\textit{unif}(U) & i=1, i=2\\
+	\textit{unif}(U) & i=1, i=2 \\
 	\textit{unif}(U \setminus \{t(i-1)\}) & i > 2, p=0.6 \\
 	t(i-2) & i > 2, p=0.4 
 \end{array} 
@@ -210,6 +213,7 @@ t(i) = \left\{
 We find that using this turn-taking function aligns LLM discussions with human content variety to a significant degree for all models except for LLaMa-8B. It also leads to unique conversational dynamics, as evidenced by LLM users requesting responses from users with controversial posts (\S\ref{sec:facilitation:behaviors}).
 
 \input{../data/eval_output/divergence_turn_taking.tex}
+
 
 \subsection{Evaluation}
 \label{sec:methodology:evaluation}
@@ -223,50 +227,51 @@ We find that using this turn-taking function aligns LLM discussions with human c
 		\multicolumn{1}{c}{\textbf{Needs humans}} & 
 		\multicolumn{1}{c}{\textbf{\ac{sdg}}} & 
 		\multicolumn{1}{c}{\textbf{Facil.}} & 
-		\multicolumn{1}{c}{\textbf{Reason}} \\
+		\multicolumn{1}{c}{\textbf{Use / Reason for non-use}} \\
 		\midrule
-		Data analytics & $\times$ & \checkmark & \checkmark & Statistics and aggregated information give us insight into system-wide properties. \\
+		Data analytics & $\times$ & \checkmark & \checkmark & Data cleaning and post-processing throughout our paper. \\
 		
 		Docking & $\times$ & $\times$ &  $\times$ & No established state-of-the-art \ac{gabm} for \ac{sdg} exists to serve as a comparison benchmark. \\
 		
-		Empirical validation & $\times$ & \checkmark & $\times$ &  ``Diversity'' can be used for comparisons with human discussions. However, limited real-world data on facilitation restricts full validation. \\
+		Empirical validation & $\times$ & \checkmark & $\times$ &  We compare content variety between human and synthetic discussions (\S\ref{sec:methodology}). However, limited real-world data on facilitation restricts the extent of our validation. \\
 		
 		Sampling & $\times$ & $\times$ & $\times$ & Requires extensive repeated simulations, leading to prohibitive computational costs. \\
 		
-		Visualization & $\times$ & $\triangle$ & $\triangle$ & Used for some extreme cases of aberrant behavior. However, the need for subjective interpretation restricts use-cases.\\
+		Visualization & $\times$ & $\checkmark$ & $\checkmark$ & Used to verify effective adversarial behavior from LLM users (\S\ref{sec:methodology:initialization:trolls}), and to showcase aberrant behavior exhibited by LLM facilitators (\S\ref{sec:facilitation:interventions}). \\
 		
-		Survey-based validation & \checkmark & $\times$ &  $\times$ & Large number of dynamically prompted agents makes interviewing impractical and analytically unclear. \\
+		Survey-based validation & \checkmark & $\times$ &  $\times$ & Large number of dynamically prompted agents makes interviewing them and analyzing the results impractical. Also, the number of human judges required, renders this method unscalable. \\
 		
-		Observational studies & \checkmark & $\triangle$ &$\triangle$ & Enables comparison of emergent behaviors with well-documented human social dynamics, but can only be applied on random samples. \\
+		Observational studies & \checkmark & $\checkmark$ &$\checkmark$ & We rely on extensive literature documenting human behavior in online spaces to verify the existence of some emergent social behaviors (\S\ref{sec:facilitation:behaviors}, \S\ref{sec:methodology:initialization:sdbs}). \\
 		
 		Expert reviews & \checkmark & $\times$ & $\times$ & High cost and difficulty in recruiting social interaction experts; not scalable. \\
 		\bottomrule
 	\end{tabular}
-	\caption{Evaluation strategies for \ac{gabm} systems and their applicability to \ac{sdg} and investigative tasks on facilitation. \checkmark: yes, $\times$: no, $\triangle$: limited/partial applicability.}
+	\caption{Summary of \ac{gabm} evaluation strategies and their practical feasibility for \ac{sdg} and facilitation tasks. \checkmark indicates application; $\times$ indicates exclusion. For each strategy, we detail its use within our work or provide a justification for its omission.}.
 	\label{tab:evaluation_sdg}
 \end{table}
 
-
-In general, a \ac{gabm} system should be validated based on its purposes and goals, as well as the availability of relevant data~\cite{collins2024}; \cite{adornetto2025_gabms} posit that systems that only exist to further research should not be held to the same standard as those used for policy-making or medicine for example.
-
-There is currently no consensus on how a \acp{gabm} system should be evaluated~\cite{adornetto2025_gabms}. We can however use a subset of foundational methods from non-generative agent-based models~\cite{collins2024}. We can also use ``face validation''~\cite{rand2011_rigor}, which employs humans to judge observed behaviors and dynamics. Specifically, since the original procedures were designed with Machine Learning and rules-based models in mind, we use the adapted guidelines proposed by~\cite{adornetto2025_gabms} for generative agents. A list of possible evaluation foundational (1-4) and face-validation (5-7) strategies with the viability for \ac{sdg} is given below:
+We detailed existing evaluation methods for \ac{gabm} systems in \S\ref{sec:related:quality:gabm}. In this section, we study which of these methods is applicable to \ac{sdg} systems, and which can be used for our facilitation experiments. We then detail where and how these methods were used in this paper, or the reason they were omitted from our analysis. An abridged report can be found in Table~\ref{tab:evaluation_sdg}, while a more extensive description is provided below for each evaluation method:
 
 \begin{enumerate}
 	% Foundational
-	\item \textbf{Data analytics} is used extensively throughout our evaluation pipeline to extract useful statistics from our simulations.
+	\item \textbf{Data analytics} is used extensively throughout our evaluation pipeline for post-processing.
 	
 	\item \textbf{Docking} compares the outputs of the evaluated \ac{gabm} to a state-of-the-art \ac{gabm}. Since we are one of the first to propose a generalized framework for \ac{sdg}, there is no apparent ``state-of-the-art'' model to be compared against.
 	
-	\item \textbf{Empirical validation} compares real-world data to ensure to the model's predictions. We can certainly use computational metrics such as \textit{Diversity}~\cite{ulmer2024} (\S\ref{sec:related:quality}) to gauge the quality of our synthetic discussions. Low diversity points to pathological problems (e.g., LLMs repeating previous comments). Conversely, extremely high diversity may indicate a lack of interaction between participants---a discussion where participants engage with each other will naturally feature some lexical overlap, including common terms or paraphrasing points made by others. We can thus compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions to estimate the former approximate real-world content variety and participant interaction. In our case, there is also a general lack of data for online discussion facilitation~\cite{korre2025evaluation}; thus we can not examine the behavior of LLM facilitators besides some general trends.
+	\item \textbf{Empirical validation} compares real-world data to ensure to the model's predictions. We use \emph{Diversity}~\cite{ulmer2024} as the only viable computational metric for gauging content variety in discussions, as discussed in \S\ref{sec:related:quality}. We maintain that more robust ways of quantifying similarities between human and LLM-generated text need to be developed, and the use of this metric is an inherent limitation of our study.
+	We compare the distribution of diversity scores for synthetic discussions with that measured on sampled human discussions to estimate the former approximate real-world content variety and participant interaction. However, in our case, there is also a general lack of data for online discussion facilitation~\cite{korre2025evaluation}; thus we can not examine the behavior of LLM facilitators besides some general trends.
 	
-	\item \textbf{Sampling} and \textbf{visualization} lead to prohibitive computational costs in the case of the former, and subjective biases for the latter~\cite{adornetto2025_gabms}.
+	\item \textbf{Sampling} requires extensive re-execution of experiments, leading to prohibitive computational costs.
+	
+	\item \textbf{Visualization} is used only in cases where behavior can be clearly demonstrated.
 	
 	% Face validation
 	\item \textbf{Survey-based validation} interviews the agents themselves. We do not follow this approach, because the large amount of agents (44 agents, 7 active at any time, with randomly assigned role prompts) used makes evaluation and analysis impractical from the perspective of time and complexity. It is also unclear what information we could derive from these agents.
 	
-	\item \textbf{Observational studies} analyze human behavior in similar settings, and compare them with the generative agents. We use this technique by observing emergent social behaviors that are well-accounted for in literature.
+	\item \textbf{Observational studies} analyze human behavior in similar settings, and compare them with the generative agents. We use this technique by observing emergent social behaviors that are well-accounted for in literature. We can not apply this method extensively to our entire dataset due to its size and the need for manual verification---thus, we can not make any claims about the frequency of observed, emergent social behaviors exhibited by LLMs, but only provide proof of their existence.
 	
-	\item \textbf{Expert reviews} are not used, since the difficulty and cost of finding experts in the field of facilitation and social interactions is time consuming and non-scalable. 
+	\item \textbf{Expert reviews} are not used, since the difficulty and cost of finding experts in the field of facilitation and social interactions is time consuming and non-scalable. However, our implementation allows human users to directly interact with the LLM participants in the same simulation environment, which makes immersive simulations by experts possible, if impractical.
 \end{enumerate}
 
-The selection of a subset of validation methods for \textit{inferential} agents (who only make decisions) based on the system's goals and limitations is often used in literature, and usually accepted by the research community~\cite{adornetto2025_gabms}.
+The selection of a subset of validation methods for \textit{inferential} agents (who only make decisions) based on the system's goals and limitations is often used in literature, and usually accepted by the research community~\cite{adornetto2025_gabms}. In general, a \ac{gabm} system should be validated based on its purposes and goals, as well as the availability of relevant data~\cite{collins2024}---indeed, \cite{adornetto2025_gabms} posit that systems that only exist to further research should not be held to the same standard as those used for policy-making or medicine for example. We therefore believe that the evaluation pipeline proposed is sufficient for a low-stakes, research-oriented system.
+
