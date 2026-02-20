@@ -20,6 +20,17 @@ def main(input_csv_path: Path, output_dir: Path):
     tasks.graphs.save_plot(output_dir / "intervention_count_strategy.png")
     plt.close()
 
+    print(
+        f"Participants responded {participant_participation(df) * 100:.2f}% "
+        "of the time"
+    )
+
+
+def participant_participation(df: pd.DataFrame) -> float:
+    non_mod_df = df[~df.is_moderator]
+    empty_messages = non_mod_df.message.astype(str).str.strip() == '""'
+    return len(empty_messages) / len(non_mod_df)
+
 
 def build_moderation_summary(
     df: pd.DataFrame,
