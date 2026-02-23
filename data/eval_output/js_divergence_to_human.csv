@@ -1,36 +1,4 @@
 dimension,model,value,js_divergence
-user_prompts,All,Main,0.11367991305715011
-user_prompts,All,Minimal instructions,0.06334053884322052
-user_prompts,All,No SDBs,0.10288296349991136
-turn_taking,All,Response-enabled,0.1103110549587163
-turn_taking,All,Round-robin,0.08204149005919856
-turn_taking,All,Random,0.09893050606849106
-initialization,All,Main,0.10949716549803674
-initialization,All,No seeds,0.09327525465245767
-user_prompts,llama8b,Main,0.44105687416046974
-user_prompts,llama8b,Minimal instructions,0.28023476427030286
-user_prompts,llama8b,No SDBs,0.4826039475007125
-turn_taking,llama8b,Response-enabled,0.4150894665890364
-turn_taking,llama8b,Random,0.40696156270914197
-turn_taking,llama8b,Round-robin,0.44116378886557645
-initialization,llama8b,Main,0.42106003381891727
-initialization,llama8b,No seeds,0.3910176711821198
-user_prompts,mistral24b,Main,0.3178069495460343
-user_prompts,mistral24b,Minimal instructions,0.2773467579795661
-user_prompts,mistral24b,No SDBs,0.3049562819524847
-turn_taking,mistral24b,Response-enabled,0.31087370261793645
-turn_taking,mistral24b,Random,0.31714763852743827
-turn_taking,mistral24b,Round-robin,0.3213543682352345
-initialization,mistral24b,Main,0.3189253205766946
-initialization,mistral24b,No seeds,0.26969897118254077
-user_prompts,qwen7b,Main,0.057879980363955315
-user_prompts,qwen7b,No SDBs,0.1352720660591521
-user_prompts,qwen7b,Minimal instructions,0.18321499932817437
-turn_taking,qwen7b,Response-enabled,0.05616267480427632
-turn_taking,qwen7b,Round-robin,0.14985813801577424
-turn_taking,qwen7b,Random,0.09142419918335204
-initialization,qwen7b,Main,0.06414576043899231
-initialization,qwen7b,No seeds,0.12002186481517006
 user_prompts,qwen32b,Main,0.2938275445244206
 user_prompts,qwen32b,No SDBs,0.33300073113020984
 user_prompts,qwen32b,Minimal instructions,0.4776693074188192
@@ -39,19 +7,51 @@ turn_taking,qwen32b,Round-robin,0.37104291719836896
 turn_taking,qwen32b,Random,0.46383264212167713
 initialization,qwen32b,Main,0.2901272484579959
 initialization,qwen32b,No seeds,0.49511571803476845
-user_prompts,mistral7b,Main,0.422684917646462
+user_prompts,mistral24b,Main,0.3178069495460343
+user_prompts,mistral24b,Minimal instructions,0.2773467579795662
+user_prompts,mistral24b,No SDBs,0.3049562819524848
+turn_taking,mistral24b,Response-enabled,0.31087370261793656
+turn_taking,mistral24b,Random,0.3171476385274384
+turn_taking,mistral24b,Round-robin,0.3213543682352345
+initialization,mistral24b,Main,0.3189253205766947
+initialization,mistral24b,No seeds,0.2696989711825409
+user_prompts,llama8b,Main,0.44105687416046974
+user_prompts,llama8b,Minimal instructions,0.28023476427030286
+user_prompts,llama8b,No SDBs,0.4826039475007125
+turn_taking,llama8b,Response-enabled,0.41508946658903656
+turn_taking,llama8b,Random,0.4069615627091421
+turn_taking,llama8b,Round-robin,0.44116378886557645
+initialization,llama8b,Main,0.42106003381891727
+initialization,llama8b,No seeds,0.3910176711821199
+user_prompts,mistral7b,Main,0.42268491764646215
 user_prompts,mistral7b,Minimal instructions,0.31363449867497123
 user_prompts,mistral7b,No SDBs,0.48007200170478953
-turn_taking,mistral7b,Response-enabled,0.4060232384964942
-turn_taking,mistral7b,Round-robin,0.4373563551061242
-turn_taking,mistral7b,Random,0.486985635453293
+turn_taking,mistral7b,Response-enabled,0.40602323849649435
+turn_taking,mistral7b,Round-robin,0.4373563551061243
+turn_taking,mistral7b,Random,0.48698563545329315
 initialization,mistral7b,Main,0.4135688962686851
 initialization,mistral7b,No seeds,0.41005813086437015
-user_prompts,llama70b,Main,0.13296949509582137
-user_prompts,llama70b,No SDBs,0.211491473967388
-user_prompts,llama70b,Minimal instructions,0.05945190842826159
-turn_taking,llama70b,Response-enabled,0.12218673534355101
-turn_taking,llama70b,Random,0.13040042915018635
-turn_taking,llama70b,Round-robin,0.22758441845343183
-initialization,llama70b,Main,0.13513071311997457
-initialization,llama70b,No seeds,0.08918226029740142
+user_prompts,llama70b,Main,0.13296949509582154
+user_prompts,llama70b,No SDBs,0.21149147396738815
+user_prompts,llama70b,Minimal instructions,0.05945190842826162
+turn_taking,llama70b,Response-enabled,0.12218673534355114
+turn_taking,llama70b,Random,0.13040042915018643
+turn_taking,llama70b,Round-robin,0.22758441845343197
+initialization,llama70b,Main,0.13513071311997443
+initialization,llama70b,No seeds,0.08918226029740178
+user_prompts,All,Main,0.11367991305715015
+user_prompts,All,Minimal instructions,0.0633405388432205
+user_prompts,All,No SDBs,0.1028829634999114
+turn_taking,All,Response-enabled,0.11031105495871633
+turn_taking,All,Round-robin,0.08204149005919859
+turn_taking,All,Random,0.09893050606849116
+initialization,All,Main,0.10949716549803681
+initialization,All,No seeds,0.0932752546524576
+user_prompts,qwen7b,Main,0.05787998036395524
+user_prompts,qwen7b,No SDBs,0.13527206605915218
+user_prompts,qwen7b,Minimal instructions,0.18321499932817437
+turn_taking,qwen7b,Response-enabled,0.05616267480427637
+turn_taking,qwen7b,Round-robin,0.14985813801577436
+turn_taking,qwen7b,Random,0.0914241991833522
+initialization,qwen7b,Main,0.06414576043899228
+initialization,qwen7b,No seeds,0.12002186481516959

@@ -82,7 +82,7 @@ for model_idx in "${!models[@]}"; do
                 --user-persona-path "$persona_path" \
                 --user-instruction-path "$user_instr_path" \
                 --mod-active \
-                --num-experiments 5 \
+                --num-experiments 10 \
                 $troll_flag \
                 $seed_flag
         done
