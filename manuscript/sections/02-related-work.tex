@@ -24,6 +24,42 @@ However, significant limitations of LLMs remain in the context of Social Science
 \subsection{Evaluation}
 \label{sec:related:quality}
 
+\subsubsection{GABM evaluation}
+\label{sec:related:quality:gabm}
+
+There is currently no consensus on how a \ac{gabm} system should be evaluated~\cite{adornetto2025_gabms}. We can however use a subset of foundational methods from non-generative agent-based models~\cite{collins2024}. We can also use ``face validation''~\cite{rand2011_rigor}, which employs humans to judge observed behaviors and dynamics. Since the original procedures were designed with \ac{ml} and rules-based models in mind, \cite{adornetto2025_gabms} propose an adapted set of guidelines for generative agents, which we briefly outline below.
+
+
+\paragraph{Foundational and Empirical Methods}
+Foundational methods ensure data integrity and consistency with established benchmarks, without requiring manual evaluation:
+
+\begin{itemize}
+	\item \textbf{Data analytics}: A prerequisite for all further analysis. Includes rigorous cleaning, organization, and statistical analysis to ensure data integrity.
+	
+	\item \textbf{Docking}: Also known as model-to-model comparison, this involves comparing a simulation's outputs with those of other state-of-the-art ABMs to verify alignment. It is particularly useful when a recognized reference model exists.
+	
+	\item \textbf{Empirical validation}: This strategy uses real-world historical or observational data to ensure that model predictions are grounded in reality. It is the primary means of evaluating a model's accuracy in replicating known phenomena.
+	
+	\item \textbf{Sampling}: Sampling involves exploring the simulation space using various techniques to understand how changes in input variables (e.g., decision thresholds) impact outcomes. This often requires extensive computational resources due to repeated simulation runs, and is therefore non-applicable for systems with non-\ac{ml} and non-rules-based agents.
+	
+	\item \textbf{Visualization}: This method utilizes graphical representations to analyze emergent behaviors and patterns. While powerful for detecting anomalies, it is subject to qualitative interpretation biases.
+\end{itemize}
+
+
+\paragraph{Face-Validation Methods}
+Face-validation focuses on whether model processes and outcomes appear ``reasonable'' to experts, and is especially critical for \acp{gabm} where natural language and social dynamics are central. Unlike empirical methods, these do not strictly require external datasets, but do require manual human labor.
+
+\begin{itemize}
+	\item \textbf{Survey-based validation}: Human evaluators---often numbering in the dozens or hundreds---are engaged to rank or score agent behaviors based on their perceived believability and social intelligence. Believability in this case refers to the agents' \emph{behaviors}; in the case of LLMs it does not refer to human-like text, which should be taken for granted given the primary goal of LLMs being human text replication~\cite{rossi_2024}. The revised guidelines~\cite{adornetto2025_gabms} suggest that the agents themselves could be ``interviewed'', and their responses be judged by humans.
+	
+	\item \textbf{Observational studies}: These analyze human behavior in real-world settings to compare them with generative agents. A notable example is the S3 (Social-network simulation system), which used LLM-agents to simulate dynamics in online social networks. The authors validated that the agents successfully replicated human emotional shifts and information diffusion patterns in response to real-world triggers, by comparing their responses to human behaviors documented, among others, during an incident where nuclear wastewater was released in Japan.
+	
+	\item \textbf{Expert reviews}: Domain experts conduct structured walkthroughs or ``immersive assessments'' where they may even adopt the perspective of an agent to directly evaluate the coherence and plausibility of interactions.
+\end{itemize}
+
+
+\subsubsection{Synthetic data quality}
+
 When creating \acp{sdg} we need to evaluate \emph{synthetic data quality}, as discussions without human involvement tend to deteriorate quickly, often becoming repetitive and low-quality \cite{ulmer2024}. Despite the need for such metrics, methods for quantifying the quality of synthetic data remain limited~\cite{ulmer2024}. 
 
 One approach~\cite{balog_2024} uses a mix of graph-based, methodology-specific, and lexical similarity metrics, many of which depend on human discussion datasets for comparison. The authors also propose a loosely defined “coherence” score, which is LLM-annotated without theoretical grounding. Another approach assesses quality through post-discussion surveys with humans, and by measuring lexical diversity to approximate the variety of opinions expressed~\cite{kim_et_al_chatbot}. 
