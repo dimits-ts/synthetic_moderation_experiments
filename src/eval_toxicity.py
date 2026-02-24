@@ -117,9 +117,8 @@ def toxicity_by_dimension(
         errorbar=("ci", 95),
     )
 
-    ax.set_ylabel("Average toxicity")
-    ax.set_xlabel("")
-    ax.set_title(f"Average toxicity by {dimension}")
+    ax.set_ylabel("")
+    ax.set_xlabel("Average toxicity")
 
     plt.tight_layout()
     tasks.graphs.save_plot(graph_dir / f"{dimension}_mean_toxicity.png")

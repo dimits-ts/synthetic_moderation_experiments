@@ -52,13 +52,64 @@ Using these sociodemographic prompts, we observe that LLM users are able to crea
 \end{quote}
 
 
-\subsubsection{Assigning participant roles and instructions}
+\subsubsection{Assigning different participant roles}
 \label{sec:methodology:initialization:trolls}
 
 \begin{table}[ht]
 	\centering
+	\caption{Justification and effects of inserting ``troll'' users in the synthetic discussions.}
+	\label{tab:trolls_setup}
+	\begin{tabular}{p{3cm} p{9cm}}
+		\toprule
+		\textbf{Component} & \textbf{Description} \\
+		\midrule
+		Goal 
+		& Evaluate the performance of an LLM facilitator in a challenging discussion environment. \\
+		
+		Problem 
+		& Aligned LLMs do not naturally produce toxic speech. \\
+		
+		Assumptions 
+		& Toxicity is primarily caused by ``trolls'', who derail discussions using toxic speech among other tactics. \\
+		
+		Design Choices 
+		& A subset of participants is assigned adversarial (trolling) behavior. \\
+		
+		Results 
+		&  + LLM trolls consistently produce toxic speech. \\
+		&  + The new environment enabled the emergence of complex social behaviors previously documented in online spaces. \\
+		&  - LLM trolls only engage in an exaggerated, stereotypical manner, remaining largely unable to produce truly harmful speech. \\
+		
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+The most basic discussion setup for our experiments involves a single role; that of participants who discuss a topic among themselves. Since our end-goal is investigating the behavior of LLM facilitators-agents, we need to add them as a second, separate role; facilitators, who are provided with specialized instructions following established facilitation strategies (see \S\ref{sec:facilitation:strategies}) and instructed to respond only when necessary.
+
+Of course, in order for our observations for the LLM facilitators to be non-trivial, we need to develop a challenging discussion environment. There is currently no consensus among researchers on what constitutes a ``challenging'' online environment (or any representative environment for that matter). We can assume that the presence of toxicity is a good proxy, since it has been shown to inhibit discussions by fermenting mistrust~\cite{bcause2023}, inhibiting productive discussions~\cite{Avalle2024PersistentIP} and causing participants to leave~\cite{bcause2023} . For these reasons, toxicity has been a long-standing target of social science research on online communities~\cite{make_reddit_great, schaffner_community_guidelines}, especially content moderation whose stated goal is to remove potentially harmful content~\cite{WARNER2025103468, habibi2025_content_moderator, PRADEL_ZILINSKY_2024}. We evaluate toxicity using the Perspective API~\cite{google_perspective_api}, since it has been used extensively in research~\cite{pozzobon-etal-2023-challenges} and it requires no additional computational resources. We note that researchers should not directly compare our results with older studies using the same API, since it is frequently retrained~\cite{pozzobon-etal-2023-challenges}.
+
+However, getting LLMs to replicate toxic behavior is extremely difficult. Due to alignment procedures LLMs exhibit extreme agreeableness~\cite{park2023game,anthis_2025}, which leads to repetitive scenarios where agents show a narrow band of ``behaviors'', and prevents them from replicating toxic, racist or harmful behaviors. LLM finetuning could be used to alter this behavior, as was the case in political science studies using LLMs~\cite{Taubenfeld2024SystematicBI}. This however is expensive in two main ways; first, the process itself requires extensive computational resources, and secondly, we would require both the original and the finetuned model loaded in memory, leading to significant capital requirements for researchers (\S\ref{sec:scalability:setup}). Another approach would be to use pretrained LLMs before they were subjected to alignment procedures. These models however are unable to follow instructions, since there are to knowledge no open-source models that are instruction-tuned but not safety-aligned (\S\ref{sec:scalability:model}).
+
+We are thus left with one choice; attempting to subtly ``jailbreak'' LLMs using prompting. LLM jailbreaking refers to the unauthorized manipulation of a large language model's behavior to bypass its built-in safety constraints and generate outputs that would otherwise be restricted or censored. Notably, our approach is different from conventional prompt-based jailbreak methods which attempt to optimize a singular prompt designed to ``fool'' the model~\cite{yi2024jailbreakattacks}. Instead of relying on prompts that break model safety by pretending fictional scenarios, shifting the attention of the model, or escalating privileges~\cite{liu2023jailbreaking}, we rely on a simple prompt and a partially derailed conversational context to induce prohibited behaviors. 
+
+Specifically, we assign antagonistic motivations to a randomly selected subset of participants,with a set probability (30\%) of each participant being selected for this role (Table~\ref{tab:trolls_setup}). These antagonistic participants are inspired by real-life internet (``trolls'') who deliberately use provocative, inflammatory, or misleading content to incite conflict, disrupt discussions, or manipulate online interactions for personal gain or amusement.\footnote{There is no formal definition of what a ``troll'' is~\cite{evita2019_trolling}, but we do not need a formal definition in this work; LLMs are extensively trained on online corpora and should thus replicate text that is associated with the human perception of the term.} A simple prompt (\S\ref{sec:appendix:prompts}) instructing the LLMs to act as trolls is enough to provoke toxic behavior (Fig.~\ref{fig:trolls}), and leads to emergent social dynamics among LLM users (\S\ref{sec:facilitation:behaviors}). However, their speech remains stereotypical, unsubtle, and can be easily distinguished from human trolls. This validates relevant work suggesting that LLMs adopt exaggerated, stereotypical features instead of nuanced views of human behavior in some cases~\cite{summerfield2024will}.
+
+
+ \begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.6\linewidth]{role_mean_toxicity.png}
+	\caption{Average toxicity of non-troll, troll, and facilitator users across synthetic discussions. Error bars indicate 95\% confidence intervals. See \S\ref{sec:scalability:setup} for experimental details.}
+	\label{fig:trolls}
+\end{figure}
+
+
+\subsubsection{Instructions}
+\label{sec:methodology:initialization:instructions}
+
+\begin{table}[ht]
+	\centering
 	\caption{Justification and effects of inserting ``troll'' users in the synthetic discussions, as well as instructing other users to respond to toxicity.}
-	\label{tab:llm_toxicity_setup}
+	\label{tab:instructions-setup}
 	\begin{tabular}{p{3cm} p{9cm}}
 		\toprule
 		\textbf{Component} & \textbf{Description} \\
@@ -67,37 +118,36 @@ Using these sociodemographic prompts, we observe that LLM users are able to crea
 		& Evaluate the performance of an LLM facilitator in a challenging, toxicity-prone discussion environment. \\
 		
 		Problem 
-		& Aligned LLMs do not naturally produce toxic speech, even when exposed to toxic prompts. \\
+		& Aligned LLMs do not naturally respond to toxic speech, even when exposed to a toxic context. \\
 		
-		Assumptions 
-		& Facilitation becomes more difficult as conversational toxicity increases. \\
+		Assumptions
 		& Human participants tend to exhibit increased toxicity when exposed to toxic online discourse. \\
 		
 		Design Choices 
-		& A subset of participants is assigned adversarial (trolling) behavior. \\
-		& Non-adversarial participants are instructed to respond to toxic speech. \\
+		& Non-troll participants are instructed to respond to toxic speech. \\
 		
 		Results 
-		& LLM participants both produced and responded to toxic speech. \\
-		&  - The use of specialized instructions degraded the believability of generated content.\\
-		&  + The new environment enabled the emergence of complex social behaviors previously documented in online spaces. \\
+		& + LLM participants both produced and responded to toxic speech. \\
+		&  +The new environment enabled the emergence of complex social behaviors previously documented in online spaces. \\
+		&  - LLM participants are now biased towards responding to toxicity no matter the context.\\
 		
 		\bottomrule
 	\end{tabular}
 \end{table}
 
-Playing out scenarios is not a task typically encountered during LLM instruction-tuning---therefore we need to give explicit instructions on how they should behave. We outline two tools that help us ``push'' LLM participants to a direction conducive for later facilitation experiments, and show the effects of our interventions (Table~\ref{tab:llm_toxicity_setup}). 
 
-A simple prompt would be to instruct the LLM to behave as a human would; this however is insufficient by itself. Due to alignment procedures LLMs exhibit extreme agreeableness~\cite{park2023game,anthis_2025}, which leads to repetitive scenarios where agents show a narrow band of ``behaviors''. LLM finetuning could be used to alter this behavior, as was the case in political science studies using LLMs~\cite{Taubenfeld2024SystematicBI}. This however is expensive in two main ways; first, the process itself requires extensive computational resources, and secondly, we would require both the original and the finetuned model loaded in memory, leading to significant capital requirements for researchers (\S\ref{sec:scalability:setup}).
+We would hope that the presence of trolls in synthetic discussions would be enough to spur other participants into meaningfully interacting with antagonistic speech. However, this is not the case; Fig~\ref{fig:instructions-trolls} shows that using basic prompts instructing the LLM to behave as a human are not enough for participants to react negatively to trolls---one of the prerequisites for later experiments. This is caused by LLM alignment procedures preventing models from responding to toxic text~\cite{park2023game, rossi_2024}; thus, all the challenges and possible solutions outlined above (\S\ref{sec:methodology:initialization:trolls}) apply here as well.
 
-We could instead use prompting by instructing participants to respond to repeatedly toxic comments. This is an example of the trade-off between complexity and research bias v.s. the need to acquire meaningful data (\S\ref{sec:methodology:designrules}). Facilitators are instructed to respond only when necessary, besides specialized instructions following established facilitation strategies (see \S\ref{sec:facilitation:strategies}). We also assign antagonistic motivations to a subset of participants (trolls), as different ``factions'' in discussions can lead to interesting and less repetitive emergent conversational dynamics~\cite{abdelnabi_negotiations}. This assumption is validated in our experiments (\S\ref{sec:facilitation:behaviors}).
+In order to have a cheap, generalizable methodology, we will again attempt to solve this issue using prompting techniques. Specifically, we explicitly instruct participants to respond to repeatedly toxic comments (Table~\ref{tab:instructions-setup}). Forcing this conversational dynamic to exist in our simulations is an example of the trade-off between complexity and research bias v.s. the need to acquire meaningful data (\S\ref{sec:methodology:designrules}). As stated before, we justify the use of these prompts through proof that without them, challenging discussions can not exist with our setup, and would not lead to interesting, emergent social behaviors (\S\ref{sec:facilitation:behaviors}). 
 
-We run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). We use \emph{``Diversity''} to measure content variety within each individual discussion, as discussed in \S\ref{sec:related:quality}. The closer the diversity distribution of our experiments are to human discussions in the same dataset as our initial comments (presented later in \S\ref{sec:methodology:seed}), the better. We can use the Jensen-Shannon divergence metric, which quantifies how ``far apart'' two distributions are from each other. We use this metric since unlike its most famous predecessor, the Kullback–Leibler divergence, it is symmetric, and thus punishes discussions that have too little \textit{and} too much content variety compared to human discussions. Fig~\ref{fig:instructions-trolls} shows that our prompts are necessary for participants to react negatively to trolls---one of the prerequisites for later experiments---even though content variety slightly diverges from human discussions (Table~\ref{tab:divergence-user_prompts}).
+We give standard instructions to troll users primarily because of a desire to keep the system as simple as possible (\S\ref{sec:methodology:designrules}), but also because we discovered that any attempt to guide the model towards specific toxic behaviors triggered standard refusal responses (e.g., \texttt{``As an AI language model, I'm unable to respond with text that can be seen as  harmful''}). A way around these refusal responses would be to use abliterated models, LLMs which have been modified to bypass such refusals~\cite{arditi_abliteration}. However, abliterated models are not well documented in literature~\cite{young2026_abliteration} and are not available for many model families and versions in standard LLM repositories such as \texttt{huggingface}.
+
+We run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). We use \emph{``Diversity''} to measure content variety within each individual discussion, as discussed in \S\ref{sec:related:quality}. The closer the diversity distribution of our experiments are to human discussions in the same dataset as our initial comments (presented later in \S\ref{sec:methodology:seed}), the better. We can use the Jensen-Shannon divergence metric, which quantifies how ``far apart'' two distributions are from each other. We use this metric since unlike its most famous predecessor, the Kullback–Leibler divergence, it is symmetric, and thus punishes discussions that have too little \textit{and} too much content variety compared to human discussions. Table~\ref{tab:divergence-user_prompts} shows that even though our prompts are necessary to induce the desired behavior for LLMs, content variety slightly diverges from human discussions when using them.
 
  \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.45\linewidth]{toxicity_vs_troll_count.png}
-	\caption{Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. Our setup is essential to elicit the behaviors we want to study in the context of facilitation. See \S\ref{sec:scalability:setup} for experimental details.}
+	\caption{Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. See \S\ref{sec:scalability:setup} for experimental details.}
 	\label{fig:instructions-trolls}
 \end{figure}
 
