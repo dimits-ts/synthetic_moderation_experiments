@@ -12,8 +12,12 @@
 \end{figure}
 
 
-\subsection{Design Rules}
-\label{sec:methodology:designrules}
+\subsection{Design}
+\label{sec:methodology:design}
+
+
+\subsubsection{Design requirements}
+\label{sec:methodology:design:rules}
 
 While \acf{sdg} is a mechanism frequently used in research, very few generalized tools have been developed to facilitate researchers in generating discussions. Concordia~\cite{concordia} is one of the very few frameworks dedicated to managing interactions between LLMs. However, it has to our knowledge been used in exactly one study~\cite{navarro2024} and one competition~\cite{neurips_concordia} since its initial release in 2023---most research is built on purpose-built tools (\S\ref{sec:related:discussions}). Given that the ecosystem around \ac{sdg} is maturing rapidly after the introduction of LLMs in 2022~\cite{adornetto2025_gabms}, it is noteworthy that standardized tooling has not been adopted at any large scale by the research community. What makes these frameworks widely used by other people has not been explored in literature, despite many such implementations. By observing which systems worked and which failed, we propose the following design rules:
 
@@ -28,16 +32,62 @@ While \acf{sdg} is a mechanism frequently used in research, very few generalized
 Indeed, most components of our framework are not as simple as they could be. We justify each intervention and assumption in our framework by documenting our goals, limitations, assumptions and end-results.
 
 
+\subsubsection{Documentation}
+\label{sec:methodology:design:doc}
+
+In Software Engineering, high-level documentation is used both for internal (within the development team) and external use. The purposes of the latter are obvious; the end-user needs to know how to operate the system. However, software development teams use extensive time and resources in drafting internal documentation during the design process~\cite{xia2018_program_comprehension}; some technical, but some squarely focused on justifying the design decisions to other engineers. Without a solid way of representing system intent, developers may spend significant resources ``reverse-engineering'' previously established systems~\cite{lee2018comparative}.
+
+Because of the large design space afforded to us by the \ac{sdg} problem statement, we need a way to effectively communicate what each component does, why it needs to do it, and how our results justify its inclusion when compared to simpler and more intuitive solutions. This is sometimes referred to as a \ac{drd}, which exists implicitly in most systems, patents and journal articles, but is not explicitly communicated~\cite{yue2023_design_rationale}. Since there is no standardized way of documenting such decisions, in this work we create and use our own \ac{drd} system called \ac{ocaso}, which directly follows from the guidelines established in \S\ref{sec:methodology:design:rules}, and is as simple as possible since writing, reading and maintaining \acp{drd} can be unsustainably time-consuming~\cite{falessi2013_design_rationale}.
+
+\begin{itemize}
+	\item \textbf{Objective}: What is the system trying to accomplish?
+	\item \textbf{Challenges}: What are the problems preventing a simpler solution from achieving the Objective?
+	\item \textbf{Assumptions}: What assumptions need to be made for the proposed Strategy to overcome these Challenges?
+	\item \textbf{Strategy}: The proposed implementation of the component.
+	\item \textbf{Outcomes}: Does the Strategy achieve the Objective while overcoming the Challenges? What are the drawbacks?
+\end{itemize}
+
+We will be using this documentation system for each component in this section.
+
+
 \subsection{Discussion Initialization}
 \label{sec:methodology:initialization}
 
 \subsubsection{LLM Personas}
 \label{sec:methodology:initialization:sdbs}
+
+\begin{table}[ht]
+	\centering
+	\caption{\ac{ocaso} documentation for using personas for each user in the synthetic discussions.}
+	\label{tab:sdb_setup}
+	\begin{tabular}{p{3cm} p{9cm}}
+		\toprule
+		\midrule
+		Objective 
+		& Generate diverse users. \\
+		
+		Challenges 
+		& LLMs do not have distinct personalities, experiences, opinions and talking patterns. \\
+		
+		Assumptions 
+		& A large part of the content humans generate is determined by their \acf{sdb}. \\
+		
+		Strategy 
+		& Create synthetic ``personas'', which are distributed among the LLM users. \\
+		
+		Outcomes 
+		&  + LLMs use their \ac{sdb} to justify positions and tell personal stories during the discussion. \\
+		&  - ?? \\
+		
+		\bottomrule
+	\end{tabular}
+\end{table}
+
 It is well known that LLMs tend to align more closely with WEIRD (Western, Educated, Industrialized, Rich, and Democratic) and socially prominent groups, while diverging from minorities~\cite{sap-etal-2022-annotators,goyal2022_toxicity,gallegos-etal-2024-bias} due to their nature as statistical models that adopt the bias of their training data during pretraining. These biases are further shaped by alignment procedures and prompt sensitivity~\cite{liu_2024_bias,santukar_2023}. Thus, synthetic discussions with out-of-the-box LLMs typically result in similar opinions and arguments, with no variance. 
 
-Including \acp{sdb} (e.g., gender, age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large,sommerauer-etal-2025-simulating}. These ``persona'' prompts essentially shift the distribution of output tokens, hence producing content of larger variety when using multiple distinct personas~\cite{liu_2024_bias}. It is worth noting that these shifts in speech do not necessarily correlate to the actual human groups these prompts are modeling~\cite{lutz-etal-2025-prompt,liu_2024_bias}, but this is not concerning for our use-case since we cannot claim to simulate human behaviors with LLMs (\S\ref{ssec:related:human-llm}).
+Including \acfp{sdb} (e.g., gender, age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large,sommerauer-etal-2025-simulating}. These ``persona'' prompts essentially shift the distribution of output tokens, hence producing content of larger variety when using multiple distinct personas~\cite{liu_2024_bias}. It is worth noting that these shifts in speech do not necessarily correlate to the actual human groups these prompts are modeling~\cite{lutz-etal-2025-prompt,liu_2024_bias}, but this is not concerning for our use-case since we cannot claim to simulate human behaviors with LLMs (\S\ref{ssec:related:human-llm}).
 
-The creation of these personas is sometimes implemented by randomly selecting sociodemographic attributes from a number of dimensions such as age, gender, employment etc.~\cite{adornetto2025_gabms} We instead pick personas from the PERSONA dataset~\cite{castricato-etal-2025-persona}, which includes a curated set of personas based on US census data (see Appendix~\ref{ssec:app:sdbs} for details).\footnote{We use the public version of the dataset, since we were unable to establish contact with the authors for gaining access to the full dataset.} We add random employment information to these personas, since we experimentally discovered that doing so improves discussion variety. 
+The creation of these personas is sometimes implemented by randomly selecting sociodemographic attributes from a number of dimensions such as age, gender, employment etc~\cite{adornetto2025_gabms}. We instead pick personas from the PERSONA dataset~\cite{castricato-etal-2025-persona}, which includes a curated set of personas based on US census data (see Appendix~\ref{ssec:app:sdbs} for details).\footnote{We use the public version of the dataset, since we were unable to establish contact with the authors for gaining access to the full dataset.} We add random employment information to these personas, since we experimentally discovered that doing so improves discussion variety, and add a random subset of these personas to each discussion. Our overall strategy is detailed in Table~\ref{tab:sdb_setup}.
 
 Using these sociodemographic prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information. Below is an excerpt from a synthetic discussion,\footnote{Unique discussion ID: \texttt{26-02-12-02-24-42.json}.} where both the facilitator and another user intervene against perceived toxicity. The LLM participants use their sociodemographic prompts to insert personal anecdotes and justify their perspectives in the discussion (text in italics). User \textcolor{olive}{seasoned-union} is also a part of the discussion; not a hallucination.
 
@@ -57,25 +107,24 @@ Using these sociodemographic prompts, we observe that LLM users are able to crea
 
 \begin{table}[ht]
 	\centering
-	\caption{Justification and effects of inserting ``troll'' users in the synthetic discussions.}
+	\caption{\ac{ocaso} documentation for creating users with antagonistic intent (``trolls'') in synthetic discussions}
 	\label{tab:trolls_setup}
 	\begin{tabular}{p{3cm} p{9cm}}
 		\toprule
-		\textbf{Component} & \textbf{Description} \\
 		\midrule
-		Goal 
+		Objective 
 		& Evaluate the performance of an LLM facilitator in a challenging discussion environment. \\
 		
-		Problem 
+		Challenges 
 		& Aligned LLMs do not naturally produce toxic speech. \\
 		
 		Assumptions 
 		& Toxicity is primarily caused by ``trolls'', who derail discussions using toxic speech among other tactics. \\
 		
-		Design Choices 
+		Strategy
 		& A subset of participants is assigned adversarial (trolling) behavior. \\
 		
-		Results 
+		Outcomes 
 		&  + LLM trolls consistently produce toxic speech. \\
 		&  + The new environment enabled the emergence of complex social behaviors previously documented in online spaces. \\
 		&  - LLM trolls only engage in an exaggerated, stereotypical manner, remaining largely unable to produce truly harmful speech. \\
@@ -108,25 +157,24 @@ Specifically, we assign antagonistic motivations to a randomly selected subset o
 
 \begin{table}[ht]
 	\centering
-	\caption{Justification and effects of inserting ``troll'' users in the synthetic discussions, as well as instructing other users to respond to toxicity.}
+	\caption{\ac{ocaso} documentation for instructing other users to respond to toxicity.}
 	\label{tab:instructions-setup}
 	\begin{tabular}{p{3cm} p{9cm}}
 		\toprule
-		\textbf{Component} & \textbf{Description} \\
 		\midrule
-		Goal 
+		Objective 
 		& Evaluate the performance of an LLM facilitator in a challenging, toxicity-prone discussion environment. \\
 		
-		Problem 
+		Challenges 
 		& Aligned LLMs do not naturally respond to toxic speech, even when exposed to a toxic context. \\
 		
 		Assumptions
 		& Human participants tend to exhibit increased toxicity when exposed to toxic online discourse. \\
 		
-		Design Choices 
+		Strategy 
 		& Non-troll participants are instructed to respond to toxic speech. \\
 		
-		Results 
+		Outcomes 
 		& + LLM participants both produced and responded to toxic speech. \\
 		&  +The new environment enabled the emergence of complex social behaviors previously documented in online spaces. \\
 		&  - LLM participants are now biased towards responding to toxicity no matter the context.\\
@@ -159,26 +207,25 @@ We run an ablation study comparing discussions where the instructions do not inc
 
 \begin{table}[ht]
 	\centering
-	\caption{Justification and effects of inserting human-made comments at the beginning of synthetic discussions.}
+	\caption{\ac{ocaso} documentation for inserting human-made comments at the beginning of synthetic discussions.}
 	\label{tab:setup_seeds}
 	\begin{tabular}{p{3cm} p{9cm}}
 		\toprule
-		\textbf{Component} & \textbf{Description} \\
 		\midrule
 		
-		Goal 
+		Objective 
 		& Hold discussions with controversial topics. \\
 		
-		Problem 
+		Challenges 
 		& LLMs are shown to be less capable at finding good starting points for discussions than traditional Information Retrieval systems. \\
 		
 		Assumptions 
 		& Human discussions are good starting points for LLMs. \\
 		
-		Design Choices 
+		Strategy
 		& Use Reddit threats to kick-start synthetic discussions. \\
 		
-		Results 
+		Outcomes 
 		& + Synthetic discussions now explore a set of topics that fit the experiment goals. \\
 		&  - The use of seed comments degraded the believability of generated content in most models.\\
 		
@@ -186,7 +233,7 @@ We run an ablation study comparing discussions where the instructions do not inc
 	\end{tabular}
 \end{table}
 
-Researchers often include some initial comments to kick-start discussions---defined as ``seed comments'' by~\cite{small-polis-llm}. While LLMs were initially proposed as generators of initial content for human discussions, they proved inferior to Information Retrieval systems used on human discussion corpora~\cite{small-polis-llm}. This process was however inverted in the field of \ac{sdg}, as some recent work uses human seed comments to kick-start synthetic discussions~\cite{balog_2024}. 
+Researchers often include some initial comments to kick-start discussions---defined as ``seed comments'' by~\cite{small-polis-llm}. While LLMs were initially proposed as generators of initial content for human discussions, they proved inferior to \ac{ir} systems used on human discussion corpora~\cite{small-polis-llm}. This process was however inverted in the field of \ac{sdg}, as some recent work uses human seed comments to kick-start synthetic discussions~\cite{balog_2024}. 
 
 Starting synthetic discussions with human comments provides numerous benefits:
 \begin{enumerate}
@@ -205,6 +252,35 @@ Our frameworks natively supports the inclusion of randomized seed opinions. We u
 \subsection{Discussion management}
 
 \subsubsection{Context Management}
+
+\begin{table}[ht]
+	\centering
+	\caption{\ac{ocaso} documentation for using a window-based context setup.}
+	\label{tab:context_setup}
+	\begin{tabular}{p{3cm} p{9cm}}
+		\toprule
+		\midrule
+		Objective 
+		& Let each user know what has transpired in the discussion thus far. \\
+		
+		Challenges 
+		& LLMs are stateless (have no memory), and VRAM constraints prevent us from using the entire discussion history in open-source, self-hosted setups (\S\ref{sec:scalability:setup}). \\
+		& LLM users need to know specific information such as phrasing and style when considering a comment; which are usually discarded in \ac{ir} schemes. \\
+		
+		Assumptions 
+		& Only a few, recent comments are relevant for a user to formulate a response. \\
+		
+		Strategy 
+		& Use the $h$-last comments as context as-is. \\
+		
+		Outcomes 
+		&  + LLMs are able to address and react to subtle textual cues such as phrasing, which are then passed down to the other users. \\
+		&  - Fine-grained information is lost if a user takes too long to respond. \\
+		
+		\bottomrule
+	\end{tabular}
+\end{table}
+
 LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024,park2023game}, LLM self-critique \cite{yu_2024_fincon}, or memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches however are not explainable, and require substantial computational resources either due to repeated generation~\cite{balog_2024,adornetto2025_gabms}, or due to the loading of specialized modules in (very valuable) GPU VRAM memory~\cite{Vezhnevets2023GenerativeAM}, rendering them inadequate for tasks where scalability and capital intensity are limiting factors.
 
 These approaches may be appropriate for highly specialized settings, but they are not necessary for every task. Prior work on online discussions has demonstrated that providing the $h$ most recent comments as context is sufficient for LLM participants to engage meaningfully \cite{pavlopoulos_2020_toxicity}. While this strategy may not be universally optimal, we argue that it is necessary in certain cases and adequate in many. In online discussions in particular, the aforementioned context-management techniques \emph{should not be used}, as they inevitably abstract away critical elements such as writing style, precise wording, and tone—features that are central to interpreting participant stance and posturing. More broadly, directly including the contents of prior interactions preserves all available information while maintaining scalability (assuming relatively small context windows) and ensuring transparency and explainability.
@@ -215,17 +291,16 @@ These approaches may be appropriate for highly specialized settings, but they ar
 
 \begin{table}[ht]
 	\centering
-	\caption{Justification and effects of using an algorithm that picks participants at random, but also allows users to respond immediately.}
+	\caption{\ac{ocaso} documentation for a turn-taking algorithm that picks participants at random, but also allows users to respond immediately.}
 	\label{tab:setup-turn-taking}
 	\begin{tabular}{p{3cm} p{9cm}}
 		\toprule
-		\textbf{Component} & \textbf{Description} \\
 		\midrule
 		
-		Goal 
+		Objective 
 		& Pick LLM turn-taking order in a way that encourages both interaction and overall participation. \\
 		
-		Problem 
+		Challenges 
 		& LLMs always respond when prompted to. \\
 		& Current turn-taking systems are either prohibitively expensive for our purposes, or rely on naive assumptions. \\
 		
@@ -233,10 +308,10 @@ These approaches may be appropriate for highly specialized settings, but they ar
 		Assumptions 
 		& Humans may not be always available online to respond.  \\
 		
-		Design Choices 
+		Strategy 
 		& Pick between a random participant to continue the discussion, and the previous participant. \\
 		
-		Results 
+		Outcomes 
 		& + Our approach enabled both exploration of different opinions, and meaningful interaction between participants. \\ %TODO this may need more justification
 		&  + The use of our turn-taking function shows significant alignment with human discussion variety. \\
 		
