@@ -36,12 +36,19 @@ def get_turntaking(full_tag: str) -> str:
 def get_userprompts(full_tag: str) -> str:
     final_tag = full_tag.split("_")[-1]
     match final_tag:
-        case "nosdbs":
-            return "No SDBs"
         case "noinstructions":
             return "Minimal instructions"
         case _:
-            return "Main"
+            return "Responsive instructions"
+
+
+def get_sdbs(full_tag: str) -> str:
+    final_tag = full_tag.split("_")[-1]
+    match final_tag:
+        case "nosdbs":
+            return "No SDBs"
+        case _:
+            return "With SDBs"
 
 
 def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
@@ -73,6 +80,7 @@ def load_and_combine_discussions(parent_dir, source_col_name="source_dir"):
             df["turn_taking"] = get_turntaking(tag)
             df["user_prompts"] = get_userprompts(tag)
             df["initialization"] = get_initialization(tag)
+            df["sdbs"] = get_sdbs(tag)
             dataframes.append(df)
 
     return pd.concat(dataframes, ignore_index=True)

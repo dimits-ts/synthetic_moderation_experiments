@@ -1,14 +1,13 @@
 \begin{table}[ht]
-\caption{Jensen-Shannon divergence between the diversity distributions  of human and synthetic discussions by user prompts.Smaller is better.}
+\caption{Jensen-Shannon divergence between the diversity distributions  of human and synthetic discussions by user prompts. Smaller is better.}
 \label{tab:divergence-user_prompts}
-\begin{tabular}{lrrrrrrr}
+\begin{tabular}{lrrrrrr}
 \toprule
-Model & All & LLaMa-70B & LLaMa-8B & Mistral-24B & Mistral-7B & Qwen-32B & Qwen-7B \\
-Ablation &  &  &  &  &  &  &  \\
+Model & LLaMa-70B & LLaMa-8B & Mistral-24B & Mistral-7B & Qwen-32B & Qwen-7B \\
+Ablation &  &  &  &  &  &  \\
 \midrule
-Main & 0.117 & 0.124 & 0.442 & 0.320 & 0.429 & 0.338 & 0.065 \\
-Minimal instructions & 0.077 & 0.101 & 0.319 & 0.279 & 0.347 & 0.511 & 0.096 \\
-No SDBs & 0.106 & 0.199 & 0.460 & 0.329 & 0.463 & 0.364 & 0.088 \\
+Minimal instructions & 0.101 & 0.319 & 0.279 & 0.347 & 0.511 & 0.096 \\
+Responsive instructions & 0.132 & 0.446 & 0.320 & 0.433 & 0.335 & 0.068 \\
 \bottomrule
 \end{tabular}
 \end{table}

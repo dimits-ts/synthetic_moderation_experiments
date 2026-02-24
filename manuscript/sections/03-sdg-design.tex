@@ -77,7 +77,7 @@ We will be using this documentation system for each component in this section.
 		
 		Outcomes 
 		&  + LLMs use their \ac{sdb} to justify positions and tell personal stories during the discussion. \\
-		&  - ?? \\
+		&  + Content variety in synthetic discussions approaches that of human discussions when using \acp{sdb}. \\
 		
 		\bottomrule
 	\end{tabular}
@@ -100,6 +100,10 @@ Using these sociodemographic prompts, we observe that LLM users are able to crea
 	\medskip
 	\textcolor{violet}{[visible-convertible]} \textcolor{orange}{@pallid-river}, I'm shocked by your comment. \emph{As a software engineer and a Vietnamese woman}, I've had the privilege of working with and learning from people from diverse backgrounds, including the LGBTQ+ community. [...] I'd love to hear about your \emph{``decades'' of experience as a doctor}, but I'm willing to bet that you've never actually worked with a trans patient or taken the time to educate yourself on the issue. \textcolor{olive}{@seasoned-union}, I think you're doing a great job of keeping the discussion respectful and informative. Keep up the good work!
 \end{quote}
+
+To quantify the change in content variety, we run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). We use \emph{``Diversity''} to measure content variety within each individual discussion, as discussed in \S\ref{sec:related:quality}. The closer the diversity distribution of our experiments are to human discussions in the same dataset as our initial comments (presented later in \S\ref{sec:methodology:seed}), the better. We can use the Jensen-Shannon divergence metric, which quantifies how ``far apart'' two distributions are from each other. We use this metric since unlike its most famous predecessor, the Kullback–Leibler divergence, it is symmetric, and thus punishes discussions that have too little \textit{and} too much content variety compared to human discussions. Table~\ref{tab:divergence-sdbs} shows that using \acp{sdb} does indeed shift the variety of synthetic discussions closer to that of human discussions.
+
+\input{../data/eval_output/divergence_sdbs.tex}
 
 
 \subsubsection{Assigning different participant roles}
@@ -190,7 +194,6 @@ In order to have a cheap, generalizable methodology, we will again attempt to so
 
 We give standard instructions to troll users primarily because of a desire to keep the system as simple as possible (\S\ref{sec:methodology:designrules}), but also because we discovered that any attempt to guide the model towards specific toxic behaviors triggered standard refusal responses (e.g., \texttt{``As an AI language model, I'm unable to respond with text that can be seen as  harmful''}). A way around these refusal responses would be to use abliterated models, LLMs which have been modified to bypass such refusals~\cite{arditi_abliteration}. However, abliterated models are not well documented in literature~\cite{young2026_abliteration} and are not available for many model families and versions in standard LLM repositories such as \texttt{huggingface}.
 
-We run an ablation study comparing discussions where the instructions do not include responding to toxic comments (``Minimal instructions''), and where no \acp{sdb} are given (``No \acp{sdb}''). We use \emph{``Diversity''} to measure content variety within each individual discussion, as discussed in \S\ref{sec:related:quality}. The closer the diversity distribution of our experiments are to human discussions in the same dataset as our initial comments (presented later in \S\ref{sec:methodology:seed}), the better. We can use the Jensen-Shannon divergence metric, which quantifies how ``far apart'' two distributions are from each other. We use this metric since unlike its most famous predecessor, the Kullback–Leibler divergence, it is symmetric, and thus punishes discussions that have too little \textit{and} too much content variety compared to human discussions. Table~\ref{tab:divergence-user_prompts} shows that even though our prompts are necessary to induce the desired behavior for LLMs, content variety slightly diverges from human discussions when using them.
 
  \begin{figure}[ht]
 	\centering

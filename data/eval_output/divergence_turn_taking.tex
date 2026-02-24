@@ -1,14 +1,14 @@
 \begin{table}[ht]
-\caption{Jensen-Shannon divergence between the diversity distributions  of human and synthetic discussions by turn taking.Smaller is better.}
+\caption{Jensen-Shannon divergence between the diversity distributions  of human and synthetic discussions by turn taking. Smaller is better.}
 \label{tab:divergence-turn_taking}
-\begin{tabular}{lrrrrrrr}
+\begin{tabular}{lrrrrrr}
 \toprule
-Model & All & LLaMa-70B & LLaMa-8B & Mistral-24B & Mistral-7B & Qwen-32B & Qwen-7B \\
-Ablation &  &  &  &  &  &  &  \\
+Model & LLaMa-70B & LLaMa-8B & Mistral-24B & Mistral-7B & Qwen-32B & Qwen-7B \\
+Ablation &  &  &  &  &  &  \\
 \midrule
-Random & 0.109 & 0.172 & 0.400 & 0.334 & 0.457 & 0.491 & 0.128 \\
-Response-enabled & 0.113 & 0.118 & 0.421 & 0.311 & 0.413 & 0.334 & 0.059 \\
-Round-robin & 0.087 & 0.194 & 0.442 & 0.340 & 0.440 & 0.383 & 0.102 \\
+Random & 0.172 & 0.400 & 0.334 & 0.457 & 0.491 & 0.128 \\
+Response-enabled & 0.118 & 0.421 & 0.311 & 0.413 & 0.334 & 0.059 \\
+Round-robin & 0.194 & 0.442 & 0.340 & 0.440 & 0.383 & 0.102 \\
 \bottomrule
 \end{tabular}
 \end{table}

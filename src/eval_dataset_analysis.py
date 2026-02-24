@@ -34,11 +34,11 @@ def main(
     human_df["user_prompts"] = "Human"
     human_df["turn_taking"] = "Human"
     human_df["initialization"] = "Human"
+    human_df["sdbs"] = "Human"
 
     combined_df = pd.concat([main_df, human_df])
 
     MODEL_ORDER = tasks.graphs.get_sorted_labels(combined_df, "model")
-    VARIANT_ORDER = tasks.graphs.get_sorted_labels(combined_df, "variant")
 
     plot_dataset_length(
         df=combined_df,
@@ -54,21 +54,15 @@ def main(
         cache_path=cache_dir / "diversity_main_model.csv",
         label_order=MODEL_ORDER,
     )
-    plot_dataset_diversity(
-        df=combined_df,
-        y_col="variant",
-        graph_output_path=graph_output_dir / "diversity_main_variant.png",
-        cache_path=cache_dir / "diversity_main_variant.csv",
-        label_order=VARIANT_ORDER,
-    )
     dataset_stats(main_df, main_csv_path)
 
     ablation_df = pd.read_csv(ablation_csv_path)
+    ablation_df = ablation_df[ablation_df.model != "hardcoded"]
     dataset_stats(ablation_df, ablation_csv_path)
 
     results_df = compute_js_divergence_to_human(
         full_df=pd.concat([main_df, ablation_df, human_df], ignore_index=True),
-        dimensions=["user_prompts", "turn_taking", "initialization"],
+        dimensions=["user_prompts", "turn_taking", "initialization", "sdbs"],
         cache_dir=cache_dir,
     )
     output_divergence_results(df=results_df, output_dir=stats_output_dir)
@@ -92,7 +86,7 @@ def output_divergence_results(df: pd.DataFrame, output_dir: Path) -> None:
         caption = (
             "Jensen-Shannon divergence between the diversity "
             "distributions  of human and synthetic discussions by "
-            f"{dimension.replace("_", " ")}."
+            f"{dimension.replace("_", " ")}. "
             "Smaller is better."
         )
         dim_df.to_latex(
@@ -188,12 +182,10 @@ def compute_js_divergence_to_human(
     records = []
     human_similarities = {}
 
-    models = set(full_df.model.unique()).union({"All"})
+    models = set(full_df.model.unique())
     for model in models:
-        if model == "Human" or model == "hardcoded":
+        if model == "Human":
             continue
-        elif model == "All":
-            df = full_df
         else:
             df = full_df.loc[full_df.model.isin([model, "Human"])]
 
@@ -213,8 +205,7 @@ def compute_js_divergence_to_human(
             print(f"  Human samples: {len(human_sim)}")
 
             non_human_values = df.loc[
-                (df[dimension] != "Human") & (df["model"] != "hardcoded"),
-                dimension,
+                (df[dimension] != "Human"), dimension
             ].unique()
 
             for value in non_human_values:
@@ -249,7 +240,7 @@ def plot_dataset_length(
     graph_output_dir: Path,
     label_order: list[str],
 ) -> None:
-    len_df = df.loc[df.model != "hardcoded", ["message", y_col]]
+    len_df = df.loc[:, ["message", y_col]]
     len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
     sns.histplot(
         data=len_df,
@@ -281,10 +272,8 @@ def plot_dataset_diversity(
 
     else:
         print("Computing similarities (cache miss)")
-        working_df = df.loc[df.model != "hardcoded"]
-
         similarity_df = (
-            working_df.groupby(["conv_id", y_col])["message"]
+            df.groupby(["conv_id", y_col])["message"]
             .apply(list)
             .reset_index()
         )
