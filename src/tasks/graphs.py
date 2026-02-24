@@ -106,3 +106,6 @@ def save_plot(path: Path) -> None:
     print(f"Figure saved to {path.resolve()}")
 
 
+def get_sorted_labels(df, col):
+    labels = sorted(df[col].dropna().unique())
+    return labels

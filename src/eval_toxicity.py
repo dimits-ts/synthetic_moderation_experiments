@@ -23,6 +23,9 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
         np.where(df.is_troll, "Troll", "Non-troll user"),
     )
 
+    MODEL_ORDER = tasks.graphs.get_sorted_labels(df, "model")
+    STRATEGY_ORDER = tasks.graphs.get_sorted_labels(df, "strategy")
+
     toxicity_overall(df[~df.is_moderator], graph_dir)
     toxicity_by_dimension(df, graph_dir, "role")
     toxicity_by_dimension(df, graph_dir, "strategy")
@@ -33,12 +36,14 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
         df=df,
         groupby_col="model",
         graph_output_path=graph_dir / "toxicity_through_time_model.png",
+        label_order=MODEL_ORDER
     )
 
     toxicity_through_time_plot(
         df=df,
         groupby_col="strategy",
         graph_output_path=graph_dir / "toxicity_through_time_strategy.png",
+        label_order=STRATEGY_ORDER
     )
 
     ablation_df = get_toxicity_df(
@@ -203,6 +208,7 @@ def toxicity_through_time_plot(
     df: pd.DataFrame,
     groupby_col: str,
     graph_output_path: Path,
+    label_order: list[str]
 ) -> None:
     # --- Step 1: copy and filter out moderators ---
     plot_df = df[~df.is_moderator].copy()
@@ -231,9 +237,10 @@ def toxicity_through_time_plot(
         x="turn_index",
         y="cum_avg_toxicity",
         hue=groupby_col,
+        hue_order=label_order,
         marker="o",
         palette=tasks.graphs.COLORBLIND_PALETTE,
-        errorbar=("ci", 95),  # <-- shows 95% confidence interval
+        errorbar=("ci", 95),
     )
 
     plt.xlabel("#User messages in conversation")

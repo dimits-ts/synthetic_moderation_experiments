@@ -25,6 +25,7 @@ def main(
     tqdm.pandas()
 
     main_df = pd.read_csv(main_csv_path)
+    main_df = main_df[main_df.model != "hardcoded"]
 
     human_df = pd.read_csv(human_csv_path)
     human_df = human_df.rename(columns={"text": "message"})
@@ -36,10 +37,14 @@ def main(
 
     combined_df = pd.concat([main_df, human_df])
 
+    MODEL_ORDER = tasks.graphs.get_sorted_labels(combined_df, "model")
+    VARIANT_ORDER = tasks.graphs.get_sorted_labels(combined_df, "variant")
+
     plot_dataset_length(
         df=combined_df,
         y_col="model",
         graph_output_dir=graph_output_dir,
+        label_order=MODEL_ORDER,
     )
 
     plot_dataset_diversity(
@@ -47,12 +52,14 @@ def main(
         y_col="model",
         graph_output_path=graph_output_dir / "diversity_main_model.png",
         cache_path=cache_dir / "diversity_main_model.csv",
+        label_order=MODEL_ORDER,
     )
     plot_dataset_diversity(
         df=combined_df,
         y_col="variant",
         graph_output_path=graph_output_dir / "diversity_main_variant.png",
         cache_path=cache_dir / "diversity_main_variant.csv",
+        label_order=VARIANT_ORDER,
     )
     dataset_stats(main_df, main_csv_path)
 
@@ -76,7 +83,7 @@ def output_divergence_results(df: pd.DataFrame, output_dir: Path) -> None:
                 "model": "Model",
                 "value": "Ablation",
             }
-        )
+        )  # type: ignore
         dim_df = dim_df.pivot(
             index="Ablation", columns="Model", values="Divergence"
         )
@@ -93,7 +100,7 @@ def output_divergence_results(df: pd.DataFrame, output_dir: Path) -> None:
             caption=caption,
             label=f"tab:divergence-{dimension}",
             position="ht",
-            float_format="%.3f"
+            float_format="%.3f",
         )
 
     print(f"\nSaved JS divergence results → {output_dir}")
@@ -103,8 +110,10 @@ def compute_js_divergence(
     dist1: np.ndarray, dist2: np.ndarray, bins: int = 50
 ) -> float:
     """
-    Compute Jensen-Shannon divergence between two distributions of ROUGE-L similarity scores.
-    Uses KDE to estimate continuous distributions, then evaluates on a shared grid.
+    Compute Jensen-Shannon divergence between two distributions of
+    diversity scores.
+    Uses KDE to estimate continuous distributions,
+     then evaluates on a shared grid.
     """
     # Filter NaNs
     dist1 = dist1[~np.isnan(dist1)]
@@ -126,7 +135,8 @@ def compute_js_divergence(
     p = p / p.sum()
     q = q / q.sum()
 
-    # jensenshannon returns the square root of JS divergence; square it for the divergence itself
+    # jensenshannon returns the square root of JS divergence; square it
+    # for the divergence itself
     return jensenshannon(p, q) ** 2
 
 
@@ -137,7 +147,8 @@ def compute_rougel_similarities_for_group(
     cache_dir: Path,
 ) -> np.ndarray:
     """
-    Compute ROUGE-L intra-conversation similarities for a specific group (e.g. one model).
+    Compute ROUGE-L intra-conversation similarities for a specific group
+    (e.g. one model).
     Returns a flat array of similarity scores.
     """
     cache_path = (
@@ -158,7 +169,7 @@ def compute_rougel_similarities_for_group(
         cache_path.parent.mkdir(parents=True, exist_ok=True)
         similarity_df.to_csv(cache_path, index=False)
 
-    return similarity_df["rougel_similarity"].dropna().values
+    return similarity_df["rougel_similarity"].dropna().values  # type: ignore
 
 
 def compute_js_divergence_to_human(
@@ -168,8 +179,8 @@ def compute_js_divergence_to_human(
     bins: int = 50,
 ) -> pd.DataFrame:
     """
-    For each (model, dimension) pair, compute the JS divergence between the model's
-    ROUGE-L similarity distribution and the Human distribution.
+    For each (model, dimension) pair, compute the JS divergence between the
+    model's ROUGE-L similarity distribution and the Human distribution.
 
     Outputs a CSV to stats_output_path with columns:
         model | dimension | js_divergence
@@ -233,7 +244,10 @@ def compute_js_divergence_to_human(
 
 
 def plot_dataset_length(
-    df: pd.DataFrame, y_col: str, graph_output_dir: Path
+    df: pd.DataFrame,
+    y_col: str,
+    graph_output_dir: Path,
+    label_order: list[str],
 ) -> None:
     len_df = df.loc[df.model != "hardcoded", ["message", y_col]]
     len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
@@ -241,6 +255,7 @@ def plot_dataset_length(
         data=len_df,
         x="comment_length",
         hue=y_col,
+        hue_order=label_order,
         common_norm=False,
         stat="density",
     )
@@ -255,6 +270,7 @@ def plot_dataset_diversity(
     y_col: str,
     graph_output_path: Path,
     cache_path: Path,
+    label_order: list[str],
 ):
     cache_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -286,6 +302,7 @@ def plot_dataset_diversity(
         data=similarity_df,
         x="rougel_similarity",
         hue=y_col,
+        hue_order=label_order,
         fill=True,
         common_norm=False,
         multiple="layer",

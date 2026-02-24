@@ -12,11 +12,18 @@ def main(input_csv_path: Path, output_dir: Path):
 
     df = pd.read_csv(input_csv_path)
 
-    intervention_through_time_plot(df=df, groupby_col="model")
+    MODEL_ORDER = tasks.graphs.get_sorted_labels(df, "model")
+    STRATEGY_ORDER = tasks.graphs.get_sorted_labels(df, "strategy")
+    
+    intervention_through_time_plot(
+        df=df, groupby_col="model", label_order=MODEL_ORDER
+    )
     tasks.graphs.save_plot(output_dir / "intervention_count_model.png")
     plt.close()
 
-    intervention_through_time_plot(df=df, groupby_col="strategy")
+    intervention_through_time_plot(
+        df=df, groupby_col="strategy", label_order=STRATEGY_ORDER
+    )
     tasks.graphs.save_plot(output_dir / "intervention_count_strategy.png")
     plt.close()
 
@@ -80,7 +87,9 @@ def build_moderation_summary(
     ).reset_index(drop=True)
 
 
-def intervention_through_time_plot(df: pd.DataFrame, groupby_col: str) -> None:
+def intervention_through_time_plot(
+    df: pd.DataFrame, groupby_col: str, label_order: list[str]
+) -> None:
     df = df.copy()
 
     # Keep only moderator messages
@@ -106,24 +115,37 @@ def intervention_through_time_plot(df: pd.DataFrame, groupby_col: str) -> None:
         .reset_index()
     )
 
-    # Plot
-    fig, ax = plt.subplots(figsize=(12, 6))
+    # build consistent color map from label_order
+    base_colors = tasks.graphs.COLORBLIND_PALETTE
+    palette = {
+        label: base_colors[i % len(base_colors)]
+        for i, label in enumerate(label_order)
+    }
 
-    colors = tasks.graphs.COLORBLIND_PALETTE
     markers = ["o", "s", "D", "^", "v", "P", "X"]
 
-    for i, (group, group_df) in enumerate(summary.groupby(groupby_col)):
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    # iterate in sorted label order
+    for i, label in enumerate(label_order):
+        group_df = summary[summary[groupby_col] == label]
+        if group_df.empty:
+            continue  # skip labels not present in this plot
+
         ax.plot(
             group_df["turn_index"],
             group_df["cum_intervention_pct"],
-            label=group,
-            color=colors[i % len(colors)],
+            label=label,
+            color=palette[label],
             marker=markers[i % len(markers)],
         )
 
     ax.set_xlabel("#Comments (start -> end)")
     ax.set_ylabel("% Interventions")
-    ax.legend()
+
+    # legend already sorted because plotting order is sorted
+    ax.legend(title=groupby_col)
+
     plt.tight_layout()
 
 
