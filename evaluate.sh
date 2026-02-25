@@ -45,6 +45,11 @@ python src/generate_toxicity_ratings.py \
     --output-path data/eval_output/ablation.csv \
     --api-key-path perspective.key
 
+python src/generate_toxicity_ratings.py \
+    --input-csv data/cmv_awry2.csv \
+    --output-path data/eval_output/cmv_awry2.csv \
+    --api-key-path perspective.key
+
 python src/eval_moderation.py \
     --input-csv data/main_output/vmd.csv \
     --output-dir graphs
