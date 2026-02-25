@@ -67,7 +67,7 @@ We initially used a bimoprhic local setup with different LLMs for participants a
 
 We run $N_d=20$ discussions for each possible configuration of LLMs, turn-taking function, and facilitation strategy. Each discussion is composed of up to $30$ comments, including facilitator interventions. All experiments were collectively completed within a week of computational time, using two Quadro RTX 6000 GPUs. Toxicity evaluation was conducted using the Perspective API service. The execution script is available in the project's repository. We provide the $h=3$ last comments for context.
 
-\begin{algorithm}[h!]
+\begin{algorithm}[ht]
 	\caption{Experimental procedure for the facilitation experiments using our \ac{sdg} framework.}
 	\label{alg:exp_generation}
 	\begin{flushleft}
@@ -112,19 +112,52 @@ We run $N_d=20$ discussions for each possible configuration of LLMs, turn-taking
 
 
 \subsection{Calculating Cost}
+\label{sec:scalability:cost}
+
+
+\subsubsection{Constraints imposed by cost}
+\label{sec:scalability:cost:sources}
+
+\begin{table}[ht]
+	\centering
+	\caption{Economic constraints imposed to researchers over operational and capital expenditure.}
+	\label{tab:cost-sources}
+	\begin{tabular}{lll}
+		\toprule
+		& \textbf{\ac{opex}} & \textbf{\ac{capex}} \\
+		\midrule
+		Constraints & Volume of experiments & Capabilities of experimental design \\
+		Funding & Continuous, ongoing funding & Large upfront investment \\
+		Consumption & Immediate (electricity/API) & Decay over time (hardware use/aging) \\
+		Local Model & Low & Variable \\
+		Cloud Model & High & None \\
+		Human & Very High & None \\
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 One of the defining arguments for the development and use of \ac{sdg} frameworks is the ability to scale up experiments. This is achieved in two ways; speed and cost. The former is intuitive, since we no longer need to recruit, orient and instruct human participants. Unlike humans, LLMs also can completely forget previous experiments, making successive experiment runs independent between each other. However, we need to take into account that the data we get from synthetic discussions are of strictly worse ``quality'' and less utility than human discussions. To partially offset this inherent limitation, we should try minimizing the costs associated with these experiments.
 
-An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design. Since there is no standardized methodology for comparing the costs of human and synthetic experiments, we extend a proposed methodology which compares on-premises LLMs with cloud-based proprietary models~\cite{pan2025_cost_benefit}.
+The transition from human-centric to synthetic research shifts the economic burden from logistical overhead to computational infrastructure. This trade-off is best understood through the lens of \ac{opex} and \ac{capex}, which impose distinct structural constraints on the research process, as summarized in Table~\ref{tab:cost-sources}. 
+
+\ac{opex} represents the immediate, ``pay-as-you-go'' costs of research. In the context of \ac{sdg}, these costs---whether electricity for local models or API credits for proprietary models---act as a ceiling on experimental \textbf{volume}. High operational costs force researchers to be selective about the number of iterations or the sample size of synthetic agents, effectively limiting the statistical power of the study.
+
+Conversely, \ac{capex} dictates what is possible in our experimental setups. Because \ac{sdg} requires substantial gpu infrastructure due to the utilization of LLMs, the upfront investment is often prohibitively high depending on the model and setup. In practice, researchers frequently navigate this by scaling down their experimental designs to fit existing hardware rather than securing the funding to expand it.
 
 The nature of the costs involved in any of the three methods are completely different:
 \begin{itemize}[nosep,noitemsep]
-	\item Open-source models incur cost from utilization of core infrastructure, electricity consumption, and asset (GPU) depreciation. 
-	\item Proprietary models charge a set amount of cost per input and output token.
-	\item Human participants cost wages and platform fees.
+	\item Open-source models incur cost from utilization of core infrastructure, electricity consumption, and asset (GPU) depreciation. \ac{opex} is relatively low, but this approach is capital-intensive.
+	\item Proprietary models charge a set amount of cost per input and output token. This nullifies \ac{capex}, but it may lead to prohibitively high \ac{opex} fees.
+	\item Human participants cost wages and platform fees. This approach incurs almost exclusively operational costs in the forms of wages and logistics (usually paying a service fee to dedicated platforms).
 \end{itemize}
 
-Any cost comparison thus necessitates normalizing costs to a universal metric. We define the \acf{cpt} as the monetary cost of completing an arbitrary task. In our experimental setup, a task corresponds to the completion of one full discussion.
+
+\subsubsection{Cost derivation}
+\label{sec:scalability:cost:calculation}
+
+An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design. Since there is no standardized methodology for comparing the costs of human and synthetic experiments, we extend a proposed methodology which compares on-premises LLMs with cloud-based proprietary models~\cite{pan2025_cost_benefit} to include human costs.
+
+Since the nature of the costs incurred by each option is different (\S\ref{sec:scalability:cost:sources}), any cost comparison thus necessitates normalizing costs to a universal metric. We define the \acf{cpt} as the monetary cost of completing an arbitrary task. For the purposes of \ac{sdg}, we define a task as the completion of one full discussion.
 
 \paragraph{Open-source models}
 For self-hosted open-source LLMs, we estimate the \acf{cpt} by explicitly modeling the  \ac{tco} over the actual duration of the experiment, rather than over a full annual cycle. This provides a conservative and deployment-aware estimate for research settings where infrastructure is utilized only for a limited time window. 
