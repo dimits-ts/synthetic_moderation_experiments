@@ -11,10 +11,11 @@ def main(input_csv_path: Path, output_dir: Path):
     tasks.graphs.seaborn_setup()
 
     df = pd.read_csv(input_csv_path)
+    df = df[df.model != "hardcoded"]
 
     MODEL_ORDER = tasks.graphs.get_sorted_labels(df, "model")
     STRATEGY_ORDER = tasks.graphs.get_sorted_labels(df, "strategy")
-    
+
     intervention_through_time_plot(
         df=df, groupby_col="model", label_order=MODEL_ORDER
     )
@@ -27,16 +28,33 @@ def main(input_csv_path: Path, output_dir: Path):
     tasks.graphs.save_plot(output_dir / "intervention_count_strategy.png")
     plt.close()
 
-    print(
-        f"Participants responded {participant_participation(df) * 100:.2f}% "
-        "of the time"
+    participation_df = participation_summary(df)
+    print(participation_df)
+
+
+def participation_summary(df: pd.DataFrame) -> pd.DataFrame:
+    non_mod_df = df[~df.is_moderator].copy()
+
+    # per-model participation
+    per_model = non_mod_df.groupby("model")["message"].apply(
+        _participation_rate
     )
 
+    # overall participation
+    overall = pd.Series({"overall": _participation_rate(non_mod_df.message)})
 
-def participant_participation(df: pd.DataFrame) -> float:
-    non_mod_df = df[~df.is_moderator]
-    empty_messages = non_mod_df.message.astype(str).str.strip() == '""'
-    return len(empty_messages) / len(non_mod_df)
+    # combine → models + overall
+    combined = pd.concat([per_model, overall])
+
+    # return transposed single-row dataframe
+    return combined.to_frame(name="participation_rate").T
+
+
+def _participation_rate(messages: pd.Series) -> float:
+    # messages where the only content is quotes, since some models
+    # accidentally add more than two quotes when not intervening
+    empty_mask = messages.fillna("").astype(str).str.fullmatch(r'[\s"]*')
+    return 1 - (empty_mask.sum() / len(messages)) if len(messages) else 0.0
 
 
 def build_moderation_summary(
