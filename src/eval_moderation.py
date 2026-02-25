@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import tasks.graphs
 
 
-def main(input_csv_path: Path, output_dir: Path):
+def main(input_csv_path: Path, graph_output_dir: Path, latex_output_dir: Path):
     tasks.graphs.seaborn_setup()
 
     df = pd.read_csv(input_csv_path)
@@ -19,17 +19,25 @@ def main(input_csv_path: Path, output_dir: Path):
     intervention_through_time_plot(
         df=df, groupby_col="model", label_order=MODEL_ORDER
     )
-    tasks.graphs.save_plot(output_dir / "intervention_count_model.png")
+    tasks.graphs.save_plot(graph_output_dir / "intervention_count_model.png")
     plt.close()
 
     intervention_through_time_plot(
         df=df, groupby_col="strategy", label_order=STRATEGY_ORDER
     )
-    tasks.graphs.save_plot(output_dir / "intervention_count_strategy.png")
+    tasks.graphs.save_plot(
+        graph_output_dir / "intervention_count_strategy.png"
+    )
     plt.close()
 
     participation_df = participation_summary(df)
-    print(participation_df)
+    participation_df.to_latex(
+        latex_output_dir / "participation.tex",
+        caption="LLM user facilitation in synthetic discussions by model.",
+        label="tab:participation",
+        position="ht",
+        float_format="%.3f",
+    )
 
 
 def participation_summary(df: pd.DataFrame) -> pd.DataFrame:
@@ -177,9 +185,18 @@ if __name__ == "__main__":
         help="Path to input CSV file",
     )
     parser.add_argument(
-        "--output-dir",
+        "--graph-output-dir",
+        type=str,
+        help="Graph output directory",
+    )
+    parser.add_argument(
+        "--stats-output-dir",
         type=str,
         help="Graph output directory",
     )
     args = parser.parse_args()
-    main(input_csv_path=Path(args.input_csv), output_dir=Path(args.output_dir))
+    main(
+        input_csv_path=Path(args.input_csv),
+        graph_output_dir=Path(args.graph_output_dir),
+        latex_output_dir=Path(args.stats_output_dir),
+    )

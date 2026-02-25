@@ -52,7 +52,8 @@ python src/generate_toxicity_ratings.py \
 
 python src/eval_moderation.py \
     --input-csv data/main_output/vmd.csv \
-    --output-dir graphs
+    --graph-output-dir graphs \
+    --stats-output-dir data/eval_output
 
 python src/eval_dataset_analysis.py \
     --main-output-dir data/main_output \
