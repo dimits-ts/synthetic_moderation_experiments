@@ -1,19 +1,19 @@
 % !TEX root = ../main.tex
 %
 
-\section{Investigating facilitation through \ac{sdg}}
+\section{Investigating facilitation through SDG}
 \label{sec:facilitation}
-
-
-\subsection{LLM strategies}
-\label{sec:facilitation:strategies}
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[width=0.7\columnwidth]{experiments.drawio.png}
+	\includegraphics[width=\columnwidth]{experiments.drawio.png}
 	\caption{We simulate online discussions using exclusively LLM participants. Some of them attempt to sabotage the discussion, while the LLM facilitator monitors and intervenes when appropriate. Then, we test different LLMs and human facilitation strategies through the LLM facilitator.}
 	\label{fig:experiments}
 \end{figure}
+
+
+\subsection{LLM facilitators cannot leverage advanced strategies}
+\label{sec:facilitation:strategies}
 
 We test two facilitation strategies used in real-life and compare them with two baselines. We summarize both documents using a proprietary LLM (Google Gemini), since LLMs have been proven to work well in these tasks~\cite{ts2024}, manually inspected the output, and removed instructions not relevant for our scenario.\footnote{Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.}
 
@@ -26,6 +26,10 @@ We test two facilitation strategies used in real-life and compare them with two 
 	
 	\item \textbf{Constructive Communications}: A \emph{real-life} strategy~\cite{dimitra-guide} which approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions e.g., ``Do not make decisions, be a guide, provide explanations''. This makes the strategy ideal for deliberative environments.
 \end{enumerate}
+
+\input{../graphs/toxicity_regression.tex}
+
+We used a mixed-effects linear regression model, which accounts for the fact that comments from the same discussion are related to one another. Table~\ref{tab:regression} shows that, while complex instructions lead to statistically significant reductions in message toxicity, the effects are quantitatively minimal. This can be seen both in aggregate---with toxicity dropping only by $0.04-0.06$ points when compared to no instructions, and in continuity---with each subsequent comment only having on average $0.001-0.002$ less toxicity.
 
 
 \subsection{LLM facilitators constantly intervene}
@@ -103,11 +107,4 @@ When a single troll is present, we may observe collective action from the rest o
 
  An unintentional side-effect of our turn-taking function is that sometimes a user is not given the opportunity to respond for some time. However, the excerpt above showcases that (1) Their contribution to the thread persists, even when their comment is placed outside of conversational context, (2) allowing users to respond is essential to sustaining conversational dynamics, and (3) like humans, LLM users express frustation whenever their inquiries go unanswered.
 
-
-\subsection{Different strategies seem to have some effect on LLM facilitators}
-
-While we have established that our methodology somewhat approximates LLM users do replicate some social behaviors found in human discussions(\S\ref{sec:facilitation:behaviors})
-We used a mixed-effects linear regression model, which accounts for the fact that comments from the same discussion are related to one another. Table~\ref{tab:regression} shows that, while complex instructions lead to statistically significant reductions in message toxicity, the effects are quantitatively minimal. This can be seen both in aggregate---with toxicity dropping only by $0.04-0.06$ points when compared to no instructions, and in continuity---with each subsequent comment only having on average $0.001-0.002$ less toxicity.
-
- \input{../graphs/toxicity_regression.tex}
 
