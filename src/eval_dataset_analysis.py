@@ -58,6 +58,7 @@ def main(
 
     ablation_df = pd.read_csv(ablation_csv_path)
     ablation_df = ablation_df[ablation_df.model != "hardcoded"]
+
     dataset_stats(ablation_df, ablation_csv_path)
 
     results_df = compute_js_divergence_to_human(
@@ -187,7 +188,11 @@ def compute_js_divergence_to_human(
         if model == "Human":
             continue
         else:
-            df = full_df.loc[full_df.model.isin([model, "Human"])]
+            df = full_df.loc[(full_df.model.isin([model, "Human"]))]
+            # filter out messages that are just a number of quotemarks
+            df = df[
+                ~df.message.fillna("").astype(str).str.fullmatch(r'[\s"]*')
+            ]
 
         print("Model: ", model)
         for dimension in dimensions:
@@ -273,9 +278,7 @@ def plot_dataset_diversity(
     else:
         print("Computing similarities (cache miss)")
         similarity_df = (
-            df.groupby(["conv_id", y_col])["message"]
-            .apply(list)
-            .reset_index()
+            df.groupby(["conv_id", y_col])["message"].apply(list).reset_index()
         )
 
         similarity_df["rougel_similarity"] = similarity_df[
