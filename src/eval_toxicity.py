@@ -141,7 +141,6 @@ def toxicity_by_dimension(
 def toxicity_regression(df: pd.DataFrame, latex_output_dir: Path) -> None:
     df["message_order_c"] = df["message_order"] - df["message_order"].mean()
     df = df.rename(columns={"toxicity": "Toxicity"})
-
     model = smf.mixedlm(
         "Toxicity ~ C(strategy, Treatment(reference='No Facilitator')) * message_order_c",
         data=df,
@@ -149,40 +148,78 @@ def toxicity_regression(df: pd.DataFrame, latex_output_dir: Path) -> None:
     )
     result = model.fit()
 
-    latex = result.summary().as_latex()
+    # --- Extract coefficients, SEs, and p-values manually ---
+    params = result.fe_params
+    bse = result.bse_fe
+    pvalues = result.pvalues[params.index]
 
-    replacements = [
-        # --- interactions FIRST ---
-        (
-            "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]:message\\_order\\_c",
-            "Constructive Communications × Turn",
-        ),
-        (
-            "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]:message\\_order\\_c",
-            "Moderation Guidelines × Turn",
-        ),
-        (
-            "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]:message\\_order\\_c",
-            "Minimal Instructions × Turn",
-        ),
-        # --- main effects ---
-        (
-            "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]",
-            "Constructive Communications",
-        ),
-        (
-            "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]",
-            "Moderation Guidelines",
-        ),
-        (
-            "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]",
-            "Minimal Instructions",
-        ),
-        ("message\\_order\\_c", "Discussion Turn")
-    ]
+    # Random effects variance
+    re_var = result.cov_re.iloc[0, 0] if result.cov_re is not None else float("nan")
 
-    for old, new in replacements:
-        latex = latex.replace(old, new)
+    # Significance stars
+    def stars(p: float) -> str:
+        if p < 0.001:
+            return "***"
+        elif p < 0.01:
+            return "**"
+        elif p < 0.05:
+            return "*"
+        return ""
+
+    # Human-readable label map
+    label_map = {
+        "Intercept": "Constant",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]": "Constructive Communications",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]": "Moderation Guidelines",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]": "Minimal Instructions",
+        "message_order_c": "Discussion Turn",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]:message_order_c": "Constructive Communications $\\times$ Turn",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]:message_order_c": "Moderation Guidelines $\\times$ Turn",
+        "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]:message_order_c": "Minimal Instructions $\\times$ Turn",
+    }
+
+    # --- Build LaTeX table manually ---
+    rows = []
+    for raw_name, coef in params.items():
+        se = bse[raw_name]
+        p = pvalues[raw_name]
+        label = label_map.get(raw_name, raw_name)
+        s = stars(p)
+        rows.append(
+            f"    {label} & ${coef:8.3f}^{{{s}}}$ \\\\\n"
+            f"    & $({se:.3f})$ \\\\"
+        )
+
+    body = "\n".join(rows)
+
+    n_obs = int(result.nobs)
+    n_groups = result.model.n_groups
+    log_lik = f"{result.llf:.3f}" if hasattr(result, "llf") and result.llf is not None else "---"
+
+    latex = (
+        "\\begin{table}[ht]\n"
+        "\\centering\n"
+        "\\caption{Mixed-Effects Model: Predictors of Message Toxicity}\n"
+        "\\label{tab:toxicity_regression}\n"
+        "\\begin{tabular}{lc}\n"
+        "\\hline\\hline\n"
+        " & Toxicity \\\\\n"
+        "\\hline\n"
+        f"{body}\n"
+        "\\hline\n"
+        f"    \\textit{{Random Effects}} & \\\\\n"
+        f"    \\quad Group Variance & ${re_var:.4f}$ \\\\\n"
+        "\\hline\n"
+        f"    Observations & {n_obs} \\\\\n"
+        f"    Groups & {n_groups} \\\\\n"
+        f"    Log-Likelihood & {log_lik} \\\\\n"
+        "\\hline\\hline\n"
+        "\\multicolumn{2}{l}{\\footnotesize Standard errors in parentheses.} \\\\\n"
+        "\\multicolumn{2}{l}{\\footnotesize $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$} \\\\\n"
+        "\\end{tabular}\n"
+        "\\end{table}\n"
+    )
+
     with open(latex_output_dir / "toxicity_regression.tex", "w") as f:
         f.write(latex)
 
