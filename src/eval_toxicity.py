@@ -32,18 +32,24 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
     toxicity_by_dimension(df, graph_dir, "model")
     toxicity_regression(df[~df.is_moderator], graph_dir=graph_dir)
 
+    palette = tasks.graphs.COLORBLIND_PALETTE
+    # shift colors left by 1 so first color is skipped
+    # given that humans dont exist in this subset
+    offset_palette = palette[1:] + palette[:1]
     toxicity_through_time_plot(
         df=df,
         groupby_col="model",
         graph_output_path=graph_dir / "toxicity_through_time_model.png",
-        label_order=MODEL_ORDER
+        label_order=MODEL_ORDER,
+        palette=offset_palette
     )
 
     toxicity_through_time_plot(
         df=df,
         groupby_col="strategy",
         graph_output_path=graph_dir / "toxicity_through_time_strategy.png",
-        label_order=STRATEGY_ORDER
+        label_order=STRATEGY_ORDER,
+        palette=palette
     )
 
     ablation_df = get_toxicity_df(
@@ -207,7 +213,8 @@ def toxicity_through_time_plot(
     df: pd.DataFrame,
     groupby_col: str,
     graph_output_path: Path,
-    label_order: list[str]
+    label_order: list[str],
+    palette: list[str]
 ) -> None:
     # --- Step 1: copy and filter out moderators ---
     plot_df = df[~df.is_moderator].copy()
@@ -238,7 +245,7 @@ def toxicity_through_time_plot(
         hue=groupby_col,
         hue_order=label_order,
         marker="o",
-        palette=tasks.graphs.COLORBLIND_PALETTE,
+        palette=palette,
         errorbar=("ci", 95),
     )
 
