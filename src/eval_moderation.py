@@ -31,9 +31,12 @@ def main(input_csv_path: Path, graph_output_dir: Path, latex_output_dir: Path):
     plt.close()
 
     participation_df = participation_summary(df)
+    participation_df = participation_df.rename(
+        {"participation_rate": "Participation Rate"}
+    )
     participation_df.to_latex(
         latex_output_dir / "participation.tex",
-        caption="LLM user facilitation in synthetic discussions by model.",
+        caption="Participation rate by model in synthetic discussions.",
         label="tab:participation",
         position="ht",
         float_format="%.3f",
@@ -49,7 +52,7 @@ def participation_summary(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     # overall participation
-    overall = pd.Series({"overall": _participation_rate(non_mod_df.message)})
+    overall = pd.Series({"Overall": _participation_rate(non_mod_df.message)})
 
     # combine → models + overall
     combined = pd.concat([per_model, overall])

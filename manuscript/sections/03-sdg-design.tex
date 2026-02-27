@@ -106,7 +106,7 @@ To quantify the change in content variety, we run an ablation study comparing di
 \input{../data/eval_output/divergence_sdbs.tex}
 
 
-\subsubsection{Assigning different participant roles}
+\subsubsection{Participant roles}
 \label{sec:methodology:initialization:trolls}
 
 \begin{table}[ht]
@@ -322,7 +322,9 @@ These approaches may be appropriate for highly specialized settings, but they ar
 	\end{tabular}
 \end{table}
 
-Turn-taking refers to the process with which humans take turns speaking in a discussion. The goal is typically to minimize idle time in discussions, while letting most participants participate. This process is poorly understood---only experimental coarse-grained solutions have been devised for automated systems~\cite{frai_turn_taking}. While humans typically learn when to speak after years of constant social interaction~\cite{frai_turn_taking}, this process must be implemented for LLM agents which are trained as chatbot assistants---and therefore to always respond. In fact, in our experiments \emph{there is not a single case where LLM participants did not respond}, even though this option is explicitly encoded in their instruction prompts.
+Turn-taking refers to the process with which humans take turns speaking in a discussion. The goal is typically to minimize idle time in discussions, while letting most participants participate. This process is poorly understood---only experimental coarse-grained solutions have been devised for automated systems~\cite{frai_turn_taking}. While humans typically learn when to speak after years of constant social interaction~\cite{frai_turn_taking}, this process must be implemented for LLM agents which are trained as chatbot assistants---and therefore to always respond. This is demonstrated across all models in Table~\ref{tab:participation}, even through the instructions given to the participants explicitly highlight the option of not responding (Appendix~\ref{sec:appendix:prompts}).
+
+\input{../data/eval_output/participation.tex}
 
 One solution is to use a dedicated smaller model whose only task is to decide whether a larger model should speak, but this approach has been only demonstrated in narrow application settings~\cite{chen-etal-2025-llamapie}. Concordia~\cite{Vezhnevets2023GenerativeAM} uses a centralized system where a single agent (``the Game Master'') determines who should speak, ignoring input from the participants themselves. This leads to some computational overhead, as the Game Master has to decide the next course of action using prompting. Deliberate Lab~\cite{Tsai_Deliberate_Lab_Open-Source_2025} uses a system where each agent is assigned a typing speed, which determines priority. These approaches showcase the necessity of a turn-taking system when using LLMs as participants.
 

@@ -1,0 +1,42 @@
+\section{Discussion}
+
+\subsection{Conclusion}
+\label{sec:discussion:conclusion}
+We conducted a brief overview of the trade-off between complexity and efficiency for synthetic discussion methodologies,from which we derived three simple design rules. Following these rules,we proposed a simple and generalizable methodology,whose components are easily validated and which enables researchers to quickly and inexpensively conduct pilot facilitation experiments using exclusively LLMs. We found that LLM facilitators significantly improve the quality of synthetic discussions; but prompting these facilitators with strategies based on Social Science research does not markedly improve their performance. We also discovered that LLM facilitators constantly intervene,even when instructed not to. Finally,we created an open-source Python framework which applies our methodology to hundreds of experiments. We used it to create and publish a large-scale synthetic dataset,which can be used for finetuning.
+
+\subsection{Future Work}
+\label{sec:discussion:future-work}
+Future work should identify additional quality metrics to evaluate synthetic data,and discussion quality. The latter can then be used to examine the applicability of our findings obtained regarding optimal facilitation strategies,to discussions involving humans. It would also be interesting to explore how to more effectively prompt LLMs with complex facilitation strategies,or alternative formulations of our methodology,as described in this paper.
+
+\subsection{Software}
+\label{sec:discussion:software}
+
+We introduce an open-source, lightweight, purpose-built framework for generating synthetic discussions. The key features of the framework are: 
+\begin{itemize}[nosep,noitemsep]
+    \item Three core functions: generating discussion setups (selecting participants, topics, roles , etc.), executing, and annotating them according to user-provided parameters.
+    \item Built-in fault tolerance (automated recovery and intermittent saving) and file logging to support extended experiments.
+    \item Applicability to other domains and use cases such as debate simulation, or discussion-based agentic systems.
+    \item Availability via PIP.
+\end{itemize}
+
+
+\subsection{Our synthetic dataset}
+\label{sec:discussion:data}
+
+We release a dataset of synthetic discussions annotated by LLMs, which can serve for finetuning facilitator LLMs~\cite{ulmer2024}.\footnote{Note that the data may need to be filtered to derive only high-quality samples---in our case filtering out discussions with constant facilitator interventions or low/extremely high diversity, the case with most synthetic datasets \cite{ulmer2024}. However, the data can be scaled accordingly, due to low computational cost.} The supplementary ablation dataset, as well as the code for the analysis and the graphs present in this paper, can be found in the project repository. The dataset is licensed under a CC BY-SA license, and the software under GPLv3. \textbf{Warning: The datasets by their nature contain offensive and hateful speech.}
+
+
+\subsection{Limitations}
+\label{sec:discussion:limitations}
+
+Given the limited prior research our methodology is mostly exploratory,and is evaluated with baselines using only two metrics. Our setup is restricted by the statelessness of LLMs,which forces us to overwhelmingly resort to prompting---however the use of open-source models prevented us from experimenting with more elaborate prompts requiring extended context windows.
+
+
+\subsection{Ethical considerations}
+\label{sec:discussion:ethical}
+Synthetic discussions involving LLMs could be exploited by malicious actors to train them at performing unethical tasks \cite{majumdar_2024_nefarious,MARULLI20245340,li_2025_vulnerable},although ongoing research is addressing these vulnerabilities \cite{wang_2025_risk}. Furthermore,the use of LLMs inherently risks skewing moderation systems towards the predominant demographics best represented in their training data. SDB prompts are a necessary but insufficient step towards avoiding this \cite{rossi_2024,anthis_2025,burton2024large}.
+
+
+\subsection{AI use statement}
+\label{sec:discussion:acknowledgments}
+We have used small, open source LLMs (principally LLaMa-8b and Qwen-7B) to help in small style changes throughout this paper. We also used them in conjunction with a GPT-5 model \cite{openai2024gpt4technicalreport} to write initial documentation for our framework,as well as to generate some of the code for the plots and the analysis presented in this paper. 
