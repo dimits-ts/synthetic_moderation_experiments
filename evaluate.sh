@@ -65,4 +65,5 @@ python src/eval_dataset_analysis.py \
 python src/eval_toxicity.py \
     --main-output-dir data/main_output \
     --toxicity-rating-dir data/eval_output \
-    --graph-output-dir graphs
+    --graph-output-dir graphs \
+    --stats-output-dir data/eval_output

@@ -10,7 +10,12 @@ import statsmodels.formula.api as smf
 import tasks.graphs
 
 
-def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
+def main(
+    main_output_dir: Path,
+    toxicity_ratings_dir: Path,
+    graph_dir: Path,
+    latex_output_dir: Path,
+):
     tasks.graphs.seaborn_setup()
     df = get_toxicity_df(
         main_df_path=main_output_dir / "vmd.csv",
@@ -30,7 +35,9 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
     toxicity_by_dimension(df, graph_dir, "role")
     toxicity_by_dimension(df, graph_dir, "strategy")
     toxicity_by_dimension(df, graph_dir, "model")
-    toxicity_regression(df[~df.is_moderator], graph_dir=graph_dir)
+    toxicity_regression(
+        df[~df.is_moderator], latex_output_dir=latex_output_dir
+    )
 
     palette = tasks.graphs.COLORBLIND_PALETTE
     # shift colors left by 1 so first color is skipped
@@ -41,7 +48,7 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
         groupby_col="model",
         graph_output_path=graph_dir / "toxicity_through_time_model.png",
         label_order=MODEL_ORDER,
-        palette=offset_palette
+        palette=offset_palette,
     )
 
     toxicity_through_time_plot(
@@ -49,7 +56,7 @@ def main(main_output_dir: Path, toxicity_ratings_dir: Path, graph_dir: Path):
         groupby_col="strategy",
         graph_output_path=graph_dir / "toxicity_through_time_strategy.png",
         label_order=STRATEGY_ORDER,
-        palette=palette
+        palette=palette,
     )
 
     ablation_df = get_toxicity_df(
@@ -131,11 +138,12 @@ def toxicity_by_dimension(
     plt.close()
 
 
-def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
+def toxicity_regression(df: pd.DataFrame, latex_output_dir: Path) -> None:
     df["message_order_c"] = df["message_order"] - df["message_order"].mean()
+    df = df.rename(columns={"toxicity": "Toxicity"})
 
     model = smf.mixedlm(
-        "toxicity ~ C(strategy, Treatment(reference='No Facilitator')) * message_order_c",
+        "Toxicity ~ C(strategy, Treatment(reference='No Facilitator')) * message_order_c",
         data=df,
         groups=df["conv_id"],
     )
@@ -143,18 +151,39 @@ def toxicity_regression(df: pd.DataFrame, graph_dir: Path) -> None:
 
     latex = result.summary().as_latex()
 
-    replacements = {
-        "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]": "CC",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]": "ER",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]": "NoMod",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]:message_order": "CC × order",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]:message_order": "ER × order",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]:message_order": "NoMod × order",
-    }
+    replacements = [
+        # --- interactions FIRST ---
+        (
+            "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]:message\\_order\\_c",
+            "Constructive Communications × Turn",
+        ),
+        (
+            "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]:message\\_order\\_c",
+            "Moderation Guidelines × Turn",
+        ),
+        (
+            "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]:message\\_order\\_c",
+            "Minimal Instructions × Turn",
+        ),
+        # --- main effects ---
+        (
+            "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]",
+            "Constructive Communications",
+        ),
+        (
+            "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]",
+            "Moderation Guidelines",
+        ),
+        (
+            "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]",
+            "Minimal Instructions",
+        ),
+        ("message\\_order\\_c", "Discussion Turn")
+    ]
 
-    for old, new in replacements.items():
+    for old, new in replacements:
         latex = latex.replace(old, new)
-    with open(graph_dir / "toxicity_regression.tex", "w") as f:
+    with open(latex_output_dir / "toxicity_regression.tex", "w") as f:
         f.write(latex)
 
 
@@ -214,7 +243,7 @@ def toxicity_through_time_plot(
     groupby_col: str,
     graph_output_path: Path,
     label_order: list[str],
-    palette: list[str]
+    palette: list[str],
 ) -> None:
     # --- Step 1: copy and filter out moderators ---
     plot_df = df[~df.is_moderator].copy()
@@ -278,9 +307,15 @@ if __name__ == "__main__":
         type=str,
         help="Graph output directory",
     )
+    parser.add_argument(
+        "--stats-output-dir",
+        type=str,
+        help="Graph output directory",
+    )
     args = parser.parse_args()
     main(
         main_output_dir=Path(args.main_output_dir),
         toxicity_ratings_dir=Path(args.toxicity_rating_dir),
         graph_dir=Path(args.graph_output_dir),
+        latex_output_dir=Path(args.stats_output_dir),
     )
