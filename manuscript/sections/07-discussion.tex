@@ -2,6 +2,7 @@
 %
 \section{Discussion}
 
+
 \paragraph{Conclusion}
 We identified a new task, \acf{sdg}, through which we can begin investigating issues in social-science domains where experimental costs are prohibitive due to the requirement for human participation. We used prior attempts at such systems and available literature to create rules for designing, documenting and evaluating such systems, on which we created a new theoretical framework allowing large-scale discussion simulation. Scalability remains an important requirement for such systems; we find that smaller, quantized LLMs are enough for most \ac{sdg} tasks. With the right setup, these experiments can be run on consumer-grade, personal-use hardware for a cost that is many orders of magnitude cheaper than traditional proprietary models (such as GPT-5o) and human participation. We implemented this framework as an open-source Python library, and ran experiments to ``debug'' and test LLMs as facilitators in online discussions. Our results showed that (1) current off-the-shelf LLMs suffer from an inability to not intervene even when instructed to only do so when unnecessary, (2) LLM facilitators respond to different facilitation strategies, altering conversational dynamics, and (3) we observed the replication of some human social behaviors in our simulations. We release the resulting large-scale synthetic dataset, which can be used for further analysis of off-the-shelf LLMs, or LLM finetuning.
 

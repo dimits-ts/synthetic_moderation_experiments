@@ -4,12 +4,58 @@
 \section{Investigating facilitation through SDG}
 \label{sec:facilitation}
 
+%TODO: Add a paragraph or section here linking to the figure and algorithm
+
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.6\columnwidth]{experiments.drawio.png}
 	\caption{We simulate online discussions using exclusively LLM participants. Some of them attempt to sabotage the discussion, while the LLM facilitator monitors and intervenes when appropriate. Then, we test different LLMs and human facilitation strategies through the LLM facilitator.}
 	\label{fig:experiments}
 \end{figure}
+
+
+\begin{algorithm}[ht]
+	\caption{Experimental procedure for the facilitation experiments using our \ac{sdg} framework.}
+	\label{alg:exp_generation}
+	\begin{flushleft}
+		\textbf{Input:}
+		\begin{itemize}
+			\item \textit{User modeling:} user SDBs $\Theta$, number of participants $N_{users}$
+			\item \textit{Moderation:} strategies $S$
+			\item \textit{Seeding:} seed discussions $D_{\text{seed}}$, number of seed comments $N_{\text{seed}}$
+			\item \textit{Models:} LLMs $llms$
+			\item \textit{Experiment control:} number of experiments $N_e$, discussion length $N_d$
+		\end{itemize}
+		\textbf{Output:} set of generated discussions $D$
+	\end{flushleft}
+	
+	\begin{algorithmic}[1]
+		\State $D \gets \emptyset$
+		
+		\ForAll{$llm \in llms$'}
+		\ForAll{$strat \in S$}
+		\For{$1,\ldots,N_e$}
+		
+		\State $users \gets$ \Call{InitializeParticipants}{$llm, \Theta, N_{users}$}
+		\State $mod \gets$ \Call{InitializeMod}{$llm, strat$}
+		\State $d \gets$ \Call{InitializeDiscussion}{$D_{\text{seed}}, N_{\text{seed}}$}
+		
+		\For{$1,\ldots,N_d$}
+		\State $last\_user \gets$ \Call{LastUser}{$d$}
+		\State $user \gets$ \Call{NextSpeaker}{$users, last\_user$}
+		\State $d \gets d \cup$ \Call{Post}{$user, d$}
+		\State $d \gets d \cup$ \Call{Post}{$mod, d, strat$}
+		\EndFor
+		
+		\State $D \gets D \cup \{d\}$
+		\EndFor
+		\EndFor
+		\EndFor
+		
+		\State \Return $D$
+	\end{algorithmic}
+\end{algorithm}
+
 
 
 
