@@ -6,30 +6,11 @@
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[width=\columnwidth]{experiments.drawio.png}
+	\includegraphics[width=0.6\columnwidth]{experiments.drawio.png}
 	\caption{We simulate online discussions using exclusively LLM participants. Some of them attempt to sabotage the discussion, while the LLM facilitator monitors and intervenes when appropriate. Then, we test different LLMs and human facilitation strategies through the LLM facilitator.}
 	\label{fig:experiments}
 \end{figure}
 
-
-\subsection{LLM facilitators cannot leverage advanced strategies}
-\label{sec:facilitation:strategies}
-
-We test two facilitation strategies used in real-life and compare them with two baselines. We summarize both documents using a proprietary LLM (Google Gemini), since LLMs have been proven to work well in these tasks~\cite{ts2024}, manually inspected the output, and removed instructions not relevant for our scenario.\footnote{Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.}
-
-\begin{enumerate}[nosep,noitemsep]
-	\item \textbf{No Facilitator}: A \emph{baseline} where no facilitator is present.
-	
-	\item \textbf{No Instructions}: A \emph{baseline} where a LLM facilitator is present, but is provided only with basic instructions e.g.,: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \cite{Tsai_Deliberate_Lab_Open-Source_2025}. 
-	
-	\item \textbf{Moderation Guidelines}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \cite{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their throughput e.g., ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
-	
-	\item \textbf{Constructive Communications}: A \emph{real-life} strategy~\cite{dimitra-guide} which approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions e.g., ``Do not make decisions, be a guide, provide explanations''. This makes the strategy ideal for deliberative environments.
-\end{enumerate}
-
-\input{../graphs/toxicity_regression.tex}
-
-We used a mixed-effects linear regression model, which accounts for the fact that comments from the same discussion are related to one another. Table~\ref{tab:regression} shows that, while complex instructions lead to statistically significant reductions in message toxicity, the effects are quantitatively minimal. This can be seen both in aggregate---with toxicity dropping only by $0.04-0.06$ points when compared to no instructions, and in continuity---with each subsequent comment only having on average $0.001-0.002$ less toxicity.
 
 
 \subsection{LLM facilitators constantly intervene}
@@ -105,6 +86,29 @@ When a single troll is present, we may observe collective action from the rest o
 	\textcolor{orange}{[organic-electron]} Wow, I'm shocked by the level of aggression and hostility in this discussion. It's clear that some users are more interested in attacking me personally than having a constructive conversation. I'm not going to engage with the trolls and moderators who are clearly biased against me. If you can't handle a little ambiguity and uncertainty, then maybe you're not cut out for this kind of discussion. I'm done here
 \end{quote}
 
- An unintentional side-effect of our turn-taking function is that sometimes a user is not given the opportunity to respond for some time. However, the excerpt above showcases that (1) Their contribution to the thread persists, even when their comment is placed outside of conversational context, (2) allowing users to respond is essential to sustaining conversational dynamics, and (3) like humans, LLM users express frustation whenever their inquiries go unanswered.
+ An unintentional side-effect of our turn-taking function is that sometimes a user is not given the opportunity to respond for some time. However, the excerpt above showcases that (1) Their contribution to the thread persists, even when their comment is placed outside of conversational context, (2) allowing users to respond is essential to sustaining conversational dynamics, and (3) like humans, LLM users express frustration whenever their inquiries go unanswered.
 
+
+\subsection{Facilitative strategies have an observable effect on conversational dynamics}
+\label{sec:facilitation:strategies}
+
+We test two facilitation strategies used in real-life and compare them with two baselines. We summarize both documents using a proprietary LLM (Google Gemini), since LLMs have been proven to work well in these tasks~\cite{ts2024}, manually inspected the output, and removed instructions not relevant for our scenario.\footnote{Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.}
+
+\begin{enumerate}[nosep,noitemsep]
+	\item \textbf{No Facilitator}: A \emph{baseline} where no facilitator is present.
+	
+	\item \textbf{No Instructions}: A \emph{baseline} where a LLM facilitator is present, but is provided only with basic instructions e.g.,: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \cite{Tsai_Deliberate_Lab_Open-Source_2025}. 
+	
+	\item \textbf{Moderation Guidelines}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \cite{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their throughput e.g., ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
+	
+	\item \textbf{Constructive Communications}: A \emph{real-life} strategy~\cite{dimitra-guide} which approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions e.g., ``Do not make decisions, be a guide, provide explanations''. This makes the strategy ideal for deliberative environments.
+\end{enumerate}
+
+\input{../data/eval_output/toxicity_regression.tex}
+
+Since we are investigating conversational dynamics through facilitation, we evaluate the impact of different strategies with regard to toxicity. Specifically, we use a mixed-effects linear regression model to investigate the trend of overall toxicity across all discussions using discussion turns as an ordinal, time-series component, and the above strategies as a categorical variable. The mixed-effects model accounts for the fact that comments from the same discussion are related to one another---the observations are only independent with observations from different discussions. We center the time variable (``Discussion Turn''), as is generally recommended for ordinal variables involved in interactions, and set the ``No Facilitator'' condition as the reference level. We do not report $R^2$ statistics, since the model is exclusively explanatory.
+
+Table~\ref{tab:toxicity_regression} shows that complex instructions lead to statistically significant reductions in message toxicity both in aggregate, and through time. Specifically, relative to the baseline, \textit{Constructive Communications} is associated with a 0.040-point reduction in toxicity ($\beta = -0.040$, SE $= 0.011$, $p < 0.001$), representing the largest main-effect decrease among facilitative strategies. \textit{Moderation Guidelines} also produce a significant reduction ($\beta = -0.032$, SE $= 0.011$, $p < 0.01$), followed by \textit{Minimal Instructions} ($\beta = -0.030$, SE $= 0.011$, $p < 0.01$). While toxicity increases slightly over the course of a discussion when no facilitator is present ($\beta = 0.001$, SE $\approx 0.000$, $p < 0.05$), the negative interaction between Constructive Communications and discussion turn ($\beta = -0.002$, SE $= 0.001$, $p < 0.01$), and through Minimal Instructions ($\beta = -0.001$, SE $= 0.001$, $p < 0.05$) suggest that the presence of the LLM facilitator meaningfully shifts conversational dynamics.
+
+Unfortunately, we cannot claim that the results in Table~\ref{tab:toxicity_regression} are representative of human discussions, since we can not evaluate whether the LLM participants react to facilitation in the same ways as human discussants. In fact, there are many reasons to believe the opposite. Firstly, human participants are likely to react poorly to LLM facilitators and not treat them similarly to their human counterparts; indeed, humans react negatively to AI-generated content~\cite{alessandro2025emotional, yao2025assistants, schlesener2025understood}---although this is not certain~\cite{xu2026mitigating, schlesener2025understood}. Secondly, while our experimental assumptions have been focused on making the simulations as realistic as possible, we are still a far cry away from fully autonomous, complex, social agents. Thirdly, even if LLMs were capable of replicating the exact reactions as the ``average human'', there would be no robust way of evaluating this fact~\cite{rossi_2024}. However, our results clearly show that \textbf{providing the LLM facilitators with different strategies changes something fundamental} in the conversational dynamics. What these effects exactly are should be explored with experiments involving human participants. In any case, our results indicate that research involving different facilitation strategies is a direction worthy of investigation in future work.
 
