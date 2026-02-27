@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+%
+\section{Materials}
+\label{sec:materials}
+%TODO: expand on this
+
+\subsection{Software}
+\label{sec:materials:software}
+
+We introduce an open-source, lightweight, purpose-built framework for generating synthetic discussions. The key features of the framework are: 
+\begin{itemize}[nosep,noitemsep]
+    \item Three core functions: generating discussion setups (selecting participants, topics, roles , etc.), executing, and annotating them according to user-provided parameters.\footnote{Although we did not use LLM annotation in this study.}
+    \item Built-in fault tolerance (automated recovery and intermittent saving) and file logging to support experiments running for an extended period of time.
+    \item Applicability to other domains and use cases such as debate simulation, or discussion-based agentic systems through an adaptable, plug-and-play, object-oriented library interface.
+    \item Availability via \texttt{pip}.
+\end{itemize}
+
+Our library is released under the \ac{gpl} license. We also release the code used for running the experiments and analyzing, visualizing and exporting the results under the same license. For the purposes of reproducibility, readers may contact the authors for access to the entire set of execution logs.
+
+
+\subsection{Our dataset}
+\label{sec:materials:data}
+
+We release a dataset of synthetic discussions annotated by LLMs, which can serve for finetuning facilitator LLMs~\cite{ulmer2024}.\footnote{Note that the data may need to be filtered to derive only high-quality samples---in our case filtering out discussions with constant facilitator interventions or low/extremely high diversity, the case with most synthetic datasets \cite{ulmer2024}. However, the data can be scaled accordingly, due to low computational cost.} The supplementary ablation dataset, as well as the code for the analysis and the graphs present in this paper, can be found in the project repository. The dataset is licensed under a CC BY-SA license. \textbf{Warning: The datasets by their nature contain offensive and hateful speech.}
