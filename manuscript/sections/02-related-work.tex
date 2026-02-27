@@ -33,7 +33,7 @@ There is currently no consensus on how a \ac{gabm} system should be evaluated~\c
 \paragraph{Foundational and Empirical Methods}
 Foundational methods ensure data integrity and consistency with established benchmarks, without requiring manual evaluation:
 
-\begin{itemize}
+\begin{itemize}[nosep, noitemsep]
 	\item \textbf{Data analytics}: A prerequisite for all further analysis. Includes rigorous cleaning, organization, and statistical analysis to ensure data integrity.
 	
 	\item \textbf{Docking}: Also known as model-to-model comparison, this involves comparing a simulation's outputs with those of other state-of-the-art ABMs to verify alignment. It is particularly useful when a recognized reference model exists.
@@ -49,7 +49,7 @@ Foundational methods ensure data integrity and consistency with established benc
 \paragraph{Face-Validation Methods}
 Face-validation focuses on whether model processes and outcomes appear ``reasonable'' to experts, and is especially critical for \acp{gabm} where natural language and social dynamics are central. Unlike empirical methods, these do not strictly require external datasets, but do require manual human labor.
 
-\begin{itemize}
+\begin{itemize}[nosep, noitemsep]
 	\item \textbf{Survey-based validation}: Human evaluators---often numbering in the dozens or hundreds---are engaged to rank or score agent behaviors based on their perceived believability and social intelligence. Believability in this case refers to the agents' \emph{behaviors}; in the case of LLMs it does not refer to human-like text, which should be taken for granted given the primary goal of LLMs being human text replication~\cite{rossi_2024}. The revised guidelines~\cite{adornetto2025_gabms} suggest that the agents themselves could be ``interviewed'', and their responses be judged by humans.
 	
 	\item \textbf{Observational studies}: These analyze human behavior in real-world settings to compare them with generative agents. A notable example is the S3 (Social-network simulation system), which used LLM-agents to simulate dynamics in online social networks. The authors validated that the agents successfully replicated human emotional shifts and information diffusion patterns in response to real-world triggers, by comparing their responses to human behaviors documented, among others, during an incident where nuclear wastewater was released in Japan.
