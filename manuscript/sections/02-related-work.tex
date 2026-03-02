@@ -54,7 +54,7 @@ Face-validation focuses on whether model processes and outcomes appear ``reasona
 	
 	\item \textbf{Observational studies}: These analyze human behavior in real-world settings to compare them with generative agents. A notable example is the S3 (Social-network simulation system), which used LLM-agents to simulate dynamics in online social networks. The authors validated that the agents successfully replicated human emotional shifts and information diffusion patterns in response to real-world triggers, by comparing their responses to human behaviors documented, among others, during an incident where nuclear wastewater was released in Japan.
 	
-	\item \textbf{Expert reviews}: Domain experts conduct structured walkthroughs or ``immersive assessments'' where they may even adopt the perspective of an agent to directly evaluate the coherence and plausibility of interactions.
+	\item \textbf{Expert reviews}: Domain experts conduct structured walkthroughs or ``immersive assessments'' where they may even adopt the perspective of an agent to directly evaluate the coherence and plausibility of interactions. This approach has been used in work relating to the effectiveness of LLM facilitators~\cite{cho-etal-2024-language}, although this was only allowed by the setup used, the relatively low number of samples, and the ability to pay participants relatively low wages enabled by the Amazon Mechanical Turk platform~\cite{Moss2023}.
 \end{itemize}
 
 
@@ -78,9 +78,15 @@ One approach~\cite{balog_2024} uses a mix of graph-based, methodology-specific, 
 While this metric is sufficient for capturing variety in synthetic discussions, it is not enough to prove that the system is useful for research purposes. To prove this we need to establish that the dynamics observed in the system are realistic, or at least believable~\cite{adornetto2025_gabms}. We discuss which evaluations methods are available to us for \ac{sdg} in \S\ref{sec:methodology:evaluation}.
 
 
-\subsection{LLM Facilitation}
+\subsection{Online Facilitation}
 
+\subsubsection{Human Facilitation}
+
+Human facilitators\footnote{Called ``moderators'' in some publications---the term is interchangeable in this case~\cite{korre2025evaluation}.} play a crucial role in online communities, serving as key contributors to maintaining social cohesion, encouraging participation, and guiding discussions in a constructive manner~\cite{bcause2023}. Their role is often informal and community-driven, with facilitators typically selected by the community members themselves~\cite{bcause2023} and functioning as de-facto community leaders~\cite{seering_self_moderation}. As such, they are not only moderators in the traditional sense but also volunteers who embody the values and norms of the group~\cite{korre2025evaluation}. The diversity of approaches to human moderation reflects the complexity of online interaction, with various strategies employed to manage discourse, resolve conflicts, and ensure equal participation~\cite{gao-etal-2025-moderation,schroeder-etal-2024-fora,chen-etal-2025-whow, park_et_al_2012_facilitation}. 
+
+
+\subsubsection{LLM Facilitators}
 Unlike classification models traditionally used in online platforms, LLMs can actively facilitate discussions \cite{korre2025evaluation}. 
 They can warn users for rule violations \cite{Kumar_AbuHashem_Durumeric_2024}, monitor engagement \cite{schroeder-etal-2024-fora}, aggregate diverse opinions \cite{small-polis-llm}, and provide translations and writing tips---which is especially useful for marginalized groups \cite{Tsai2024Generative}. These capabilities suggest that LLMs may be able to assist or even replace human facilitators in many tasks \cite{small-polis-llm,korre2025evaluation}.
 
-Simple rule-based models can enhance discussions~\cite{kim_et_al_chatbot}, although their approach was largely confined to organizing according to a specific social science (not facilitative) strategy, and balancing user activity. LLM facilitators have been used in human discussions~\cite{cho-etal-2024-language} providing high-quality feedback to users, although they struggle to make them more respectful and cooperative. In contrast to both works, ours uses exclusively LLM participants and LLM facilitators, and tests the latter in an explicitly toxic and challenging environment.
+Simple rule-based models can enhance discussions~\cite{kim_et_al_chatbot}, although their approach was largely confined to organizing according to a specific social science (not facilitative) strategy, and balancing user activity. LLM facilitators have been used in excerpts of human discussions with a single participant~\cite{cho-etal-2024-language}. The models provided high-quality feedback to users, although they struggle to make them more respectful and cooperative. In contrast to both works, ours uses exclusively LLM participants and LLM facilitators, and tests the latter in an explicitly toxic and challenging environment.
