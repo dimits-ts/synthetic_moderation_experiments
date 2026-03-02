@@ -18,7 +18,11 @@ We introduce an open-source, lightweight, purpose-built framework for generating
 Our library is released under the \ac{gpl} license. We also release the code used for running the experiments and analyzing, visualizing and exporting the results under the same license. For the purposes of reproducibility, readers may contact the authors for access to the entire set of execution logs.
 
 
-\subsection{Our dataset}
+\subsection{Datasets}
 \label{sec:materials:data}
 
-We release a dataset of synthetic discussions annotated by LLMs, which can serve for finetuning facilitator LLMs~\cite{ulmer2024}.\footnote{Note that the data may need to be filtered to derive only high-quality samples---in our case filtering out discussions with constant facilitator interventions or low/extremely high diversity, the case with most synthetic datasets \cite{ulmer2024}. However, the data can be scaled accordingly, due to low computational cost.} The supplementary ablation dataset, as well as the code for the analysis and the graphs present in this paper, can be found in the project repository. The dataset is licensed under a CC BY-SA license. \textbf{Warning: The datasets by their nature contain offensive and hateful speech.}
+\input{../data/eval_output/dataset_statistics.tex}
+
+This paper presents a dataset that captures interactions between synthetic participants and facilitators in structured dialogue environments, designed to support research in human-computer interaction, social dynamics, and language modeling for facilitation tasks. The dataset is primarily intended to serve as a resource for analyzing off-the-shelf LLMs in the task of online facilitation, as well as the behaviors and language used by LLM participants. Additionally, it could be used for fine-tuning large language models~\cite{ulmer2024} for facilitation, since such datasets are extremely limited in literature~\cite{korre2025evaluation}. However, it may require filtering to ensure the quality and representativeness of the discussions~\cite{ulmer2024}---in our case filtering out discussions with constant facilitator interventions or low/extremely high diversity. This restriction can be overcome by choosing appropriate models (\S\ref{sec:scalability:model}) as the data can be scaled accordingly due to low computational cost (\S\ref{sec:scalability:cost}). 
+
+The supplementary ablation dataset, as well as the code for the analysis and the graphs present in this paper, can be found in the project repository. The dataset is licensed under a CC BY-SA license. We include relevant statistics for the main, ablation and human discussion~\cite{chang-danescu-niculescu-mizil-2019-trouble} datasets in Table~\ref{tab:dataset-stats}.

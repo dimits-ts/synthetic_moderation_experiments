@@ -54,12 +54,9 @@ def main(
         cache_path=cache_dir / "diversity_main_model.csv",
         label_order=MODEL_ORDER,
     )
-    dataset_stats(main_df, main_csv_path)
 
     ablation_df = pd.read_csv(ablation_csv_path)
     ablation_df = ablation_df[ablation_df.model != "hardcoded"]
-
-    dataset_stats(ablation_df, ablation_csv_path)
 
     results_df = compute_js_divergence_to_human(
         full_df=pd.concat([main_df, ablation_df, human_df], ignore_index=True),
@@ -67,6 +64,30 @@ def main(
         cache_dir=cache_dir,
     )
     output_divergence_results(df=results_df, output_dir=stats_output_dir)
+
+    main_stats = dataset_stats(main_df, "Main")
+    ablation_stats = dataset_stats(ablation_df, "Ablation")
+    human_stats = dataset_stats(human_df, "Human")
+
+    all_stats_df = (
+        main_stats
+        .merge(ablation_stats, on="Metric", how="outer")
+        .merge(human_stats, on="Metric", how="outer")
+    )
+
+    caption = "Dataset statistics for all datasets."
+    latex_path = stats_output_dir / "dataset_statistics.tex"
+
+    all_stats_df.to_latex(
+        buf=latex_path,
+        index=False,
+        caption=caption,
+        label="tab:dataset-stats",
+        float_format="%.2f",
+        position="ht",
+    )
+
+    print(f"\nSaved dataset statistics → {latex_path}")
 
 
 def output_divergence_results(df: pd.DataFrame, output_dir: Path) -> None:
@@ -305,35 +326,32 @@ def plot_dataset_diversity(
     plt.close()
 
 
-def dataset_stats(df: pd.DataFrame, csv_path: Path):
-    print("*" * 25)
-    print("Comments per discussion:")
-    print(df.groupby("conv_id").size().describe())
+def dataset_stats(df: pd.DataFrame, dataset_name: str) -> pd.DataFrame:
+    comments_per_discussion = df.groupby("conv_id").size().describe()
 
-    print("#Comments:", len(df))
-
-    print("#Discussions:", df["conv_id"].nunique())
-
-    print("Word count per comment:")
-    print(
+    word_counts = (
         df.message.astype(str)
         .apply(lambda x: x.split())
         .apply(len)
         .astype(int)
         .describe()
     )
-    print(f"Dataset total size: {_convert_bytes(csv_path.stat().st_size)}")
-    print("*" * 25)
 
+    stats = {
+        r"\# Comments": len(df),
+        r"\# Discussions": df["conv_id"].nunique(),
+        r"Mean Comments per Discussion": comments_per_discussion["mean"],
+        r"Std. Comments per Discussion": comments_per_discussion["std"],
+        r"Mean Words per Comment": word_counts["mean"],
+        r"Std. Words per Comment": word_counts["std"],
+    }
 
-def _convert_bytes(num):
-    """
-    this function will convert bytes to MB.... GB... etc
-    """
-    for x in ["bytes", "KB", "MB", "GB", "TB"]:
-        if num < 1024.0:
-            return "%3.1f %s" % (num, x)
-        num /= 1024.0
+    stats_df = pd.DataFrame.from_dict(
+        stats, orient="index", columns=[dataset_name]
+    )
+    stats_df.index.name = "Metric"
+
+    return stats_df.reset_index()
 
 
 if __name__ == "__main__":
