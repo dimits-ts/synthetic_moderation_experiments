@@ -1,0 +1,36 @@
+\begin{table}[ht]
+\centering
+\caption{Mixed-Effects Model: Predictors of Message Toxicity}
+\label{tab:toxicity_regression}
+\begin{tabular}{lc}
+\hline\hline
+ & Toxicity \\
+\hline
+    Constant & $   0.184^{***}$ \\
+    & $(0.008)$ \\
+    Constructive Communications & $  -0.040^{***}$ \\
+    & $(0.011)$ \\
+    Moderation Guidelines & $  -0.032^{**}$ \\
+    & $(0.011)$ \\
+    Minimal Instructions & $  -0.030^{**}$ \\
+    & $(0.011)$ \\
+    Discussion Turn & $   0.001^{*}$ \\
+    & $(0.000)$ \\
+    Constructive Communications $\times$ Turn & $  -0.002^{**}$ \\
+    & $(0.001)$ \\
+    Moderation Guidelines $\times$ Turn & $  -0.001^{}$ \\
+    & $(0.001)$ \\
+    Minimal Instructions $\times$ Turn & $  -0.001^{*}$ \\
+    & $(0.001)$ \\
+\hline
+    \textit{Random Effects} & \\
+    \quad Group Variance & $0.0096$ \\
+\hline
+    Observations & 15369 \\
+    Groups & 720 \\
+    Log-Likelihood & 11575.546 \\
+\hline\hline
+\multicolumn{2}{l}{\footnotesize Standard errors in parentheses.} \\
+\multicolumn{2}{l}{\footnotesize $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$} \\
+\end{tabular}
+\end{table}

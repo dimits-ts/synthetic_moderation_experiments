@@ -5,12 +5,20 @@
 
 
 \begin{acronym}[WWW] % Give the longest label here so that the list is nicely aligned
-	\acro{vmd}[VMD]{Virtual Moderation Dataset}
-	\acro{cs}[CS]{Computer Science}
+	\acro{swe}[SWE]{Software Engineering}
+	\acro{nlp}[NLP]{Natural Language Processing}
+	\acro{ml}[ML]{Machine Learning}
 	\acro{sdb}[SDB]{SocioDemographic Background}
 	\acro{ceri}[CeRI]{Cornell e-Rulemaking Initiative}
 	\acro{sdg}[SDG]{Synthetic Discussion Generation}
 	\acro{cpt}[CPT]{Cost Per Task}
+	\acro{capex}[CapEx]{Capital Expenditure}
+	\acro{opex}[OpEx]{Opertional Expenditure}
+	\acro{tco}[TCO]{Total Cost of Ownership}
+	\acro{gabm}[GABM]{Generative Agent-Based Modelling}
+	\acro{ocaso}[OCASO]{Objective Challenges Assumptions Strategy Outcomes}
+	\acro{drd}[DRD]{Design Rationale Documentation}
+	\acro{ir}[IR]{Information Retrieval}
 \end{acronym}
 
 
@@ -29,55 +37,88 @@ Finally, it's worth noting that while we have made efforts to make the study as 
 \section{Cost Calculation}
 \label{sec:appendix:cost}
 
-
 \subsection{Methodology}
-\label{ssec:appendix:cost:methodology}
-
-The nature of the costs involved in any of the three methods are completely different:
-\begin{itemize}[nosep,noitemsep]
-	\item Open-source models incur cost from utilization of core infrastructure, electricity consumption,and asset (GPU) depreciation. 
-	\item Proprietary models charge a set amount of cost per input and output token.
-	\item Human participants cost wages and platform fees.
-\end{itemize}
-
-Any cost comparison thus necessitates normalizing costs to a universal metric: the \acf{cpt}, which estimates the monetary cost of completing an arbitrary task. In our experimental setup, a task corresponds to the completion of one full discussion, which may consist of multiple sequential model requests.
 
 \paragraph{Open-source models}
-Self-hosting open-source LLMs requires calculating the Total Cost of Ownership (TCO), which converts fixed and recurring expenditures into a variable cost per unit of output \cite{pan2025_cost_benefit}. TCO encompasses both Capital Expenditure (CapEx) and Operational Expenditure (OpEx) amortized over the asset's lifespan. This covers the case of self-hosting on-premises, as well as the case of using cloud hosting services (such as Amazon Bedrock).
+For self-hosted open-source LLMs, we estimate the \acf{cpt} by explicitly modeling the  \ac{tco} over the actual duration of the experiment, rather than over a full annual cycle. This provides a conservative and deployment-aware estimate for research settings where infrastructure is utilized only for a limited time window. 
 
-The general formula for calculating the Total Cost of Ownership ($\text{TCO}_{\text{Self-Hosted}}$) over $N$ annual periods is defined as the sum of annualized capital and operational costs \cite{pan2025_cost_benefit}:
-
-\[
-\text{TCO}_{\text{Self-Hosted}} = \sum_{n=1}^{N} \left[ \text{CapEx}_n + \text{OpEx}_n \right]
-\]
-
-\noindent Where $\text{CapEx}_n$ includes the initial hardware cost (e.g., GPU servers) amortized over a depreciation period (often 4 years),and $\text{OpEx}_n$ includes yearly hosting, power,  cooling, and personnel maintenance costs \cite{nvidia_tco}.
-
-To enable comparison with API models,the yearly TCO must be normalized to a cost-per-volume metric (e.g., Cost Per 1000 Prompts). This calculation is contingent on the hardware's achieved performance, measured in Requests Per Second (RPS) or Tokens Per Hour ($\text{TPH}$) \cite{pan2025_cost_benefit}. In our experiments, the cost per request is converted to cost per task by accounting for the number of model requests required to complete a full discussion.
+We decompose the \ac{tco} for the experiment ($\text{TCO}_{\text{exp}}$) into \ac{capex} and \ac{opex}, where \ac{opex} includes electricity costs:
 
 \[
- 	\text{Cost per Request} = \frac{\text{TCO}_{\text{Yearly Server Cost}}}{\text{Total Yearly Requests per Server}} \times 1000
+\text{TCO}_{\text{exp}} = \text{CapEx}_{\text{exp}} + \text{PowerCost}_{\text{exp}}.
 \]
-\noindent The $\text{Total Yearly Requests per Server}$ is a function of the Optimal RPS adjusted by the system's expected uptime fraction, which reflects the financial viability being directly tied to utilization rates \cite{nvidia_tco}. Although TCO is traditionally defined over annual periods, we amortize capital costs only over the actual experimental utilization window, resulting in a conservative estimate for short-term research deployments.
+
+\ac{capex} is computed by amortizing the initial server investment over a fixed depreciation period (typically 4 years), and scaling it proportionally to the experiment duration:
+
+\[
+\text{CapEx}_{\text{exp}} =
+C_{\text{server}} \cdot N_{\text{servers}}
+\cdot
+\frac{D_{\text{exp}}}{365 \cdot Y_{\text{depr}}},
+\]
+
+\noindent where:
+\begin{itemize}
+	\item $C_{\text{server}}$ is the initial cost per server,
+	\item $N_{\text{servers}}$ is the number of servers used,
+	\item $Y_{\text{depr}}$ is the depreciation period in years,
+	\item $D_{\text{exp}}$ is the experiment duration in days.
+\end{itemize}
+
+Operational expenditure includes electricity consumption over the experiment window. Note that this formulation does not account for other operational costs such as software licenses (since most tools used in \ac{nlp} are open-source), or personnel (since it is unlikely that dedicated staff members maintain the servers in research settings).
+
+\[
+\text{PowerCost}_{\text{exp}} =
+\frac{P_{\text{watts}}}{1000}
+\cdot (24 \cdot D_{\text{exp}})
+\cdot C_{\text{kWh}}
+\cdot N_{\text{servers}},
+\]
+
+\noindent where:
+\begin{itemize}
+	\item $P_{\text{watts}}$ is the average power draw per server (in watts),
+	\item $C_{\text{kWh}}$ is the electricity price per kilowatt-hour.
+\end{itemize}
+
+To convert $\text{TCO}_{\text{exp}}$ into a cost per task, we estimate the total number of tasks completed during the experiment using system throughput. Let $R_{\text{ps}}$ denote requests per second per instance, $N_{\text{inst}}$ the number of model instances, $U$ the uptime fraction, and $R_{\text{task}}$ the number of model requests required per task. The total number of tasks completed during the experiment is:
+
+\[
+\text{Tasks}_{\text{exp}} =
+\frac{
+	R_{\text{ps}} \cdot N_{\text{inst}} \cdot U
+	\cdot (24 \cdot 3600 \cdot D_{\text{exp}})
+}{
+	R_{\text{task}}
+}.
+\]
+
+Finally, the Cost Per Task for self-hosted open-source models is:
+
+\[
+\text{CPT}_{\text{Open-Source}} =
+\frac{\text{TCO}_{\text{exp}}}{\text{Tasks}_{\text{exp}}}.
+\]
+
+This formulation makes explicit that cost efficiency depends critically on hardware utilization (requests per second and uptime) and on the number of model calls required per task. Underutilized infrastructure or excessive request counts per discussion significantly increase the effective CPT, while higher throughput and stable uptime reduce it.
 
 
 \paragraph{Proprietary models}
-The task of calculating \ac{cpt} for proprietary models is significantly easier, since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL), using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens.
+The task of calculating \ac{cpt} for proprietary models is significantly easier, since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL), using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens. Unlike \cite{pan2025_cost_benefit}, we do not explicitly consider model throughput in our calculations, since there is no monetary penalty for slower generation---the cost is only dependent on the input and output tokens. The \ac{cpt} for proprietary models is thus defined as:
 
 \[
-	\text{CPT}_{\text{Proprietary}} = \frac{(\text{ISL} \times P_{\text{in}} + \text{OSL} \times P_{\text{out}})}{1,000,000} + C_{\text{API Overhead}} 
+\text{CPT}_{\text{Proprietary}} = \frac{(\text{ISL} \times P_{\text{in}} + \text{OSL} \times P_{\text{out}})}{1,000,000} + C_{\text{API Overhead}} 
 \]
-\noindent where $C_{\text{API Overhead}}$ includes amortized costs from failed calls and vendor usage fees. For multi-turn discussions, ISL and OSL denote the cumulative input and output token counts across all model calls required to complete the task.
+\noindent where $C_{\text{API Overhead}}$ includes costs from failed calls and vendor usage fees. For multi-turn discussions, ISL and OSL denote the \textit{non-cumulative} input and output token counts across all model calls required to complete the task.
 
 
 \paragraph{Human participation}
 
-Human participation costs can not, and should not, be calculated in a vacuum. There are certainly ways to get participates with wages much lower than minimum wage for most countries, and there are even platforms such as Mechanical Turk which streamline this process. Besides the obvious and severe ethical implications of doing so, this often results in poor quality data \cite{Moss2023}.
+Human participation costs can not, and should not, be calculated in a vacuum. There are certainly ways to get participates with wages much lower than minimum wage for most countries, and there are even platforms such as Mechanical Turk which streamline this process. Besides the obvious and severe ethical implications of doing so, this often results in poor quality data \cite{Moss2023}. The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage, mandatory platform fees, and quality assurance overhead:
 
-The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage, mandatory platform fees, and quality assurance overhead:
-
+The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time required to complete the specific research task:
 \[
-	\text{Cost Per Hour}_{\text{Human}} = W_{\text{gross}} \times (1 + F_{\text{platform}}) + C_{\text{QA-overhead}}
+CPT_{\text{Human}} =(\text{Time Per Task}_{\text{est}} \times W_{\text{gross}}) \times(1 + F_{\text{platform}}) + C_{\text{QA per Task}}
 \]
 \noindent where:
 \begin{itemize}
@@ -86,15 +127,9 @@ The true cost of procuring human labor in a research context is calculated using
 	\item $C_{\text{QA-overhead}}$ is the amortized internal labor cost incurred by the research team for quality control, screening, and dropout management.
 \end{itemize}
 
-The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time required to complete the specific research task:
-\[
-		CPT_{\text{Human}} =(\text{Time Per Task}_{\text{est}} \times W_{\text{gross}}) \times(1 + F_{\text{platform}}) + C_{\text{QA per Task}}
-\]
-
-
 \subsection{Assumptions}
 
-We assume that no data are thrown out for data quality reasons in any of the tasks. Our own experimental setup (\S\ref{sec:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore, we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs, since our technologies are all open-source. Since the server utilization is extremely short (5 days) we do not account for operational costs other than electricity and GPU depreciation. The budget setup assumes a consumer-grade computer with on-board GPU which costs no additional expenses to the researchers, which draws half the power of a GPU server.
+We assume that no data are thrown out for data quality reasons in any of the tasks. Our own experimental setup (\S\ref{sec:scalability:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore, we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs, since our technologies are all open-source. Since the server utilization is extremely short (5 days) we do not account for operational costs other than electricity and GPU depreciation. The budget setup assumes a consumer-grade computer with on-board GPU which costs no additional expenses to the researchers, which draws half the power of a GPU server.
 
 We compare our setup with an OpenAI GPT-5.2 instance for proprietary models. The GPT-5 pricing model as of the time of writing (Q1 2026), is 1.77\$ per million input tokens and 14\$ per million output tokens. The costs can be adjusted depending on the model and future pricing changes. We selected this specific model as a good compromise between model capability and cost considerations---cheaper models are explicitly marketed as competent in ``well-defined tasks''~\cite{openai-pricing}, which ours is not.
 
@@ -132,7 +167,7 @@ Each LLM participant is given a persona from the public version of the PERSONA d
 		Personality Characteristics & list of strings \\
 		\bottomrule
 	\end{tabular}
-	\caption{Sociodemographic information provided to the LLM participants and annotators. We defer the reader to the supplementary material for the actual values.\analysislink}
+	\caption{Sociodemographic information provided to the LLM participants and annotators. We defer the reader to the supplementary material for the actual values.}
 	\label{tab:sdb}
 \end{table}
     

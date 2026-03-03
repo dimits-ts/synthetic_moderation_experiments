@@ -45,15 +45,25 @@ python src/generate_toxicity_ratings.py \
     --output-path data/eval_output/ablation.csv \
     --api-key-path perspective.key
 
+python src/generate_toxicity_ratings.py \
+    --input-csv data/cmv_awry2.csv \
+    --output-path data/eval_output/cmv_awry2.csv \
+    --api-key-path perspective.key
+
 python src/eval_moderation.py \
     --input-csv data/main_output/vmd.csv \
-    --output-dir graphs
+    --graph-output-dir graphs \
+    --stats-output-dir data/eval_output
 
 python src/eval_dataset_analysis.py \
     --main-output-dir data/main_output \
-    --graph-output-dir graphs
+    --graph-output-dir graphs \
+    --human-csv data/cmv_awry2.csv \
+    --cache-dir data/cache \
+    --stats-output-dir data/eval_output
 
 python src/eval_toxicity.py \
     --main-output-dir data/main_output \
     --toxicity-rating-dir data/eval_output \
-    --graph-output-dir graphs
+    --graph-output-dir graphs \
+    --stats-output-dir data/eval_output

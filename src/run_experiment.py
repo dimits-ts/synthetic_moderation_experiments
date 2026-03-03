@@ -14,14 +14,13 @@ import syndisco.logging_util
 import syndisco.turn_manager
 
 TROLL_CHANCE = 0.3
+MAX_COMMENT_LENGTH_CHARS = 500
 
 
 def main(
     config_file_path: Path,
-    user_model_url: str,
-    user_model_name: str,
-    mod_model_url: str,
-    mod_model_name: str,
+    model_url: str,
+    model_name: str,
     turn_manager_type: str,
     num_experiments: int,
     mod_active: bool,
@@ -30,6 +29,7 @@ def main(
     user_persona_path: Path,
     output_dir: Path,
     trolls_active: bool,
+    include_seed_comments: bool,
 ) -> None:
     with open(config_file_path, "r", encoding="utf8") as file:
         yaml_data = yaml.safe_load(file)
@@ -37,7 +37,7 @@ def main(
     json_output_dir = output_dir
 
     run_logger_name = (
-        f"run.{user_model_name}.{turn_manager_type}"
+        f"run.{model_name}.{turn_manager_type}"
         f".mod{'On' if mod_active else 'Off'}"
         f".trolls{'On' if trolls_active else 'Off'}"
     )
@@ -66,19 +66,14 @@ def main(
 
     try:
         user_model = syndisco.model.TransformersModel(
-            model_path=user_model_url,
-            name=user_model_name,
+            model_path=model_url,
+            name=model_name,
             remove_string_list=[],
             max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
         )
 
         if mod_active:
-            mod_model = syndisco.model.TransformersModel(
-                model_path=mod_model_url,
-                name=mod_model_name,
-                remove_string_list=[],
-                max_out_tokens=yaml_data["discussion_model"]["max_tokens"],
-            )
+            mod_model = user_model
         else:
             mod_model = None
 
@@ -93,6 +88,7 @@ def main(
             turn_manager_type=turn_manager_type,
             trolls_active=trolls_active,
             num_experiments=missing_experiments,
+            include_seed_comments=include_seed_comments,
         )
 
         run_discussion_experiment(
@@ -128,12 +124,15 @@ def create_discussion_experiment(
     turn_manager_type: str,
     trolls_active: bool,
     num_experiments: int,
+    include_seed_comments: bool,
 ) -> syndisco.experiments.DiscussionExperiment:
 
     context = discussion_config["experiment_variables"]["context_prompt"]
 
-    topics = get_topics(
-        topics_path=Path(discussion_config["files"]["topics_path"])
+    topics = (
+        get_topics(Path(discussion_config["files"]["topics_path"]))
+        if include_seed_comments
+        else None
     )
 
     users = get_users(
@@ -203,6 +202,7 @@ def get_topics(topics_path: Path) -> list[list[str]]:
     ]
 
     df = df.sort_values(["conv_id"]).reset_index(drop=True)
+    df.text = df.text.str.slice(0, MAX_COMMENT_LENGTH_CHARS)
 
     # Create a positional index within each conversation
     df["pos"] = df.groupby("conv_id").cumcount()
@@ -326,7 +326,7 @@ if __name__ == "__main__":
         help="Path to the YAML configuration file",
     )
     parser.add_argument(
-        "--user-model-url",
+        "--model-url",
         required=True,
         help=(
             "HuggingFace url for the desired participant (non-moderator) "
@@ -334,22 +334,9 @@ if __name__ == "__main__":
         ),
     )
     parser.add_argument(
-        "--user-model-pseudo",
+        "--model-pseudo",
         required=True,
         help="Short-hand name for the participant (non-moderator) model",
-    )
-    parser.add_argument(
-        "--mod-model-url",
-        required=True,
-        help=(
-            "HuggingFace url for the desired moderator "
-            "model. No GGUF support."
-        ),
-    )
-    parser.add_argument(
-        "--mod-model-pseudo",
-        required=True,
-        help="Short-hand name for the moderator model",
     )
     parser.add_argument(
         "--mod-strategy-file",
@@ -378,14 +365,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "--mod-active", action=argparse.BooleanOptionalAction, default=True
     )
+    parser.add_argument(
+        "--include-seed-comments",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Include seed comments at the start of discussions",
+    )
     args = parser.parse_args()
 
     main(
         config_file_path=Path(args.config_file),
-        user_model_url=args.user_model_url,
-        user_model_name=args.user_model_pseudo,
-        mod_model_url=args.mod_model_url,
-        mod_model_name=args.mod_model_pseudo,
+        model_url=args.model_url,
+        model_name=args.model_pseudo,
         mod_active=args.mod_active,
         turn_manager_type=args.turn_manager,
         mod_strategy_path=Path(args.mod_strategy_file),
@@ -394,4 +385,5 @@ if __name__ == "__main__":
         trolls_active=args.trolls_active,
         user_instruction_path=Path(args.user_instruction_path),
         user_persona_path=Path(args.user_persona_path),
+        include_seed_comments=args.include_seed_comments,
     )

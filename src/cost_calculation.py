@@ -6,8 +6,6 @@ This script is provided as a runnable tool.
 
 import argparse
 
-import pandas as pd
-
 
 def capex_for_experiment(
     initial_server_cost: float,
