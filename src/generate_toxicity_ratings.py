@@ -35,11 +35,13 @@ def get_perspective_scores(
 
     batch = []
     wrote_header = False
+    # handle CMV-AWRY dataset
+    text_column = "message" if "message" in df.columns else "text"
 
     for idx, row in tqdm(
         df.iterrows(), total=len(df), desc="Scoring comments"
     ):
-        text = row["message"]
+        text = row[text_column] 
         msg_id = row["message_id"]
 
         if text == "":

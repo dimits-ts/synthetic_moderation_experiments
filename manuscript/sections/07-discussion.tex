@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+%
+\section{Discussion}
+
+
+\paragraph{Conclusion}
+We identified a new task, \acf{sdg}, through which we can begin investigating issues in social-science domains where experimental costs are prohibitive due to the requirement for human participation. We used prior attempts at such systems and available literature to create rules for designing, documenting and evaluating such systems, on which we created a new theoretical framework allowing large-scale discussion simulation. Scalability remains an important requirement for such systems; we find that smaller, quantized LLMs are enough for most \ac{sdg} tasks. With the right setup, these experiments can be run on consumer-grade, personal-use hardware for a cost that is many orders of magnitude cheaper than traditional proprietary models (such as GPT-5o) and human participation. We implemented this framework as an open-source Python library, and ran experiments to ``debug'' and test LLMs as facilitators in online discussions. Our results showed that (1) current off-the-shelf LLMs suffer from an inability to not intervene even when instructed to only do so when unnecessary, (2) LLM facilitators respond to different facilitation strategies, altering conversational dynamics, and (3) we observed the replication of some human social behaviors in our simulations. We release the resulting large-scale synthetic dataset, which can be used for further analysis of off-the-shelf LLMs, or LLM finetuning.
+
+
+\paragraph{Limitations and future work}
+
+Our research is fundamentally restricted by the unavailability of robust evaluation metrics for synthetic text data; while the diversity metric used extensively in this study is a step towards the right direction, its utility remains limited due to exact-word matching and well-known issues with ROUGE. The field of \ac{gabm} is also lacking in robust evaluation strategies not involving extensive, specialized and costly human annotation.
+
+Future work should thus focus on further ways to robustly evaluate synthetic discussions and replication of social behaviors by LLMs. Additionally, we believe that \ac{sdg} is a promising direction which can be applied to many domains outside of LLM facilitation. Qualitative extensions of this work could involve the use of a dimorphic setup to differentiate participants and facilitators as discussed in \S\ref{sec:scalability:experimental}, the use of non-finetuned models for more ``authentic'' generation (\S\ref{sec:scalability:model}), and sophisticated turn-taking algorithms that give agency to the LLM participants (\S\ref{sec:methodology:turn-taking}).
+
+
+\paragraph{Ethical considerations}
+Synthetic discussions involving LLMs could be exploited by malicious actors to train them at performing unethical tasks \cite{majumdar_2024_nefarious,MARULLI20245340,li_2025_vulnerable}, although ongoing research is addressing these vulnerabilities \cite{wang_2025_risk}. Furthermore,the use of LLMs inherently risks skewing moderation systems towards the predominant demographics best represented in their training data. SDB prompts are a necessary but insufficient step towards avoiding this \cite{rossi_2024,anthis_2025,burton2024large}.
+
+\paragraph{AI use statement}
+We have used small, open source LLMs (principally LLaMa-8b and Qwen-7B) to help in small style changes throughout this paper. We also used them in conjunction with a GPT-5 model \cite{openai2024gpt4technicalreport} to write initial documentation for our framework,as well as to generate some of the code for the plots and the analysis presented in this paper. 
