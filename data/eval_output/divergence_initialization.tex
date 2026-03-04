@@ -1,13 +1,13 @@
 \begin{table}[ht]
-\caption{Jensen-Shannon divergence between the diversity distributions  of human and synthetic discussions by initialization. Smaller is better.}
+\caption{Jensen-Shannon divergence between the diversity distributions  of human and synthetic discussions by whether seed comments were provided (the seed comments themselves are not counted). Smaller is better, smallest values highlighted in bold.}
 \label{tab:divergence-initialization}
 \begin{tabular}{lrrrrrr}
 \toprule
 Model & LLaMa-70B & LLaMa-8B & Mistral-24B & Mistral-7B & Qwen-32B & Qwen-7B \\
 Ablation &  &  &  &  &  &  \\
 \midrule
-Main & 0.358 & 0.449 & 0.331 & 0.448 & 0.103 & 0.208 \\
-No seeds & 0.377 & 0.430 & 0.280 & 0.429 & 0.133 & 0.163 \\
+No seeds & 0.377 & \textbf{0.430} & \textbf{0.280} & \textbf{0.429} & 0.133 & \textbf{0.163} \\
+With seeds & \textbf{0.358} & 0.449 & 0.331 & 0.448 & \textbf{0.103} & 0.208 \\
 \bottomrule
 \end{tabular}
 \end{table}

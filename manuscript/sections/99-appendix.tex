@@ -5,6 +5,7 @@
 
 
 \begin{acronym}[WWW] % Give the longest label here so that the list is nicely aligned
+	\acro{ai}[AI]{Artificial Intelligence}
 	\acro{swe}[SWE]{Software Engineering}
 	\acro{nlp}[NLP]{Natural Language Processing}
 	\acro{ml}[ML]{Machine Learning}
@@ -23,7 +24,10 @@
 
 
 \section{Replication Notes}
-\label{ssec:appendix:replication}
+\label{sec:appendix:replication}
+
+\subsection{Experiments}
+\label{sec:appendix:replication:experiments}
 
 The latest version of our framework (\texttt{2.0.7} at the time of writing) was the one used in our experiments. Researchers replicating this work should downgrade to this version. 
 
@@ -31,7 +35,19 @@ We did not take any preprocessing steps when analyzing our own dataset besides e
 
 For the seed discussions we use the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble}, as stated in the main text. We remove comments from deleted users. In order to select ``escalated'' discussions, we use the \texttt{derailment} values provided by the dataset. Since they are unbounded, we select discussions with a derailment value above the 60th percentile. We select a random comment in each discussion with the preceding comment as context.
 
-Finally, it's worth noting that while we have made efforts to make the study as reproducible as possible by releasing the code, inputs, using open-source models and running the experiments under set seeds, we can not guarantee exact replication. This is caused by inherent randomness in LLMs which can only be mitigated \cite{atil_2025,bisbee_2023}.
+Finally, it's worth noting that while we have made efforts to make the study as reproducible as possible by releasing the code, inputs, using open-source models and running the experiments under set seeds, we can not guarantee exact replication due to the inherent randomness in LLMs which can only be mitigated \cite{atil_2025,bisbee_2023}. Likewise, the instruction prompts as well as other hyper-parameters may have been implicitly optimized during the many iterations of this study.
+
+
+\subsection{Analysis}
+\label{sec:appendix:replication:analysis}
+
+Our Jensen--Shannon divergence estimates rely on several methodological assumptions. First, we approximate the underlying diversity distributions using Gaussian kernel density estimation (KDE) evaluated on a fixed grid over $[0,1]$, implicitly assuming smooth, continuous distributions and sufficient sample sizes for stable density estimation. In our experiments, the ablation conditions have fewer discussions than the main dataset, which is necessary even with relatively low inference costs (\S\ref{sec:scalability:cost}) due to the multidimensional exploratory nature of our approach. We assume that the density estimation is accurate enough with at least $n=30$ discussions. Second, the choice of bandwidth (as determined by the default \texttt{gaussian\_kde} implementation) and the number of evaluation bins (fixed to 50) can affect the resulting divergence scores; alternative bandwidth selection strategies or grid resolutions may yield quantitatively different results. We also remove empty comments from the calculations.
+
+
+\subsection{Seed dataset preprocessing}
+\label{sec:appendix:replication:preprocessing}
+
+As a preprocessing step, we remove comments that contain no textual content and exclude discussions involving fewer than two distinct participants, ensuring that all retained threads constitute meaningful interactions. Our data are drawn from the PEFK dataset~\cite{tsirmpas2025pefk}. To operationalize escalation, we rely on the derailment score provided in the official release. Because these scores are model-derived and not directly interpretable on an absolute scale, we adopt a percentile-based threshold: a discussion is labeled as \emph{escalated} if its derailment value falls within the top 60th percentile of the distribution. This relative criterion ensures comparability while avoiding assumptions about the intrinsic scale of the original model outputs.
 
 
 \section{Cost Calculation}

@@ -18,7 +18,7 @@ def main(
     ablation_csv_path: Path,
     human_csv_path: Path,
     graph_output_dir: Path,
-    stats_output_dir: Path,
+    stats_output_dir: Path, 
     cache_dir: Path,
 ):
     tasks.graphs.seaborn_setup()

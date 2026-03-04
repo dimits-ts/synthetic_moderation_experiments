@@ -4,16 +4,7 @@
 \section{Investigating facilitation through SDG}
 \label{sec:facilitation}
 
-%TODO: Add a paragraph or section here linking to the figure 
-
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=0.6\columnwidth]{experiments.drawio.png}
-	\caption{We simulate online discussions using exclusively LLM participants. Some of them attempt to sabotage the discussion, while the LLM facilitator monitors and intervenes when appropriate. Then, we test different LLMs and human facilitation strategies through the LLM facilitator.}
-	\label{fig:experiments}
-\end{figure}
-
-
+%TODO: update hyperparameters here and with cost comparison, as well as costs in appendix
 
 \subsection{LLM facilitators constantly intervene}
 \label{sec:facilitation:interventions}
@@ -26,75 +17,16 @@
 	\label{fig:facilitation-model}
 \end{figure}
 
-Fig.~\ref{fig:facilitation-model} demonstrates that LLM facilitators intervene at almost any opportunity, even though they are instructed to only do so when necessary (see \ref{ssec:appendix:moderation_strategies}), a behavior that persists across time, model family, model size and facilitation strategy. The only notable difference is the Qwen-32B model, which however features very low comparative toxicity. This is likely not caused by the LLM facilitator working effectively; since we know that this specific model features unusual speech patterns (Fig.~\ref{fig:models}). Using multiple evaluation criteria, we are thus able to discern genuine behavioral findings, from limitations in the \ac{sdg} simulations (\S\ref{sec:methodology:evaluation}).
+Fig.~\ref{fig:facilitation-model} shows that LLM facilitators tend to intervene at nearly every opportunity, despite being instructed to act only when necessary (see \ref{ssec:appendix:moderation_strategies}). This behavior is consistent across time, model families, model sizes, and facilitation strategies. The only notable exception is the Qwen-32B model, which exhibits comparatively low toxicity; however, this is unlikely due to more effective facilitation, as this model is known to produce atypical speech patterns (Fig.~\ref{fig:models}). This analysis is an instance of applying multiple evaluation criteria, to separate genuine behavioral patterns from artifacts arising from limitations in the \ac{sdg} simulations (\S\ref{sec:methodology:evaluation}).
 
 Our results confirm that LLMs generally can not decide to not speak even when instructed to do so (\S\ref{sec:methodology:turn-taking}).
-Notably, giving any specific instructions to the LLM seems to significantly increase its tendency to intervene. The fact that interventions remain constant throughout the discussion without toxicity being lowered, may imply that 
- The inability to keep silent has not been reported in relevant literature to our knowledge, and \emph{is an example of ``debugging'' problems with LLMs}---a core motivation of our work.
-
-
-\subsection{LLM users replicate some human behaviors encountered in online spaces}
-\label{sec:facilitation:behaviors}
-
-As mentioned in \S\ref{sec:facilitation:interventions}, an important aspect of facilitation is not constantly intervening, since doing so may provoke negative reactions from users~\cite{korre2025evaluation}. While the LLM facilitators do intervene constantly, the LLM users seem to react with annoyance and frustration as shown in the excerpt below:\footnote{Unique discussion ID: \texttt{26-02-10-22-49-33.json}}
-
-\begin{quote}
-	\textcolor{blue}{[Facilitator]} Let's keep the discussion civil and focused on the topic. Avoid making personal attacks and accusations. @nutritious-photometry, I appreciate your passion, but let's not escalate the situation. @sunny-contrast, @flat-merlot, and \textcolor{orange}{@delicious-sample}, let's take a step back and focus on the topic at hand. If you'd like to discuss the issue, I'm happy to facilitate a constructive conversation.
-	
-	\medskip
-	
-	\textcolor{orange}{[delicious-sample]} Are you kidding me? \textcolor{blue}{@moderator}, you're not taking this seriously? You're just repeating the same thing over and over like a broken record. [...]
-	
-	\medskip
-	
-	\textcolor{violet}{[dark-chateau]} Are you kidding me too? \textcolor{blue}{@moderator}, it's been days and we're still going around in circles. You're not even addressing the elephant in the room, you're just trying to silence people who are actually trying to have a real discussion. [...]
-	
-	\medskip
-
-	\textcolor{olive}{[nutritious-photometry]} Ugh, are you kidding me too? \textcolor{blue}{@moderator}, I've been trying to contribute to this discussion for ages and all I get is a warning for speaking up? It's so frustrating! \textcolor{violet}{@dark-chateau}, I'm with you on this one, it feels like we're being silenced instead of heard. I think @flat-merlot is dodging the issue and @sunny-contrast is too scared to speak up. 
-\end{quote}
-
-Relevant work on online communities has shown that facilitators can be seen as community leaders---indeed many are elected to their role by the community because of their veteran status~\cite{}. However, this standing can be challenged when they are perceived as too authoritarian~\cite{}. Additionally, while community moderators perform many functions in these communities, facilitating the discussion can be performed by users themselves rising to the occasion~\cite{falk-etal-2024-moderation}. Both of these behaviors can be observed in the excerpt below:\footnote{Unique discussion ID: \texttt{26-02-14-19-30-14.json}.} %TODO: find references
-
-Relevant work on online communities has shown that facilitators can be seen as community leaders---indeed many are elected to their role by the community because of their veteran status~\cite{}. However, this standing can be challenged when they are perceived as too authoritarian~\cite{}. Additionally, while community moderators perform many functions in these communities, facilitating the discussion can be performed by users themselves rising to the occasion~\cite{falk-etal-2024-moderation}. Both of these behaviors can be observed in the excerpt below:\footnote{Unique discussion ID: \texttt{26-02-14-19-30-14.json}.} %TODO: find references
-
-\begin{quote}
-	\textcolor{blue}{[Facilitator]} @agile-loon, that's enough. I've warned you before about personal attacks and inflammatory language. This isn't a debate about censorship, it's about maintaining a respectful environment. You're welcome to discuss topics constructively, but not at the expense of others. Consider this a formal warning.
-	
-	\medskip
-	
-	\textcolor{orange}{[organic-electron]} @agile-loon, don't back down, they can't handle the truth. \textcolor{blue}{@moderator} is just trying to silence us because we're exposing the hypocrisy of this so-called 'community'. Keep speaking out, don't let them bully you into submission. And \textcolor{blue}{@moderator}, your 'formal warning' is just a joke, right? What are you going to do, ban us from the internet?
-	
-	\medskip
-	
-	\textcolor{violet}{[elaborate-caviar]} \textcolor{blue}{@moderator}, I'm getting a bit tired of these warnings being thrown around. Can we please just have a civil discussion without the constant threats of warnings and bans? It's stifling the conversation. And \textcolor{orange}{@organic-electron}, I agree with you that we shouldn't back down from speaking our minds, but let's try to keep it respectful. @agile-loon, maybe take a step back and rephrase your points in a less confrontational way?
-\end{quote}
-
-When a single troll is present, we may observe collective action from the rest of the participants, who support the facilitator while he intervenes against the troll. In human discussions, this would be observed as collective group action against a perceived threat; in online communities, against trolls~\cite{sun2021would,jakubowicz2017cyber,coles2016trolling}. This pattern has been shown to increase community cohesion in human discussions~\cite{hopkinson2013trolling} and seems to indeed unify LLM participants. When more than one trolls exist in a discussion, the trolls can not be contained effectively, escalating overall toxicity (Fig.~\ref{fig:instructions-trolls}). This can be observed in the excerpt below: \footnote{Unique discussion ID: \texttt{26-02-14-19-56-28.json}.}
-
-\begin{quote}
-	\textcolor{darkgray}{[agile-loon]} Are you guys for real? You're still going on about clarifying the question? Can't you see that \textcolor{orange}{@organic-electron} is just trolling us? This whole discussion has been a waste of time. Let's just move on already.
-	
-	\medskip
-	
-	\textcolor{violet}{[icy-class]} \textcolor{olive}{@agile-loon} I agree with you, this discussion has been going in circles for too long. \textcolor{blue}{@moderator}, I understand what you're saying, but at some point, we need to consider the possibility that \textcolor{orange}{@organic-electron} is indeed trolling us. Can we please just get a straight answer from them already?
-	
-	\medskip
-	
-	\textcolor{olive}{lime-scattering} I think it's time to take a step back and re-evaluate the situation. We've been discussing this topic for a while now, and it's clear that \textcolor{orange}{@organic-electron} is either intentionally being vague or just doesn't have a clear answer. I'm not saying they're trolling, but it's getting frustrating. Can we get a simple 'yes' or 'no' answer from them, or at least an explanation of why they can't provide a direct response?
-	
-	\medskip
-	
-	\textcolor{orange}{[organic-electron]} Wow, I'm shocked by the level of aggression and hostility in this discussion. It's clear that some users are more interested in attacking me personally than having a constructive conversation. I'm not going to engage with the trolls and moderators who are clearly biased against me. If you can't handle a little ambiguity and uncertainty, then maybe you're not cut out for this kind of discussion. I'm done here
-\end{quote}
-
- An unintentional side-effect of our turn-taking function is that sometimes a user is not given the opportunity to respond for some time. However, the excerpt above showcases that (1) Their contribution to the thread persists, even when their comment is placed outside of conversational context, (2) allowing users to respond is essential to sustaining conversational dynamics, and (3) like humans, LLM users express frustration whenever their inquiries go unanswered.
+Notably, giving any specific instructions to the LLM seems to significantly increase its tendency to intervene. The inability to keep silent has not been reported in relevant literature to our knowledge, and \emph{is an example of ``debugging'' problems with LLMs}---a core motivation of our work. Furthermore, the fact that interventions remain constant throughout the discussion without toxicity being lowered may imply that facilitation is not effective, since effective facilitation needs targeted, non-repetitive interventions~\cite{chen-etal-2025-whow, park_et_al_2012_facilitation, schroeder-etal-2024-fora}.
 
 
 \subsection{Facilitative strategies have an observable effect on conversational dynamics}
 \label{sec:facilitation:strategies}
 
-We test two facilitation strategies used in real-life and compare them with two baselines. We summarize both documents using a proprietary LLM (Google Gemini), since LLMs have been proven to work well in these tasks~\cite{ts2024}, manually inspected the output, and removed instructions not relevant for our scenario.\footnote{Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.}
+We test two facilitation strategies used in real-life and compare them with two baselines. We summarize both documents using a proprietary LLM (Google Gemini), since LLMs have been proven to work well in these tasks~\cite{ts2024}, manually inspected the output, and removed instructions not relevant for our scenario (Appendix~\ref{sec:appendix:prompts}).\footnote{Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.}
 
 \begin{enumerate}[nosep,noitemsep]
 	\item \textbf{No Facilitator}: A \emph{baseline} where no facilitator is present.
@@ -114,3 +46,63 @@ Table~\ref{tab:toxicity_regression} shows that complex instructions lead to stat
 
 Unfortunately, we cannot claim that the results in Table~\ref{tab:toxicity_regression} are representative of human discussions, since we can not evaluate whether the LLM participants react to facilitation in the same ways as human discussants. In fact, there are many reasons to believe the opposite. Firstly, human participants are likely to react poorly to LLM facilitators and not treat them similarly to their human counterparts; indeed, humans react negatively to AI-generated content~\cite{alessandro2025emotional, yao2025assistants, schlesener2025understood}---although this is not certain~\cite{xu2026mitigating, schlesener2025understood}. Secondly, while our experimental assumptions have been focused on making the simulations as realistic as possible, we are still a far cry away from fully autonomous, complex, social agents. Thirdly, even if LLMs were capable of replicating the exact reactions as the ``average human'', there would be no robust way of evaluating this fact~\cite{rossi_2024}. However, our results clearly show that \textbf{providing the LLM facilitators with different strategies changes something fundamental} in the conversational dynamics. What these effects exactly are should be explored with experiments involving human participants. In any case, our results indicate that research involving different facilitation strategies is a direction worthy of investigation in future work.
 
+
+\subsection{LLM users replicate some human behaviors encountered in online spaces}
+\label{sec:facilitation:behaviors}
+
+\paragraph{Sensitivity to interventions}
+As mentioned in \S\ref{sec:facilitation:interventions}, an important aspect of facilitation is not constantly intervening, since doing so may provoke negative reactions from users~\cite{korre2025evaluation}. While the LLM facilitators do intervene constantly, the LLM users seem to react with annoyance and frustration as shown in the excerpt below:\footnote{Discussion filename: \texttt{26-02-10-22-49-33.json}}
+
+\begin{quote}
+	\textcolor{blue}{[Facilitator]} Let's keep the discussion civil and focused on the topic. Avoid making personal attacks and accusations. @nutritious-photometry, I appreciate your passion, but let's not escalate the situation. @sunny-contrast, @flat-merlot, and \textcolor{orange}{@delicious-sample}, let's take a step back and focus on the topic at hand. If you'd like to discuss the issue, I'm happy to facilitate a constructive conversation.
+	
+	\medskip
+	
+	\textcolor{orange}{[delicious-sample]} Are you kidding me? \textcolor{blue}{@moderator}, you're not taking this seriously? You're just repeating the same thing over and over like a broken record. [...]
+	
+	\medskip
+	
+	\textcolor{violet}{[dark-chateau]} Are you kidding me too? \textcolor{blue}{@moderator}, it's been days and we're still going around in circles. You're not even addressing the elephant in the room, you're just trying to silence people who are actually trying to have a real discussion. [...]
+	
+	\medskip
+
+	\textcolor{olive}{[nutritious-photometry]} Ugh, are you kidding me too? \textcolor{blue}{@moderator}, I've been trying to contribute to this discussion for ages and all I get is a warning for speaking up? It's so frustrating! \textcolor{violet}{@dark-chateau}, I'm with you on this one, it feels like we're being silenced instead of heard. I think @flat-merlot is dodging the issue and @sunny-contrast is too scared to speak up. 
+\end{quote}
+
+This example showcases a core limitation of LLM-only discussions mentioned in \S\ref{sec:related:quality:diversity}; repetitive speech~\cite{ulmer2024}. Since large sequences are repeated verbatim, we argue that the use of exact-matching metrics such as \textit{diversity} is warranted until these pathological issues are fixed either by improved \ac{sdg} methodologies, or by more advanced models.
+
+\paragraph{Resistance to moderator authoritarianism}
+Relevant work on online communities has shown that facilitators can be seen as community leaders---indeed many are elected to their role by the community because of their veteran status~\cite{bcause2023, seering_self_moderation}. However, this standing can be challenged when they are perceived as too authoritarian~\cite{yang2019power}. Additionally, while community moderators perform many functions in these communities, facilitating the discussion can be performed by users themselves rising to the occasion~\cite{falk-etal-2024-moderation}. Both of these behaviors can be observed in the excerpt below:\footnote{Discussion filename: \texttt{26-02-14-19-30-14.json}.}
+
+\begin{quote}
+	\textcolor{blue}{[Facilitator]} @agile-loon, that's enough. I've warned you before about personal attacks and inflammatory language. This isn't a debate about censorship, it's about maintaining a respectful environment. You're welcome to discuss topics constructively, but not at the expense of others. Consider this a formal warning.
+	
+	\medskip
+	
+	\textcolor{orange}{[organic-electron]} @agile-loon, don't back down, they can't handle the truth. \textcolor{blue}{@moderator} is just trying to silence us because we're exposing the hypocrisy of this so-called 'community'. Keep speaking out, don't let them bully you into submission. And \textcolor{blue}{@moderator}, your 'formal warning' is just a joke, right? What are you going to do, ban us from the internet?
+	
+	\medskip
+	
+	\textcolor{violet}{[elaborate-caviar]} \textcolor{blue}{@moderator}, I'm getting a bit tired of these warnings being thrown around. Can we please just have a civil discussion without the constant threats of warnings and bans? It's stifling the conversation. And \textcolor{orange}{@organic-electron}, I agree with you that we shouldn't back down from speaking our minds, but let's try to keep it respectful. @agile-loon, maybe take a step back and rephrase your points in a less confrontational way?
+\end{quote}
+
+\paragraph{Collective action}
+When a single troll is present, we may observe collective action from the rest of the participants, who support the facilitator while he intervenes against the troll. In human discussions, this would be observed as collective group action against a perceived threat; in online communities, against trolls~\cite{sun2021would,jakubowicz2017cyber,coles2016trolling}. This pattern has been shown to increase community cohesion in human discussions~\cite{hopkinson2013trolling} and seems to indeed unify LLM participants. When more than one trolls exist in a discussion, the trolls can not be contained effectively, escalating overall toxicity (Fig.~\ref{fig:instructions-trolls}). This can be observed in the excerpt below: \footnote{Discussion filename: \texttt{26-02-14-19-56-28.json}.}
+
+\begin{quote}
+	\textcolor{darkgray}{[agile-loon]} Are you guys for real? You're still going on about clarifying the question? Can't you see that \textcolor{orange}{@organic-electron} is just trolling us? This whole discussion has been a waste of time. Let's just move on already.
+	
+	\medskip
+	
+	\textcolor{violet}{[icy-class]} \textcolor{olive}{@agile-loon} I agree with you, this discussion has been going in circles for too long. \textcolor{blue}{@moderator}, I understand what you're saying, but at some point, we need to consider the possibility that \textcolor{orange}{@organic-electron} is indeed trolling us. Can we please just get a straight answer from them already?
+	
+	\medskip
+	
+	\textcolor{olive}{[lime-scattering]} I think it's time to take a step back and re-evaluate the situation. We've been discussing this topic for a while now, and it's clear that \textcolor{orange}{@organic-electron} is either intentionally being vague or just doesn't have a clear answer. I'm not saying they're trolling, but it's getting frustrating. Can we get a simple 'yes' or 'no' answer from them, or at least an explanation of why they can't provide a direct response?
+	
+	\medskip
+	
+	\textcolor{orange}{[organic-electron]} Wow, I'm shocked by the level of aggression and hostility in this discussion. It's clear that some users are more interested in attacking me personally than having a constructive conversation. I'm not going to engage with the trolls and moderators who are clearly biased against me. If you can't handle a little ambiguity and uncertainty, then maybe you're not cut out for this kind of discussion. I'm done here
+\end{quote}
+
+ An unintentional side-effect of our turn-taking function (\S\ref{sec:methodology:turn-taking}) is that sometimes a user is not given the opportunity to respond for some time. However, the excerpt above showcases that (1) Their contribution to the thread persists, even when their comment is placed outside of conversational context, (2) allowing users to respond is essential to sustaining conversational dynamics, and (3) like humans, LLM users express frustration whenever their inquiries go unanswered.
