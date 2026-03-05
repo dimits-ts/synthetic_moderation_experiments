@@ -10,29 +10,29 @@ python src/create_datasets.py \
 
 python src/cost_calculation.py \
   --mode proprietary \
-  --num-tasks 2273 \
-  --isl-tokens 31580 \
-  --osl-tokens 7860 \
+  --num-tasks 1800 \
+  --isl-tokens 3600 \
+  --osl-tokens 1200 \
   --price-input-per-million 1.75 \
   --price-output-per-million 14
 
 python src/cost_calculation.py \
   --mode human \
-  --num-tasks 15911 \
+  --num-tasks 12600 \
   --time-per-task-seconds 300
 
 python src/cost_calculation.py \
   --mode open-source \
-  --num-tasks 2273 \
-  --requests-per-task 21 \
-  --experiment-duration-days 4
+  --num-tasks 1800 \
+  --requests-per-task 30 \
+  --experiment-duration-days 7
 
 python src/cost_calculation.py \
   --mode open-source \
-  --num-tasks 2273 \
-  --requests-per-task 21 \
+  --num-tasks 1800 \
+  --requests-per-task 30 \
   --initial-server-cost 0 \
-  --experiment-duration-days 4 \
+  --experiment-duration-days 7 \
   --power-watts-per-server 2000
 
 python src/generate_toxicity_ratings.py \
