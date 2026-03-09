@@ -7,6 +7,7 @@
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=\columnwidth]{research_goal.drawio.png}
+	\Description[Outline of the base components of an SDG system.]{Three blocks are present, each of which includes the components used in SDG systems. The ``SDG evaluation'' block includes the items ``Social Science literature'', ''Data Analysis'', and a crossed-out ``Human Evaluator'' figure. The ``SDG initialization'' block includes participants roles, personas, and ``seed discussions''. The ``SDG management'' block includes the turn-taking systemm the ``Discussion History'' (connected with the seed discussion figure), and a crossed-out memory module. The SDG initialization block is linked to three figures representing synthetic participants, which are also linked to an LLM, and to a crossed-out human figurine.}
 	\caption{We design \ac{sdg} systems through three main components; the creation of LLM participants in lieu of humans; simple synthetic systems that handle conversational dynamics; and scalable evaluation methodologies grounded in literature which avoiding human validation as much as possible.}
 	\label{fig:sdg}
 \end{figure}
@@ -143,6 +144,7 @@ Specifically, we assign antagonistic motivations to a randomly selected subset o
  \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\linewidth]{role_mean_toxicity.png}
+	\Description{Barplot showing toxicity for trolls (0.3), moderators (0.3) and non-troll users (0.07). The error bars are tiny.}
 	\caption{Average toxicity of non-troll, troll, and facilitator users across synthetic discussions. Error bars indicate 95\% confidence intervals. See \S\ref{sec:scalability:experimental} for experimental details.}
 	\label{fig:trolls}
 \end{figure}
@@ -187,7 +189,8 @@ As discussed earlier, we justify this intervention empirically: without such pro
 
 \begin{figure}[ht]
 	\centering
-	\includegraphics[width=0.45\linewidth]{toxicity_vs_troll_count.png}
+	\includegraphics[width=0.7\linewidth]{toxicity_vs_troll_count.png}
+	\Description[Lineplot showing that toxicity only rises with the number of trolls when using the responsive prompt.]{A lineplot with two lines. The y axis represents average toxicity, while the x-axis represents the number of active troll users (0--4+). The basic prompt line is consistently close to 0, while the line representing the responsive prompt rises linearly with the number of trolls by about 0.04 toxicity per troll.}
 	\caption{Average toxicity of non-troll, non-facilitator users across discussions with X numbers of active trolls. Error bars indicate 95\% confidence intervals. See \S\ref{sec:scalability:experimental} for experimental details.}
 	\label{fig:instructions-trolls}
 \end{figure}
