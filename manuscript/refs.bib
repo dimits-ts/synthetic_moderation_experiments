@@ -120,7 +120,8 @@
 	year = {2008},
 	month = {3},
 	url = {https://paulgraham.com/disagree.html},
-	note = {Accessed: 2024-06-24}
+	archived={https://paulgraham.com/disagree.html},
+	lastaccessed = {2024-06-24}
 }
 
 @inproceedings{dekock2022disagree,
@@ -171,7 +172,10 @@
 @online{benesch2016counterspeech,
 	title={Counterspeech on twitter: A field study. Dangerous Speech Project},
 	author={Benesch, Susan and Ruths, Derek and Dillon, Kelly P and Saleem, Haji Mohammad and Wright, Lucas},
-	year={2016}
+	year={2016},
+	lastaccessed={2026-03-09},
+	archived={https://www.dangerousspeech.org/libraries/counterspeech-on-twitter-a-field-study},
+	url={https://www.dangerousspeech.org/libraries/counterspeech-on-twitter-a-field-study}
 }
 
 @article{karadzhov2023delidata,
@@ -473,7 +477,7 @@
 	url        = {https://data.europa.eu/eli/reg/2016/679/oj},
 	titleaddon = {of 27 {April} 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing {Directive} 95/46/{EC} ({General} {Data} {Protection} {Regulation})},
 	abstract   = {The General Data Protection Regulation (2016/679, "GDPR") is a Regulation in European Union (EU) law on data protection and privacy in the EU and the European Economic Area (EEA).},
-	author     = {{European Parliament} and {Council of the European Union}},
+	key     = {GDPR},
 	keywords   = {access consumer data data-processing freedom gdpr information justice law personal privacy protection security verification},
 	urldate    = {2023-04-13},
 }
@@ -943,7 +947,7 @@ year = {2024}
 	url={https://api.semanticscholar.org/CorpusID:249062985}
 }
 
-@article{Tsai2024Generative,
+@online{Tsai2024Generative,
 	author = {Tsai, Lily L. and Pentland, Alex and Braley, Alia and Chen, Nuole and Enr{\' i}quez, Jos{\' e} Ram{\' o}n and Reuel, Anka},
 	journal = {An MIT Exploration of Generative AI},
 	year = {2024},
@@ -1234,23 +1238,23 @@ series = {WWW '23}
       url={https://arxiv.org/abs/2312.03664}, 
 }
 
-@online{langchain,
-	author = {LangChain Contributors},
+@ArtifactSoftware{langchain,
+	key = {LangChain},
 	title = {LangChain: Building applications with LLMs through composability},
 	howpublished = {\url{https://github.com/langchain-ai/langchain}},
 	year = {2023},
 	note = {GitHub repository},
-	url = {https://github.com/langchain-ai/langchain},
-	urldate = {2025-02-13},
+	archived = {https://github.com/langchain-ai/langchain},
+	lastaccessed = {2025-02-13},
 }
 
-@online{tinytroupe,
-    author={TinyTroupe contributors},
+@ArtifactSoftware{tinytroupe,
+    key={TinyTroupe},
     title={TinyTroupe},
     year={2024},
     note = {GitHub repository},
-    url={https://github.com/microsoft/TinyTroupe},
-    urldate={2025-02-13}
+    archived={https://github.com/microsoft/TinyTroupe},
+    lastaccessed={2025-02-13}
 }
 
 @article{Madaan2023SelfRefineIR,
@@ -1379,17 +1383,34 @@ numpages = {10},
 location = {College Park, Maryland, USA},
 }
 
-@unpublished{korre2025evaluation,
-  title={Evaluation and Facilitation of Online Discussions in the LLM Era: A Survey},
-  author={Korre, Katerina and Tsirmpas, Dimitris and Gkoumas, Nikos and Cabalé, Emma and Kontarinis, Dionysis and Myrtzani, Danai and Evgeniou, Theodoros and Androutsopoulos, Ion and Pavlopoulos, John},
-  year={2025},
-  month={02},
-  note={ACL ARR 2025 February Submission},
-  url={https://openreview.net/forum?id=T9c0zA8GTj}
+@inproceedings{korre2025evaluation,
+	title = "Evaluation and Facilitation of Online Discussions in the {LLM} Era: A Survey",
+	author = "Korre, Katerina  and
+	Tsirmpas, Dimitris  and
+	Gkoumas, Nikos  and
+	Cabal{\'e}, Emma  and
+	Myrtzani, Danai  and
+	Evgeniou, Theodoros  and
+	Androutsopoulos, Ion  and
+	Pavlopoulos, John",
+	editor = "Christodoulopoulos, Christos  and
+	Chakraborty, Tanmoy  and
+	Rose, Carolyn  and
+	Peng, Violet",
+	booktitle = "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
+	month = nov,
+	year = "2025",
+	address = "Suzhou, China",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/2025.emnlp-main.1243/",
+	doi = "10.18653/v1/2025.emnlp-main.1243",
+	pages = "24443--24462",
+	ISBN = "979-8-89176-332-6",
+	abstract = "We present a survey of methods for assessing and enhancing the quality of online discussions, focusing on the potential of Large Language Models (LLMs). While online discourses aim, at least in theory, to foster mutual understanding, they often devolve into harmful exchanges, such as hate speech, threatening social cohesion and democratic values. Recent advancements in LLMs enable artificial facilitation agents to not only moderate content, but also actively improve the quality of interactions. Our survey synthesizes ideas from Natural Language Processing (NLP) and Social Sciences to provide (a) a new taxonomy on discussion quality evaluation, (b) an overview of intervention and facilitation strategies, (c) along with a new taxonomy of conversation facilitation datasets, (d) an LLM-oriented roadmap of good practices and future research directions, from technological and societal perspectives."
 }
 
 @unpublished{hewitt2024predicting,
-  title={Predicting Results of Social Science Experiments Using Large Language Models},
+	  title={Predicting Results of Social Science Experiments Using Large Language Models},
   author={Hewitt, Luke and Ashokkumar, Ashwini and Ghezae, Isaias and Willer, Robb},
   year={2024},
   month={08},
@@ -1749,7 +1770,7 @@ url={https://openreview.net/forum?id=mM7VurbA4r}
     abstract = "Recent advances in large language models (LLM) have enabled richer social simulations, allowing for the study of various social phenomena. However, most recent work has used a more omniscient perspective on these simulations (e.g., single LLM to generate all interlocutors), which is fundamentally at odds with the non-omniscient, information asymmetric interactions that involve humans and AI agents in the real world. To examine these differences, we develop an evaluation framework to simulate social interactions with LLMs in various settings (omniscient, non-omniscient). Our experiments show that LLMs perform better in unrealistic, omniscient simulation settings but struggle in ones that more accurately reflect real-world conditions with information asymmetry. Moreover, we illustrate the limitations inherent in learning from omniscient simulations. Our findings indicate that addressing information asymmetry remains a fundamental challenge for LLM-based agents."
 }
 
-@misc{retraction_watch,
+@online{retraction_watch,
   title        = "Experiment using AI-generated posts on Reddit draws fire for ethics concerns",
   author       = "Retraction-Watch",
   howpublished = "\url{https://retractionwatch.com/2025/04/28/experiment-using-ai-generated-posts-on-reddit-draws-fire-for-ethics-concerns/}",
@@ -1757,7 +1778,7 @@ url={https://openreview.net/forum?id=mM7VurbA4r}
   note         = "Accessed: 2025-04-29"
 }
 
-@misc{eu_ai_act_2024,
+@online{eu_ai_act_2024,
   title        = {Regulation (EU) 2024/1689 of the European Parliament and of the Council of 13 June 2024 laying down harmonised rules on artificial intelligence and amending certain Union legislative acts (Artificial Intelligence Act)},
   author       = {{European Parliament and Council}},
   howpublished = {\url{https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689}},
@@ -2191,13 +2212,13 @@ abstract = {Large Language Models (LLMs) are rapidly evolving, demonstrating imp
 	url={https://doi.org/10.3758/s13428-022-02005-0}
 }
 
-@misc{openai-pricing,
+@online{openai-pricing,
 	title = {Open AI pricing},
 	date = {2026-1-29},
-	author       = "{OpenAI}",
+	key       = "{OpenAI Pricing}",
 	howpublished = "\url{https://openai.com/api/pricing/}",
 	year         = 2026,
-	note         = "Accessed: 2026-03-05"
+	lastaccessed  = {2026-03-05}
 }
 
 @article{sun2021would,
@@ -2690,7 +2711,7 @@ abstract = {Large Language Models (LLMs) are rapidly evolving, demonstrating imp
 	year={2024}
 }
 
-@misc{google_perspective_api,
+@ArtifactSoftware{google_perspective_api,
 	author = "Google",
 	title = "Perspective API",
 	howpublished = "https://www.perspectiveapi.com/",
@@ -2927,7 +2948,7 @@ abstract = {Large Language Models (LLMs) are rapidly evolving, demonstrating imp
 	publisher={SAGE Publications Sage UK: London, England}
 }
 
-@dataset{tsirmpas2025pefk,
+@ArtifactDataset{tsirmpas2025pefk,
 	author       = {Tsirmpas, Dimitris},
 	title        = {PEFK: Patterns of Engagement in Facilitated Konversations},
 	year         = {2025},
