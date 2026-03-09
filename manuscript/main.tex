@@ -36,10 +36,23 @@
 	
 \theoremstyle{acmdefinition}\newtheorem*{definition}{Definition}
 
+
+\newcommand{\usercolor}[2]{%
+	\ifcase#1
+	\or \textcolor{ACMDarkBlue}{#2}%
+	\or \textcolor{ACMPurple}{#2}%
+	\or \textcolor{ACMOrange}{#2}%
+	\or \textcolor{ACMRed}{#2}%
+	\or \textcolor{ACMLightBlue}{#2}%
+	\or \textcolor{ACMGreen}{#2}%
+	\or \textcolor{ACMYellow}{#2}%
+	\or \textcolor{ACMBlue}{#2}%
+	\else #2%
+	\fi
+}
+
 \acmJournal{TSC}
 \title[Designing Synthetic Discussions]{Designing Synthetic Discussion Generation Systems: A Case Study for Online Facilitation}
-
-%TODO: Add authors?
 
 \keywords{LLMs, discussions, facilitation, GABM, synthetic, experiments}
 \begin{CCSXML}
