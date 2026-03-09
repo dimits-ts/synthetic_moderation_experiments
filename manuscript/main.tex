@@ -29,8 +29,12 @@
 \newcommand{\asterisknote}{
 	$\cdot p<0.1$,\textsuperscript{*} $p<0.05$,\textsuperscript{**} $p<0.01$,\textsuperscript{***} $p<0.001$
 }
-\newtheorem*{definition}{Definition}
-\newtheorem{research-question}{RQ}
+
+\AtEndPreamble{%
+	\theoremstyle{acmdefinition}
+	\newtheorem{research-question}{RQ}}
+	
+\theoremstyle{acmdefinition}\newtheorem*{definition}{Definition}
 
 \acmJournal{TSC}
 \title[Designing Synthetic Discussions]{Designing Synthetic Discussion Generation Systems: A Case Study for Online Facilitation}
