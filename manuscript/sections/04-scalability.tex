@@ -54,7 +54,7 @@ We could thus assume that the Qwen-7B model is ideal for simulating human discus
 	\centering
 	\caption{Economic constraints imposed to researchers over operational and capital expenditure.}
 	\label{tab:cost-sources}
-	\begin{tabular}{lll}
+	\begin{tabular}{lcc}
 		\toprule
 		& \textbf{\ac{opex}} & \textbf{\ac{capex}} \\
 		\midrule
@@ -89,25 +89,24 @@ The nature of the costs involved in any of the three methods are completely diff
 
 \begin{table}[ht]
 	\centering
-	\caption{Estimated \ac{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5.1 pricing, our own experimental setup, and a production-stage setup with a single consumer-grade GPU. While capital costs are factored in the \ac{cpt} calculation (see~\ref{sec:appendix:cost}), we also include them separately in this table.}
+	\caption{Estimated \ac{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5.1 pricing, our own experimental setup, and a production-stage setup with a single consumer-grade GPU. While capital costs are factored in the \ac{cpt} calculation (see Appendix~\ref{sec:appendix:cost}), we also include them separately in this table.}
 	\label{tab:cost}
 	\begin{tabular}{cccc}
 		\toprule
-		\textbf{Participant Type} & \ac{cpt} & \textbf{Total cost} & \textbf{Infrastructure} \\
+		 & \ac{cpt} & \textbf{Total cost} & \textbf{Infrastructure} \\
 		\midrule
-		Humans & \$ 1.666 & \$ 20,995.80 & No \\
-		Proprietary (GPT-5.1) & \$ 0.0231 & \$ 41.58 & No \\
-		Open Source (Our setup) & \$ 0.0537 & \$ 96.65 & Basic GPU server \\
-		Open Source (Small models only) & \$ 0.0111 & \$ 20.00 & Consumer-grade computer \\
+		Humans & \$ 1.666 & \$ $20{,}995.80$ & None \\
+		Proprietary (GPT-5.1) & \$ $0.0231$ & \$ $446.32$ & None \\
+		Open Source (Our setup) & \$ $0.0537$ & \$ $96.65$ & Basic GPU server \\
+		Open Source (Small models only) & \$ $0.0111$ & \$ $20.00$ & Consumer-grade computer \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
-An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design. Since there is no standardized methodology for comparing the costs of human and synthetic experiments, we extend a proposed methodology which compares on-premises LLMs with cloud-based proprietary models~\cite{pan2025_cost_benefit} to include human costs.
+An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design. Since there is no standardized methodology for comparing the costs of human and synthetic experiments, we extend a proposed methodology which compares on-premises LLMs with cloud-based proprietary models~\cite{pan2025_cost_benefit} to include human costs. Since the nature of the costs incurred by each option is different (\S\ref{sec:scalability:cost:sources}), any cost comparison necessitates normalizing costs to a universal metric. We define the \acf{cpt} as the monetary cost of completing an arbitrary task. For the purposes of \ac{sdg}, we define a task as the completion of one full discussion. The full methodology can be found in Appendix~\ref{sec:appendix:cost}. 
 
-Since the nature of the costs incurred by each option is different (\S\ref{sec:scalability:cost:sources}), any cost comparison necessitates normalizing costs to a universal metric. We define the \acf{cpt} as the monetary cost of completing an arbitrary task. For the purposes of \ac{sdg}, we define a task as the completion of one full discussion. The full methodology can be found in Appendix~\ref{sec:appendix:cost}. 
-
-Table~\ref{tab:cost} summarizes the estimated cost per task and total experiment cost for human participants, proprietary models, our GPU-server-based setup, and a lightweight setup using only small models on a local machine (\S\ref{sec:scalability:experimental}). As shown in Table~\ref{tab:cost}, the latter approach reduces the total cost of our experiments by roughly \emph{three orders of magnitude} compared with using human participants, although it remains somewhat more expensive than using proprietary models such as GPT-5.1 due to infrastructure costs. Our actual experimental setup relied on a basic GPU server in order to evaluate both larger and smaller open-source models for exploratory purposes. However, our results show that smaller models are sufficient for the task (\S\ref{sec:scalability:model}); in a production setting, the experiments could therefore be run using only these smaller models on a single consumer-grade computer equipped with a GPU, reducing the total cost to approximately \$20. 
+Table~\ref{tab:cost} summarizes the estimated cost per task and total experiment cost for human participants, proprietary models, our GPU-server-based setup, and a lightweight setup using only small models on a local machine (\S\ref{sec:scalability:experimental}). As shown in Table~\ref{tab:cost}, the latter approach reduces the total cost of our experiments by roughly \emph{three orders of magnitude} compared with using human participants, and \emph{by twenty times} compared to proprietary models. Our actual experimental setup relied on a basic GPU server in order to evaluate both larger and smaller open-source models for exploratory purposes. However, our results show that smaller models are sufficient for the task (\S\ref{sec:scalability:model}); in a production setting, the experiments could therefore be run using only these smaller models on a single consumer-grade computer equipped with a GPU, reducing the total cost to approximately \$20. 
+%TODO: Mention that GPT-5 is used everywhere
 
 
 \subsection{Experimental Setup}

@@ -11,8 +11,8 @@ python src/create_datasets.py \
 python src/cost_calculation.py \
   --mode proprietary \
   --num-tasks 1800 \
-  --isl-tokens 3600 \
-  --osl-tokens 1200 \
+  --isl-tokens 47370 \
+  --osl-tokens 11790 \
   --price-input-per-million 1.75 \
   --price-output-per-million 14
 
