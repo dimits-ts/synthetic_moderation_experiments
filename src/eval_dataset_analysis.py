@@ -1,4 +1,3 @@
-
 # Intervention Detection in Discussions
 # Copyright (C) 2026 Dimitris Tsirmpas
 
@@ -22,6 +21,7 @@ from pathlib import Path
 
 import pandas as pd
 import numpy as np
+import matplotlib.collections
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tqdm.auto import tqdm
@@ -37,7 +37,7 @@ def main(
     ablation_csv_path: Path,
     human_csv_path: Path,
     graph_output_dir: Path,
-    stats_output_dir: Path, 
+    stats_output_dir: Path,
     cache_dir: Path,
 ):
     tasks.graphs.seaborn_setup()
@@ -64,6 +64,7 @@ def main(
         y_col="model",
         graph_output_dir=graph_output_dir,
         label_order=MODEL_ORDER,
+        palette=tasks.graphs.COLORBLIND_PALETTE
     )
 
     plot_dataset_diversity(
@@ -88,11 +89,9 @@ def main(
     ablation_stats = dataset_stats(ablation_df, "Ablation")
     human_stats = dataset_stats(human_df, "Human")
 
-    all_stats_df = (
-        main_stats
-        .merge(ablation_stats, on="Metric", how="outer")
-        .merge(human_stats, on="Metric", how="outer")
-    )
+    all_stats_df = main_stats.merge(
+        ablation_stats, on="Metric", how="outer"
+    ).merge(human_stats, on="Metric", how="outer")
 
     caption = "Dataset statistics for all datasets."
     latex_path = stats_output_dir / "dataset_statistics.tex"
@@ -284,19 +283,55 @@ def plot_dataset_length(
     y_col: str,
     graph_output_dir: Path,
     label_order: list[str],
+    palette: list[str],
 ) -> None:
     len_df = df.loc[:, ["message", y_col]]
     len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
-    sns.histplot(
+
+    ax = sns.kdeplot(
         data=len_df,
         x="comment_length",
         hue=y_col,
         hue_order=label_order,
+        palette=palette,
+        fill=True,
         common_norm=False,
-        stat="density",
+        multiple="layer",
     )
+
+    # Match polys to labels by color
+    color_to_hatch = {
+        tuple(c[:3]): h
+        for c, h in zip(
+            [matplotlib.colors.to_rgba(p) for p in palette],
+            tasks.graphs.HATCHES[: len(label_order)],
+        )
+    }
+    poly_collections = [
+        c
+        for c in ax.collections
+        if isinstance(c, matplotlib.collections.PolyCollection)
+    ]
+    for poly in poly_collections:
+        face_color = tuple(poly.get_facecolor()[0][:3])
+        hatch = color_to_hatch.get(face_color)
+        if hatch:
+            poly.set_hatch(hatch)
+
+    # Rebuild legend with hatches
+    legend = ax.get_legend()
+    new_handles = [
+        matplotlib.patches.Patch(
+            facecolor=palette[i],
+            hatch=tasks.graphs.HATCHES[i],
+            label=label,
+        )
+        for i, label in enumerate(label_order)
+    ]
+    ax.legend(handles=new_handles, title=legend.get_title().get_text())
+
     plt.xlim(0, 400)
-    plt.xlabel(r"Comment length (\# words)")
+    plt.xlabel("Comment length (#words)")
     tasks.graphs.save_plot(graph_output_dir / "comment_len_model.png")
     plt.close()
 
@@ -314,23 +349,19 @@ def plot_dataset_diversity(
     if cache_path.exists():
         print(f"Loading cached similarities from {cache_path}")
         similarity_df = pd.read_csv(cache_path)
-
     else:
         print("Computing similarities (cache miss)")
         similarity_df = (
             df.groupby(["conv_id", y_col])["message"].apply(list).reset_index()
         )
-
         similarity_df["rougel_similarity"] = similarity_df[
             "message"
         ].progress_apply(tasks.stats.rougel_similarity)
-
         similarity_df = similarity_df.dropna(subset=["rougel_similarity"])
-
         similarity_df.to_csv(cache_path, index=False)
         print(f"Saved cache → {cache_path}")
 
-    sns.kdeplot(
+    ax = sns.kdeplot(
         data=similarity_df,
         x="rougel_similarity",
         hue=y_col,
@@ -339,6 +370,39 @@ def plot_dataset_diversity(
         common_norm=False,
         multiple="layer",
     )
+
+    # Get the palette colors in hue_order
+    palette_colors = sns.color_palette(n_colors=len(label_order))
+    color_to_hatch = {
+        tuple(color): hatch
+        for color, hatch in zip(
+            palette_colors, tasks.graphs.HATCHES[: len(label_order)]
+        )
+    }
+
+    # Apply hatches by matching each poly's color to its label's color
+    poly_collections = [
+        c
+        for c in ax.collections
+        if isinstance(c, matplotlib.collections.PolyCollection)
+    ]
+    for poly in poly_collections:
+        face_color = tuple(poly.get_facecolor()[0][:3])  # RGB only, drop alpha
+        hatch = color_to_hatch.get(face_color)
+        if hatch:
+            poly.set_hatch(hatch)
+
+    # Rebuild legend with matching hatch marks, in label_order
+    new_handles = [
+        matplotlib.patches.Patch(
+            facecolor=palette_colors[i],
+            hatch=tasks.graphs.HATCHES[i],
+            label=label,
+        )
+        for i, label in enumerate(label_order)
+    ]
+    ax.legend(handles=new_handles, title="")
+
     plt.xlim(0.6, 1)
     plt.xlabel("Diversity")
     tasks.graphs.save_plot(graph_output_path)

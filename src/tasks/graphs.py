@@ -18,18 +18,13 @@
 # You may contact the author at dim.tsirmpas@aueb.gr
 
 from pathlib import Path
-import itertools
 
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.axes
 import seaborn as sns
-import scikit_posthocs as sp
 
-from . import stats
-from . import constants
 
+MARKERS = ["o", "s", "D", "^", "v", "P", "X"]
+HATCHES = ["//", "\\\\", "xx", "oo", "..", "**", "++", "--"]
 
 COLORBLIND_PALETTE = [
     "#000000",  # black

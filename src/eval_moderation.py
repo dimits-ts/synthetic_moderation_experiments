@@ -170,8 +170,6 @@ def intervention_through_time_plot(
         for i, label in enumerate(label_order)
     }
 
-    markers = ["o", "s", "D", "^", "v", "P", "X"]
-
     fig, ax = plt.subplots(figsize=(12, 6))
 
     # iterate in sorted label order
@@ -185,7 +183,7 @@ def intervention_through_time_plot(
             group_df["cum_intervention_pct"],
             label=label,
             color=palette[label],
-            marker=markers[i % len(markers)],
+            marker=tasks.graphs.MARKERS[i % len(tasks.graphs.MARKERS)],
         )
 
     ax.set_xlabel("#Comments (start -> end)")

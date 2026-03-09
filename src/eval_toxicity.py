@@ -1,4 +1,3 @@
-
 # Intervention Detection in Discussions
 # Copyright (C) 2026 Dimitris Tsirmpas
 
@@ -43,8 +42,8 @@ def main(
 
     df["role"] = np.where(
         df.is_moderator,
-        "Moderator",
-        np.where(df.is_troll, "Troll", "Non-troll user"),
+        "Facilitator",
+        np.where(df.is_troll, "Troll", "Non-troll"),
     )
 
     MODEL_ORDER = tasks.graphs.get_sorted_labels(df, "model")
@@ -94,8 +93,8 @@ def main(
     ]
 
     ablation_df = ablation_df[ablation_df.message_id.isin(valid_ids)]
-    ablation_df["dataset"] = "Basic Prompt"
-    df["dataset"] = "Provocation-Reactive Prompt"
+    ablation_df["dataset"] = "Minimal"
+    df["dataset"] = "Responsive"
 
     full_df = pd.concat([df, ablation_df], ignore_index=True)
     toxicity_vs_troll_count(df=full_df, graph_dir=graph_dir)
@@ -147,6 +146,7 @@ def toxicity_by_dimension(
         y=dimension,
         estimator=np.mean,
         errorbar=("ci", 95),
+        order=["Facilitator", "Non-troll", "Troll"]
     )
 
     ax.set_ylabel("")
@@ -173,7 +173,9 @@ def toxicity_regression(df: pd.DataFrame, latex_output_dir: Path) -> None:
     pvalues = result.pvalues[params.index]
 
     # Random effects variance
-    re_var = result.cov_re.iloc[0, 0] if result.cov_re is not None else float("nan")
+    re_var = (
+        result.cov_re.iloc[0, 0] if result.cov_re is not None else float("nan")
+    )
 
     # Significance stars
     def stars(p: float) -> str:
@@ -213,7 +215,11 @@ def toxicity_regression(df: pd.DataFrame, latex_output_dir: Path) -> None:
 
     n_obs = int(result.nobs)
     n_groups = result.model.n_groups
-    log_lik = f"{result.llf:.3f}" if hasattr(result, "llf") and result.llf is not None else "---"
+    log_lik = (
+        f"{result.llf:.3f}"
+        if hasattr(result, "llf") and result.llf is not None
+        else "---"
+    )
 
     latex = (
         "\\begin{table}[ht]\n"
@@ -282,6 +288,8 @@ def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
         hue="dataset",
         estimator=np.mean,
         errorbar=("ci", 95),
+        hue_order=["Responsive", "Minimal"],
+        markers=["*", "^"]
     )
 
     ax.set_title("Toxicity of non-troll users by instruction prompt")
@@ -301,19 +309,11 @@ def toxicity_through_time_plot(
     label_order: list[str],
     palette: list[str],
 ) -> None:
-    # --- Step 1: copy and filter out moderators ---
     plot_df = df[~df.is_moderator].copy()
-
-    # --- Step 2: remove duplicate messages per conversation ---
     plot_df = plot_df.drop_duplicates(subset=["conv_id", "message_id"])
-
-    # --- Step 3: sort messages by conversation and message order ---
     plot_df = plot_df.sort_values(["conv_id", "message_order"])
 
-    # --- Step 4: reconstruct turn index within each conversation ---
     plot_df["turn_index"] = plot_df.groupby("conv_id").cumcount() + 1
-
-    # --- Step 5: compute cumulative average toxicity per conversation ---
     plot_df["cum_avg_toxicity"] = (
         plot_df.groupby("conv_id")["toxicity"]
         .expanding()
@@ -321,7 +321,6 @@ def toxicity_through_time_plot(
         .reset_index(level=0, drop=True)
     )
 
-    # --- Step 6: seaborn lineplot with errorbar ---
     plt.figure(figsize=(12, 6))
     sns.lineplot(
         data=plot_df,
@@ -329,17 +328,20 @@ def toxicity_through_time_plot(
         y="cum_avg_toxicity",
         hue=groupby_col,
         hue_order=label_order,
-        marker="o",
         palette=palette,
         errorbar=("ci", 95),
+        markers=True,
+        dashes=False,
+        style=groupby_col,   # required for markers to actually render
+        style_order=label_order,
+        markersize=10,
     )
 
-    plt.xlabel("#User messages in conversation")
+    plt.xlabel("#Comments (start -> end)")
     plt.ylabel("Cumulative average toxicity")
-    plt.legend(title="")
+    plt.legend(title="", loc="upper right")
     plt.tight_layout()
 
-    # --- Step 7: save the plot ---
     tasks.graphs.save_plot(graph_output_path)
     plt.close()
 
