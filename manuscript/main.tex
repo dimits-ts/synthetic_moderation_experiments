@@ -2,9 +2,7 @@
 \pdfoutput=1
 % In particular,the hyperref package requires pdfLaTeX in order to break URLs across lines.
 
-\documentclass[manuscript,screen,review]{acmart}
-\usepackage[misc]{ifsym}
-\newcommand{\corr}{(\Letter)}
+\documentclass[acmsmall,anonymous,review]{acmart}
 
 % my packages
 \usepackage{graphicx}
@@ -34,8 +32,60 @@
 \newtheorem*{definition}{Definition}
 \newtheorem{research-question}{RQ}
 
+\acmJournal{TSC}
+\title[Designing Synthetic Discussions]{Designing Synthetic Discussion Generation Systems: A Case Study for Online Facilitation}
 
-\title{Designing Synthetic Discussion Generation Systems: A Case Study for Online Facilitation}
+%TODO: Add authors?
+
+\keywords{LLMs, discussions, facilitation, GABM, synthetic, experiments}
+\begin{CCSXML}
+	<ccs2012>
+	<concept>
+	<concept_id>10010147.10010178.10010179.10010182</concept_id>
+	<concept_desc>Computing methodologies~Natural language generation</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10010147.10010178.10010179.10010181</concept_id>
+	<concept_desc>Computing methodologies~Discourse, dialogue and pragmatics</concept_desc>
+	<concept_significance>300</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10010147.10010178.10010179.10010186</concept_id>
+	<concept_desc>Computing methodologies~Language resources</concept_desc>
+	<concept_significance>300</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003120.10003130.10003233.10003597</concept_id>
+	<concept_desc>Human-centered computing~Open source software</concept_desc>
+	<concept_significance>300</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003120.10003130.10003233.10010519</concept_id>
+	<concept_desc>Human-centered computing~Social networking sites</concept_desc>
+	<concept_significance>100</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003120.10003130.10003131.10011761</concept_id>
+	<concept_desc>Human-centered computing~Social media</concept_desc>
+	<concept_significance>100</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003120.10003130.10003134</concept_id>
+	<concept_desc>Human-centered computing~Collaborative and social computing design and evaluation methods</concept_desc>
+	<concept_significance>100</concept_significance>
+	</concept>
+	</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Computing methodologies~Natural language generation}
+\ccsdesc[300]{Computing methodologies~Discourse, dialogue and pragmatics}
+\ccsdesc[300]{Computing methodologies~Language resources}
+\ccsdesc[300]{Human-centered computing~Open source software}
+\ccsdesc[100]{Human-centered computing~Social networking sites}
+\ccsdesc[100]{Human-centered computing~Social media}
+\ccsdesc[100]{Human-centered computing~Collaborative and social computing design and evaluation methods}
+
 
 \begin{document}
 
