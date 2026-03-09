@@ -88,6 +88,8 @@ The nature of the costs involved in any of the three methods are completely diff
 
 \begin{table}[ht]
 	\centering
+	\caption{Estimated \ac{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5.1 pricing, our own experimental setup, and a production-stage setup with a single consumer-grade GPU. While capital costs are factored in the \ac{cpt} calculation (see~\ref{sec:appendix:cost}), we also include them separately in this table.}
+	\label{tab:cost}
 	\begin{tabular}{cccc}
 		\toprule
 		\textbf{Participant Type} & \ac{cpt} & \textbf{Total cost} & \textbf{Infrastructure} \\
@@ -98,8 +100,6 @@ The nature of the costs involved in any of the three methods are completely diff
 		Open Source (Small models only) & \$ 0.0111 & \$ 20.00 & Consumer-grade computer \\
 		\bottomrule
 	\end{tabular}
-	\caption{Estimated \ac{cpt} and total experiment cost in U.S.D. for human participation, proprietary models with GPT-5.1 pricing, our own experimental setup, and a production-stage setup with a single consumer-grade GPU. While capital costs are factored in the \ac{cpt} calculation (see~\ref{sec:appendix:cost}), we also include them separately in this table.}
-	\label{tab:cost}
 \end{table}
 
 An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design. Since there is no standardized methodology for comparing the costs of human and synthetic experiments, we extend a proposed methodology which compares on-premises LLMs with cloud-based proprietary models~\cite{pan2025_cost_benefit} to include human costs.

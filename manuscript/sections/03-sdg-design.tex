@@ -340,6 +340,8 @@ We find that using this turn-taking function aligns LLM discussions with human c
 \begin{table}[h	t]
 	\centering
 	\small
+	\caption{Summary of \ac{gabm} evaluation strategies and their practical feasibility for \ac{sdg} and facilitation tasks. \checkmark indicates application; $\times$ indicates exclusion. For each strategy, we detail its use within our work or provide a justification for its omission.}.
+	\label{tab:evaluation_sdg}
 	\begin{tabular}{>{\bfseries}p{3cm} c c c p{5cm}}
 		\toprule
 		\multicolumn{1}{c}{\textbf{Name}} & 
@@ -365,8 +367,6 @@ We find that using this turn-taking function aligns LLM discussions with human c
 		Expert reviews & \checkmark & $\times$ & $\times$ & High cost and difficulty in recruiting social interaction experts; not scalable. \\
 		\bottomrule
 	\end{tabular}
-	\caption{Summary of \ac{gabm} evaluation strategies and their practical feasibility for \ac{sdg} and facilitation tasks. \checkmark indicates application; $\times$ indicates exclusion. For each strategy, we detail its use within our work or provide a justification for its omission.}.
-	\label{tab:evaluation_sdg}
 \end{table}
 
 We detailed existing evaluation methods for \ac{gabm} systems in \S\ref{sec:related:quality:gabm}. In this section, we study which of these methods are applicable to \ac{sdg} systems, as well as which can be used for our facilitation experiments. We then detail where and how these methods were used in this paper, or the reason they were omitted from our analysis. An abridged report can be found in Table~\ref{tab:evaluation_sdg}, while a more extensive description is provided below for each evaluation method:
