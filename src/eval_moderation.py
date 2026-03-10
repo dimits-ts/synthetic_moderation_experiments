@@ -188,9 +188,10 @@ def intervention_through_time_plot(
 
     ax.set_xlabel("#Comments (start -> end)")
     ax.set_ylabel("% Interventions")
+    ax.set_title(f"Facilitator interventions per {groupby_col}")
 
     # legend already sorted because plotting order is sorted
-    ax.legend(title=groupby_col)
+    ax.legend(title="")
 
     plt.tight_layout()
 

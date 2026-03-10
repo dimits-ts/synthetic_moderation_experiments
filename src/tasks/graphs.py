@@ -71,7 +71,7 @@ def seaborn_setup() -> None:
             "font.family": "serif",
             "font.serif": ["Liberation Serif", "Nimbus Roman"],
             "font.size": 18,
-            "axes.titlesize": 18,
+            "axes.titlesize": 24,
             "axes.labelsize": 22,
             "xtick.labelsize": 14,
             "ytick.labelsize": 14,
