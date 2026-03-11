@@ -1,4 +1,3 @@
-
 # Intervention Detection in Discussions
 # Copyright (C) 2026 Dimitris Tsirmpas
 
@@ -19,450 +18,480 @@
 
 """
 Python script to calculate Cost Per Task (CPT) for Human, Open-Source
-(Self-Hosted) LLMs, and Proprietary LLMs.
-This script is provided as a runnable tool.
+(Self-Hosted) LLMs, and Proprietary LLMs, following the methodology defined
+in the paper.
+
+Total Cost = CPT * N_tasks
+CPT = O_task * C_op
+
+Three cost models are supported:
+  - open-source:  Self-hosted LLMs; C_op derived from amortized TCO.
+  - proprietary:  API-based LLMs; C_op derived from token usage.
+  - human:        Crowdsourced workers; C_op derived from wage + platform fees.
 """
 
 import argparse
 
 
+# ---------------------------------------------------------------------------
+# Open-source (self-hosted) model
+# ---------------------------------------------------------------------------
+
+
 def capex_for_experiment(
-    initial_server_cost: float,
+    server_cost: float,
     n_servers: int,
-    depreciation_period_years: int,
-    experiment_duration_days: int,
+    depreciation_years: int,
+    experiment_days: int,
 ) -> float:
     """
-    Calculate the annualized capital expenditure (CapEx)
-    for server infrastructure only over the experiment duration.
+    Amortized capital expenditure over the experiment window.
 
-    :param initial_server_cost: Initial cost of a single server (e.g., in USD).
-    :type initial_server_cost: float
-    :param n_servers: Number of servers in the infrastructure.
-    :type n_servers: int
-    :param depreciation_period_years:
-        Number of years over which the server cost is amortized.
-    :type depreciation_period_years: int
-    :param experiment_duration_days:
-        How many days the experiment ran for. Used to adjust capex depreciation
-    :type experiment_duration_days: int
-    :return: Annualized CapEx (in USD).
-    :rtype: float
+    CapEx_exp = C_server * N_servers * (D_exp / (365 * Y_depr))
+
+    :param server_cost: Purchase cost of a single server (USD).
+    :param n_servers: Number of servers.
+    :param depreciation_years: Hardware depreciation period (years).
+    :param experiment_days: Duration of the experiment (days).
+    :return: Amortized CapEx for the experiment window (USD).
     """
-    total_capex = initial_server_cost * n_servers
-    depreciation_days = depreciation_period_years * 365
-    return total_capex * (experiment_duration_days / depreciation_days)
+    return (
+        server_cost
+        * n_servers
+        * (experiment_days / (365 * depreciation_years))
+    )
 
 
 def power_cost_for_experiment(
-    power_watts_per_server: float,
+    power_watts: float,
     electricity_price_per_kwh: float,
     n_servers: int,
-    experiment_duration_days: int,
+    experiment_days: int,
 ) -> float:
     """
-    Calculate the annual electricity cost for running the
-    server infrastructure.
+    Electricity cost over the experiment window.
 
-    This includes the power consumption of each server, converted to kWh,
-    multiplied by the electricity price per kWh, and scaled by the number
-    of servers.
+    PowerCost_exp = (P_watts / 1000) * (24 * D_exp) * C_kWh * N_servers
 
-    :param power_watts_per_server: Power consumption in watts per server.
-    :type power_watts_per_server: float
-    :param hours_per_year:
-        Number of hours the server is expected to run per year.
-    :type hours_per_year: int
-    :param electricity_price_per_kwh:
-        Price of electricity in dollars per kilowatt-hour (kWh).
-    :type electricity_price_per_kwh: float
-    :param n_servers: Number of servers in the infrastructure.
-    :type n_servers: int
-    :param experiment_duration_days:
-        How many days the experiment ran for.
-    :type experiment_duration_days: int
-    :return: Annual power cost (in USD).
-    :rtype: float
+    :param power_watts: Average power draw per server (W).
+    :param electricity_price_per_kwh: Electricity price (USD/kWh).
+    :param n_servers: Number of servers.
+    :param experiment_days: Duration of the experiment (days).
+    :return: Total electricity cost for the experiment window (USD).
     """
-    hours = experiment_duration_days * 24
     return (
-        power_watts_per_server
-        * hours
-        / 1000.0
+        (power_watts / 1000.0)
+        * (24 * experiment_days)
         * electricity_price_per_kwh
         * n_servers
     )
 
 
 def tco_experiment(
-    initial_server_cost: float,
+    server_cost: float,
     n_servers: int,
-    depreciation_period_years: int,
-    power_watts_per_server: float,
+    depreciation_years: int,
+    power_watts: float,
     electricity_price_per_kwh: float,
-    experiment_duration_days: int,
+    experiment_days: int,
 ) -> float:
     """
-    Calculate the Total Cost of Ownership (TCO) for the server infrastructure
-    for the experiment.
+    Total Cost of Ownership for the experiment window.
 
-    TCO includes both capital and operational expenditures,
-    amortized over the timeframe of the experiment.
+    TCO_exp = CapEx_exp + PowerCost_exp
 
-    :param initial_server_cost: Initial cost of a single server (e.g., in USD).
-    :type initial_server_cost: float
-    :param n_servers: Number of servers in the infrastructure.
-    :type n_servers: int
-    :param depreciation_period_years:
-        Number of years over which the server cost is amortized.
-    :type depreciation_period_years: int
-    :param power_watts_per_server: Power consumption in watts per server.
-    :type power_watts_per_server: float
-    :param hours_per_year:
-        Number of hours the server is expected to run per year.
-    :type hours_per_year: int
-    :param electricity_price_per_kwh:
-        Price of electricity in dollars per kilowatt-hour (kWh).
-    :type electricity_price_per_kwh: float
-    :param experiment_duration_days:
-        How many days the experiment ran for.
-    :type experiment_duration_days: int
-    :return: Total yearly cost of ownership (in USD).
-    :rtype: float
+    :param server_cost: Purchase cost of a single server (USD).
+    :param n_servers: Number of servers.
+    :param depreciation_years: Hardware depreciation period (years).
+    :param power_watts: Average power draw per server (W).
+    :param electricity_price_per_kwh: Electricity price (USD/kWh).
+    :param experiment_days: Duration of the experiment (days).
+    :return: TCO for the experiment window (USD).
     """
     capex = capex_for_experiment(
-        initial_server_cost,
-        n_servers,
-        depreciation_period_years,
-        experiment_duration_days,
+        server_cost, n_servers, depreciation_years, experiment_days
     )
     power = power_cost_for_experiment(
-        power_watts_per_server,
-        electricity_price_per_kwh,
-        n_servers,
-        experiment_duration_days,
+        power_watts, electricity_price_per_kwh, n_servers, experiment_days
     )
     return capex + power
 
 
-def total_tasks_from_throughput(
+def total_requests_for_experiment(
     rps_per_instance: float,
-    instances: int,
-    uptime_fraction: float,
-    experiment_duration_days: int,
-    requests_per_task: int,
-) -> float:
-    seconds = experiment_duration_days * 24 * 3600
-    total_requests = rps_per_instance * instances * uptime_fraction * seconds
-    return total_requests / requests_per_task
-
-
-def total_yearly_tasks_from_throughput(
-    rps_per_instance: float,
-    instances: float,
-    uptime_fraction: float,
-    seconds_per_year: int = 365 * 24 * 3600,
+    n_instances: int,
+    utilization: float,
+    experiment_days: int,
 ) -> float:
     """
-    Calculate the total number of tasks handled by the system in a year.
+    Total number of model requests processed during the experiment.
 
-    This is based on the system's throughput (requests per second
-    per instance),
-    the number of instances, and the uptime fraction (fraction of time the
-    system is operational).
+    Requests_exp = R_ps * N_inst * U * (24 * 3600 * D_exp)
 
-    :param rps_per_instance: Requests per second per instance.
-    :type rps_per_instance: float
-    :param instances: Number of instances in the cluster.
-    :type instances: float
-    :param uptime_fraction:
-        Fraction of time the system is operational (e.g., 0.9 for 90% uptime).
-    :type uptime_fraction: float
-    :param seconds_per_year:
-        Total number of seconds in a year (default: 31,536,000).
-    :type seconds_per_year: int
-    :return: Total number of tasks handled in a year.
-    :rtype: float
+    :param rps_per_instance: Request throughput per model instance (req/s).
+    :param n_instances: Number of model instances.
+    :param utilization: GPU utilization fraction (0–1).
+    :param experiment_days: Duration of the experiment (days).
+    :return: Total number of requests processed.
     """
-    return rps_per_instance * instances * uptime_fraction * seconds_per_year
+    return (
+        rps_per_instance
+        * n_instances
+        * utilization
+        * (24 * 3600 * experiment_days)
+    )
 
 
 def cpt_open_source(
-    rps_per_instance: float,
-    instances: int,
-    uptime_fraction: float,
-    requests_per_task: int,
-    initial_server_cost: float,
-    n_servers: int,
-    depreciation_period_years: int,
-    power_watts_per_server: float,
-    electricity_price_per_kwh: float,
-    experiment_duration_days: int,
+    # Infrastructure
+    os_server_cost: float,
+    os_n_servers: int,
+    os_depreciation_years: int,
+    os_power_watts: float,
+    os_electricity_price_per_kwh: float,
+    # Throughput
+    os_rps_per_instance: float,
+    os_n_instances: int,
+    os_utilization: float,
+    # Task structure
+    experiment_days: int,
+    operations_per_task: int,
 ) -> float:
     """
-    Calculate the Cost Per Task (CPT) for self-hosted open-source LLMs.
+    Cost Per Task for self-hosted open-source LLMs.
 
-    This function computes the CPT by normalizing the Total Cost of Ownership
-    (TCO) to a per-task basis, based on the system's throughput
-    and utilization.
+    C_op^OS  = TCO_exp / Requests_exp
+    CPT_OS   = O_task * C_op^OS
 
-    :param rps_per_instance: Requests per second per instance.
-    :type rps_per_instance: float
-    :param instances: Number of instances in the cluster.
-    :type instances: float
-    :param uptime_fraction:
-        Fraction of time the system is operational (e.g., 0.9 for 90% uptime).
-    :type uptime_fraction: float
-    :param initial_server_cost: Initial cost of a single server (e.g., in USD).
-    :type initial_server_cost: float
-    :param n_servers: Number of servers in the infrastructure.
-    :type n_servers: int
-    :param depreciation_period_years:
-        Number of years over which the server cost is amortized.
-    :type depreciation_period_years: int
-    :param yearly_hosting_cost:
-        Yearly hosting cost per server (e.g., cloud hosting fees).
-    :type yearly_hosting_cost: float
-    :param yearly_software_cost: Yearly software licensing cost per server.
-    :type yearly_software_cost: float
-    :param power_watts_per_server: Power consumption in watts per server.
-    :type power_watts_per_server: float
-    :param hours_per_year:
-        Number of hours the server is expected to run per year.
-    :type hours_per_year: int
-    :param electricity_price_per_kwh:
-        Price of electricity in dollars per kilowatt-hour (kWh).
-    :type electricity_price_per_kwh: float
-    :param experiment_duration_days:
-        How many days the experiment ran for.
-    :type experiment_duration_days: int
-    :return: The Cost Per Task (CPT) for open-source LLMs
-    :rtype: float
+    :param os_server_cost: Purchase cost of a single server (USD).
+    :param os_n_servers: Number of servers.
+    :param os_depreciation_years: Hardware depreciation period (years).
+    :param os_power_watts: Average power draw per server (W).
+    :param os_electricity_price_per_kwh: Electricity price (USD/kWh).
+    :param os_rps_per_instance: Request throughput per model instance (req/s).
+    :param os_n_instances: Number of model instances.
+    :param os_utilization: GPU utilization fraction (0–1).
+    :param experiment_days: Duration of the experiment (days).
+    :param operations_per_task: Number of model requests per task (O_task).
+    :return: Cost Per Task (USD).
     """
     tco = tco_experiment(
-        initial_server_cost,
-        n_servers,
-        depreciation_period_years,
-        power_watts_per_server,
-        electricity_price_per_kwh,
-        experiment_duration_days,
+        os_server_cost,
+        os_n_servers,
+        os_depreciation_years,
+        os_power_watts,
+        os_electricity_price_per_kwh,
+        experiment_days,
     )
-    tasks = total_tasks_from_throughput(
-        rps_per_instance,
-        instances,
-        uptime_fraction,
-        experiment_duration_days,
-        requests_per_task,
+    requests = total_requests_for_experiment(
+        os_rps_per_instance,
+        os_n_instances,
+        os_utilization,
+        experiment_days,
     )
-    return tco / tasks
+    c_op = tco / requests
+    return operations_per_task * c_op
 
 
-def human_cost_per_hour(
-    human_wage_gross: float,
-    platform_fee_frac: float,
-    qa_overhead_per_hour: float,
+# ---------------------------------------------------------------------------
+# Proprietary model
+# ---------------------------------------------------------------------------
+
+
+def cpt_proprietary(
+    prop_isl: int,
+    prop_osl: int,
+    prop_price_in_per_million: float,
+    prop_price_out_per_million: float,
+    prop_api_overhead: float,
+    operations_per_task: int,
 ) -> float:
     """
-    Calculate the effective hourly cost of human labor,
-    including platform fees and QA overhead.
+    Cost Per Task for proprietary LLM APIs.
 
-    :param human_wage_gross: Gross hourly wage of the worker (e.g., in USD).
-    :type human_wage_gross: float
-    :param platform_fee_frac:
-        Fraction of the wage taken by the platform (e.g., 0.33 for 33%).
-    :type platform_fee_frac: float
-    :param qa_overhead_per_hour:
-        Additional cost per hour for quality assurance.
-    :type qa_overhead_per_hour: float
-    :return: Effective hourly cost of human labor (in USD).
-    :rtype: float
+    C_op^Prop = (ISL * P_in + OSL * P_out) / 1_000_000 + C_API_Overhead
+    CPT_Prop  = O_task * C_op^Prop
+
+    :param prop_isl: Input sequence length (tokens) per model call.
+    :param prop_osl: Output sequence length (tokens) per model call.
+    :param prop_price_in_per_million: Vendor price per million input tokens (USD).
+    :param prop_price_out_per_million: Vendor price per million output tokens (USD).
+    :param prop_api_overhead: Fixed API overhead cost per call (USD).
+    :param operations_per_task: Number of model calls per task (O_task).
+    :return: Cost Per Task (USD).
     """
-    return human_wage_gross * (1 + platform_fee_frac) + qa_overhead_per_hour
+    c_op = (
+        prop_isl * prop_price_in_per_million
+        + prop_osl * prop_price_out_per_million
+    ) / 1_000_000.0 + prop_api_overhead
+    return operations_per_task * c_op
+
+
+# ---------------------------------------------------------------------------
+# Human model
+# ---------------------------------------------------------------------------
 
 
 def cpt_human(
     human_wage_gross: float,
-    platform_fee_frac: float,
-    qa_overhead_per_hour: float,
-    time_per_task_seconds: float,
-    qa_amortized_per_task: float,
+    human_platform_fee_frac: float,
+    human_time_per_task_seconds: float,
+    human_qa_amortized_per_task: float,
+    human_n_humans: int,
 ) -> float:
     """
-    Calculate the Cost Per Task (CPT) for human labor,
-    including QA amortization.
+    Cost Per Task for human participants.
 
-    :param human_wage_gross: Gross hourly wage of the worker (e.g., in USD).
-    :type human_wage_gross: float
-    :param platform_fee_frac:
-        Fraction of the wage taken by the platform (e.g., 0.33 for 33%).
-    :type platform_fee_frac: float
-    :param qa_overhead_per_hour:
-        Additional cost per hour for quality assurance.
-    :type qa_overhead_per_hour: float
-    :param time_per_task_seconds:
-        Estimated time (in seconds) to complete a task.
-    :type time_per_task_seconds: float
-    :param qa_amortized_per_task:
-        Amortized cost per task for quality assurance.
-    :type qa_amortized_per_task: float
-    :return: The human Cost Per Task (CPT).
-    :rtype: float
+    C_op^Human = (W_gross / 3600) * (1 + F_platform) * T_task + C_QA
+    CPT_Human  = C_op^Human * N_Humans
+
+    :param human_wage_gross: Ethical gross hourly wage of a worker (USD/hr).
+    :param human_platform_fee_frac: Platform commission as a fraction (e.g. 0.20).
+    :param human_time_per_task_seconds: Estimated task duration per worker (s).
+    :param human_qa_amortized_per_task: Amortized QA overhead cost per task (USD).
+    :param human_n_humans: Number of human workers needed to complete one task.
+    :return: Cost Per Task (USD).
     """
-    cph = human_cost_per_hour(
-        human_wage_gross, platform_fee_frac, qa_overhead_per_hour
-    )
-    cpt = (time_per_task_seconds / 3600.0 * cph) + qa_amortized_per_task
-    return cpt
+    c_op = (human_wage_gross / 3600.0) * (
+        1 + human_platform_fee_frac
+    ) * human_time_per_task_seconds + human_qa_amortized_per_task
+    return c_op * human_n_humans
 
 
-def cpt_proprietary(
-    isl_tokens: float,
-    osl_tokens: float,
-    price_input_per_million: float,
-    price_output_per_million: float,
-    api_retry_overhead_fraction: float,
-    api_fixed_overhead_per_task: float,
-) -> float:
-    """
-    Calculate the Cost Per Task (CPT) for proprietary LLM APIs.
-
-    This includes the cost of input and output tokens, plus API overhead.
-
-    :param isl_tokens: Number of input tokens per task.
-    :type isl_tokens: float
-    :param osl_tokens: Number of output tokens per task.
-    :type osl_tokens: float
-    :param price_input_per_million: Price per million input tokens (in USD).
-    :type price_input_per_million: float
-    :param price_output_per_million: Price per million output tokens (in USD).
-    :type price_output_per_million: float
-    :param api_retry_overhead_fraction: Fraction of cost attributed to retries.
-    :type api_retry_overhead_fraction: float
-    :param api_fixed_overhead_per_task:
-        Fixed overhead per task (e.g., API fees).
-    :type api_fixed_overhead_per_task: float
-    :return: The Cost Per Task (CPT) for proprietary models.
-    :rtype: float
-    """
-    base = (
-        isl_tokens * price_input_per_million
-        + osl_tokens * price_output_per_million
-    ) / 1_000_000.0
-    overhead = base * api_retry_overhead_fraction + api_fixed_overhead_per_task
-    return base + overhead
+# ---------------------------------------------------------------------------
+# Quality adjustment (optional)
+# ---------------------------------------------------------------------------
 
 
 def quality_adjusted_cpt(raw_cpt: float, quality_score: float) -> float:
     """
-    Adjust the Cost Per Task (CPT) based on a quality score.
+    Adjust the CPT by a quality score.
 
-    A higher quality score reduces the effective CPT, reflecting better
-    data quality or efficiency.
+    A higher quality score lowers the effective CPT.
 
-    :param raw_cpt: Raw CPT (before quality adjustment).
-    :type raw_cpt: float
-    :param quality_score: Quality score (should be > 0).
-    :type quality_score: float
-    :return: Quality-adjusted CPT.
-    :rtype: float
+    :param raw_cpt: Raw CPT before quality adjustment (USD).
+    :param quality_score: Quality score (must be > 0).
+    :return: Quality-adjusted CPT (USD).
     """
     if quality_score <= 0:
         return float("inf")
     return raw_cpt / quality_score
 
 
-def main(args: argparse.Namespace):
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
 
+
+def main(args: argparse.Namespace):
     match args.mode:
         case "open-source":
             cpt = cpt_open_source(
-                args.rps_per_instance,
-                args.instances,
-                args.uptime_fraction,
-                args.requests_per_task,
-                args.initial_server_cost,
-                args.n_servers,
-                args.depreciation_period_years,
-                args.power_watts_per_server,
-                args.electricity_price_per_kwh,
-                args.experiment_duration_days,
-            )
-
-        case "human":
-            cpt = cpt_human(
-                args.human_wage_gross,
-                args.platform_fee_frac,
-                args.qa_overhead_per_hour,
-                args.time_per_task_seconds,
-                args.qa_amortized_per_task,
+                os_server_cost=args.os_server_cost,
+                os_n_servers=args.os_n_servers,
+                os_depreciation_years=args.os_depreciation_years,
+                os_power_watts=args.os_power_watts,
+                os_electricity_price_per_kwh=args.os_electricity_price_per_kwh,
+                os_rps_per_instance=args.os_rps_per_instance,
+                os_n_instances=args.os_n_instances,
+                os_utilization=args.os_utilization,
+                experiment_days=args.experiment_days,
+                operations_per_task=args.operations_per_task,
             )
 
         case "proprietary":
             cpt = cpt_proprietary(
-                args.isl_tokens,
-                args.osl_tokens,
-                args.price_input_per_million,
-                args.price_output_per_million,
-                args.api_retry_overhead_fraction,
-                args.api_fixed_overhead_per_task,
+                prop_isl=args.prop_isl,
+                prop_osl=args.prop_osl,
+                prop_price_in_per_million=args.prop_price_in_per_million,
+                prop_price_out_per_million=args.prop_price_out_per_million,
+                prop_api_overhead=args.prop_api_overhead,
+                operations_per_task=args.operations_per_task,
+            )
+
+        case "human":
+            cpt = cpt_human(
+                human_wage_gross=args.human_wage_gross,
+                human_platform_fee_frac=args.human_platform_fee_frac,
+                human_time_per_task_seconds=args.human_time_per_task_seconds,
+                human_qa_amortized_per_task=args.human_qa_amortized_per_task,
+                human_n_humans=args.human_n_humans,
             )
 
         case _:
             raise ValueError(f"Unknown mode: {args.mode}")
 
-    print(f"CPT ({args.mode}): {cpt:.6f} USD")
-
-    if args.num_tasks > 1:
+    if args.quality_score is not None:
+        adjusted = quality_adjusted_cpt(cpt, args.quality_score)
         print(
-            f"Total cost ({args.num_tasks} tasks): {cpt * args.num_tasks:.2f} USD"
+            f"CPT ({args.mode}): {cpt:.6f} USD  |  quality-adjusted: {adjusted:.6f} USD"
+        )
+    else:
+        print(f"CPT ({args.mode}): {cpt:.6f} USD")
+
+    if args.n_tasks > 1:
+        print(
+            f"Total cost ({args.n_tasks} tasks): {cpt * args.n_tasks:.2f} USD"
         )
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Compute Cost Per Task (CPT) for open-source LLMs, proprietary LLMs, or human workers.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
 
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument("--num-tasks", type=int, default=1)
+    # ---- Shared ----
     parser.add_argument(
         "--mode",
-        choices=["open-source", "human", "proprietary"],
+        choices=["open-source", "proprietary", "human"],
         required=True,
-        help="Which cost model to compute",
-    )
-
-    # Experiment structure
-    parser.add_argument("--requests-per-task", type=int, default=1)
-    parser.add_argument("--experiment-duration-days", type=int, default=1)
-
-    # Open-source infra
-    parser.add_argument("--initial-server-cost", type=float, default=7000.0)
-    parser.add_argument("--n-servers", type=int, default=1)
-    parser.add_argument("--depreciation-period-years", type=int, default=4)
-    parser.add_argument("--power-watts-per-server", type=float, default=8000.0)
-    parser.add_argument(
-        "--electricity-price-per-kwh", type=float, default=0.12
-    )
-    parser.add_argument("--rps-per-instance", type=float, default=0.2)
-    parser.add_argument("--instances", type=int, default=1)
-    parser.add_argument("--uptime-fraction", type=float, default=0.9)
-
-    # Human labor
-    parser.add_argument("--human-wage-gross", type=float, default=12.0)
-    parser.add_argument("--platform-fee-frac", type=float, default=0.333)
-    parser.add_argument("--qa-overhead-per-hour", type=float, default=4.0)
-    parser.add_argument("--time-per-task-seconds", type=float, default=600.0)
-    parser.add_argument("--qa-amortized-per-task", type=float, default=0.0)
-
-    # Proprietary (full discussion defaults)
-    parser.add_argument("--isl-tokens", type=int, default=50)
-    parser.add_argument("--osl-tokens", type=int, default=20)
-    parser.add_argument("--price-input-per-million", type=float, default=1.25)
-    parser.add_argument("--price-output-per-million", type=float, default=10.0)
-    parser.add_argument(
-        "--api-retry-overhead-fraction", type=float, default=0.0
+        help="Cost model to compute.",
     )
     parser.add_argument(
-        "--api-fixed-overhead-per-task", type=float, default=0.0
+        "--n-tasks",
+        type=int,
+        default=1,
+        help="Total number of tasks (N_tasks). Used to report total cost.",
+    )
+    parser.add_argument(
+        "--operations-per-task",
+        type=int,
+        default=1,
+        help="Number of model calls / operations required per task (O_task). "
+        "Used by open-source and proprietary modes.",
+    )
+    parser.add_argument(
+        "--experiment-days",
+        type=int,
+        default=1,
+        help="Duration of the experiment in days (D_exp). Used by open-source mode.",
+    )
+    parser.add_argument(
+        "--quality-score",
+        type=float,
+        default=None,
+        help="Optional quality score (>0) to compute quality-adjusted CPT.",
+    )
+
+    # ---- Open-source: infrastructure ----
+    os_group = parser.add_argument_group("open-source — infrastructure")
+    os_group.add_argument(
+        "--os-server-cost",
+        type=float,
+        default=7_000.0,
+        help="Purchase cost of a single server, C_server (USD).",
+    )
+    os_group.add_argument(
+        "--os-n-servers",
+        type=int,
+        default=1,
+        help="Number of servers, N_servers.",
+    )
+    os_group.add_argument(
+        "--os-depreciation-years",
+        type=int,
+        default=4,
+        help="Hardware depreciation period, Y_depr (years).",
+    )
+    os_group.add_argument(
+        "--os-power-watts",
+        type=float,
+        default=500.0,
+        help="Average server power draw, P_watts (W).",
+    )
+    os_group.add_argument(
+        "--os-electricity-price-per-kwh",
+        type=float,
+        default=0.12,
+        help="Electricity price, C_kWh (USD/kWh).",
+    )
+
+    # ---- Open-source: throughput ----
+    os_tp_group = parser.add_argument_group("open-source — throughput")
+    os_tp_group.add_argument(
+        "--os-rps-per-instance",
+        type=float,
+        default=60,
+        help="Request throughput per model instance, R_ps (req/s).",
+    )
+    os_tp_group.add_argument(
+        "--os-n-instances",
+        type=int,
+        default=1,
+        help="Number of model instances, N_inst.",
+    )
+    os_tp_group.add_argument(
+        "--os-utilization",
+        type=float,
+        default=0.9,
+        help="GPU utilization fraction, U (0-1).",
+    )
+
+    # ---- Proprietary ----
+    prop_group = parser.add_argument_group("proprietary — token pricing")
+    prop_group.add_argument(
+        "--prop-isl",
+        type=int,
+        default=1_000,
+        help="Input sequence length per model call, ISL (tokens).",
+    )
+    prop_group.add_argument(
+        "--prop-osl",
+        type=int,
+        default=500,
+        help="Output sequence length per model call, OSL (tokens).",
+    )
+    prop_group.add_argument(
+        "--prop-price-in-per-million",
+        type=float,
+        default=1.25,
+        help="Vendor price per million input tokens, P_in (USD).",
+    )
+    prop_group.add_argument(
+        "--prop-price-out-per-million",
+        type=float,
+        default=10.0,
+        help="Vendor price per million output tokens, P_out (USD).",
+    )
+    prop_group.add_argument(
+        "--prop-api-overhead",
+        type=float,
+        default=0.0,
+        help="Fixed API overhead cost per call, C_API_Overhead (USD).",
+    )
+
+    # ---- Human ----
+    human_group = parser.add_argument_group("human — labor costs")
+    human_group.add_argument(
+        "--human-wage-gross",
+        type=float,
+        default=12.0,
+        help="Gross hourly wage of a worker, W_gross (USD/hr).",
+    )
+    human_group.add_argument(
+        "--human-platform-fee-frac",
+        type=float,
+        default=0.20,
+        help="Platform commission as a fraction, F_platform (e.g. 0.20).",
+    )
+    human_group.add_argument(
+        "--human-time-per-task-seconds",
+        type=float,
+        default=600.0,
+        help="Estimated task duration per worker, T_task (s).",
+    )
+    human_group.add_argument(
+        "--human-qa-amortized-per-task",
+        type=float,
+        default=0.0,
+        help="Amortized QA overhead cost per task, C_QA (USD).",
+    )
+    human_group.add_argument(
+        "--human-n-humans",
+        type=int,
+        default=1,
+        help="Number of human workers needed per task, N_Humans.",
     )
 
     main(parser.parse_args())

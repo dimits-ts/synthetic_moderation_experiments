@@ -141,13 +141,15 @@ Finally, it's worth noting that while we have made efforts to make the study as 
 \subsection{Analysis}
 \label{sec:appendix:replication:analysis}
 
-Our Jensen--Shannon divergence estimates rely on several methodological assumptions. First, we approximate the underlying diversity distributions using Gaussian kernel density estimation (KDE) evaluated on a fixed grid over $[0,1]$, implicitly assuming smooth, continuous distributions and sufficient sample sizes for stable density estimation. In our experiments, the ablation conditions have fewer discussions than the main dataset, which is necessary even with relatively low inference costs (\S\ref{sec:scalability:cost}) due to the multidimensional exploratory nature of our approach. We assume that the density estimation is accurate enough with at least $n=30$ discussions. Second, the choice of bandwidth (as determined by the default \texttt{gaussian\_kde} implementation) and the number of evaluation bins (fixed to 50) can affect the resulting divergence scores; alternative bandwidth selection strategies or grid resolutions may yield quantitatively different results. We also remove empty comments from the calculations.
+We use the Jensen--Shannon metric since unlike its most famous predecessor, the Kullback–Leibler divergence, it is symmetric, and thus punishes discussions that have too little \textit{and} too much content variety compared to human discussions. Our estimates rely on several methodological assumptions. First, we approximate the underlying diversity distributions using Gaussian kernel density estimation (KDE) evaluated on a fixed grid over $[0,1]$, implicitly assuming smooth, continuous distributions and sufficient sample sizes for stable density estimation. In our experiments, the ablation conditions have fewer discussions than the main dataset, which is necessary even with relatively low inference costs (\S\ref{sec:scalability:cost}) due to the multidimensional exploratory nature of our approach. We assume that the density estimation is accurate enough with at least $n=30$ discussions. Second, the choice of bandwidth (as determined by the default \texttt{gaussian\_kde} implementation) and the number of evaluation bins (fixed to 50) can affect the resulting divergence scores; alternative bandwidth selection strategies or grid resolutions may yield quantitatively different results. We also remove empty comments from the calculations.
 
 
-\subsection{Seed dataset preprocessing}
+\subsection{Seed dataset}
 \label{sec:appendix:replication:preprocessing}
 
-As a preprocessing step, we remove comments that contain no textual content and exclude discussions involving fewer than two distinct participants, ensuring that all retained threads constitute meaningful interactions. Our data are drawn from the PEFK dataset~\cite{tsirmpas2025pefk}. To operationalize escalation, we rely on the derailment score provided in the official release. Because these scores are model-derived and not directly interpretable on an absolute scale, we adopt a percentile-based threshold: a discussion is labeled as \emph{escalated} if its derailment value falls within the top 60th percentile of the distribution. This relative criterion ensures comparability while avoiding assumptions about the intrinsic scale of the original model outputs.
+We use the CMV-Awry dataset~\cite{chang-danescu-niculescu-mizil-2019-trouble}, as it is composed of social media posts, allows us to select ``escalated'' discussions, and similarly to our work, includes toxicity ratings obtained by the Perspective API~\cite{google_perspective_api}.
+
+We download the raw dataset files, instead of using the ConvoKit version of the dataset. As a preprocessing step, we remove comments that contain no textual content and exclude discussions involving fewer than two distinct participants, ensuring that all retained threads constitute meaningful interactions. Our data are drawn from the PEFK dataset~\cite{tsirmpas2025pefk}. To operationalize escalation, we rely on the derailment score provided in the official release. Because these scores are model-derived and not directly interpretable on an absolute scale, we adopt a percentile-based threshold: a discussion is labeled as \emph{escalated} if its derailment value falls within the top 60th percentile of the distribution. This relative criterion ensures comparability while avoiding assumptions about the intrinsic scale of the original model outputs.
 
 
 \section{Cost Calculation}
@@ -155,33 +157,35 @@ As a preprocessing step, we remove comments that contain no textual content and 
 
 \subsection{Methodology}
 
-\paragraph{Open-source models}
-For self-hosted open-source LLMs, we estimate the \acf{cpt} by explicitly modeling the  \ac{tco} over the actual duration of the experiment, rather than over a full annual cycle. This provides a conservative and deployment-aware estimate for research settings where infrastructure is utilized only for a limited time window. 
-
-We decompose the \ac{tco} for the experiment ($\text{TCO}_{\text{exp}}$) into \ac{capex} and \ac{opex}, where \ac{opex} includes electricity costs:
+We define a \textit{task} as the generation of a single discussion instance in the experimental pipeline. A task may require multiple model calls or human actions depending on the system used. For each method, we estimate the \acf{cpt}, defined as the monetary cost required to complete an arbitrary task (in our case, a single discussion). The total cost of the experiment is therefore:
 
 \[
-\text{TCO}_{\text{exp}} = \text{CapEx}_{\text{exp}} + \text{PowerCost}_{\text{exp}}.
+\text{Total Cost} = \text{CPT} \times N_{\text{tasks}},
 \]
 
-\ac{capex} is computed by amortizing the initial server investment over a fixed depreciation period (typically 4 years), and scaling it proportionally to the experiment duration:
+where $N_{\text{tasks}}$ denotes the total number of generated discussions.
+
+Across all systems, a task consists of a number of operations $O_{\text{task}}$, where an operation corresponds to a model request, API call, or human action. Let $C_{\text{op}}$ denote the cost per operation. The CPT can therefore be expressed generically as $
+\text{CPT} = O_{\text{task}} \cdot C_{\text{op}}
+$. The three cost models differ primarily in how $C_{\text{op}}$ is determined.
+
+\paragraph{Open-source models}
+
+For self-hosted open-source LLMs, the cost per operation arises from the amortized infrastructure cost over the duration of the experiment. We estimate the Total Cost of Ownership (TCO) during the experiment window as $
+\text{TCO}_{\text{exp}} = \text{CapEx}_{\text{exp}} + \text{PowerCost}_{\text{exp}}$.
+
+Capital expenditure is amortized over the hardware depreciation period:
 
 \[
-\text{CapEx}_{\text{exp}} =
+\text{CapEx}_{\text{exp}} =	
 C_{\text{server}} \cdot N_{\text{servers}}
 \cdot
 \frac{D_{\text{exp}}}{365 \cdot Y_{\text{depr}}},
 \]
 
-\noindent where:
-\begin{itemize}
-	\item $C_{\text{server}}$ is the initial cost per server,
-	\item $N_{\text{servers}}$ is the number of servers used,
-	\item $Y_{\text{depr}}$ is the depreciation period in years,
-	\item $D_{\text{exp}}$ is the experiment duration in days.
-\end{itemize}
+where $C_{\text{server}}$ is the server purchase cost, $N_{\text{servers}}$ the number of servers, $Y_{\text{depr}}$ the depreciation period in years (in other words, how long the server is expected to last), and $D_{\text{exp}}$ the experiment duration in days.
 
-Operational expenditure includes electricity consumption over the experiment window. Note that this formulation does not account for other operational costs such as software licenses (since most tools used in \ac{nlp} are open-source), or personnel (since it is unlikely that dedicated staff members maintain the servers in research settings).
+Electricity consumption is estimated as
 
 \[
 \text{PowerCost}_{\text{exp}} =
@@ -191,61 +195,64 @@ Operational expenditure includes electricity consumption over the experiment win
 \cdot N_{\text{servers}},
 \]
 
-\noindent where:
-\begin{itemize}
-	\item $P_{\text{watts}}$ is the average power draw per server (in watts),
-	\item $C_{\text{kWh}}$ is the electricity price per kilowatt-hour.
-\end{itemize}
+where $P_{\text{watts}}$ is the average server power draw and $C_{\text{kWh}}$ the electricity price.
 
-To convert $\text{TCO}_{\text{exp}}$ into a cost per task, we estimate the total number of tasks completed during the experiment using system throughput. Let $R_{\text{ps}}$ denote requests per second per instance, $N_{\text{inst}}$ the number of model instances, $U$ the uptime fraction, and $R_{\text{task}}$ the number of model requests required per task. The total number of tasks completed during the experiment is:
+To convert infrastructure cost to a per-operation cost, we estimate the total number of model requests processed during the experiment using system throughput:
 
 \[
-\text{Tasks}_{\text{exp}} =
-\frac{
-	R_{\text{ps}} \cdot N_{\text{inst}} \cdot U
-	\cdot (24 \cdot 3600 \cdot D_{\text{exp}})
-}{
-	R_{\text{task}}
-}.
+\text{Requests}_{\text{exp}} =
+R_{\text{ps}} \cdot N_{\text{inst}} \cdot U
+\cdot (24 \cdot 3600 \cdot D_{\text{exp}}),
 \]
 
-Finally, the Cost Per Task for self-hosted open-source models is:
+where $R_{\text{ps}}$ is the request throughput per instance, $N_{\text{inst}}$ the number of model instances, and $U$ is GPU utilization.
 
-\[
-\text{CPT}_{\text{Open-Source}} =
-\frac{\text{TCO}_{\text{exp}}}{\text{Tasks}_{\text{exp}}}.
-\]
-
-This formulation makes explicit that cost efficiency depends critically on hardware utilization (requests per second and uptime) and on the number of model calls required per task. Underutilized infrastructure or excessive request counts per discussion significantly increase the effective CPT, while higher throughput and stable uptime reduce it.
-
+The cost per model request is therefore $
+C_{\text{op}}^{\text{OS}} =
+\frac{\text{TCO}_{\text{exp}}}{\text{Requests}_{\text{exp}}},
+$ and the resulting cost per task is
+$
+\text{CPT}_{\text{OS}} =
+O_{\text{task}} \cdot C_{\text{op}}^{\text{OS}} .
+$
 
 \paragraph{Proprietary models}
-The task of calculating \ac{cpt} for proprietary models is significantly easier, since their service has a clear pricing structure. The \ac{cpt} for Proprietary LLMs ($CPT_{\text{Proprietary}}$) is calculated by separating the expense for the Input Sequence Length (ISL) and the Output Sequence Length (OSL), using the respective prices ($P_{\text{in}}$ and $P_{\text{out}}$) per million tokens. Unlike \cite{pan2025_cost_benefit}, we do not explicitly consider model throughput in our calculations, since there is no monetary penalty for slower generation---the cost is only dependent on the input and output tokens. The \ac{cpt} for proprietary models is thus defined as:
+
+For proprietary LLM APIs, the cost per operation is determined by token usage rather than infrastructure time. Each API call incurs costs proportional to the input and output token counts:
 
 \[
-\text{CPT}_{\text{Proprietary}} = \frac{(\text{ISL} \times P_{\text{in}} + \text{OSL} \times P_{\text{out}})}{1,000,000} + C_{\text{API Overhead}} 
+C_{\text{op}}^{\text{Prop}} =
+\frac{\text{ISL} \cdot P_{\text{in}} +
+	\text{OSL} \cdot P_{\text{out}}}{1{,}000{,}000}
++ C_{\text{API Overhead}},
 \]
-\noindent where $C_{\text{API Overhead}}$ includes costs from failed calls and vendor usage fees. For multi-turn discussions, ISL and OSL denote the \textit{non-cumulative} input and output token counts across all model calls required to complete the task.
 
+where ISL and OSL denote the input and output token counts for a single model call, and $P_{\text{in}}$, $P_{\text{out}}$ are the vendor prices per million tokens. The cost per task is therefore $
+\text{CPT}_{\text{Prop}} =
+O_{\text{task}} \cdot C_{\text{op}}^{\text{Prop}}
+$.		
 
 \paragraph{Human participation}
 
-Human participation costs can not, and should not, be calculated in a vacuum. There are certainly ways to get participates with wages much lower than minimum wage for most countries, and there are even platforms such as Mechanical Turk which streamline this process. Besides the obvious and severe ethical implications of doing so, this often results in poor quality data \cite{Moss2023}. The true cost of procuring human labor in a research context is calculated using the (ethical) gross hourly wage, mandatory platform fees, and quality assurance overhead:
+For human participants, the operation corresponds to a single worker completing the discussion task. The cost per operation depends on the worker's gross hourly wage and platform fees:
 
-The human labor rate is converted to $CPT_{\text{Human}}$ by estimating the time required to complete the specific research task:
 \[
-CPT_{\text{Human}} =(\text{Time Per Task}_{\text{est}} \times W_{\text{gross}}) \times(1 + F_{\text{platform}}) + C_{\text{QA per Task}}
+C_{\text{op}}^{\text{Human}} =
+\frac{W_{\text{gross}}}{3600}
+\cdot (1 + F_{\text{platform}})
+\cdot T_{\text{task}}
++ C_{\text{QA}},
 \]
-\noindent where:
-\begin{itemize}
-	\item $W_{\text{gross}}$ is the ethical gross hourly wage (e.g., minimum recommended rate of \$8.00–\$12.00/hour).
-	\item $F_{\text{platform}}$ is the commission charged by crowdsourcing platforms (e.g., $33.3\%$ for academic use on Prolific or $20-40\%$ on MTurk).
-	\item $C_{\text{QA-overhead}}$ is the amortized internal labor cost incurred by the research team for quality control, screening, and dropout management.
-\end{itemize}
+
+where $W_{\text{gross}}$ is the ethical hourly wage, $F_{\text{platform}}$ the platform commission, $T_{\text{task}}$ the estimated task duration in seconds, and $C_{\text{QA}}$ the amortized quality-assurance overhead per task. The resulting cost per task is therefore $
+\text{CPT}_{\text{Human}} =
+C_{\text{op}}^{\text{Human}} \cdot N_{Humans}
+$, where $N_{Humans}$ is the number of humans needed to complete the task.
+
 
 \subsection{Assumptions}
 
-We assume that no data are thrown out for data quality reasons in any of the tasks. Our own experimental setup (\S\ref{sec:scalability:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore, we assume an initial server cost of 7000\$ for CAPEX. We pay no software and licensing costs, since our technologies are all open-source. Since the server utilization is extremely short (5 days) we do not account for operational costs other than electricity and GPU depreciation. The budget setup assumes a consumer-grade computer with on-board GPU which costs no additional expenses to the researchers, which draws half the power of a GPU server.
+We assume that no data are thrown out for data quality reasons in any of the tasks. Our own experimental setup (\S\ref{sec:scalability:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore, we assume an initial server cost of 5000\$ for \ac{capex}. Since the server utilization is extremely short (5 days) we do not account for operational costs other than electricity and server depreciation. The budget setup assumes a consumer-grade computer with on-board GPU which costs no additional expenses to the researchers, and which draws half the power of a GPU server. We assume a server utilization of 90\% for both setups, and a depreciation period of four years.
 
 We compare our setup with an OpenAI GPT-5.2 instance for proprietary models. The GPT-5 pricing model as of the time of writing (Q1 2026), is 1.77\$ per million input tokens and 14\$ per million output tokens. The costs can be adjusted depending on the model and future pricing changes. We selected this specific model as a good compromise between model capability and cost considerations---cheaper models are explicitly marketed as competent in ``well-defined tasks''~\cite{openai-pricing}, which ours is not.
 

@@ -10,30 +10,37 @@ python src/create_datasets.py \
 
 python src/cost_calculation.py \
   --mode proprietary \
-  --num-tasks 1800 \
-  --isl-tokens 47370 \
-  --osl-tokens 11790 \
-  --price-input-per-million 1.75 \
-  --price-output-per-million 14
+  --n-tasks 1800 \
+  --prop-isl 47370 \
+  --prop-osl 11790 \
+  --prop-price-in-per-million 1.75 \
+  --prop-price-out-per-million 14
 
 python src/cost_calculation.py \
   --mode human \
-  --num-tasks 12600 \
-  --time-per-task-seconds 300
+  --n-tasks 1800 \
+  --human-time-per-task-seconds 300 \
+  --human-wage-gross 12 \
+  --human-platform-fee-frac 0.33 \
+  --human-n-humans 7
 
 python src/cost_calculation.py \
   --mode open-source \
-  --num-tasks 1800 \
-  --requests-per-task 30 \
-  --experiment-duration-days 7
+  --n-tasks 1800 \
+  --experiment-days 7 \
+  --os-utilization 0.9 \
+  --os-rps-per-instance 0.0017 \
+  --os-server-cost 000 \
+  --os-power-watts 1500
 
 python src/cost_calculation.py \
   --mode open-source \
-  --num-tasks 1800 \
-  --requests-per-task 30 \
-  --initial-server-cost 0 \
-  --experiment-duration-days 7 \
-  --power-watts-per-server 2000
+  --n-tasks 1800 \
+  --os-server-cost 0 \
+  --experiment-days 5 \
+  --os-utilization 0.9 \
+  --os-rps-per-instance 0.0034 \
+  --os-power-watts 500
 
 python src/generate_toxicity_ratings.py \
     --input-csv data/main_output/vmd.csv \
