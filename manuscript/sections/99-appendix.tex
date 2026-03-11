@@ -156,6 +156,7 @@ We download the raw dataset files, instead of using the ConvoKit version of the 
 \label{sec:appendix:cost}
 
 \subsection{Methodology}
+\label{sec:appendix:cost:methodology}
 
 We define a \textit{task} as the generation of a single discussion instance in the experimental pipeline. A task may require multiple model calls or human actions depending on the system used. For each method, we estimate the \acf{cpt}, defined as the monetary cost required to complete an arbitrary task (in our case, a single discussion). The total cost of the experiment is therefore:
 
@@ -251,6 +252,7 @@ $, where $N_{Humans}$ is the number of humans needed to complete the task.
 
 
 \subsection{Assumptions}
+\label{sec:appendix:cost:assumptions}
 
 We assume that no data are thrown out for data quality reasons in any of the tasks. Our own experimental setup (\S\ref{sec:scalability:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore, we assume an initial server cost of 5000\$ for \ac{capex}. Since the server utilization is extremely short (5 days) we do not account for operational costs other than electricity and server depreciation. The budget setup assumes a consumer-grade computer with on-board GPU which costs no additional expenses to the researchers, and which draws half the power of a GPU server. We assume a server utilization of 90\% for both setups, and a depreciation period of four years.
 

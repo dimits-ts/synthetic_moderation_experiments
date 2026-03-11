@@ -9,13 +9,14 @@
 
 We introduce an open-source, lightweight, purpose-built framework for generating synthetic discussions. The key features of the framework are: 
 \begin{itemize}[nosep,noitemsep]
-    \item Three core functions: generating discussion setups (selecting participants, topics, roles , etc.), executing, and annotating them according to user-provided parameters.\footnote{Although we did not use LLM annotation in this study.}
+    \item Three core functionalities: generating discussion setups (selecting participants, topics, roles , etc.), executing, and annotating them according to user-provided parameters.\footnote{Although we did not use LLM annotation in this study.}
     \item Built-in fault tolerance (automated recovery and intermittent saving) and file logging to support experiments running for an extended period of time.
     \item Applicability to other domains and use cases such as debate simulation, or discussion-based agentic systems through an adaptable, plug-and-play, object-oriented library interface.
     \item Availability via \texttt{pip}.
 \end{itemize}
 
-Our library is released under the GNU General Public License v3 (GPLv3). We also release the code used for running the experiments and analyzing, visualizing and exporting the results under the same license. For the purposes of reproducibility, readers may contact the authors for access to the entire set of execution logs.
+Our library is released under the GNU General Public License v3 (GPLv3). We also release the code used for running the experiments and analyzing, visualizing and exporting the results under the same license.
+%TODO: add links
 
 
 \subsection{Datasets}
@@ -23,6 +24,6 @@ Our library is released under the GNU General Public License v3 (GPLv3). We also
 
 \input{../data/eval_output/dataset_statistics.tex}
 
-We present a dataset designed to support research in human-computer interaction, social dynamics, and language modeling for facilitation tasks. The dataset is primarily intended to serve as a resource for analyzing off-the-shelf LLMs in the task of online facilitation, as well as the behaviors and language used by LLM participants. Additionally, it could be used for fine-tuning large language models~\cite{ulmer2024} for facilitation, since such datasets are extremely limited in literature~\cite{korre2025evaluation}. However, it may require filtering to ensure the quality and representativeness of the discussions~\cite{ulmer2024}---in our case filtering out discussions with constant facilitator interventions or low/extremely high diversity. This restriction can be overcome by choosing appropriate models (\S\ref{sec:scalability:model}) as the data can be scaled accordingly due to low computational cost (\S\ref{sec:scalability:cost}). 
+We present a dataset designed to support research in human-computer interaction, social dynamics, and language modeling for facilitation tasks. The dataset is primarily intended to serve as a resource for analyzing off-the-shelf LLMs in the task of online facilitation, as well as the behaviors and language used by LLM participants. Additionally, it could be used for fine-tuning LLMs~\cite{ulmer2024} for facilitation, since such datasets are extremely limited in literature~\cite{korre2025evaluation}. However, it may require filtering to ensure the quality and representativeness of the discussions~\cite{ulmer2024}---in our case filtering out discussions with constant facilitator interventions or low/extremely high diversity. This restriction can be overcome by choosing appropriate models (\S\ref{sec:scalability:model}) as the data can be scaled accordingly due to low computational cost (\S\ref{sec:scalability:cost}). 
 
 The supplementary ablation dataset, as well as the code for the analysis and the graphs present in this paper, can be found in the project repository. The dataset is licensed under a CC BY-SA license. We include relevant statistics for the main, ablation and human discussion~\cite{chang-danescu-niculescu-mizil-2019-trouble} datasets in Table~\ref{tab:dataset-stats}.

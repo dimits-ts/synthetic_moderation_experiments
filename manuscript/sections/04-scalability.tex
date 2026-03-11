@@ -18,10 +18,10 @@
 		& \textbf{\ac{opex}} & \textbf{\ac{capex}} \\
 		\midrule
 		Constraints & Volume of experiments & Capabilities of experimental design \\
-		Funding & Continuous, ongoing funding & Large upfront investment \\
-		Consumption & Immediate (electricity/API) & Decay over time (hardware use/aging) \\
+		Funding & Continuous funding & Large upfront investment \\
+		Consumption & Immediate (electricity/API) & Hardware depreciation \\
 		Local Model & Low & Variable \\
-		Cloud Model & High & None \\
+		Propr. Model & High & None \\
 		Human & Very High & None \\
 		\bottomrule
 	\end{tabular}
@@ -35,14 +35,6 @@ The transition from human-centric to synthetic research shifts the economic burd
 
 Conversely, \acf{capex} dictates what is possible in our experimental setups. Because \ac{sdg} requires substantial GPU infrastructure due to the utilization of LLMs, the upfront investment is often prohibitively high depending on the model and setup. In practice, researchers frequently navigate this by scaling down their experimental designs to fit existing hardware rather than securing the funding to expand it.
 
-The nature of the costs involved in any of the three methods are completely different:
-\begin{itemize}[nosep,noitemsep]
-	\item Open-source models incur cost from utilization of core infrastructure, electricity consumption, and asset (GPU) depreciation. \ac{opex} is relatively low, but this approach is capital-intensive.
-	\item Proprietary models charge a set amount of cost per input and output token. This nullifies \ac{capex}, but it may lead to prohibitively high \ac{opex} fees.
-	\item Human participants cost wages and platform fees. This approach incurs almost exclusively \ac{opex} costs in the forms of wages and logistics (usually paying a service fee to dedicated platforms).
-\end{itemize}
-
-
 \subsubsection{Cost comparison}
 \label{sec:scalability:cost:calculation}
 
@@ -54,18 +46,26 @@ The nature of the costs involved in any of the three methods are completely diff
 		\toprule
 		& \ac{cpt} & \textbf{Total cost} & \textbf{Infrastructure} \\
 		\midrule
-		Humans & \$ 1.666 & \$ $20{,}995.80$ & None \\
-		Proprietary (GPT-5.1) & \$ $0.0231$ & \$ $446.32$ & None \\
-		Open Source (Our setup) & \$ $0.0537$ & \$ $96.65$ & Basic GPU server \\
-		Open Source (Small models only) & \$ $0.0111$ & \$ $20.00$ & Consumer-grade computer \\
+		Humans & \$ 9.3100 & \$ 16{,}758.00 & None \\
+		Proprietary (GPT-5.1) & \$ 0.247957 & \$ 446.32 & None \\
+		Open Source (Our setup) & \$ 0.032680 & \$ 58.82 & Basic GPU server \\
+		Open Source (Small models only) & \$ 0.005447 & \$ 9.80 & Consumer-grade computer \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
-An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design. Since there is no standardized methodology for comparing the costs of human and synthetic experiments, we extend a proposed methodology which compares on-premises LLMs with cloud-based proprietary models~\cite{pan2025_cost_benefit} to include human costs. Since the nature of the costs incurred by each option is different (\S\ref{sec:scalability:cost:sources}), any cost comparison necessitates normalizing costs to a universal metric. We define the \acf{cpt} as the monetary cost of completing an arbitrary task. For the purposes of \ac{sdg}, we define a task as the completion of one full discussion. The full methodology can be found in Appendix~\ref{sec:appendix:cost}. 
+An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design. Since there is no standardized methodology for comparing the costs of human and synthetic experiments, we extend a proposed methodology which compares on-premises LLMs with cloud-based proprietary models~\cite{pan2025_cost_benefit} to include human costs. Since the nature of the costs incurred by each option is different (\S\ref{sec:scalability:cost:sources}), any cost comparison necessitates normalizing costs to a universal metric. We define the \acf{cpt} as the monetary cost of completing an arbitrary task. For the purposes of \ac{sdg}, we define a task as the completion of one full discussion. The full methodology can be found in Appendix~\ref{sec:appendix:cost:methodology}. 
 
-Table~\ref{tab:cost} summarizes the estimated cost per task and total experiment cost for human participants, proprietary models, our GPU-server-based setup, and a lightweight setup using only small models on a local machine (\S\ref{sec:scalability:experimental}). As shown in Table~\ref{tab:cost}, the latter approach reduces the total cost of our experiments by roughly \emph{three orders of magnitude} compared with using human participants, and \emph{by twenty times} compared to proprietary models. Our actual experimental setup relied on a basic GPU server in order to evaluate both larger and smaller open-source models for exploratory purposes. However, our results show that smaller models are sufficient for the task (\S\ref{sec:scalability:model}); in a production setting, the experiments could therefore be run using only these smaller models on a single consumer-grade computer equipped with a GPU, reducing the total cost to approximately \$20. 
-%TODO: Mention that GPT-5 is used everywhere
+Specifically, we define a \textit{task} as the generation of a single discussion instance in the experimental pipeline. A task may involve multiple model calls, multiple human actions, or multiple system requests depending on the implementation. The total cost of the experiment is then computed as:
+
+\[
+\text{Total Cost} = \text{CPT} \times N_{\text{tasks}},
+\]
+
+where $N_{\text{tasks}}$ is the number of discussion-generation tasks executed in the experiment.
+
+Table~\ref{tab:cost} summarizes the estimated cost per task and total experiment cost for human participants, proprietary models, our GPU-server-based setup, and a lightweight setup using only small models (\S\ref{sec:scalability:experimental}). As shown in Table~\ref{tab:cost}, the latter approach reduces the total cost of our experiments by roughly \emph{three orders of magnitude} compared with using human participants, and \emph{by twenty times} compared to proprietary models. Our actual experimental setup relied on a basic GPU server in order to evaluate both larger and smaller open-source models for exploratory purposes. However, our results show that smaller models are sufficient for the task (\S\ref{sec:scalability:model}); in a production setting, the experiments could therefore be run using only these smaller models on a single consumer-grade computer equipped with a GPU, reducing the total cost to approximately \$20. See Appendix~\ref{sec:appendix:cost:assumptions}
+
 
 \subsection{Model Selection}
 \label{sec:scalability:model}
@@ -100,11 +100,11 @@ Table~\ref{tab:cost} summarizes the estimated cost per task and total experiment
 \end{table}
 
 
-We settle on three main model families of open-source models commonly used in industrial and research applications. For each family, we use a large (24B-70B) and a corresponding small (7B-8B) model (Table~\ref{tab:model-details}).\footnote{While there is an updated version of the LLaMa model (LLaMa-70B-3.3), we do not use it since there is no corresponding 8B model of that version.} While we experimented with smaller models (3B-4B), they could not handle the size of the input (context + instructions). We use exclusively instruction-tuned versions, even though these variants are much less likely to replicate toxic, racist or harmful speech. This was deemed necessary since only through instruction-tuning can these models leverage advanced instructions and \ac{sdb} prompts. In our experience, non-instruction tuned variants are also vulnerable to discussion collapses (where models keep repeating the same phrases over and over~\cite{ulmer2024}). We use 4-bit quantization to drastically lower infrastructure requirements, and significantly cut back on inference time and cost---the usual trade-off between model capability and inference cost~\cite{Huang2024}\footnote{Which may not actually exist on a meaningful scale~\cite{kurtic-etal-2025-give}.} does not apply in our task, since the goal of \ac{sdg} is to generate text and replicate some human behaviors instead of being applied to precise tasks.
+We settle on three main model families of open-source models commonly used in industrial and research applications. For each family, we use a large (24B-70B) and a corresponding small (7B-8B) model (Table~\ref{tab:model-details}).\footnote{While there is an updated version of the LLaMa model (LLaMa-70B-3.3), we do not use it since there is no corresponding 8B model of that version.} While we experimented with smaller models (3B-4B), they could not effectively handle the size of the input (context + instructions). We use exclusively instruction-tuned versions, even though these variants are much less likely to replicate toxic, racist or harmful speech. This was deemed necessary since only through instruction-tuning can these models leverage advanced instructions and \ac{sdb} prompts. In our experience, non-instruction tuned variants are also vulnerable to discussion collapses (where models keep repeating the same phrases over and over~\cite{ulmer2024}). We use 4-bit quantization to drastically lower infrastructure requirements, and significantly cut back on inference time and cost---the usual trade-off between model capability and inference cost~\cite{Huang2024}\footnote{Which may not actually exist on a meaningful scale~\cite{kurtic-etal-2025-give}.} does not apply in our task, since the goal of \ac{sdg} is to generate text and replicate some human behaviors instead of being applied to precise tasks.
 
-The text generated by each model differs substantially in content. Figure~\ref{fig:models} shows the diversity and comment lengths for discussions generated by each model, when compared with human discussions (black distribution). We find that \textbf{LLM size does not seem to impact the variety of generated content}. Indeed, while a small model such as Qwen-7B approaches human discussion very well content-wise, its large variant (Qwen-32B) diverges wildly into discussions whose comments are very unrelated between each other, as evidenced by extremely high diversity scores (\S\ref{sec:related:quality}). This is not an isolated case; both large variants of LLaMa and Mistral fail to meaningfully approach human discussions, although in their case, the generated text has lower variety than human discussions. This would indicate that \textbf{small models may be enough for \ac{sdg} tasks}, which means researchers may be able to significantly cut back on infrastructure and inference costs, without sacrificing data quality. 
+The text generated by each model differs substantially in content. Figure~\ref{fig:models} shows the diversity and comment lengths for discussions generated by each model, when compared with human discussions (black distribution). We find that \emph{LLM size does not seem to impact the variety of generated content}. Indeed, while a small model such as Qwen-7B approaches human discussion very well content-wise, its large variant (Qwen-32B) diverges wildly into discussions whose comments are very unrelated between each other, as evidenced by extremely high diversity scores (\S\ref{sec:related:quality}). This is not an isolated case; both large variants of LLaMa and Mistral fail to meaningfully approach human discussions, although in their case, the generated text has lower variety than human discussions. This would indicate that \emph{small models may be enough for \ac{sdg} tasks}, which means researchers may be able to significantly cut back on infrastructure and inference costs, without sacrificing data quality. 
 
-We could thus assume that the Qwen-7B model is ideal for simulating human discussions. However, this is only with regard to content variety, which may not be sufficient for our use cases by itself. For instance, when evaluated with regard to \textbf{toxicity generation however, Qwen-7B is not a suitable model}. In \S\ref{sec:methodology:initialization:trolls} we mentioned that ideally our setup would allow for limited model ``jail-breaking'' in order for us to test LLM facilitators in a challenging environment. This behavior can be conclusively verified for only a single model---LLaMa-8B (Fig.~\ref{fig:models}), whose toxicity rises rapidly during the course of synthetic discussions. On the other hand, if our setup put emphasis on letting models decide whether to speak (which ours does not---\S\ref{sec:methodology:management:turn-taking}), then every model outside the Qwen family of models would be useless for our purposes, as they can not decide to not speak (Table~\ref{tab:participation}). We thus argue that model selection is a crucial part of designing \ac{sdg} systems, which fundamentally changes the dynamics, capabilities and limitations of our simulations. Evaluation of these models must be conducted on a multidimensional level, given the basic goals of the simulations. 
+We might therefore assume that the Qwen-7B model is well suited for simulating human discussions. However, this conclusion holds only with respect to content diversity, which alone is insufficient for our intended use cases. For example, when evaluated in terms of \emph{toxicity generation}, Qwen-7B proves unsuitable. As discussed in \S\ref{sec:methodology:initialization:trolls}, our framework ideally permits limited model ``jailbreaking'' so that LLM facilitators can be tested in more challenging environments. Among the evaluated models, this behavior can be clearly observed only in LLaMA-8B (Fig.~\ref{fig:models}), whose toxicity levels increase rapidly over the course of synthetic discussions. Conversely, if the system emphasized allowing models to decide whether to participate in a turn (which our framework does not—see \S\ref{sec:methodology:management:turn-taking}), then all models outside the Qwen family would be unsuitable for our purposes, as they are unable to refrain from speaking (Table~\ref{tab:participation}). We therefore argue that \emph{models must be evaluated along multiple dimensions} depending on the core objectives of the simulations.
 
 
 \subsection{Experimental Setup}
@@ -150,8 +150,6 @@ We could thus assume that the Qwen-7B model is ideal for simulating human discus
 	\end{algorithmic}
 \end{algorithm}
 
-In tasks where one agent needs to play a complex role, while other agents need only respond to the former's decisions, it may be advantageous to separate the underlying models. An example of this approach is an \ac{sdg} task where the agents simulated the roleplaying game ``Dungeons \& Dragons''~\cite{ulmer2024}. A larger model is used for controlling the narrative, while a smaller agent reacts to the scenarios put forward by the former. This size difference enables the researchers to finetune the smaller model (since its purpose is very task-specific), while the larger model retains its general knowledge. We initially used a bimoprhic local setup with different LLMs for participants and facilitators.  However, while this approach lowers inference costs, it requires a greater capital expense since it loads two models in (expensive) VRAM memory. 
-
-Eventually, we switched to a single-model local setup, since they are often used in \ac{sdg} tasks, either with local or proprietary models alone. This lowered the costs and complexity of our experiments, and significantly simplified our analysis, although it introduced an unavoidable dependency between the synthetic users and the facilitator. We also note that this setup is not conducive in the case where the central agent (here, the facilitator) would need to be finetuned---in this case the setup above would be ideal. An overview of how the experiments are generated can be found in Alg.~\ref{alg:exp_generation}.
+We adopt a single-model local setup, as such configurations are commonly used in \ac{sdg} tasks, whether with local or proprietary models alone. This choice reduces both the cost and complexity of our experiments and significantly simplifies the subsequent analysis. However, it also introduces an unavoidable dependency between the synthetic users and the facilitator. Additionally, this setup is not well suited for scenarios in which the central agent (here, the facilitator) must be fine-tuned. In such cases, a configuration with two separate models possessing different capabilities would be preferable, as demonstrated in~\cite{ulmer2024}. An overview of the experimental generation process is provided in Algorithm~\ref{alg:exp_generation}.
 
 We run $N_d=30$ discussions for each possible configuration of LLMs, turn-taking function, and facilitation strategy. Each discussion is composed of up to $30$ comments, including facilitator interventions. All experiments were collectively completed within a week of computational time, using two Quadro RTX 6000 GPUs. Toxicity evaluation was conducted using the Perspective API service~\cite{google_perspective_api}. The execution script is available in the project's repository. We provide the $h=3$ last comments for context.
