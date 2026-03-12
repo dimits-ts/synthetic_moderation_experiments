@@ -1,12 +1,12 @@
 \begin{table}[ht]
 \centering
-\caption{Mixed-Effects Model: Predictors of Message Toxicity}
+\caption{Mixed-Effects Model for toxicity depending on the facilitator's strategy. Reference level is \texttt{No Facilitator}. \texttt{Turn} denotes the (centered) number of comments in the discussion so far.}
 \label{tab:toxicity_regression}
 \begin{tabular}{lc}
-\hline\hline
+\toprule
  & Toxicity \\
-\hline
-    Constant & $   0.184^{***}$ \\
+\midrule
+    Intercept & $   0.184^{***}$ \\
     & $(0.008)$ \\
     Constructive Communications & $  -0.040^{***}$ \\
     & $(0.011)$ \\
@@ -22,15 +22,10 @@
     & $(0.001)$ \\
     Minimal Instructions $\times$ Turn & $  -0.001^{*}$ \\
     & $(0.001)$ \\
-\hline
-    \textit{Random Effects} & \\
-    \quad Group Variance & $0.0096$ \\
-\hline
-    Observations & 15369 \\
-    Groups & 720 \\
-    Log-Likelihood & 11575.546 \\
-\hline\hline
-\multicolumn{2}{l}{\footnotesize Standard errors in parentheses.} \\
-\multicolumn{2}{l}{\footnotesize $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$} \\
+\midrule
+    Observations & $15{,}369$ \\
+    Groups & $720$ \\
+\bottomrule
+\multicolumn{2}{l}{\footnotesize $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$ Standard errors in parentheses.} \\
 \end{tabular}
 \end{table}
