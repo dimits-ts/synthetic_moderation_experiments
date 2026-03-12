@@ -156,12 +156,18 @@ def intervention_through_time_plot(
         df["cum_interventions"] / df["cum_messages"] * 100
     )
 
-    # Average across conversations for each model and turn index
+    # Average + 95% CI across conversations for each group and turn index
     summary = (
         df.groupby([groupby_col, "turn_index"])["cum_intervention_pct"]
-        .mean()
+        .agg(
+            mean="mean",
+            sem=lambda x: x.sem() if len(x) > 1 else 0.0,
+            n="count",
+        )
         .reset_index()
     )
+    # 95% CI half-width (1.96 * SEM)
+    summary["ci95"] = 1.96 * summary["sem"]
 
     # build consistent color map from label_order
     base_colors = tasks.graphs.COLORBLIND_PALETTE
@@ -178,16 +184,24 @@ def intervention_through_time_plot(
         if group_df.empty:
             continue  # skip labels not present in this plot
 
+        x = group_df["turn_index"]
+        y = group_df["mean"]
+        ci = group_df["ci95"]
+
+        color = palette[label]
         ax.plot(
-            group_df["turn_index"],
-            group_df["cum_intervention_pct"],
+            x,
+            y,
             label=label,
-            color=palette[label],
+            color=color,
             marker=tasks.graphs.MARKERS[i % len(tasks.graphs.MARKERS)],
         )
+        ax.fill_between(x, y - ci, y + ci, color=color, alpha=0.15)
 
+    ax.set_xticks(sorted(summary["turn_index"].unique()))
+    ax.xaxis.set_minor_locator(plt.NullLocator())
     ax.set_xlabel("#Comments (start -> end)")
-    ax.set_ylabel("% Interventions")
+    ax.set_ylabel("Cumulative Intervention Rate (%)")
     ax.set_title(f"Facilitator interventions per {groupby_col}")
 
     # legend already sorted because plotting order is sorted

@@ -22,8 +22,19 @@ Our library is released under the GNU General Public License v3 (GPLv3). We also
 \subsection{Datasets}
 \label{sec:materials:data}
 
-\input{../data/eval_output/dataset_statistics.tex}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.45\columnwidth]{toxicity_distribution_human_vs_synthetic.png}
+	\includegraphics[width=0.45\columnwidth]{comment_len_model.png}
+	\Description{Distribution plot showing toxicity ratings between human and synthetic discussions. Distribution plot showing comment length in words by model, including human discussions. }
+	\caption{\textbf{Left}: Distribution of toxicity ratings between the main synthetic dataset and the human seed-opinion dataset. \textbf{Right}: Comment length of human and LLM discussions by model. Qwen-32B is the only model that occasionally chooses not to speak---this is largely due to it being the only model to occasionally not intervene (\S\ref{sec:facilitation:interventions}).}
+	\label{fig:human-llm-comparison}
+\end{figure}
 
-We present a dataset designed to support research in human-computer interaction, social dynamics, and language modeling for facilitation tasks. The dataset is primarily intended to serve as a resource for analyzing off-the-shelf LLMs in the task of online facilitation, as well as the behaviors and language used by LLM participants. Additionally, it could be used for fine-tuning LLMs~\cite{ulmer2024} for facilitation, since such datasets are extremely limited in literature~\cite{korre2025evaluation}. However, it may require filtering to ensure the quality and representativeness of the discussions~\cite{ulmer2024}---in our case filtering out discussions with constant facilitator interventions or low/extremely high diversity. This restriction can be overcome by choosing appropriate models (\S\ref{sec:scalability:model}) as the data can be scaled accordingly due to low computational cost (\S\ref{sec:scalability:cost}). 
+
+We present a dataset designed to support research in human-computer interaction, social dynamics, and language modeling for facilitation tasks. The dataset is primarily intended to serve as a resource for analyzing off-the-shelf LLMs in the task of online facilitation, as well as the behaviors and language used by LLM participants. Additionally, it could be used for fine-tuning LLMs~\cite{ulmer2024} for facilitation, since such datasets are extremely limited in literature~\cite{korre2025evaluation}. However, it may require filtering to ensure the quality and representativeness of the discussions~\cite{ulmer2024}---in our case filtering out discussions with constant facilitator interventions or low/extremely high diversity. This restriction can be overcome by choosing appropriate models (\S\ref{sec:scalability:model}) as the data can be scaled accordingly due to low computational cost (\S\ref{sec:scalability:cost}).
+Figure~\ref{fig:human-llm-comparison} shows that the main synthetic dataset exhibits toxicity levels (measured with the same Perspective API model) and comment lengths that broadly align with those of the human seed-opinion dataset. However, in both cases the synthetic datasets display noticeably sharper distributions centered around the human mean. This pattern may suggest that LLMs exhibit a tendency to gravitate toward the statistical mean of human-written text.
 
 The supplementary ablation dataset, as well as the code for the analysis and the graphs present in this paper, can be found in the project repository. The dataset is licensed under a CC BY-SA license. We include relevant statistics for the main, ablation and human discussion~\cite{chang-danescu-niculescu-mizil-2019-trouble} datasets in Table~\ref{tab:dataset-stats}.
+
+\input{../data/eval_output/dataset_statistics.tex}

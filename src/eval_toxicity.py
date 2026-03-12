@@ -20,6 +20,8 @@ import argparse
 from pathlib import Path
 
 import pandas as pd
+import matplotlib
+import matplotlib.patches
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
@@ -29,14 +31,16 @@ import tasks.graphs
 
 
 def main(
-    main_output_dir: Path,
+    vmd_path: Path,
+    ablation_path: Path,
+    human_path: Path,
     toxicity_ratings_dir: Path,
     graph_dir: Path,
     latex_output_dir: Path,
 ):
     tasks.graphs.seaborn_setup()
     df = get_toxicity_df(
-        main_df_path=main_output_dir / "vmd.csv",
+        main_df_path=vmd_path,
         toxicity_df_path=toxicity_ratings_dir / "vmd.csv",
     )
 
@@ -49,9 +53,7 @@ def main(
     MODEL_ORDER = tasks.graphs.get_sorted_labels(df, "model")
     STRATEGY_ORDER = tasks.graphs.get_sorted_labels(df, "strategy")
 
-    toxicity_overall(df[~df.is_moderator], graph_dir)
     toxicity_by_dimension(df, graph_dir, "role")
-    toxicity_by_dimension(df, graph_dir, "strategy")
     toxicity_by_dimension(df, graph_dir, "model")
     toxicity_regression(
         df[~df.is_moderator], latex_output_dir=latex_output_dir
@@ -78,13 +80,13 @@ def main(
     )
 
     ablation_df = get_toxicity_df(
-        main_df_path=main_output_dir / "ablation.csv",
+        main_df_path=ablation_path,
         toxicity_df_path=toxicity_ratings_dir / "ablation.csv",
     )
+    ablation_raw = pd.read_csv(ablation_path)
 
     # Keep only rows where prompt does NOT contain "strong opinions"
     # aka where instruction prompt is no_instructions.txt
-    ablation_raw = pd.read_csv(main_output_dir / "ablation.csv")
     valid_ids = ablation_raw.loc[
         ~ablation_raw.prompt.str.contains(
             "strong opinions", case=False, na=False
@@ -93,11 +95,24 @@ def main(
     ]
 
     ablation_df = ablation_df[ablation_df.message_id.isin(valid_ids)]
-    ablation_df["dataset"] = "Minimal"
-    df["dataset"] = "Responsive"
+    ablation_df["instructions"] = "Default"
+    df["instructions"] = "Respond-Provoke"
 
-    full_df = pd.concat([df, ablation_df], ignore_index=True)
-    toxicity_vs_troll_count(df=full_df, graph_dir=graph_dir)
+    synthetic_df = pd.concat([df, ablation_df], ignore_index=True)
+    toxicity_vs_troll_count(df=synthetic_df, graph_dir=graph_dir)
+
+    human_df = get_toxicity_df(
+        main_df_path=human_path,
+        toxicity_df_path=toxicity_ratings_dir / "cmv_awry2.csv",
+    )
+    human_synthetic_df = pd.concat([df, human_df], ignore_index=True)
+
+    toxicity_distribution_comparison(
+        df=human_synthetic_df[~human_synthetic_df.is_moderator],
+        graph_output_path=graph_dir
+        / "toxicity_distribution_human_vs_synthetic.png",
+        label_order=["Human", "Synthetic"],
+    )
 
 
 def get_toxicity_df(
@@ -110,7 +125,16 @@ def get_toxicity_df(
     toxicity_df.toxicity = pd.to_numeric(toxicity_df.toxicity)
 
     full_df = df.merge(right=toxicity_df, how="inner", on="message_id")
-    full_df["is_troll"] = full_df.prompt.str.contains("troll")
+
+    if "prompt" in full_df.columns:
+        full_df["is_troll"] = full_df.prompt.str.contains("troll")
+        full_df["dataset"] = "Synthetic"
+    else:
+        full_df["is_troll"] = False
+        full_df["model"] = "Human"
+        full_df["strategy"] = "Human"
+        full_df["message_order"] = full_df.groupby("conv_id").cumcount() + 1
+        full_df["dataset"] = "Human"
 
     full_df = full_df.loc[
         (full_df.model != "hardcoded"),
@@ -124,16 +148,11 @@ def get_toxicity_df(
             "strategy",
             "message_order",
             "model",
+            "dataset",
         ],
     ]
 
     return full_df
-
-
-def toxicity_overall(df: pd.DataFrame, graph_dir: Path) -> None:
-    sns.histplot(df.toxicity)
-    tasks.graphs.save_plot(graph_dir / "overall_toxicity.png")
-    plt.close()
 
 
 def toxicity_by_dimension(
@@ -146,7 +165,7 @@ def toxicity_by_dimension(
         y=dimension,
         estimator=np.mean,
         errorbar=("ci", 95),
-        order=["Facilitator", "Non-troll", "Troll"]
+        order=["Facilitator", "Non-troll", "Troll"],
     )
 
     ax.set_ylabel("")
@@ -253,14 +272,14 @@ def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
     non_troll_df = df.loc[(~df.is_troll) & (~df.is_moderator)]
 
     avg_toxicity = (
-        non_troll_df.groupby(["conv_id", "dataset"])["toxicity"]
+        non_troll_df.groupby(["conv_id", "instructions"])["toxicity"]
         .mean()
         .rename("avg_non_troll_toxicity")
     )
 
     troll_counts = (
         df.loc[df.is_troll]
-        .groupby(["conv_id", "dataset"])["user"]
+        .groupby(["conv_id", "instructions"])["user"]
         .nunique()
         .rename("n_distinct_trolls")
     )
@@ -285,20 +304,79 @@ def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
         x="troll_bin",
         order=["0", "1", "2", "3", "4+"],
         y="avg_non_troll_toxicity",
-        hue="dataset",
+        hue="instructions",
         estimator=np.mean,
         errorbar=("ci", 95),
-        hue_order=["Responsive", "Minimal"],
-        markers=["*", "^"]
+        hue_order=["Respond-Provoke", "Default"],
+        markers=["*", "^"],
     )
 
-    ax.set_title("Toxicity of non-troll users by instruction prompt")
+    ax.xaxis.set_minor_locator(plt.NullLocator())
+    ax.set_title("Toxicity of non-troll users")
     ax.set_xlabel("#Active troll users")
     ax.set_ylabel("Avg. toxicity")
     ax.legend(title="")
 
     plt.tight_layout()
     tasks.graphs.save_plot(graph_dir / "toxicity_vs_troll_count.png")
+    plt.close()
+
+
+def toxicity_distribution_comparison(
+    df: pd.DataFrame,
+    graph_output_path: Path,
+    label_order: list[str],
+) -> None:
+    """
+    KDE distribution plot comparing toxicity scores across human vs synthetic
+    datasets.
+    Styled after plot_dataset_diversity with hatched fills and custom legend.
+    """
+    print(df.dataset)
+    ax = sns.kdeplot(
+        data=df,
+        x="toxicity",
+        hue="dataset",
+        hue_order=label_order,
+        fill=True,
+        common_norm=False,
+        multiple="layer",
+    )
+
+    palette_colors = sns.color_palette(n_colors=len(label_order))
+    color_to_hatch = {
+        tuple(color): hatch
+        for color, hatch in zip(
+            palette_colors, tasks.graphs.HATCHES[: len(label_order)]
+        )
+    }
+
+    poly_collections = [
+        c
+        for c in ax.collections
+        if isinstance(c, matplotlib.collections.PolyCollection)
+    ]
+    for poly in poly_collections:
+        face_color = tuple(poly.get_facecolor()[0][:3])
+        hatch = color_to_hatch.get(face_color)
+        if hatch:
+            poly.set_hatch(hatch)
+
+    new_handles = [
+        matplotlib.patches.Patch(
+            facecolor=palette_colors[i],
+            hatch=tasks.graphs.HATCHES[i],
+            label=label,
+        )
+        for i, label in enumerate(label_order)
+    ]
+    ax.legend(handles=new_handles, title="")
+
+    ax.set_xlabel("Toxicity")
+    ax.set_ylabel("Density")
+
+    plt.tight_layout()
+    tasks.graphs.save_plot(graph_output_path)
     plt.close()
 
 
@@ -322,7 +400,7 @@ def toxicity_through_time_plot(
     )
 
     plt.figure(figsize=(12, 6))
-    sns.lineplot(
+    ax = sns.lineplot(
         data=plot_df,
         x="turn_index",
         y="cum_avg_toxicity",
@@ -332,11 +410,14 @@ def toxicity_through_time_plot(
         errorbar=("ci", 95),
         markers=True,
         dashes=False,
-        style=groupby_col,   # required for markers to actually render
+        style=groupby_col,  # required for markers to actually render
         style_order=label_order,
         markersize=10,
     )
 
+    # the errorbar argument turns the x-axis into 0-index for some reason
+    plt.xticks(sorted(plot_df["turn_index"].unique()))
+    ax.xaxis.set_minor_locator(plt.NullLocator())
     plt.xlabel("#Comments (start -> end)")
     plt.ylabel("Cumulative average toxicity")
     plt.legend(title="", loc="upper right")
@@ -348,31 +429,57 @@ def toxicity_through_time_plot(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Run Perspective API scoring and save results to CSV."
+        description="Run toxicity analysis and generate plots."
     )
+
     parser.add_argument(
-        "--main-output-dir",
+        "--vmd-path",
         type=str,
-        help="Directory holding the VMD and ablation datasets",
+        required=True,
+        help="Path to the main VMD dataset CSV",
     )
+
+    parser.add_argument(
+        "--ablation-path",
+        type=str,
+        required=True,
+        help="Path to the ablation dataset CSV",
+    )
+
+    parser.add_argument(
+        "--human-path",
+        type=str,
+        required=True,
+        help="Path to the human CMV dataset CSV",
+    )
+
     parser.add_argument(
         "--toxicity-rating-dir",
         type=str,
-        help="Directory holding the VMD and ablation toxicity ratings",
+        required=True,
+        help="Directory holding toxicity ratings",
     )
+
     parser.add_argument(
         "--graph-output-dir",
         type=str,
+        required=True,
         help="Graph output directory",
     )
+
     parser.add_argument(
         "--stats-output-dir",
         type=str,
-        help="Graph output directory",
+        required=True,
+        help="Directory for LaTeX regression output",
     )
+
     args = parser.parse_args()
+
     main(
-        main_output_dir=Path(args.main_output_dir),
+        vmd_path=Path(args.vmd_path),
+        ablation_path=Path(args.ablation_path),
+        human_path=Path(args.human_path),
         toxicity_ratings_dir=Path(args.toxicity_rating_dir),
         graph_dir=Path(args.graph_output_dir),
         latex_output_dir=Path(args.stats_output_dir),

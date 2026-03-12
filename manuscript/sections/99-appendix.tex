@@ -10,7 +10,6 @@
 	\acro{nlp}[NLP]{Natural Language Processing}
 	\acro{ml}[ML]{Machine Learning}
 	\acro{sdb}[SDB]{SocioDemographic Background}
-	\acro{ceri}[CeRI]{Cornell e-Rulemaking Initiative}
 	\acro{sdg}[SDG]{Synthetic Discussion Generation}
 	\acro{cpt}[CPT]{Cost Per Task}
 	\acro{capex}[CapEx]{Capital Expenditure}
@@ -25,7 +24,6 @@
 
 \section{Observed behaviors}
 \label{sec:appendix:behaviors}
-
 
 \paragraph{Use of personal experiences} LLM participants can construct ``stories'' to support and justify their positions and viewpoints. Offering a \ac{sdb} is thus not only beneficial for generating a variety of perspectives but also helps them develop fictional experiences, which can be cited by other participants during the discussion. Table~\ref{tab:logs-sdbs} shows such an exchange.
 
@@ -126,14 +124,36 @@ When a single troll is present, we may observe collective action from the rest o
 \section{Replication notes}
 \label{sec:appendix:replication}
 
+\subsection{Models}
+\label{sec:appendix:replication:models}
+
+\begin{table}[ht]
+	\centering
+	\caption{Models used in this study. The URL refers to the associated \texttt{huggingface} repository.}
+	\label{tab:model-details}
+	\begin{tabular}{>{$}l<{$} >{$}l<{$} >{$}l<{$} >{$}l<{$}}
+		\toprule
+		\textbf{Family} & \textbf{Version} & \textbf{\#Params} & \textbf{URL} \\
+		\midrule
+		\texttt{LLaMa} & \texttt{3.1} & \texttt{70B} & \texttt{unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit} \\
+		\texttt{LLaMa} & \texttt{3.1} & \texttt{8B} & \texttt{unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit} \\
+		\texttt{Mistral} & \texttt{---} & \texttt{24B} & \texttt{unsloth/Mistral-Small-24B-Instruct-2501-bnb-4bit} \\
+		\texttt{Mistral} & \texttt{---} & \texttt{7B} & \texttt{unsloth/mistral-7b-instruct-v0.3-bnb-4bit} \\
+		\texttt{Qwen} & \texttt{2.5} & \texttt{32B} & \texttt{unsloth/Qwen2.5-32B-Instruct-bnb-4bit} \\
+		\texttt{Qwen} & \texttt{2.5} & \texttt{7B} & \texttt{unsloth/Qwen2.5-7B-Instruct-bnb-4bit} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+We settle on three main model families of open-source models commonly used in industrial and research applications. For each family, we use a large (24B-70B) and a corresponding small (7B-8B) model (Table~\ref{tab:model-details}).\footnote{While there is an updated version of the LLaMa model (LLaMa-70B-3.3), we do not use it since there is no corresponding 8B model of that version.} While we experimented with smaller models (3B-4B), they could not effectively handle the size of the input (context + instructions). We use exclusively instruction-tuned versions, even though these variants are much less likely to replicate toxic, racist or harmful speech. This was deemed necessary since only through instruction-tuning can these models leverage advanced instructions and \ac{sdb} prompts. In our experience, non-instruction tuned variants are also vulnerable to discussion collapses (where models keep repeating the same phrases over and over~\cite{ulmer2024}). We use 4-bit quantization to drastically lower infrastructure requirements, and significantly cut back on inference time and cost---the usual trade-off between model capability and inference cost~\cite{Huang2024}\footnote{Which may not actually exist on a meaningful scale~\cite{kurtic-etal-2025-give}.} does not apply in our task, since the goal of \ac{sdg} is to generate text and replicate some human behaviors instead of being applied to precise tasks.
+
+
 \subsection{Experiments}
 \label{sec:appendix:replication:experiments}
 
 The latest version of our framework (\texttt{2.0.7} at the time of writing) was the one used in our experiments. Researchers replicating this work should downgrade to this version. 
 
-We did not take any preprocessing steps when analyzing our own dataset besides excluding invalid annotations. This was necessary since the model did not always respond with a valid annotation score (we note that this refusal was rare). The only preprocessing performed on the \ac{ceri} Regulation Room dataset is the removal of HTML tags from the comment text. 
-
-For the seed discussions we use the CMV-Awry dataset \cite{chang-danescu-niculescu-mizil-2019-trouble}, as stated in the main text. We remove comments from deleted users. In order to select ``escalated'' discussions, we use the \texttt{derailment} values provided by the dataset. Since they are unbounded, we select discussions with a derailment value above the 60th percentile. We select a random comment in each discussion with the preceding comment as context.
+We do not provide extensive instructions to troll users in order for us to keep the system as simple as possible (\S\ref{sec:methodology:design:rules}), but also because we discovered that any attempt to guide the model towards specific toxic behaviors triggered standard refusal responses (e.g., \texttt{``As an AI language model, I'm unable to respond with text that can be seen as  harmful''}).\footnote{A way around these refusal responses would be to use abliterated models; LLMs which have been modified to bypass such refusals~\cite{arditi_abliteration}. However, abliterated models are not well documented in literature~\cite{young2026_abliteration} and are not available for many model families and versions in standard LLM repositories such as \texttt{huggingface}.}
 
 Finally, it's worth noting that while we have made efforts to make the study as reproducible as possible by releasing the code, inputs, using open-source models and running the experiments under set seeds, we can not guarantee exact replication due to the inherent randomness in LLMs which can only be mitigated \cite{atil_2025,bisbee_2023}. Likewise, the instruction prompts as well as other hyper-parameters may have been implicitly optimized during the many iterations of this study.
 
@@ -172,7 +192,7 @@ $. The three cost models differ primarily in how $C_{\text{op}}$ is determined.
 
 \paragraph{Open-source models}
 
-For self-hosted open-source LLMs, the cost per operation arises from the amortized infrastructure cost over the duration of the experiment. We estimate the Total Cost of Ownership (TCO) during the experiment window as $
+For self-hosted open-source LLMs, the cost per operation arises from the amortized infrastructure cost over the duration of the experiment. We estimate the \ac{TCO} during the experiment window as $
 \text{TCO}_{\text{exp}} = \text{CapEx}_{\text{exp}} + \text{PowerCost}_{\text{exp}}$.
 
 Capital expenditure is amortized over the hardware depreciation period:
