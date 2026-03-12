@@ -55,9 +55,11 @@ def main(
 
     toxicity_by_dimension(df, graph_dir, "role")
     toxicity_by_dimension(df, graph_dir, "model")
-    toxicity_regression(
+    participant_toxicity_regression(
         df[~df.is_moderator], latex_output_dir=latex_output_dir
     )
+    moderator_toxicity_regression(df[df.is_moderator])
+    facilitation_response_regression(df)
 
     palette = tasks.graphs.COLORBLIND_PALETTE
     # shift colors left by 1 so first color is skipped
@@ -176,7 +178,9 @@ def toxicity_by_dimension(
     plt.close()
 
 
-def toxicity_regression(df: pd.DataFrame, latex_output_dir: Path) -> None:
+def participant_toxicity_regression(
+    df: pd.DataFrame, latex_output_dir: Path
+) -> None:
     df["message_order_c"] = df["message_order"] - df["message_order"].mean()
     df = df.rename(columns={"toxicity": "Toxicity"})
     model = smf.mixedlm(
@@ -185,87 +189,83 @@ def toxicity_regression(df: pd.DataFrame, latex_output_dir: Path) -> None:
         groups=df["conv_id"],
     )
     result = model.fit()
+    print(result.summary())
 
-    # --- Extract coefficients, SEs, and p-values manually ---
-    params = result.fe_params
-    bse = result.bse_fe
-    pvalues = result.pvalues[params.index]
 
-    # Random effects variance
-    re_var = (
-        result.cov_re.iloc[0, 0] if result.cov_re is not None else float("nan")
+def moderator_toxicity_regression(df: pd.DataFrame) -> None:
+    df["message_order_c"] = df["message_order"] - df["message_order"].mean()
+    df = df.rename(columns={"toxicity": "Toxicity"})
+    model = smf.mixedlm(
+        "Toxicity ~ C(strategy, Treatment(reference='No Instructions')) * message_order_c",
+        data=df,
+        groups=df["conv_id"],
     )
+    result = model.fit()
+    print(result.summary())
 
-    # Significance stars
-    def stars(p: float) -> str:
-        if p < 0.001:
-            return "***"
-        elif p < 0.01:
-            return "**"
-        elif p < 0.05:
-            return "*"
-        return ""
 
-    # Human-readable label map
-    label_map = {
-        "Intercept": "Constant",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]": "Constructive Communications",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]": "Moderation Guidelines",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]": "Minimal Instructions",
-        "message_order_c": "Discussion Turn",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.Constr. Comms]:message_order_c": "Constructive Communications $\\times$ Turn",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.E-Rulemaking]:message_order_c": "Moderation Guidelines $\\times$ Turn",
-        "C(strategy, Treatment(reference='No Facilitator'))[T.No Instructions]:message_order_c": "Minimal Instructions $\\times$ Turn",
-    }
+def facilitation_response_regression(df: pd.DataFrame) -> None:
+    """
+    For each facilitator comment, find the next comment by the same user
+    (pattern: user A -> facilitator -> user A) and use that as the outcome.
+    Runs a mixed-effects model of strategy + is_troll on post-facilitation toxicity.
+    """
+    df = df.sort_values(["conv_id", "message_order"]).reset_index(drop=True)
 
-    # --- Build LaTeX table manually ---
-    rows = []
-    for raw_name, coef in params.items():
-        se = bse[raw_name]
-        p = pvalues[raw_name]
-        label = label_map.get(raw_name, raw_name)
-        s = stars(p)
-        rows.append(
-            f"    {label} & ${coef:8.3f}^{{{s}}}$ \\\\\n"
-            f"    & $({se:.3f})$ \\\\"
-        )
+    records = []
+    for conv_id, conv_df in df.groupby("conv_id"):
+        conv_df = conv_df.reset_index(drop=True)
+        moderator_mask = conv_df["is_moderator"]
 
-    body = "\n".join(rows)
+        for mod_idx in conv_df.index[moderator_mask]:
+            # Find the comment immediately before the facilitator
+            if mod_idx == 0:
+                continue
+            pre_mod = conv_df.loc[mod_idx - 1]
+            if pre_mod["is_moderator"]:
+                continue
 
-    n_obs = int(result.nobs)
-    n_groups = result.model.n_groups
-    log_lik = (
-        f"{result.llf:.3f}"
-        if hasattr(result, "llf") and result.llf is not None
-        else "---"
+            target_user = pre_mod["user"]
+
+            # Find the next comment by that same user after the facilitator
+            after = conv_df.loc[mod_idx + 1:]
+            same_user_after = after[after["user"] == target_user]
+            if same_user_after.empty:
+                continue
+
+            post_mod = same_user_after.iloc[0]
+
+            records.append({
+                "conv_id": conv_id,
+                "user": target_user,
+                "is_troll": pre_mod["is_troll"],
+                "strategy": conv_df.loc[mod_idx, "strategy"],
+                "pre_toxicity": pre_mod["toxicity"],
+                "post_toxicity": post_mod["toxicity"],
+            })
+
+    response_df = pd.DataFrame(records)
+    print(f"\nFacilitation response pairs found: {len(response_df)}")
+    print(f"Strategy breakdown:\n{response_df['strategy'].value_counts()}\n")
+
+    model = smf.mixedlm(
+        "post_toxicity ~ C(strategy, Treatment(reference='No Instructions')) * C(is_troll)",
+        data=response_df,
+        groups=response_df["conv_id"],
     )
+    result = model.fit()
+    print(result.summary())
 
-    latex = (
-        "\\begin{table}[ht]\n"
-        "\\centering\n"
-        "\\caption{Mixed-Effects Model: Predictors of Message Toxicity}\n"
-        "\\label{tab:toxicity_regression}\n"
-        "\\begin{tabular}{lc}\n"
-        "\\hline\\hline\n"
-        " & Toxicity \\\\\n"
-        "\\hline\n"
-        f"{body}\n"
-        "\\hline\n"
-        f"    \\textit{{Random Effects}} & \\\\\n"
-        f"    \\quad Group Variance & ${re_var:.4f}$ \\\\\n"
-        "\\hline\n"
-        f"    Observations & {n_obs} \\\\\n"
-        f"    Groups & {n_groups} \\\\\n"
-        f"    Log-Likelihood & {log_lik} \\\\\n"
-        "\\hline\\hline\n"
-        "\\multicolumn{2}{l}{\\footnotesize Standard errors in parentheses.} \\\\\n"
-        "\\multicolumn{2}{l}{\\footnotesize $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$} \\\\\n"
-        "\\end{tabular}\n"
-        "\\end{table}\n"
-    )
 
-    with open(latex_output_dir / "toxicity_regression.tex", "w") as f:
-        f.write(latex)
+# Significance stars
+def stars(p: float) -> str:
+    if p < 0.001:
+        return "***"
+    elif p < 0.01:
+        return "**"
+    elif p < 0.05:
+        return "*"
+    return ""
 
 
 def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
@@ -332,7 +332,7 @@ def toxicity_distribution_comparison(
     datasets.
     Styled after plot_dataset_diversity with hatched fills and custom legend.
     """
-    print(df.dataset)
+
     ax = sns.kdeplot(
         data=df,
         x="toxicity",

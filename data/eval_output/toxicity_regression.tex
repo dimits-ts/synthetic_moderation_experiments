@@ -1,31 +1,57 @@
 \begin{table}[ht]
-\centering
-\caption{Mixed-Effects Model for toxicity depending on the facilitator's strategy. Reference level is \texttt{No Facilitator}. \texttt{Turn} denotes the (centered) number of comments in the discussion so far.}
-\label{tab:toxicity_regression}
-\begin{tabular}{lc}
-\toprule
- & Toxicity \\
-\midrule
-    Intercept & $   0.184^{***}$ \\
-    & $(0.008)$ \\
-    Constructive Communications & $  -0.040^{***}$ \\
-    & $(0.011)$ \\
-    Moderation Guidelines & $  -0.032^{**}$ \\
-    & $(0.011)$ \\
-    Minimal Instructions & $  -0.030^{**}$ \\
-    & $(0.011)$ \\
-    Discussion Turn & $   0.001^{*}$ \\
-    & $(0.000)$ \\
-    Constructive Communications $\times$ Turn & $  -0.002^{**}$ \\
-    & $(0.001)$ \\
-    Moderation Guidelines $\times$ Turn & $  -0.001^{}$ \\
-    & $(0.001)$ \\
-    Minimal Instructions $\times$ Turn & $  -0.001^{*}$ \\
-    & $(0.001)$ \\
-\midrule
-    Observations & $15{,}369$ \\
-    Groups & $720$ \\
-\bottomrule
-\multicolumn{2}{l}{\footnotesize $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$ Standard errors in parentheses.} \\
-\end{tabular}
+	\centering
+	\caption{\ac{mem} on LLM participant toxicity depending on the facilitator's strategy. Reference level is \texttt{No Facilitator}. Acronyms: CC = Constructive Communications, MG = Moderation Guidelines, MI = Minimal Instructions, T = Discussion Turn (centered number of comments in the discussion so far). $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
+	\label{tab:regression-overall}
+	\begin{tabular}{lcccccccc}
+		\toprule
+		& Intercept & CC & MG & MI & T & CC $\times$ T & MG $\times$ T & MI $\times$ T \\
+		\midrule
+		& \begin{tabular}[c]{@{}c@{}}$0.184^{***}$ \\ $(0.008)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.040^{***}$ \\ $(0.011)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.032^{**}$ \\ $(0.011)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.030^{**}$ \\ $(0.011)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.001^{*}$ \\ $(0.000)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.002^{**}$ \\ $(0.001)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.001$ \\ $(0.001)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.001^{*}$ \\ $(0.001)$\end{tabular} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\caption{\ac{mem} on toxicity exhibited by the \emph{LLM facilitator} depending on the facilitation strategy. Reference level is \texttt{No Instructions}. Acronyms: CC = Constructive Communications, MG = Moderation Guidelines, T = message order (centered). $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
+	\label{tab:regression-facilitator}
+	\begin{tabular}{lcccccc}
+		\toprule
+		& Intercept & CC & MG & T & CC $\times$ T & MG $\times$ T \\
+		\midrule
+		Facilitator 	Toxicity 
+		& \begin{tabular}[c]{@{}c@{}}$0.061^{***}$ \\ $(0.002)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.020^{***}$ \\ $(0.003)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.023^{***}$ \\ $(0.003)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.000$ \\ $(0.000)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.000$ \\ $(0.000)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.000$ \\ $(0.000)$\end{tabular} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\caption{\ac{mem} on the toxicity of users responding to an intervention depending on facilitation strategy. We consider a response as a chain of user A commenting, followed by an intervention, followed by user A commenting again. Reference levels: \texttt{No Instructions} for strategy, \texttt{False} for trolls. Acronyms: CC = Constructive Communications, MG = Moderation Guidelines, TR = whether the participant is a troll. $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
+	\label{tab:regression-response}
+	\begin{tabular}{lcccccc}
+		\toprule
+		& Intercept & CC & MG & TR & CC $\times$ TR & MG $\times$ TR \\
+		\midrule
+		Response Toxicity 
+		& \begin{tabular}[c]{@{}c@{}}$0.102^{***}$ \\ $(0.007)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.007$ \\ $(0.010)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.003$ \\ $(0.010)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.182^{***}$ \\ $(0.006)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.008$ \\ $(0.008)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.010$ \\ $(0.008)$\end{tabular} \\
+		\bottomrule
+	\end{tabular}
 \end{table}
