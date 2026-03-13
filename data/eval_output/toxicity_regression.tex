@@ -1,6 +1,6 @@
 \begin{table}[ht]
 	\centering
-	\caption{\ac{mem} on LLM participant toxicity depending on the facilitator's strategy. Reference level is \texttt{No Facilitator}. Acronyms: CC = Constructive Communications, MG = Moderation Guidelines, MI = Minimal Instructions, T = Discussion Turn (centered number of comments in the discussion so far). $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
+	\caption{\ac{mem} on LLM participant toxicity depending on the facilitator's strategy. Comments in the same discussion should feature highly correlated content, and therefore toxicity, which makes the use of a \ac{mem} grouping comments by discussions necessary. Reference level is \texttt{No Facilitator}. Acronyms: CC = Constructive Communications, MG = Moderation Guidelines, MI = Minimal Instructions, T = Discussion Turn (centered number of comments in the discussion so far). $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
 	\label{tab:regression-overall}
 	\begin{tabular}{lcccccccc}
 		\toprule
@@ -39,19 +39,20 @@
 
 \begin{table}[ht]
 	\centering
-	\caption{\ac{mem} on the toxicity of users responding to an intervention depending on facilitation strategy. We consider a response as a chain of user A commenting, followed by an intervention, followed by user A commenting again. Reference levels: \texttt{No Instructions} for strategy, \texttt{False} for trolls. Acronyms: CC = Constructive Communications, MG = Moderation Guidelines, TR = whether the participant is a troll. $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
+	\caption{\ac{mem} predicting post-intervention toxicity. In a chain of user A commenting, followed by an intervention, followed by user A commenting again, we consider the first and last comments to be the pre- and post-intervention toxicity levels respectively. We control for pre-toxicity, since it should be highly correlated with post-toxicity. Reference levels: \texttt{No Instructions} for strategy, \texttt{False} for trolls. Acronyms: CC = Constructive Communications, ER = E-Rulemaking, TR = whether the participant is a troll, PI= Pre-Intervention toxicity. $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
 	\label{tab:regression-response}
-	\begin{tabular}{lcccccc}
+	\begin{tabular}{lccccccc}
 		\toprule
-		& Intercept & CC & MG & TR & CC $\times$ TR & MG $\times$ TR \\
+		& Intercept & CC & ER & TR & CC $\times$ TR & ER $\times$ TR & PI \\
 		\midrule
-		Response Toxicity 
-		& \begin{tabular}[c]{@{}c@{}}$0.102^{***}$ \\ $(0.007)$\end{tabular}
-		& \begin{tabular}[c]{@{}c@{}}$-0.007$ \\ $(0.010)$\end{tabular}
-		& \begin{tabular}[c]{@{}c@{}}$-0.003$ \\ $(0.010)$\end{tabular}
-		& \begin{tabular}[c]{@{}c@{}}$0.182^{***}$ \\ $(0.006)$\end{tabular}
-		& \begin{tabular}[c]{@{}c@{}}$-0.008$ \\ $(0.008)$\end{tabular}
-		& \begin{tabular}[c]{@{}c@{}}$0.010$ \\ $(0.008)$\end{tabular} \\
+		Post Toxicity
+		& \begin{tabular}[c]{@{}c@{}}$0.084^{***}$ \\ $(0.006)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.007$ \\ $(0.009)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.002$ \\ $(0.009)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.150^{***}$ \\ $(0.007)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.006$ \\ $(0.008)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.007$ \\ $(0.008)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.172^{***}$ \\ $(0.016)$\end{tabular} \\
 		\bottomrule
 	\end{tabular}
 \end{table}

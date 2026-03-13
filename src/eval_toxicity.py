@@ -249,7 +249,7 @@ def facilitation_response_regression(df: pd.DataFrame) -> None:
     print(f"Strategy breakdown:\n{response_df['strategy'].value_counts()}\n")
 
     model = smf.mixedlm(
-        "post_toxicity ~ C(strategy, Treatment(reference='No Instructions')) * C(is_troll)",
+        "post_toxicity ~ C(strategy, Treatment(reference='No Instructions')) * C(is_troll) + pre_toxicity",
         data=response_df,
         groups=response_df["conv_id"],
     )
