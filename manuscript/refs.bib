@@ -2968,3 +2968,104 @@ abstract = {Large Language Models (LLMs) are rapidly evolving, demonstrating imp
 	primaryClass={cs.CL},
 	url={https://arxiv.org/abs/2312.11805}, 
 }
+
+@inproceedings{zhang2023llmaaa,
+	title={Llmaaa: Making large language models as active annotators},
+	author={Zhang, Ruoyu and Li, Yanzeng and Ma, Yongliang and Zhou, Ming and Zou, Lei},
+	booktitle={Findings of the Association for Computational Linguistics: EMNLP 2023},
+	pages={13088--13103},
+	year={2023}
+}
+
+
+@article{krumdick2025no,
+	title={No free labels: Limitations of llm-as-a-judge without human grounding},
+	author={Krumdick, Michael and Lovering, Charles and Reddy, Varshini and Ebner, Seth and Tanner, Chris},
+	journal={arXiv preprint arXiv:2503.05061},
+	year={2025}
+}
+
+@inproceedings{hanna-bojar-2021-fine,
+	title = "A Fine-Grained Analysis of {BERTS}core",
+	author = "Hanna, Michael  and
+	Bojar, Ond{\v{r}}ej",
+	editor = "Barrault, Loic  and
+	Bojar, Ondrej  and
+	Bougares, Fethi  and
+	Chatterjee, Rajen  and
+	Costa-jussa, Marta R.  and
+	Federmann, Christian  and
+	Fishel, Mark  and
+	Fraser, Alexander  and
+	Freitag, Markus  and
+	Graham, Yvette  and
+	Grundkiewicz, Roman  and
+	Guzman, Paco  and
+	Haddow, Barry  and
+	Huck, Matthias  and
+	Yepes, Antonio Jimeno  and
+	Koehn, Philipp  and
+	Kocmi, Tom  and
+	Martins, Andre  and
+	Morishita, Makoto  and
+	Monz, Christof",
+	booktitle = "Proceedings of the Sixth Conference on Machine Translation",
+	month = nov,
+	year = "2021",
+	address = "Online",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/2021.wmt-1.59/",
+	pages = "507--517",
+	abstract = "BERTScore, a recently proposed automatic metric for machine translation quality, uses BERT, a large pre-trained language model to evaluate candidate translations with respect to a gold translation. Taking advantage of BERT{'}s semantic and syntactic abilities, BERTScore seeks to avoid the flaws of earlier approaches like BLEU, instead scoring candidate translations based on their semantic similarity to the gold sentence. However, BERT is not infallible; while its performance on NLP tasks set a new state of the art in general, studies of specific syntactic and semantic phenomena have shown where BERT{'}s performance deviates from that of humans more generally. This naturally raises the questions we address in this paper: what are the strengths and weaknesses of BERTScore? Do they relate to known weaknesses on the part of BERT? We find that while BERTScore can detect when a candidate differs from a reference in important content words, it is less sensitive to smaller errors, especially if the candidate is lexically or stylistically similar to the reference."
+}
+
+@inproceedings{chen-etal-2022-reproducibility,
+	title = "Reproducibility Issues for {BERT}-based Evaluation Metrics",
+	author = "Chen, Yanran  and
+	Belouadi, Jonas  and
+	Eger, Steffen",
+	editor = "Goldberg, Yoav  and
+	Kozareva, Zornitsa  and
+	Zhang, Yue",
+	booktitle = "Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing",
+	month = dec,
+	year = "2022",
+	address = "Abu Dhabi, United Arab Emirates",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/2022.emnlp-main.192/",
+	doi = "10.18653/v1/2022.emnlp-main.192",
+	pages = "2965--2989",
+	abstract = "Reproducibility is of utmost concern in machine learning and natural language processing (NLP). In the field of natural language generation (especially machine translation), the seminal paper of Post (2018) has pointed out problems of reproducibility of the dominant metric, BLEU, at the time of publication. Nowadays, BERT-based evaluation metrics considerably outperform BLEU. In this paper, we ask whether results and claims from four recent BERT-based metrics can be reproduced. We find that reproduction of claims and results often fails because of (i) heavy undocumented preprocessing involved in the metrics, (ii) missing code and (iii) reporting weaker results for the baseline metrics. (iv) In one case, the problem stems from correlating not to human scores but to a wrong column in the csv file, inflating scores by 5 points. Motivated by the impact of preprocessing, we then conduct a second study where we examine its effects more closely (for one of the metrics). We find that preprocessing can have large effects, especially for highly inflectional languages. In this case, the effect of preprocessing may be larger than the effect of the aggregation mechanism (e.g., greedy alignment vs. Word Mover Distance)."
+}
+
+
+@inproceedings{post-2018-call,
+	title = "A Call for Clarity in Reporting {BLEU} Scores",
+	author = "Post, Matt",
+	editor = "Bojar, Ond{\v{r}}ej  and
+	Chatterjee, Rajen  and
+	Federmann, Christian  and
+	Fishel, Mark  and
+	Graham, Yvette  and
+	Haddow, Barry  and
+	Huck, Matthias  and
+	Yepes, Antonio Jimeno  and
+	Koehn, Philipp  and
+	Monz, Christof  and
+	Negri, Matteo  and
+	N{\'e}v{\'e}ol, Aur{\'e}lie  and
+	Neves, Mariana  and
+	Post, Matt  and
+	Specia, Lucia  and
+	Turchi, Marco  and
+	Verspoor, Karin",
+	booktitle = "Proceedings of the Third Conference on Machine Translation: Research Papers",
+	month = oct,
+	year = "2018",
+	address = "Brussels, Belgium",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/W18-6319/",
+	doi = "10.18653/v1/W18-6319",
+	pages = "186--191",
+	abstract = "The field of machine translation faces an under-recognized problem because of inconsistency in the reporting of scores from its dominant metric. Although people refer to ``the'' BLEU score, BLEU is in fact a parameterized metric whose values can vary wildly with changes to these parameters. These parameters are often not reported or are hard to find, and consequently, BLEU scores between papers cannot be directly compared. I quantify this variation, finding differences as high as 1.8 between commonly used configurations. The main culprit is different tokenization and normalization schemes applied to the reference. Pointing to the success of the parsing community, I suggest machine translation researchers settle upon the BLEU scheme used by the annual Conference on Machine Translation (WMT), which does not allow for user-supplied reference processing, and provide a new tool, SACREBLEU, to facilitate this."
+}
