@@ -1,4 +1,4 @@
-# Evaluating Online Moderation Strategies Through Synthetic Discussion Generation
+# Designing Synthetic Discussion Generation Systems: A Case Study for Online Facilitation
 
 Synthetic dataset generation using the [SynDisco](https://github.com/dimits-ts/synthetic_discussion_framework) library. Experiments exploring the effect of various LLM moderation strategies in online conversations.
 

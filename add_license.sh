@@ -2,7 +2,7 @@
 
 # Define the header to prepend
 HEADER="
-# Intervention Detection in Discussions
+# Synthetic discussion generation experiments
 # Copyright (C) 2026 Dimitris Tsirmpas
 
 # This program is free software: you can redistribute it and/or modify
