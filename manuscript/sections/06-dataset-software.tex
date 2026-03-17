@@ -40,4 +40,20 @@ The dataset is primarily intended to serve as a resource for analyzing off-the-s
 
 The supplementary ablation dataset, as well as the code for the analysis and the graphs present in this paper, can be found in the project repository. The dataset is licensed under a CC BY-SA license. We include relevant statistics for the main, ablation and human discussion~\cite{chang-danescu-niculescu-mizil-2019-trouble} datasets in Table~\ref{tab:dataset-stats}.
 
-\input{../data/eval_output/dataset_statistics.tex}
+\begin{table}[ht]
+	\caption{Dataset statistics for all datasets.}
+	\label{tab:dataset-stats}
+	\begin{tabular}{lrrr}
+	\toprule
+	& Main & Ablation & Human \\
+	\midrule
+	Mean Comments per Discussion & 26.25 & 30.00 & 6.11 \\
+	Mean Words per Comment & 53.52 & 48.18 & 101.48 \\
+	Std. Comments per Discussion & 6.50 & 0.00 & 3.29 \\
+	Std. Words per Comment & 46.56 & 34.66 & 131.65 \\
+	\# Comments & 18900.00 & 32400.00 & 41772.00 \\
+	\# Discussions & 720.00 & 1080.00 & 6841.00 \\
+	\bottomrule
+	\end{tabular}
+\end{table}
+	
