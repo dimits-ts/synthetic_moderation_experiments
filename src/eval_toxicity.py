@@ -168,6 +168,7 @@ def toxicity_by_dimension(
         estimator=np.mean,
         errorbar=("ci", 95),
         order=["Facilitator", "Non-troll", "Troll"],
+        errcolor="green",
     )
 
     ax.set_ylabel("")
