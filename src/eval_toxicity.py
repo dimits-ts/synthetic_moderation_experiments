@@ -54,7 +54,6 @@ def main(
     STRATEGY_ORDER = tasks.graphs.get_sorted_labels(df, "strategy")
 
     toxicity_by_dimension(df, graph_dir, "role")
-    toxicity_by_dimension(df, graph_dir, "model")
     participant_toxicity_regression(
         df[~df.is_moderator], latex_output_dir=latex_output_dir
     )
