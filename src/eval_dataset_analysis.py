@@ -64,7 +64,7 @@ def main(
         y_col="model",
         graph_output_dir=graph_output_dir,
         label_order=MODEL_ORDER,
-        palette=tasks.graphs.COLORBLIND_PALETTE
+        palette=tasks.graphs.COLORBLIND_PALETTE,
     )
 
     plot_dataset_diversity(
@@ -285,6 +285,8 @@ def plot_dataset_length(
     label_order: list[str],
     palette: list[str],
 ) -> None:
+    # filter out messages that are just a number of quotemarks
+    df = df[~df.message.fillna("").astype(str).str.fullmatch(r'[\s"]*')]
     len_df = df.loc[:, ["message", y_col]]
     len_df["comment_length"] = len_df.message.apply(lambda x: len(x.split()))
 
