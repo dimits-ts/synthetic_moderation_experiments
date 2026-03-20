@@ -23,6 +23,7 @@ import pandas as pd
 import matplotlib
 import matplotlib.patches
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 import numpy as np
 import seaborn as sns
 import statsmodels.formula.api as smf
@@ -100,7 +101,8 @@ def main(
     df["instructions"] = "Respond-Provoke"
 
     synthetic_df = pd.concat([df, ablation_df], ignore_index=True)
-    toxicity_vs_troll_count(df=synthetic_df, graph_dir=graph_dir)
+    toxicity_vs_troll_count_all(df=synthetic_df, graph_dir=graph_dir)
+    toxicity_vs_troll_count_participants(df=synthetic_df, graph_dir=graph_dir)
 
     human_df = get_toxicity_df(
         main_df_path=human_path,
@@ -270,7 +272,37 @@ def stars(p: float) -> str:
     return ""
 
 
-def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
+def plot_toxicity_vs_trolls_participants(
+    plot_df: pd.DataFrame, graph_dir: Path
+) -> None:
+    plt.figure(figsize=(7, 4))
+
+    ax = sns.pointplot(
+        data=plot_df,
+        x="troll_bin",
+        order=["No trolls", "1", "2", "3", "4+"],
+        y="avg_non_troll_toxicity",
+        hue="instructions",
+        estimator=np.mean,
+        errorbar=("ci", 95),
+        hue_order=["Respond-Provoke", "Default"],
+        markers=["*", "^"],
+    )
+
+    ax.xaxis.set_minor_locator(plt.NullLocator())
+    ax.set_title(r"Toxicity of \textbf{non-troll} users")
+    ax.set_xlabel(r"\#Active troll users")
+    ax.set_ylabel("Avg. toxicity")
+    ax.legend(title="")
+
+    plt.tight_layout()
+    tasks.graphs.save_plot(graph_dir / "toxicity_vs_troll_count.png")
+    plt.close()
+
+
+def toxicity_vs_troll_count_participants(
+    df: pd.DataFrame, graph_dir: Path
+) -> None:
     non_troll_df = df.loc[(~df.is_troll) & (~df.is_moderator)]
 
     avg_toxicity = (
@@ -298,34 +330,133 @@ def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
         .replace({"4": "4+", "0": "No trolls"})
     )
 
-    plot_toxicity_vs_trolls(plot_df, graph_dir)
+    plot_toxicity_vs_trolls_participants(plot_df, graph_dir)
 
 
-def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
-
-    plt.figure(figsize=(7, 4))
-
-    ax = sns.pointplot(
-        data=plot_df,
-        x="troll_bin",
-        order=["No trolls", "1", "2", "3", "4+"],
-        y="avg_non_troll_toxicity",
-        hue="instructions",
-        estimator=np.mean,
-        errorbar=("ci", 95),
-        hue_order=["Respond-Provoke", "Default"],
-        markers=["*", "^"],
+def toxicity_vs_troll_count_all(df: pd.DataFrame, graph_dir: Path) -> None:
+    troll_counts = (
+        df.loc[df.is_troll]
+        .groupby(["conv_id", "instructions"])["user"]
+        .nunique()
+        .rename("n_distinct_trolls")
     )
 
+    role_map = {
+        "Troll": df.is_troll,
+        "Facilitator": df.is_moderator & ~df.is_troll,
+        "Other": ~df.is_troll & ~df.is_moderator,
+    }
+
+    role_frames = []
+    for role, mask in role_map.items():
+        avg = (
+            df.loc[mask]
+            .groupby(["conv_id", "instructions"])["toxicity"]
+            .mean()
+            .rename("avg_toxicity")
+        )
+        frame = avg.to_frame()
+        frame["role"] = role
+        role_frames.append(frame)
+
+    avg_toxicity = pd.concat(role_frames).reset_index()
+
+    troll_counts_df = troll_counts.reset_index()
+    plot_df = avg_toxicity.merge(
+        troll_counts_df, on=["conv_id", "instructions"], how="left"
+    )
+    plot_df["n_distinct_trolls"] = plot_df["n_distinct_trolls"].fillna(0)
+
+    plot_df["troll_bin"] = (
+        plot_df["n_distinct_trolls"]
+        .clip(upper=4)
+        .astype(int)
+        .astype(str)
+        .replace({"4": "4+", "0": "No trolls"})
+    )
+
+    plot_toxicity_vs_trolls_all(plot_df, graph_dir)
+
+
+def plot_toxicity_vs_trolls_all(plot_df: pd.DataFrame, graph_dir: Path) -> None:
+    ROLE_STYLES = {
+        "Troll": {"linestyle": "-", "marker": None},
+        "Facilitator": {"linestyle": "--", "marker": None},
+        "Other": {"linestyle": ":", "marker": None},
+    }
+    INSTRUCTION_MARKERS = {
+        "Respond-Provoke": "*",
+        "Default": "^",
+    }
+    TROLL_BIN_ORDER = ["No trolls", "1", "2", "3", "4+"]
+
+    fig, ax = plt.subplots(figsize=(8, 4.5))
+
+    palette = sns.color_palette("tab10", n_colors=len(ROLE_STYLES))
+    role_colors = dict(zip(ROLE_STYLES.keys(), palette))
+
+    for role, rstyle in ROLE_STYLES.items():
+        for instruction, marker in INSTRUCTION_MARKERS.items():
+            subset = plot_df[
+                (plot_df["role"] == role)
+                & (plot_df["instructions"] == instruction)
+            ]
+            if subset.empty:
+                continue
+            sns.pointplot(
+                data=subset,
+                x="troll_bin",
+                order=TROLL_BIN_ORDER,
+                y="avg_toxicity",
+                estimator=np.mean,
+                errorbar=("ci", 95),
+                color=role_colors[role],
+                linestyles=rstyle["linestyle"],
+                markers=marker,
+                ax=ax,
+                label=None,
+            )
+
+    # Build a combined legend manually
+    legend_handles = []
+    # Role entries (line style)
+    for role, rstyle in ROLE_STYLES.items():
+        legend_handles.append(
+            mlines.Line2D(
+                [],
+                [],
+                color=role_colors[role],
+                linestyle=rstyle["linestyle"],
+                linewidth=1.5,
+                marker="o",
+                markersize=5,
+                label=role,
+            )
+        )
+    # Instruction entries (marker only, neutral color)
+    for instruction, marker in INSTRUCTION_MARKERS.items():
+        legend_handles.append(
+            mlines.Line2D(
+                [],
+                [],
+                color="gray",
+                linestyle="-",
+                linewidth=0,
+                marker=marker,
+                markersize=7,
+                label=instruction,
+            )
+        )
+
+    ax.legend(handles=legend_handles, title="", framealpha=0.7)
     ax.xaxis.set_minor_locator(plt.NullLocator())
-    ax.set_title(r"Toxicity of \textbf{non-troll} users")
+    ax.set_title(r"Toxicity by role vs.\ \textbf{troll count}")
     ax.set_xlabel(r"\#Active troll users")
     ax.set_ylabel("Avg. toxicity")
-    ax.legend(title="")
-
     plt.tight_layout()
-    tasks.graphs.save_plot(graph_dir / "toxicity_vs_troll_count.png")
+    tasks.graphs.save_plot(graph_dir / "toxicity_vs_troll_count_all.png")
     plt.close()
+
 
 def toxicity_distribution_comparison(
     df: pd.DataFrame,
