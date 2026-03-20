@@ -55,9 +55,7 @@ def main(
     STRATEGY_ORDER = tasks.graphs.get_sorted_labels(df, "strategy")
 
     toxicity_by_dimension(df, graph_dir, "role")
-    participant_toxicity_regression(
-        df[~df.is_moderator], latex_output_dir=latex_output_dir
-    )
+    participant_toxicity_regression(df[~df.is_moderator])
     moderator_toxicity_regression(df[df.is_moderator])
     facilitation_response_regression(df)
 
@@ -96,13 +94,22 @@ def main(
         "message_id",
     ]
 
-    ablation_df = ablation_df[ablation_df.message_id.isin(valid_ids)]
-    ablation_df["instructions"] = "Default"
+    default_instr_df = ablation_df[
+        ablation_df.message_id.isin(valid_ids)
+    ].copy()
+    default_instr_df["instructions"] = "Default"
     df["instructions"] = "Respond-Provoke"
 
-    synthetic_df = pd.concat([df, ablation_df], ignore_index=True)
-    toxicity_vs_troll_count_all(df=synthetic_df, graph_dir=graph_dir)
-    toxicity_vs_troll_count_participants(df=synthetic_df, graph_dir=graph_dir)
+    no_trolls_df = ablation_df[
+        ~ablation_df["conv_id"].isin(
+            ablation_df.loc[ablation_df["is_troll"], "conv_id"]
+        )
+    ].copy()
+    troll_comp_df = pd.concat(
+        [df, no_trolls_df, default_instr_df], ignore_index=True
+    )
+    toxicity_vs_troll_count_all(df=troll_comp_df, graph_dir=graph_dir)
+    toxicity_vs_troll_count_participants(df=troll_comp_df, graph_dir=graph_dir)
 
     human_df = get_toxicity_df(
         main_df_path=human_path,
@@ -180,9 +187,8 @@ def toxicity_by_dimension(
     plt.close()
 
 
-def participant_toxicity_regression(
-    df: pd.DataFrame, latex_output_dir: Path
-) -> None:
+def participant_toxicity_regression(df: pd.DataFrame) -> None:
+    df = df.copy()
     df["message_order_c"] = df["message_order"] - df["message_order"].mean()
     df = df.rename(columns={"toxicity": "Toxicity"})
     model = smf.mixedlm(
@@ -195,6 +201,7 @@ def participant_toxicity_regression(
 
 
 def moderator_toxicity_regression(df: pd.DataFrame) -> None:
+    df = df.copy()
     df["message_order_c"] = df["message_order"] - df["message_order"].mean()
     df = df.rename(columns={"toxicity": "Toxicity"})
     model = smf.mixedlm(
@@ -378,7 +385,9 @@ def toxicity_vs_troll_count_all(df: pd.DataFrame, graph_dir: Path) -> None:
     plot_toxicity_vs_trolls_all(plot_df, graph_dir)
 
 
-def plot_toxicity_vs_trolls_all(plot_df: pd.DataFrame, graph_dir: Path) -> None:
+def plot_toxicity_vs_trolls_all(
+    plot_df: pd.DataFrame, graph_dir: Path
+) -> None:
     ROLE_STYLES = {
         "Troll": {"linestyle": "-", "marker": None},
         "Facilitator": {"linestyle": "--", "marker": None},
