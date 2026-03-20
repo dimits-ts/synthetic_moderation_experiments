@@ -60,7 +60,7 @@ def seaborn_setup() -> None:
 
     plt.rcParams.update(
         {
-            "text.usetex": False,
+            "text.usetex": True,
             # Figure
             "figure.figsize": (12, 8),
             "figure.dpi": 300,

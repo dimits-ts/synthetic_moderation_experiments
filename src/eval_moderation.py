@@ -200,7 +200,7 @@ def intervention_through_time_plot(
 
     ax.set_xticks(sorted(summary["turn_index"].unique()))
     ax.xaxis.set_minor_locator(plt.NullLocator())
-    ax.set_xlabel("#Comments (start -> end)")
+    ax.set_xlabel(r"\#Comments (start $\rightarrow$ end)")
     ax.set_ylabel("Avg. Cum. Intervention Rate (%)")
     ax.set_title(f"Facilitator interventions per {groupby_col}")
 

@@ -333,7 +333,7 @@ def plot_dataset_length(
     ax.legend(handles=new_handles, title=legend.get_title().get_text())
 
     plt.xlim(0, 400)
-    plt.xlabel("Comment length (#words)")
+    plt.xlabel(r"Comment length (\#words)")
     tasks.graphs.save_plot(graph_output_dir / "comment_len_model.png")
     plt.close()
 

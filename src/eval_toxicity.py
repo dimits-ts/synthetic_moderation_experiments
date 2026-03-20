@@ -228,21 +228,23 @@ def facilitation_response_regression(df: pd.DataFrame) -> None:
             target_user = pre_mod["user"]
 
             # Find the next comment by that same user after the facilitator
-            after = conv_df.loc[mod_idx + 1:]
+            after = conv_df.loc[mod_idx + 1 :]
             same_user_after = after[after["user"] == target_user]
             if same_user_after.empty:
                 continue
 
             post_mod = same_user_after.iloc[0]
 
-            records.append({
-                "conv_id": conv_id,
-                "user": target_user,
-                "is_troll": pre_mod["is_troll"],
-                "strategy": conv_df.loc[mod_idx, "strategy"],
-                "pre_toxicity": pre_mod["toxicity"],
-                "post_toxicity": post_mod["toxicity"],
-            })
+            records.append(
+                {
+                    "conv_id": conv_id,
+                    "user": target_user,
+                    "is_troll": pre_mod["is_troll"],
+                    "strategy": conv_df.loc[mod_idx, "strategy"],
+                    "pre_toxicity": pre_mod["toxicity"],
+                    "post_toxicity": post_mod["toxicity"],
+                }
+            )
 
     response_df = pd.DataFrame(records)
     print(f"\nFacilitation response pairs found: {len(response_df)}")
@@ -290,19 +292,23 @@ def toxicity_vs_troll_count(df: pd.DataFrame, graph_dir: Path) -> None:
 
     plot_df["troll_bin"] = plot_df["n_distinct_trolls"].clip(upper=4)
     plot_df["troll_bin"] = (
-        plot_df["troll_bin"].astype(int).astype(str).replace({"4": "4+"})
+        plot_df["troll_bin"]
+        .astype(int)
+        .astype(str)
+        .replace({"4": "4+", "0": "No trolls"})
     )
 
     plot_toxicity_vs_trolls(plot_df, graph_dir)
 
 
 def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
+
     plt.figure(figsize=(7, 4))
 
     ax = sns.pointplot(
         data=plot_df,
         x="troll_bin",
-        order=["0", "1", "2", "3", "4+"],
+        order=["No trolls", "1", "2", "3", "4+"],
         y="avg_non_troll_toxicity",
         hue="instructions",
         estimator=np.mean,
@@ -312,15 +318,14 @@ def plot_toxicity_vs_trolls(plot_df: pd.DataFrame, graph_dir: Path) -> None:
     )
 
     ax.xaxis.set_minor_locator(plt.NullLocator())
-    ax.set_title("Toxicity of non-troll users")
-    ax.set_xlabel("#Active troll users")
+    ax.set_title(r"Toxicity of \textbf{non-troll} users")
+    ax.set_xlabel(r"\#Active troll users")
     ax.set_ylabel("Avg. toxicity")
     ax.legend(title="")
 
     plt.tight_layout()
     tasks.graphs.save_plot(graph_dir / "toxicity_vs_troll_count.png")
     plt.close()
-
 
 def toxicity_distribution_comparison(
     df: pd.DataFrame,
@@ -418,7 +423,7 @@ def toxicity_through_time_plot(
     # the errorbar argument turns the x-axis into 0-index for some reason
     plt.xticks(sorted(plot_df["turn_index"].unique()))
     ax.xaxis.set_minor_locator(plt.NullLocator())
-    plt.xlabel("#Comments (start -> end)")
+    plt.xlabel(r"\#Comments (start $\rightarrow$ end)")
     plt.ylabel("Cumulative average toxicity")
     plt.legend(title="", loc="upper right")
     plt.tight_layout()
