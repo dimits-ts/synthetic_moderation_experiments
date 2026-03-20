@@ -74,5 +74,4 @@ python src/eval_toxicity.py \
   --ablation-path data/main_output/ablation.csv \
   --toxicity-rating-dir data/eval_output \
   --graph-output-dir graphs \
-  --human-path data/cmv_awry2.csv \
-  --stats-output-dir data/eval_output
+  --human-path data/cmv_awry2.csv

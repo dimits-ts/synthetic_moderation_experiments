@@ -36,8 +36,7 @@ def main(
     ablation_path: Path,
     human_path: Path,
     toxicity_ratings_dir: Path,
-    graph_dir: Path,
-    latex_output_dir: Path,
+    graph_dir: Path
 ):
     tasks.graphs.seaborn_setup()
     df = get_toxicity_df(
@@ -176,7 +175,7 @@ def toxicity_by_dimension(
         estimator=np.mean,
         errorbar=("ci", 95),
         order=["Facilitator", "Non-troll", "Troll"],
-        errcolor="green",
+        err_kws={'color': 'green'}
     )
 
     ax.set_ylabel("")
@@ -611,14 +610,6 @@ if __name__ == "__main__":
         required=True,
         help="Graph output directory",
     )
-
-    parser.add_argument(
-        "--stats-output-dir",
-        type=str,
-        required=True,
-        help="Directory for LaTeX regression output",
-    )
-
     args = parser.parse_args()
 
     main(
@@ -626,6 +617,5 @@ if __name__ == "__main__":
         ablation_path=Path(args.ablation_path),
         human_path=Path(args.human_path),
         toxicity_ratings_dir=Path(args.toxicity_rating_dir),
-        graph_dir=Path(args.graph_output_dir),
-        latex_output_dir=Path(args.stats_output_dir),
+        graph_dir=Path(args.graph_output_dir)
     )
