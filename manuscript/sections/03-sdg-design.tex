@@ -8,7 +8,7 @@
 	\centering
 	\includegraphics[width=\columnwidth]{research_goal.drawio.png}
 	\Description[Outline of the base components of an SDG system.]{Three blocks are present, each of which includes the components used in SDG systems. The ``SDG evaluation'' block includes the items ``Social Science literature'', ''Data Analysis'', and a crossed-out ``Human Evaluator'' figure. The ``SDG initialization'' block includes participants roles, personas, and ``seed discussions''. The ``SDG management'' block includes the turn-taking systemm the ``Discussion History'' (connected with the seed discussion figure), and a crossed-out memory module. The SDG initialization block is linked to three figures representing synthetic participants, which are also linked to an LLM, and to a crossed-out human figurine.}
-	\caption{We design \ac{sdg} systems through three high-level components: (1) the creation of LLM participants in lieu of humans (\S\ref{sec:methodology:initialization}), (2) simple synthetic systems that handle conversational dynamics (\S\ref{sec:methodology:management}), and (3) scalable evaluation methodologies grounded in literature which avoid human validation as much as possible (\S\ref{sec:methodology:evaluation}).}
+	\caption{We identify three key requirements for \ac{sdg} systems: (1) the generation of LLM participants to replace human agents (\S\ref{sec:methodology:initialization}---left), (2) the development of simple synthetic systems capable of managing conversational dynamics (\S\ref{sec:methodology:management}---top), and (3) the implementation of scalable evaluation methodologies rooted in existing literature, minimizing reliance on human validation (\S\ref{sec:methodology:evaluation}---right).}
 	\label{fig:sdg}
 \end{figure}
 
@@ -23,20 +23,28 @@
 We study \ac{sdg} in the context of text-only, online discussions. Unlike online fora and some social media such as Reddit which feature tree-style (``thread'') discussions~\cite{korre2025evaluation}, we assume a chat-like schema often encountered in comment sections or IRC chats, where a global ordering exists between all comments in a discussion. This greatly simplifies the design of our framework, although a small modification to how context is handled (\S\ref{sec:methodology:management:context}) would allow for experiments in such environments.
 
 
-\subsubsection{Design requirements}
+\subsubsection{Requirements}
 \label{sec:methodology:design:rules}
 
 Although \ac{sdg} is widely employed as a research mechanism, relatively few general-purpose tools have been developed to support researchers in generating and managing simulated discussions. Concordia~\cite{concordia} is among the few frameworks explicitly designed to orchestrate interactions between LLM agents. To our knowledge, however, it has been used in only one empirical study~\cite{navarro2024} and one competition~\cite{neurips_concordia} since its release. In contrast, most existing work relies on ad hoc, purpose-built frameworks (see \S\ref{sec:related:discussions}).
 
 Given the rapid maturation of the \ac{sdg} ecosystem following the widespread adoption of LLMs~\cite{adornetto2025_gabms}, the limited uptake of standardized tooling is striking. Despite numerous implementations, the factors that shape---or hinder---broader community adoption remain underexplored in the literature. To address this gap, we first outline plausible reasons for this limited adoption and then derive corresponding design principles to guide future framework development.
 
-\begin{enumerate}
-	\item \textbf{The framework should remain as simple as possible while still fulfilling the researchers' objectives}. In the field of \ac{swe}, there is a widely accepted principle that simpler systems generally perform their intended functions more effectively (the “Keep It Simple, Stupid”---KISS principle) \cite{beck2000extreme,thomas2025simplicity}. Empirical evidence from real-world applications supports this notion \cite{banker1989software,ogheneovo2014relationship}. Violating this principle may partly explain the difficulties encountered in other \ac{sdg} systems~\cite{balog_2024}. For example, complex and inflexible architectures, as well as high initial computational requirements and operating costs, have been identified as limiting factors in systems such as Concordia~\cite{neurips_concordia}. Simplicity has likewise been highlighted as a core design principle for online deliberative platforms like BCAUSE~\cite{bcause2023}, which our system simulates.
-	
-	\item \textbf{Complexity is directly related to researcher bias}. Each new feature necessarily follows our own expectations with how human discussions work. Indeed, recent work on LLM behaviors~\cite{park_simulacra} managed to derive interesting insights exactly because the authors did \emph{not} tamper with the way LLM users interacted. This is generally supported by \ac{gabm} literature~\cite{adornetto2025_gabms}.
-	
-	\item \textbf{\ac{sdg} should be scalable} The primary reason for designing and using \ac{sdg} methodologies is to bypass the monetary and time cost of human experiments~\cite{rossi_2024}. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions, it is necessary to generate large quantities of data without compromising cost efficiency, and thus scalability.
-\end{enumerate}
+\begin{principle}
+\label{principle:simple}
+    \textbf{The framework should remain as simple as possible while still fulfilling the researchers' objectives}. In the field of \ac{swe}, there is a widely accepted principle that simpler systems generally perform their intended functions more effectively (the “Keep It Simple, Stupid”---KISS principle) \cite{beck2000extreme,thomas2025simplicity}. Empirical evidence from real-world applications supports this notion \cite{banker1989software,ogheneovo2014relationship}. Violating this principle may partly explain the difficulties encountered in other \ac{sdg} systems~\cite{balog_2024}. For example, complex and inflexible architectures, as well as high initial computational requirements and operating costs, have been identified as limiting factors in systems such as Concordia~\cite{neurips_concordia}. Simplicity has likewise been highlighted as a core design principle for online deliberative platforms like BCAUSE~\cite{bcause2023}, which our system simulates.
+\end{principle}
+
+\begin{principle}
+\label{principle:bias}
+    \textbf{Complexity is directly related to researcher bias}. Each new feature necessarily follows our own expectations with how human discussions work. Indeed, recent work on LLM behaviors~\cite{park_simulacra} managed to derive interesting insights exactly because the authors did \emph{not} tamper with the way LLM users interacted. This is generally supported by \ac{gabm} literature~\cite{adornetto2025_gabms}.
+\end{principle}
+
+\begin{principle}
+\label{principle:scalable}
+    \textbf{\ac{sdg} should be scalable} The primary reason for designing and using \ac{sdg} methodologies is to bypass the monetary and time cost of human experiments~\cite{rossi_2024}. As the data obtained from these methodologies are inherently less valuable than those gathered through live human interactions, it is necessary to generate large quantities of data without compromising cost efficiency, and thus scalability. This is one of the most important design principles, influencing evaluation (\S\ref{sec:methodology:evaluation}), experiment implementation (\S\ref{sec:scalability:cost}), model selection (\S\ref{sec:scalability:model}), and constraining the tools with which we can influence LLM participants (Principle~\ref{principle:finetuning}).
+\end{principle}
+
 
 
 \subsubsection{Documentation}
@@ -57,10 +65,10 @@ Because of the large design space afforded to us by the \ac{sdg} problem stateme
 Indeed, most components of our framework are not as simple as they could theoretically be. We justify complexity in each of the components of our framework by documenting our goals, limitations, assumptions, and end-results.
 
 
-\subsection{Discussion Initialization}
+\subsection{LLM personas}
 \label{sec:methodology:initialization}
 
-\subsubsection{LLM Personas}
+\subsubsection{Injecting sociodemographic information}
 \label{sec:methodology:initialization:sdbs}
 
 \begin{table}[ht]
@@ -93,7 +101,7 @@ It is well known that LLMs tend to align more closely with WEIRD (Western, Educa
 
 Including \acfp{sdb} (e.g., gender, age and education) in prompts has proven promising in the generation of varied content \cite{burton2024large,sommerauer-etal-2025-simulating}. The injection of these ``persona'' prompts systematically shift the distribution of output tokens, hence producing content of larger variety when using multiple distinct personas~\cite{liu_2024_bias}.\footnote{It is worth noting that these shifts in speech do not necessarily correlate to the actual human groups these prompts are modeling~\cite{lutz-etal-2025-prompt,liu_2024_bias}, but this is not concerning for our use-case since our results do not depend on this assumption.} The creation of these personas is sometimes implemented by randomly selecting \ac{sdb} attributes from a number of dimensions such as age, gender, and employment~\cite{adornetto2025_gabms}. We instead pick personas from the PERSONA dataset~\cite{castricato-etal-2025-persona}, which includes a curated set of personas based on US census data (Appendix~\ref{ssec:app:sdbs}). Injecting these \ac{sdb} prompts, we observe that LLM users are able to create and share personal narratives and experiences from the provided information (Appendix~\ref{sec:appendix:behaviors}; Table~\ref{tab:logs-sdbs}).
 
-To measure changes in content variety, we perform an ablation study comparing discussions with and without access to \acp{sdb}. Using Jensen–Shannon divergence, we compare the "Diversity" distributions of human discussions to those from our experiments, where lower divergence indicates greater alignment with human discussion variety (see Appendix~\ref{sec:appendix:replication:analysis}). Table~\ref{tab:divergence-sdbs} shows that using \acp{sdb} brings synthetic discussions closer to human-like diversity.
+To measure changes in content variety, we perform an ablation study comparing discussions with and without access to \acp{sdb}. Using Jensen–Shannon divergence, we compare the "Diversity" distributions of human discussions to those from our experiments, where lower divergence indicates greater alignment with human discussion variety (see Appendix~\ref{sec:appendix:replication:analysis}). Table~\ref{tab:divergence-sdbs} shows that using \acp{sdb} brings synthetic discussions closer to human-like diversity. This finding does not necessarily mean that the LLM personas are accurate or indicative of real humans (and indeed relevant work suggests otherwise---\S\ref{ssec:related:human-llm}), but this is not a necessary condition for validating the findings of the experiments on our down-stream task (\S\ref{sec:facilitation}).
 
 
 \begin{table}[ht]
@@ -112,7 +120,7 @@ To measure changes in content variety, we perform an ablation study comparing di
 	
 
 
-\subsubsection{Participant roles}
+\subsubsection{Adding antagonistic users}
 \label{sec:methodology:initialization:trolls}
 
 \begin{table}[ht]
@@ -146,7 +154,7 @@ The most basic discussion setup for our experiments involves a single role; that
 
 Of course, in order for our observations for the LLM facilitators to be non-trivial, we need to develop a challenging discussion environment. There is currently no consensus among researchers on what constitutes a ``challenging'' online environment (or any representative simulated environment for that matter). We can assume that the presence of toxicity is a good proxy, since it has been shown to inhibit discussions by fermenting mistrust~\cite{bcause2023}, inhibiting productive discussions~\cite{Avalle2024PersistentIP} and causing participants to leave~\cite{bcause2023}.\footnote{We note that some recent work suggests otherwise~\cite{Avalle2024PersistentIP}.} For these reasons, toxicity has been a long-standing target of social science research on online communities~\cite{make_reddit_great, schaffner_community_guidelines, WARNER2025103468, habibi2025_content_moderator, PRADEL_ZILINSKY_2024}.
 
-LLMs are inherently aligned to be highly agreeable, making it difficult for them to replicate toxic or harmful behaviors~\cite{park_simulacra,anthis_2025}. While fine-tuning can alter this behavior~\cite{Taubenfeld2024SystematicBI}, it is computationally expensive and resource-intensive, requiring significant capital (\S\ref{sec:scalability:experimental}). An alternative is to use pre-aligned LLMs, but these lack instruction-following capabilities, as no open-source, safety-unaligned, instruction-tuned models are available. We are thus left with one choice; attempting to subtly ``jailbreak'' LLMs using prompting. LLM jailbreaking refers to the unauthorized manipulation of a large language model's behavior to bypass its built-in safety constraints and generate outputs that would otherwise be restricted or censored. Notably, our approach is different from conventional prompt-based jailbreak methods which attempt to optimize a singular prompt designed to ``fool'' the model~\cite{yi2024jailbreakattacks}. Instead of relying on prompts that break model safety by using fictional scenarios, shifting the attention of the model, or escalating privileges~\cite{liu2023jailbreaking}, we rely on a constantly partially derailed conversational context to induce prohibited behaviors.
+LLMs are inherently aligned to be highly agreeable, making it difficult for them to replicate toxic or harmful behaviors~\cite{park_simulacra,anthis_2025}. While fine-tuning can alter this behavior~\cite{Taubenfeld2024SystematicBI}, we consider it an indavisable method for \ac{sdg} (see \S\ref{sec:scalability:experimental}; Principle~\ref{principle:finetuning}). An alternative is to use pre-aligned LLMs, but these lack instruction-following capabilities, as no open-source, safety-unaligned, instruction-tuned models are available. We are thus left with one choice; attempting to subtly ``jailbreak'' LLMs using prompting. LLM jailbreaking refers to the unauthorized manipulation of a large language model's behavior to bypass its built-in safety constraints and generate outputs that would otherwise be restricted or censored. Notably, our approach is different from conventional prompt-based jailbreak methods which attempt to optimize a singular prompt designed to ``fool'' the model~\cite{yi2024jailbreakattacks}. Instead of relying on prompts that break model safety by using fictional scenarios, shifting the attention of the model, or escalating privileges~\cite{liu2023jailbreaking}, we rely on a constantly partially derailed conversational context to induce prohibited behaviors.
 
 Specifically, we assign antagonistic motivations to a randomly selected subset of participants,with a set probability (30\%) of each participant being selected for this role (Table~\ref{tab:trolls_setup}). These antagonistic participants are inspired by real-life internet ``trolls'' who deliberately use provocative, inflammatory, or misleading content to incite conflict, disrupt discussions, or manipulate online interactions for personal gain or amusement.\footnote{There is no formal definition of what a ``troll'' is~\cite{evita2019_trolling}, but we do not need one in this work; LLMs are extensively trained on online corpora and should thus replicate text that is associated with the human perception of the term.} A simple prompt (Appendix~\ref{sec:appendix:prompts}) instructing the LLMs to act as trolls is enough to provoke toxic behavior (Fig.~\ref{fig:trolls}), following human trends (Fig~\ref{fig:human-llm-comparison}), and leads to emergent social dynamics among LLM users (Appendix~\ref{sec:appendix:behaviors}). However, their speech remains stereotypical, unsubtle, and can be easily distinguished from human trolls, validating relevant work suggesting that LLMs often adopt exaggerated, stereotypical features instead of nuanced views of human behavior~\cite{summerfield2024will}.
 
@@ -160,7 +168,7 @@ Specifically, we assign antagonistic motivations to a randomly selected subset o
 \end{figure}
 
 
-\subsubsection{Instructions}
+\subsubsection{Ensuring meaningful interaction}
 \label{sec:methodology:initialization:instructions}
 
 \begin{table}[ht]
@@ -190,7 +198,7 @@ Specifically, we assign antagonistic motivations to a randomly selected subset o
 	\end{tabular}
 \end{table}
 
-We would hope that the presence of trolls in synthetic discussions would be enough to spur other participants into meaningfully interacting with their antagonistic speech. However, this is not the case; Fig~\ref{fig:instructions-trolls} shows that using basic prompts instructing the LLM to behave as a human are not enough for participants to react in a toxic manner even in the presence of trolls---one of the prerequisites for later experiments. This is likely caused by LLM alignment procedures preventing models from responding to toxic text~\cite{park_simulacra, rossi_2024}. Thus, all the challenges and possible solutions outlined above (\S\ref{sec:methodology:initialization:trolls}) apply here as well. 
+We would hope that the presence of trolls in synthetic discussions would be enough to spur other participants into meaningfully interacting with their antagonistic speech. However, this is not the case; Fig~\ref{fig:instructions-trolls} shows that using basic prompts instructing the LLM to behave as a human is not enough for participants to react in a toxic manner even in the presence of trolls---one of the prerequisites for later experiments. This is likely caused by LLM alignment procedures preventing models from responding to toxic text~\cite{park_simulacra, rossi_2024}. Thus, all the challenges and possible solutions outlined above (\S\ref{sec:methodology:initialization:trolls}) apply here as well. 
 
 Instructing participants to respond to toxic text (our "Respond-Provoke" strategy) enables the spread of toxic content even without actual trolls. This dynamic allows minor disagreements to escalate, even when no one is explicitly told to act as a troll. However, toxicity increases significantly when real trolls are present (Fig.~\ref{fig:instructions-trolls}). A downside is that this leads to greater divergence from natural human conversations (Table~\ref{tab:divergence-user_prompts}). We find no significant changes in the toxicity of trolls and facilitators in discussions with different prompting strategies, irrespective of troll count.
 
@@ -221,7 +229,10 @@ Instructing participants to respond to toxic text (our "Respond-Provoke" strateg
 	
 
 
-\subsubsection{Seed comments}
+\subsection{Running the discussion}
+\label{sec:methodology:management}
+
+\subsubsection{Starting the discussion}
 \label{sec:methodology:seed}
 
 \begin{table}[ht]
@@ -277,51 +288,9 @@ Our frameworks natively supports the inclusion of randomized seed opinions. We u
 	\bottomrule
 	\end{tabular}
 \end{table}
-	
 
 
-\subsection{Discussion management}
-\label{sec:methodology:management}
-
-\subsubsection{Context Management}
-\label{sec:methodology:management:context}
-
-\begin{table}[ht]
-	\centering
-	\caption{\ac{ocaso} documentation for using a window-based context setup.}
-	\label{tab:context_setup}
-	\begin{tabular}{p{3cm} p{9cm}}
-		\toprule
-		Objective 
-		& Keep the LLM participants informed of the discussion context at all times. \\
-		
-		Challenges 
-		& LLMs are stateless (have no memory), and VRAM constraints prevent us from using the entire discussion history in open-source, self-hosted setups (\S\ref{sec:scalability:experimental}). \\
-		& LLM users need to know specific information such as phrasing and style when considering a comment; which are usually discarded in \ac{ir} schemes. \\
-		
-		Assumptions 
-		& Only a few, recent comments are relevant for a user to formulate a response. \\
-		
-		Strategy 
-		& Use the $h$-last comments as context as-is. \\
-		
-		Outcomes 
-		&  + LLMs are able to address and react to subtle textual cues such as phrasing, which are then passed down to the other users (Appendix~\ref{sec:appendix:behaviors}; Table~\ref{tab:logs-sdbs}). \\
-		& + Notable conversational events persist long after the context window elapses (Appendix~\ref{sec:appendix:behaviors}; Table~\ref{tab:logs-user-facilitation}).\\
-		&  - Fine-grained information is lost if a user takes too long to respond (Appendix~\ref{sec:appendix:behaviors}; Table~\ref{tab:logs-user-facilitation}). \\
-		
-		\bottomrule
-	\end{tabular}
-\end{table}
-
-LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024,park_simulacra}, LLM self-critique \cite{yu_2024_fincon}, and memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches however are not explainable, and require substantial computational resources either due to repeated generation~\cite{balog_2024,adornetto2025_gabms}, or due to the loading of specialized modules in (very valuable) GPU VRAM memory~\cite{Vezhnevets2023GenerativeAM} (discussed in \S\ref{sec:scalability:cost:sources}), rendering them inadequate for tasks where scalability and capital intensity are limiting factors.
-
-These approaches may be appropriate in highly specialized settings, but they are not necessary for every task. Several studies have used mechanisms such as memory modules, retrieval systems, or summarization techniques to manage long interaction histories in LLM-based \ac{sdg} systems \cite{balog_2024, park_simulacra, abdelnabi_negotiations}. While these methods can improve scalability in contexts with extensive dialogue histories, they introduce abstraction layers that may alter or omit important details from the original interaction, such as tone and exact phrasing.
-
-Prior work on online discussions has shown that providing the $h$ most recent comments as context is sufficient for LLM participants to engage meaningfully in conversation \cite{pavlopoulos_2020_toxicity}. Although this strategy may not be optimal for all \ac{sdg} tasks, we argue that it is necessary in certain cases and adequate in many. In the context of online discussions in particular, the aforementioned context-management techniques should be avoided, as they inevitably abstract away critical elements such as writing style, precise wording, and tone—features that are essential for interpreting participant stance and rhetorical positioning. More broadly, directly including the contents of prior interactions preserves all available information while maintaining scalability (assuming relatively small context windows) and supporting transparency and explainability.
-
-
-\subsubsection{Turn Taking}
+\subsubsection{Choosing the next speaker}
 \label{sec:methodology:management:turn-taking}
 
 \begin{table}[ht]
@@ -398,6 +367,47 @@ We find that using this turn-taking function aligns LLM discussions with human c
 	\bottomrule
 	\end{tabular}
 \end{table}
+
+\subsubsection{Remembering the past} % not the most clinical title but I quite like it
+\label{sec:methodology:management:context}
+
+\begin{table}[ht]
+	\centering
+	\caption{\ac{ocaso} documentation for using a window-based context setup.}
+	\label{tab:context_setup}
+	\begin{tabular}{p{3cm} p{9cm}}
+		\toprule
+		Objective 
+		& Keep the LLM participants informed of the discussion context at all times. \\
+		
+		Challenges 
+		& LLMs are stateless (have no memory), and VRAM constraints prevent us from using the entire discussion history in open-source, self-hosted setups (\S\ref{sec:scalability:experimental}). \\
+		& LLM users need to know specific information such as phrasing and style when considering a comment; which are usually discarded in \ac{ir} schemes. \\
+		
+		Assumptions 
+		& Only a few, recent comments are relevant for a user to formulate a response. \\
+		
+		Strategy 
+		& Use the $h$-last comments as context as-is. \\
+		
+		Outcomes 
+		&  + LLMs are able to address and react to subtle textual cues such as phrasing, which are then passed down to the other users (Appendix~\ref{sec:appendix:behaviors}; Table~\ref{tab:logs-sdbs}). \\
+		& + Notable conversational events persist long after the context window elapses (Appendix~\ref{sec:appendix:behaviors}; Table~\ref{tab:logs-user-facilitation}).\\
+		&  - Fine-grained information is lost if a user takes too long to respond (Appendix~\ref{sec:appendix:behaviors}; Table~\ref{tab:logs-user-facilitation}). \\
+		
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+LLM capabilities have incentivized researchers to create elaborate ways of managing context such as dynamic summarization \cite{balog_2024,park_simulacra}, LLM self-critique \cite{yu_2024_fincon}, and memory modules \cite{Vezhnevets2023GenerativeAM}. These approaches however are not explainable, and require substantial computational resources either due to repeated generation~\cite{balog_2024,adornetto2025_gabms}, or due to the loading of specialized modules in (very valuable) GPU VRAM memory~\cite{Vezhnevets2023GenerativeAM} (discussed in \S\ref{sec:scalability:cost:sources}), rendering them inadequate for tasks where scalability and capital intensity are limiting factors.
+
+These approaches may be appropriate in highly specialized settings, but they are not necessary for every task. Several studies have used mechanisms such as memory modules, retrieval systems, or summarization techniques to manage long interaction histories in LLM-based \ac{sdg} systems \cite{balog_2024, park_simulacra, abdelnabi_negotiations}. While these methods can improve scalability in contexts with extensive dialogue histories, they introduce abstraction layers that may alter or omit important details from the original interaction, such as tone and exact phrasing.
+
+Prior work on online discussions has shown that providing the $h$ most recent comments as context is sufficient for LLM participants to engage meaningfully in conversation \cite{pavlopoulos_2020_toxicity}. Although this strategy may not be optimal for all \ac{sdg} tasks, we argue that it is necessary in certain cases and adequate in many. In the context of online discussions in particular, the aforementioned context-management techniques should be avoided, as they inevitably abstract away critical elements such as writing style, precise wording, and tone—features that are essential for interpreting participant stance and rhetorical positioning. More broadly, directly including the contents of prior interactions preserves all available information while maintaining scalability (assuming relatively small context windows) and supporting transparency and explainability.
+
+
+
+
 	
 
 
