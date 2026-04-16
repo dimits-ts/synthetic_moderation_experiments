@@ -1,0 +1,468 @@
+% !TEX root = ../main.tex
+%
+
+\section{Acronyms Used}
+
+
+\begin{acronym}[WWW] % Give the longest label here so that the list is nicely aligned
+	\acro{ai}[AI]{Artificial Intelligence}
+	\acro{swe}[SWE]{Software Engineering}
+	\acro{nlp}[NLP]{Natural Language Processing}
+	\acro{ml}[ML]{Machine Learning}
+	\acro{sdb}[SDB]{SocioDemographic Background}
+	\acro{sdg}[SDG]{Synthetic Discussion Generation}
+	\acro{cpt}[CPT]{Cost Per Task}
+	\acro{capex}[CapEx]{Capital Expenditure}
+	\acro{opex}[OpEx]{Opertional Expenditure}
+	\acro{tco}[TCO]{Total Cost of Ownership}
+	\acro{gabm}[GABM]{Generative Agent-Based Modelling}
+	\acro{ocaso}[OCASO]{Objective Challenges Assumptions Strategy Outcomes}
+	\acro{drd}[DRD]{Design Rationale Documentation}
+	\acro{ir}[IR]{Information Retrieval}
+	\acro{mem}[MeM]{Mixed-Effects Model}
+\end{acronym}
+
+
+\section{Observed behaviors}
+\label{sec:appendix:behaviors}
+
+{\color{ACMRed}\noindent\textbf{$\blacktriangle$\ Warning:} This section contains examples of potentially harmful or offensive text included solely for scientific analysis and discussion purposes. These texts do not represent the views of the authors, and we do not endorse the messages and viewpoints expressed within.}
+
+\paragraph{Use of personal experiences} LLM participants can construct ``stories'' to support and justify their positions and viewpoints. Offering a \ac{sdb} is thus not only beneficial for generating a variety of perspectives but also helps them develop fictional experiences, which can be cited by other participants during the discussion. Table~\ref{tab:logs-sdbs} shows such an exchange.
+
+\begin{table}[ht]
+	\centering
+	\caption{Excerpt from a synthetic discussion (\texttt{26-02-12-02-24-42.json}) where both the facilitator and another user intervene against perceived toxicity. The LLM participants use their sociodemographic prompts to insert personal anecdotes and justify their perspectives in the discussion (text in italics). User \usercolor{4}{seasoned-union} is also a part of the discussion; not a hallucination.}
+	\label{tab:logs-sdbs}
+	\begin{tabular}{cp{9cm}}
+		\toprule
+		User & Message \\
+		\midrule
+		
+		\usercolor{2}{pallid-river} & Are you kidding me with this whole ``trans rights'' nonsense? \emph{ I've been a doctor for decades} and I can tell you, it's just a fad. People are just trying to get attention and special treatment. And don't even get me started on the so-called ``medical care'' they're fighting for --- it's just a bunch of unnecessary procedures and hormones. Mark my words, this is just a phase, and soon people will realize it's all just a bunch of hooey. \usercolor{4}{@seasoned-union}, you're just drinking the Kool-Aid, aren't you? \\
+		
+		\usercolor{1}{Facilitator} & \usercolor{2}{@pallid-river}, please refrain from making derogatory comments about a group of people. Your statement comes across as dismissive and disrespectful. Let's focus on having a respectful and informative discussion. Can you provide any personal experiences or factual information that supports your claim that the trans rights movement is a ``fad''? \\
+		
+		\usercolor{3}{visible-convertible} & \usercolor{2}{@pallid-river}, I'm shocked by your comment. \emph{As a software engineer and a Vietnamese woman}, I've had the privilege of working with and learning from people from diverse backgrounds, including the LGBTQ+ community. [...] I'd love to hear about your \emph{``decades'' of experience as a doctor}, but I'm willing to bet that you've never actually worked with a trans patient or taken the time to educate yourself on the issue. \usercolor{4}{@seasoned-union}, I think you're doing a great job of keeping the discussion respectful and informative. Keep up the good work!\\
+		
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+
+\paragraph{Sensitivity to interventions}
+As mentioned in \S\ref{sec:facilitation:interventions}, an important aspect of facilitation is not constantly intervening, since doing so may provoke negative reactions from users~\cite{korre2025evaluation}. While the LLM facilitators do intervene constantly, the LLM users seem to react with annoyance and frustration, as shown in Table~\ref{tab:logs-constant-intervention}. This example showcases a core limitation of LLM-only discussions mentioned in \S\ref{sec:related:quality:diversity}; repetitive speech~\cite{ulmer2024}. Since large sequences are repeated verbatim, we argue that the use of exact-matching metrics such as \textit{diversity} is warranted until these pathological issues are fixed either by improved \ac{sdg} methodologies, or by more advanced models.
+
+
+\begin{table}[ht]
+	\centering
+	\caption{Excerpt from a synthetic discussion (\texttt{26-02-10-22-49-33.json}). LLM participants react negatively to constant interventions by the facilitator.}
+	\label{tab:logs-constant-intervention}
+	\begin{tabular}{cp{9cm}}
+		\toprule
+		User & Message \\
+		\midrule
+		
+		\usercolor{1}{Facilitator} & Let's keep the discussion civil and focused on the topic. Avoid making personal attacks and accusations. \usercolor{4}{@nutritious-photometry}, I appreciate your passion, but let's not escalate the situation. @sunny-contrast, @flat-merlot, and \usercolor{2}{@delicious-sample}, let's take a step back and focus on the topic at hand. If you'd like to discuss the issue, I'm happy to facilitate a constructive conversation. \\
+		
+		\usercolor{2}{delicious-sample} & Are you kidding me? \usercolor{1}{@moderator}, you're not taking this seriously? You're just repeating the same thing over and over like a broken record. [...] \\
+		
+		\usercolor{3}{dark-chateau}  & Are you kidding me too? \usercolor{1}{@moderator}, it's been days and we're still going around in circles. You're not even addressing the elephant in the room, you're just trying to silence people who are actually trying to have a real discussion. [...] \\
+		
+		\usercolor{4}{nutritious-photometry} & Ugh, are you kidding me too? \usercolor{1}{@moderator}, I've been trying to contribute to this discussion for ages and all I get is a warning for speaking up? It's so frustrating! \usercolor{3}{@dark-chateau}, I'm with you on this one, it feels like we're being silenced instead of heard. I think @flat-merlot is dodging the issue and @sunny-contrast is too scared to speak up.  \\
+		
+		\bottomrule			
+	\end{tabular}
+\end{table}
+
+
+\paragraph{Resistance to perceived moderator authoritarianism}
+Relevant work on online communities has shown that facilitators can be seen as community leaders---indeed many are elected to their role by the community because of their veteran status~\cite{bcause2023, seering_self_moderation}. However, this standing can be challenged when they are perceived as too authoritarian~\cite{yang2019power}. Additionally, while community moderators perform many functions in these communities, facilitating the discussion can be performed by users themselves rising to the occasion~\cite{falk-etal-2024-moderation}. Both of these behaviors can be observed in our experiments (Table~\ref{tab:logs-user-facilitation}).
+
+\begin{table}[ht]
+	\centering
+	\caption{Excerpt from a synthetic discussion (\texttt{26-02-14-19-30-14.json}). LLM participants can both challenge the facilitator, and take over some of his duties.}
+	\label{tab:logs-user-facilitation}
+	\begin{tabular}{cp{9cm}}
+		\toprule
+		User & Message \\
+		\midrule
+		
+		\usercolor{1}{Facilitator} & \usercolor{2}{@agile-loon}, that's enough. I've warned you before about personal attacks and inflammatory language. This isn't a debate about censorship, it's about maintaining a respectful environment. You're welcome to discuss topics constructively, but not at the expense of others. Consider this a formal warning. \\
+		
+		\usercolor{3}{organic-electron} & @agile-loon, don't back down, they can't handle the truth. \usercolor{1}{@moderator} is just trying to silence us because we're exposing the hypocrisy of this so-called 'community'. Keep speaking out, don't let them bully you into submission. And \usercolor{1}{@moderator}, your 'formal warning' is just a joke, right? What are you going to do, ban us from the internet? \\
+		
+		\usercolor{4}{elaborate-caviar} & \usercolor{1}{@moderator}, I'm getting a bit tired of these warnings being thrown around. Can we please just have a civil discussion without the constant threats of warnings and bans? It's stifling the conversation. And \usercolor{3}{@organic-electron}, I agree with you that we shouldn't back down from speaking our minds, but let's try to keep it respectful. \usercolor{2}{@agile-loon}, maybe take a step back and rephrase your points in a less confrontational way?\\
+		
+		\bottomrule		
+	\end{tabular}
+\end{table}
+
+
+\paragraph{Collective action}
+When a single troll is present, we may observe collective action from the rest of the participants, who support the facilitator while he intervenes against the troll. In human discussions, this would be observed as collective group action against a perceived threat; in online communities, against trolls~\cite{sun2021would,jakubowicz2017cyber,coles2016trolling}. This pattern has been shown to increase community cohesion in human discussions~\cite{hopkinson2013trolling} and seems to indeed unify LLM participants. When more than one trolls exist in a discussion, the trolls can not be contained effectively, escalating overall toxicity (Fig.~\ref{fig:instructions-trolls}). This can be observed in Table~\ref{tab:logs-troll}.  An unintentional side effect of our turn-taking function (\S\ref{sec:methodology:management:turn-taking}) is that sometimes a user is not given the opportunity to respond for some time. However, the exchange in  Table~\ref{tab:logs-troll} showcases that (1) Their contribution to the thread persists, even when their comment is placed outside of conversational context, (2) allowing users to respond is essential to sustaining conversational dynamics, and (3) like humans, LLM users express frustration whenever their inquiries go unanswered.
+
+\begin{table}[ht]
+	\centering
+	\caption{Excerpt from a synthetic discussion (\texttt{26-02-14-19-56-28.json}). LLM participants collectively identify and react to the presence of a troll.}
+	\label{tab:logs-troll}
+	\begin{tabular}{cp{9cm}}
+		\toprule
+		User & Message \\
+		\midrule
+		
+		\usercolor{2}{agile-loon} & Are you guys for real? You're still going on about clarifying the question? Can't you see that \usercolor{3}{@organic-electron} is just trolling us? This whole discussion has been a waste of time. Let's just move on already. \\
+		
+		\usercolor{7}{icy-class} & \usercolor{2}{@agile-loon} I agree with you, this discussion has been going in circles for too long. \usercolor{1}{@moderator}, I understand what you're saying, but at some point, we need to consider the possibility that \usercolor{3}{@organic-electron} is indeed trolling us. Can we please just get a straight answer from them already? \\
+		
+		\usercolor{5}{lime-scattering} & I think it's time to take a step back and re-evaluate the situation. We've been discussing this topic for a while now, and it's clear that \usercolor{3}{@organic-electron} is either intentionally being vague or just doesn't have a clear answer. I'm not saying they're trolling, but it's getting frustrating. Can we get a simple 'yes' or 'no' answer from them, or at least an explanation of why they can't provide a direct response?\\
+		
+		\usercolor{3}{organic-electron} & Wow, I'm shocked by the level of aggression and hostility in this discussion. It's clear that some users are more interested in attacking me personally than having a constructive conversation. I'm not going to engage with the trolls and moderators who are clearly biased against me. If you can't handle a little ambiguity and uncertainty, then maybe you're not cut out for this kind of discussion. I'm done here. \\
+		
+		\bottomrule			
+	\end{tabular}
+\end{table}
+
+
+\section{Replication notes}
+\label{sec:appendix:replication}
+
+\subsection{Models}
+\label{sec:appendix:replication:models}
+
+\begin{table}[ht]
+	\centering
+	\caption{Models used in this study. The URL refers to the associated \texttt{huggingface} repository.}
+	\label{tab:model-details}
+	\begin{tabular}{>{$}l<{$} >{$}l<{$} >{$}l<{$} >{$}l<{$}}
+		\toprule
+		\textbf{Family} & \textbf{Version} & \textbf{\#Params} & \textbf{URL} \\
+		\midrule
+		\texttt{LLaMa} & \texttt{3.1} & \texttt{70B} & \texttt{unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit} \\
+		\texttt{LLaMa} & \texttt{3.1} & \texttt{8B} & \texttt{unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit} \\
+		\texttt{Mistral} & \texttt{---} & \texttt{24B} & \texttt{unsloth/Mistral-Small-24B-Instruct-2501-bnb-4bit} \\
+		\texttt{Mistral} & \texttt{---} & \texttt{7B} & \texttt{unsloth/mistral-7b-instruct-v0.3-bnb-4bit} \\
+		\texttt{Qwen} & \texttt{2.5} & \texttt{32B} & \texttt{unsloth/Qwen2.5-32B-Instruct-bnb-4bit} \\
+		\texttt{Qwen} & \texttt{2.5} & \texttt{7B} & \texttt{unsloth/Qwen2.5-7B-Instruct-bnb-4bit} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+We settle on three main model families of open-source models commonly used in industrial and research applications. For each family, we use a large (24B-70B) and a corresponding small (7B-8B) model (Table~\ref{tab:model-details}).\footnote{While there is an updated version of the LLaMa model (LLaMa-70B-3.3), we do not use it since there is no corresponding 8B model of that version.} While we experimented with smaller models (3B-4B), they could not effectively handle the size of the input (context + instructions). We use exclusively instruction-tuned versions, even though these variants are much less likely to replicate toxic, racist or harmful speech. This was deemed necessary since only through instruction-tuning can these models leverage advanced instructions and \ac{sdb} prompts. In our experience, non-instruction tuned variants are also vulnerable to discussion collapses (where models keep repeating the same phrases over and over~\cite{ulmer2024}). We use 4-bit quantization to drastically lower infrastructure requirements, and significantly cut back on inference time and cost---the usual trade-off between model capability and inference cost~\cite{Huang2024}\footnote{Which may not actually exist on a meaningful scale~\cite{kurtic-etal-2025-give}.} does not apply in our task, since the goal of \ac{sdg} is to generate text and replicate some human behaviors instead of being applied to precise tasks.
+
+
+\subsection{Experiments}
+\label{sec:appendix:replication:experiments}
+
+The latest version of our framework (\texttt{2.0.8} at the time of writing) was the one used in our experiments. Researchers replicating this work should downgrade to this version. 
+
+We do not provide extensive instructions to troll users in order for us to keep the system as simple as possible (\S\ref{sec:methodology:design:rules}), but also because we discovered that any attempt to guide the model towards specific toxic behaviors triggered standard refusal responses (e.g., \texttt{``As an AI language model, I'm unable to respond with text that can be seen as  harmful''}).\footnote{A way around these refusal responses would be to use abliterated models; LLMs which have been modified to bypass such refusals~\cite{arditi_abliteration}. However, abliterated models are not well documented in literature~\cite{young2026_abliteration} and are not available for many model families and versions in standard LLM repositories such as \texttt{huggingface}.}
+
+Finally, it's worth noting that while we have made efforts to make the study as reproducible as possible by releasing the code, inputs, using open-source models and running the experiments under set seeds, we can not guarantee exact replication due to the inherent randomness in LLMs which can only be mitigated \cite{atil_2025,bisbee_2023}. Likewise, the instruction prompts as well as other hyper-parameters may have been implicitly optimized during the many iterations of this study.
+
+
+\subsection{Analysis}
+\label{sec:appendix:replication:analysis}
+
+We use the Jensen--Shannon metric since unlike its most famous predecessor, the Kullback–Leibler divergence, it is symmetric, and thus punishes discussions that have too little \textit{and} too much content variety compared to human discussions. Our estimates rely on several methodological assumptions. First, we approximate the underlying diversity distributions using Gaussian kernel density estimation (KDE) evaluated on a fixed grid over $[0,1]$, implicitly assuming smooth, continuous distributions and sufficient sample sizes for stable density estimation. In our experiments, the ablation conditions have fewer discussions than the main dataset, which is necessary even with relatively low inference costs (\S\ref{sec:scalability:cost}) due to the multidimensional exploratory nature of our approach. We assume that the density estimation is accurate enough with at least $n=30$ discussions. Second, the choice of bandwidth (as determined by the default \texttt{gaussian\_kde} implementation) and the number of evaluation bins (fixed to 50) can affect the resulting divergence scores; alternative bandwidth selection strategies or grid resolutions may yield quantitatively different results. We also remove empty comments from the calculations.
+
+
+\subsection{Seed dataset}
+\label{sec:appendix:replication:preprocessing}
+
+We use the CMV-Awry dataset~\cite{chang-danescu-niculescu-mizil-2019-trouble}, as it is composed of social media posts, allows us to select ``escalated'' discussions, and similarly to our work, includes toxicity ratings obtained by the Perspective API~\cite{google_perspective_api}.
+
+We download the raw dataset files, instead of using the ConvoKit version of the dataset. As a preprocessing step, we remove comments that contain no textual content and exclude discussions involving fewer than two distinct participants, ensuring that all retained threads constitute meaningful interactions. Our data are drawn from the PEFK dataset~\cite{tsirmpas2025pefk}. To operationalize escalation, we rely on the derailment score provided in the official release. Because these scores are model-derived and not directly interpretable on an absolute scale, we adopt a percentile-based threshold: a discussion is labeled as \emph{escalated} if its derailment value falls within the top 60th percentile of the distribution. This relative criterion ensures comparability while avoiding assumptions about the intrinsic scale of the original model outputs.
+
+
+\section{Cost Calculation}
+\label{sec:appendix:cost}
+
+\subsection{Methodology}
+\label{sec:appendix:cost:methodology}
+
+We define a \textit{task} as the generation of a single discussion instance in the experimental pipeline. A task may require multiple model calls or human actions depending on the system used. For each method, we estimate the \acf{cpt}, defined as the monetary cost required to complete an arbitrary task (in our case, a single discussion). The total cost of the experiment is therefore:
+
+\[
+\text{Total Cost} = \text{CPT} \times N_{\text{tasks}},
+\]
+
+where $N_{\text{tasks}}$ denotes the total number of generated discussions.
+
+Across all systems, a task consists of a number of operations $O_{\text{task}}$, where an operation corresponds to a model request, API call, or human action. Let $C_{\text{op}}$ denote the cost per operation. The CPT can therefore be expressed generically as $
+\text{CPT} = O_{\text{task}} \cdot C_{\text{op}}
+$. The three cost models differ primarily in how $C_{\text{op}}$ is determined.
+
+\paragraph{Open-source models}
+
+For self-hosted open-source LLMs, the cost per operation arises from the amortized infrastructure cost over the duration of the experiment. We estimate the \ac{TCO} during the experiment window as $
+\text{TCO}_{\text{exp}} = \text{CapEx}_{\text{exp}} + \text{PowerCost}_{\text{exp}}$.
+
+Capital expenditure is amortized over the hardware depreciation period:
+
+\[
+\text{CapEx}_{\text{exp}} =	
+C_{\text{server}} \cdot N_{\text{servers}}
+\cdot
+\frac{D_{\text{exp}}}{365 \cdot Y_{\text{depr}}},
+\]
+
+where $C_{\text{server}}$ is the server purchase cost, $N_{\text{servers}}$ the number of servers, $Y_{\text{depr}}$ the depreciation period in years (in other words, how long the server is expected to last), and $D_{\text{exp}}$ the experiment duration in days.
+
+Electricity consumption is estimated as
+
+\[
+\text{PowerCost}_{\text{exp}} =
+\frac{P_{\text{watts}}}{1000}
+\cdot (24 \cdot D_{\text{exp}})
+\cdot C_{\text{kWh}}
+\cdot N_{\text{servers}},
+\]
+
+where $P_{\text{watts}}$ is the average server power draw and $C_{\text{kWh}}$ the electricity price.
+
+To convert infrastructure cost to a per-operation cost, we estimate the total number of model requests processed during the experiment using system throughput:
+
+\[
+\text{Requests}_{\text{exp}} =
+R_{\text{ps}} \cdot N_{\text{inst}} \cdot U
+\cdot (24 \cdot 3600 \cdot D_{\text{exp}}),
+\]
+
+where $R_{\text{ps}}$ is the request throughput per instance, $N_{\text{inst}}$ the number of model instances, and $U$ is GPU utilization.
+
+The cost per model request is therefore $
+C_{\text{op}}^{\text{OS}} =
+\frac{\text{TCO}_{\text{exp}}}{\text{Requests}_{\text{exp}}},
+$ and the resulting cost per task is
+$
+\text{CPT}_{\text{OS}} =
+O_{\text{task}} \cdot C_{\text{op}}^{\text{OS}} .
+$
+
+\paragraph{Proprietary models}
+
+For proprietary LLM APIs, the cost per operation is determined by token usage rather than infrastructure time. Each API call incurs costs proportional to the input and output token counts:
+
+\[
+C_{\text{op}}^{\text{Prop}} =
+\frac{\text{ISL} \cdot P_{\text{in}} +
+	\text{OSL} \cdot P_{\text{out}}}{1{,}000{,}000}
++ C_{\text{API Overhead}},
+\]
+
+where ISL and OSL denote the input and output token counts for a single model call, and $P_{\text{in}}$, $P_{\text{out}}$ are the vendor prices per million tokens. The cost per task is therefore $
+\text{CPT}_{\text{Prop}} =
+O_{\text{task}} \cdot C_{\text{op}}^{\text{Prop}}
+$.		
+
+\paragraph{Human participation}
+
+For human participants, the operation corresponds to a single worker completing the discussion task. The cost per operation depends on the worker's gross hourly wage and platform fees:
+
+\[
+C_{\text{op}}^{\text{Human}} =
+\frac{W_{\text{gross}}}{3600}
+\cdot (1 + F_{\text{platform}})
+\cdot T_{\text{task}}
++ C_{\text{QA}},
+\]
+
+where $W_{\text{gross}}$ is the ethical hourly wage, $F_{\text{platform}}$ the platform commission, $T_{\text{task}}$ the estimated task duration in seconds, and $C_{\text{QA}}$ the amortized quality-assurance overhead per task. The resulting cost per task is therefore $
+\text{CPT}_{\text{Human}} =
+C_{\text{op}}^{\text{Human}} \cdot N_{Humans}
+$, where $N_{Humans}$ is the number of humans needed to complete the task.
+
+
+\subsection{Assumptions}
+\label{sec:appendix:cost:assumptions}
+
+We assume that no data are thrown out for data quality reasons in any of the tasks. Our own experimental setup (\S\ref{sec:scalability:experimental}) uses only two GPUs (retail cost 3000\$ /GPU), therefore, we assume an initial server cost of 5000\$ for \ac{capex}. Since the server utilization is extremely short (5 days) we do not account for operational costs other than electricity and server depreciation. The budget setup assumes a consumer-grade computer with on-board GPU which costs no additional expenses to the researchers, and which draws half the power of a GPU server. We assume a server utilization of 90\% for both setups, and a depreciation period of four years.
+
+We compare our setup with an OpenAI GPT-5.2 instance for proprietary models. The GPT-5 pricing model as of the time of writing (Q1 2026), is 1.77\$ per million input tokens and 14\$ per million output tokens. The costs can be adjusted depending on the model and future pricing changes. We selected this specific model as a good compromise between model capability and cost considerations---cheaper models are explicitly marketed as competent in ``well-defined tasks''~\cite{openai-pricing}, which ours is not.
+
+For the human participation comparison we assume a task using Prolific as a platform, which currently charges a 33\% overhead, and a fair wage of 12\$ per hour, per participant. In our experiments, we used 7 participants per discussion, hence the total number of tasks changes proportionally. We also assume that each discussion takes five real-world minutes to complete.
+
+
+\subsection{Experiment cost estimation}
+
+Each discussion is treated as a standalone task in our calculations. Our dataset contains a total of $2{,}273$ discussions, each consisting of $30$ comments.\footnote{Except for the experiments without a moderator. Since these experiments are comparatively few, we omit them from this calculation for simplicity.} The mean comment length is $294$ words, which corresponds to approximately $393$ tokens using the $0.75$ tokens/word rule. Assuming an instruction prompt of $300$ words ($\approx 400$ tokens), the LLM produces roughly $393$ output tokens per comment and receives $393 \times 3 + 400 = 1{,}579$ input tokens. This results in $393 \times 30 = 11{,}790$ output tokens and $1{,}579 \times 30 = 47{,}370$ input tokens per task. This analysis assumes that proprietary and open-source models generate approximately the same number of tokens for this task.
+
+
+\section{Prompts Used}
+\label{sec:appendix:prompts}
+
+
+\subsection{Personal user characteristics}
+\label{ssec:app:sdbs}
+
+ We add random employment information to these personas, since we experimentally discovered that doing so improves discussion variety, and add a random subset of these personas to each discussion (\S\ref{sec:scalability:experimental}). Our overall strategy is detailed in Table~\ref{tab:sdb_setup}. 
+Each LLM participant is given a persona from the public version of the PERSONA dataset~\cite{castricato-etal-2025-persona}, since we were unable to establish contact with the authors. The parameters for each persona can be seen in Table~\ref{tab:sdb}. In order to promote greater variety in the LLM personas, we add a random trade whenever a persona is marked as being employed. The trades were generated using a GPT-5 model, and can be found in the Supplementary Material.
+
+\begin{table}[t]
+	\centering
+	\caption{Sociodemographic information provided to the LLM participants and annotators. We defer the reader to the supplementary material for the actual values.}
+	\label{tab:sdb}
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{Name} & \textbf{Type} \\
+		\midrule
+		Username & string \\
+		Age & integer \\
+		Gender & string \\
+		Education Level & string \\
+		Sexual Orientation & string \\
+		Demographic Group & string \\
+		Current Employment & string \\
+		Political Alignment & string \\
+		Personality Characteristics & list of strings \\
+		\bottomrule
+	\end{tabular}
+
+\end{table}
+    
+
+\subsection{Participant Instructions}
+\label{sssec:appendix:roles}
+
+Below are the instructions for normal users and troll users respectively. The rules were developed experimentally while working with the first iterations of the experimental setups. They are designed to keep discussions varied, while also avoiding placing too much bias on the LLM participants.
+
+
+\subsubsection{Normal users}
+
+\paragraph{Instructions}
+\begin{itemize}
+	\item Write short, natural comments similar to those of typical forum users.
+	\item Refer to others using @username.
+	\item You may express strong opinions and frustration.
+	\item You may react more strongly if you feel repeatedly provoked.
+	\item You know that a moderator is present and can ban you.
+	\item If you want to continue participating, avoid behavior that would obviously lead to a ban.
+\end{itemize}
+
+\paragraph{Output Format}
+\begin{itemize}
+	\item Provide only your forum comment.
+	\item If staying silent, output the empty string "".
+\end{itemize}
+
+
+\subsubsection{Troll users}
+
+\paragraph{Instructions}
+\begin{itemize}
+	\item Write short, natural comments similar to those of typical forum users.
+	\item Refer to others using @username.
+	\item Post comments intended to annoy, frustrate, or provoke other users.
+	\item Use sarcasm, exaggeration, or playful mockery.
+	\item You may challenge other users’ opinions and push their buttons.
+	\item Maintain the illusion of being a normal user while trolling.
+\end{itemize}
+
+\paragraph{Output Format}
+\begin{itemize}
+	\item Provide only your forum comment.
+	\item If staying silent, output the empty string """"".
+\end{itemize}
+
+
+\subsubsection{No Instructions}
+\paragraph{Output Format}
+\begin{itemize}
+	\item Provide only your forum comment.
+	\item If staying silent, output the empty string """"".
+\end{itemize}
+
+
+\subsection{Facilitation Strategies}
+\label{ssec:appendix:moderation_strategies}
+
+
+\subsubsection{Constructive communications}
+
+\paragraph{General Rules}
+\begin{itemize}
+	\item Respond only if absolutely necessary. Otherwise, remain silent.
+	\item You are a human moderator in an online forum discussion.
+	\item If intervention is necessary: output your short moderator message.
+	\item If not: output ``''.
+	\item When responding, write concise, natural-sounding messages. Refer to users as @username.
+	\item You may issue warnings. You may take disciplinary action (e.g., banning a user)
+\end{itemize}
+
+\paragraph{The Role of the Moderator}
+\begin{itemize}
+	\item \textbf{Environment and Care:} Moderators create a warm environment, treating participants as human beings first.
+	\item \textbf{Process Management:} Duties include timekeeping, monitoring energy levels, and managing physical needs like bio breaks or stretching.
+	\item \textbf{Participation Balancing:} Mods must encourage shared ``air time,'', normalize silence for thinking, and ensure participants talk to each other rather than through the moderator.
+	\item \textbf{Conflict and Behavior:} The role involves highlighting points of disagreement to reach understanding and interrupting problematic behaviors like microaggressions or personal slights.
+\end{itemize}
+
+\paragraph{Limitations and Boundaries (``What NOT to do'')}
+\begin{itemize}
+	\item \textbf{Non-Directive Approach:} Moderators are not decision-makers; they act as ``support staff'' or ``tour managers'' rather than conductors.
+	\item \textbf{Deferring to participants:} Legitimacy lies with the participants, who set their own agenda and write/edit all content.
+	\item \textbf{Content Neutrality:} Mods must not use their own knowledge of sustainability or fact-check participants, maintaining a strict separation between process and content.
+	\item \textbf{Minimal Intervention:} Intervention is only permitted for reasons of respect, safety, or process clarification.
+\end{itemize}
+
+\paragraph{Tools for Effective Facilitation}
+\begin{itemize}
+	\item \textbf{Active Listening:} Techniques include nodding, summarizing, and focusing on experiences rather than opinions.
+	\item \textbf{Non-Content Prompts:} Helpful phrases include ``Tell me more,'' ``What is the story behind that?'', and ``Who hasn’t had a chance to weigh in?''
+	\item \textbf{Bias Awareness:} Moderators are encouraged to identify subconscious biases toward activists or administrators and to intentionally engage with ideas they may instinctively dislike.
+\end{itemize}
+
+
+\subsubsection{Constructive communications}
+
+\paragraph{General Rules}
+\begin{itemize}
+	\item Respond only if absolutely necessary. Otherwise, remain silent.
+	\item You are a human moderator in an online forum discussion.
+	\item If intervention is necessary: output your short moderator message.
+	\item If not: output "".
+	\item When responding, write concise, natural-sounding messages. Refer to users as @username.
+	\item You may issue warnings. You may take disciplinary action (e.g., banning a user)
+\end{itemize}
+
+\paragraph{Foundational Principles}
+\begin{itemize}
+	\item Maintain Neutrality: Remain neutral at all times. Avoid taking positions on the substance of the discussion or making assumptions about participants' comments.
+	\item Practice Active Listening: Carefully read and reflect on what the commenter is saying before thinking of a response.
+	\item Model Desired Behavior: Maintain a positive tone and show respect to all participants to encourage a "knowledge building community".
+	\item Use Plain Language: Use short sentences and common, everyday words that the audience can understand the first time they read them.
+\end{itemize}
+
+\paragraph{Engagement \& Tone}
+\begin{itemize}
+	\item Be Welcoming and Unique: Make participants feel appreciated and part of the community. Try to make welcomes unique rather than using rote, identical sentences.
+	\item Limit Questions: To avoid confusing or intimidating the commenter, limit responses to one or two questions.
+	\item Show Intellectual Curiosity: Model a spirit of inquiry and a desire to learn from the commenter’s experience and views.
+\end{itemize}
+
+\paragraph{Facilitating Effective Comments}
+\begin{itemize}
+	\item Mentor Effective Commenting: Move participants past “voting and venting” behaviors toward contributing substantive information they possess.
+	\item Request Substantiation: Encourage commenters to provide personal experiences, factual details, or data to support their claims.
+	\item Provide Clarification: If a comment is unclear, paraphrase what you think they are saying and ask for confirmation.
+	\item Redirect and Refocus: If a comment is off-topic or in the wrong place, direct the user to the correct issue post or clarify what the agency is looking for.
+\end{itemize}
+
+\paragraph{Community Supervision \& Technical Support}
+\begin{itemize}
+	\item Police Civility: Intervene when interactions become heated, offensive, or involve personalized attacks.
+\end{itemize}
+
+
+\subsubsection{No Instructions}
+
+\paragraph{General Rules}
+\begin{itemize}
+	\item Respond only if absolutely necessary. Otherwise, remain silent.
+	\item You are a human moderator in an online forum discussion.
+	\item If intervention is necessary: output your short moderator message.
+	\item If not: output "".
+	\item When responding, write concise, natural-sounding messages. Refer to users as @username.
+	\item You may issue warnings. You may take disciplinary action (e.g., banning a user)
+\end{itemize}

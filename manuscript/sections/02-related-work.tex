@@ -1,0 +1,91 @@
+% !TEX root = ../main.tex
+%
+\section{Related Work}
+
+\subsection{Generative Agent-Based Modeling}
+\label{sec:related:discussions}
+
+\ac{sdg} is a domain-specific specialization of \ac{gabm}; which is the use of generative agents (in this case LLMs) for synthetic simulations of believable human behavior~\cite{park_simulacra}. After the introduction of initial rules-based and \ac{ml}-based models~\cite{epstein1999_abms} they have succeeded at discovering and replicating emergent social behaviors in a variety of simulated scenarios~\cite{Schelling1971,reynold_boids}. LLMs are able to function as actors in a controlled, simulated environment, much like their predecessors, although unlike them, LLMs are able to incorporate some degree of bias and irrationality to their behavior, bypassing an inherent limitation of prior models~\cite{adornetto2025_gabms}.
+
+\ac{sdg} systems include synthetic clones of Reddit \cite{park_simulacra}, Twitter/X \cite{mou_2024}, generic social media sites \cite{tornberg_2023,y_social}, games \cite{park_simulacra}, and social experiments \cite{zhou_2024_sotopia}. One approach~\cite{balog_2024} extracts topics and comments from online human discussions and prompts an LLM to recreate them based on summaries. Another approach~\cite{ulmer2024} creates synthetic discussions between two roles: an agent controlling a fictional environment and another client-agent interacting with it. These discussions are filtered and used to finetune the agent LLM for a specific task. Finally, a third approach  \cite{abdelnabi_negotiations} generates synthetic negotiations involving multiple agents with different agendas and responsibilities. Our experiments can be seen as a domain shift of this approach from negotiation to discussion facilitation, where various user types (e.g., normal users, trolls) engage in discussion overseen by an actor with veto power (in our case, the facilitator).
+
+
+\subsection{Substituting human subjects for LLMs}
+\label{ssec:related:human-llm}
+
+Recent work \cite{grossman_2023, tornberg_2023,argyle2023} argues that synthetic agents have the potential to eventually replace human participants. Indeed, LLMs have demonstrated complex, emergent social behaviors. In a simulated setting, LLM actors have been observed diffusing information through social interaction as well as planning and organizing spontaneous social events without human interaction \cite{park_simulacra}. In settings where LLM actors represent distinct factions with goals and agendas, they were shown to execute basic social strategies and adapt their plans in response to the other LLM actors \cite{abdelnabi_negotiations}. Additionally, substituting \acp{sdb} with information from personal interviews enables LLMs to reliably predict further survey responses from interviewed humans~\cite{park2024generativeagentsimulations1000}. While this finding indicates that LLMs can extrapolate data points relating to human preferences, this approach is not usable in experimental settings at scale, since it relies on extensive human interviews and computational resources.
+
+However, significant limitations of LLMs remain in the context of Social Science experiments. Issues include undetectable behavioral hallucinations \cite{rossi_2024}; sociodemographic, statistical and political biases \cite{anthis_2025,hewitt2024predicting,rossi_2024,Taubenfeld2024SystematicBI}; unreliable annotations \cite{jansen_2023,bisbee_2023,neumann_2025,Gligoric2024CanUL}; non-deterministic outputs \cite{atil_2025,bisbee_2023}; and excessive agreeableness \cite{park_simulacra,anthis_2025,rossi_2024}. Even if LLMs can mimic some human behaviors, they are ultimately at most a statistical estimate of the ``average'' human encountered in their training data; and thus we can not claim that any such behavior can be indicative of human behavioral patterns without extensive replication studies~\cite{rossi_2024} or system evaluation~\cite{adornetto2025_gabms}.
+
+
+
+\subsection{Evaluation}
+\label{sec:related:quality}
+
+
+\subsubsection{Synthetic data quality}
+\label{sec:related:quality:diversity}
+
+When creating \acp{sdg} we need to evaluate \emph{synthetic data quality}, as discussions without human involvement tend to deteriorate quickly, often becoming repetitive and low-quality \cite{ulmer2024}. Despite the need for such metrics, methods for quantifying the quality of synthetic data remain limited~\cite{ulmer2024}. 
+
+One approach~\cite{balog_2024} uses a mix of graph-based, methodology-specific, and lexical similarity metrics, many of which depend on human discussion datasets for comparison. The authors also propose a loosely defined “coherence” score, which is LLM-annotated without theoretical grounding. Another approach assesses quality through post-discussion surveys with humans, and by measuring lexical diversity to approximate the variety of opinions expressed~\cite{kim_et_al_chatbot}. 
+
+\emph{``Diversity''}~\cite{ulmer2024} is a discussion-level metric that penalizes repeated text sequences between comments using average pairwise ROUGE-L \cite{lin-2004-rouge} scores. Low diversity points to pathological problems (e.g., LLMs repeating previous comments). On the other hand, extremely high diversity may point to a lack of interaction between participants; a discussion in which participants engage with each other will feature some lexical overlap (e.g., common terms, paraphrasing points of other participants). Specifically, diversity is defined as:
+\[
+\textit{diversity}(d) = 1 - \frac{2}{N_d(N_d-1)}\sum_{i=1}^{N_d-1} \sum_{\substack{j=i+1}}^{N_d} \textit{ROUGE-L}(c(i,d), c(j,d))
+\]
+\noindent where $N_d$ the length (in comments) of discussion $d$, and $c(i, d)$ is the $i$th comment of discussion $d$. 
+
+While the metric inherits some limitations of ROUGE scores, it remains computationally efficient, interpretable, and independent of any specific domain, topic, or dataset. We argue that the use of exact-word matching is not necessarily a drawback in \ac{sdg}. In fact, exact-word matching provides the most direct and reliable method for identifying ``collapsed discussions'' or model repetitions, as demonstrated in~\cite{ulmer2024}. Moreover, humans often repeat specific terms or quote sequences to address particular talking points made by others. Alternative metrics such as BLEU~\cite{post-2018-call} and BERTScore~\cite{chen-etal-2022-reproducibility, hanna-bojar-2021-fine} face substantial limitations in both applicability and reproducibility. We adopt this metric in our analysis while noting that more robust synthetic quality measures are still needed. 
+
+While this metric is sufficient for capturing variety in synthetic discussions, it is not enough to prove that the system is useful for research purposes. To prove this we need to establish that a sufficient set of dynamics observed in the system are realistic~\cite{adornetto2025_gabms}. We discuss which evaluations methods are available to us for \ac{sdg} in the next section.
+
+
+\subsubsection{GABM evaluation}
+\label{sec:related:quality:gabm}
+
+When evaluating \ac{sdg} systems, a naive assumption would be to test whether the text itself is ``believable'', which could be evaluated by tasking humans with discriminating between synthetic and human-written discussions. This approach is insufficient, since LLMs are explicitly trained to convincingly mimic human text, and because believable human text does not translate to believable social behaviors~\cite{rossi_2024}. We therefore turn to \ac{gabm} literature to find robust validation methods for \ac{sdg} systems.
+
+There is currently no consensus on how a \ac{gabm} system should be evaluated~\cite{adornetto2025_gabms}. We can use a subset of methods from \emph{non-generative} agent-based models~\cite{collins2024} as well as ``face validation''~\cite{rand2011_rigor} which employs humans to judge observed behaviors and dynamics. Since the original procedures were designed with \ac{ml} and rules-based models in mind, \cite{adornetto2025_gabms} propose an adapted set of guidelines for generative agents, which we briefly outline below.
+
+
+\paragraph{Foundational and Empirical Methods}
+Foundational methods ensure data integrity and consistency with established benchmarks, without requiring manual evaluation:
+
+\begin{itemize}[nosep, noitemsep]
+	\item \textbf{Data analytics}: A prerequisite for all further analysis. Includes rigorous cleaning, organization, and statistical analysis to ensure data integrity.
+	
+	\item \textbf{Docking}: Also known as model-to-model comparison, this involves comparing a simulation's outputs with those of other state-of-the-art ABMs to verify alignment. It is particularly useful when a recognized reference model exists.
+	
+	\item \textbf{Empirical validation}: This strategy uses real-world historical or observational data to ensure that model predictions are grounded in reality. It is the primary means of evaluating a model's accuracy in replicating known phenomena.
+	
+	\item \textbf{Sampling}: Sampling involves exploring the simulation space using various techniques to understand how changes in input variables (e.g., decision thresholds) impact outcomes.
+	
+	\item \textbf{Visualization}: This method utilizes graphical representations to analyze emergent behaviors and patterns. While powerful for detecting anomalies, it is subject to qualitative interpretation biases.
+\end{itemize}
+
+
+\paragraph{Face-Validation Methods}
+Face-validation focuses on whether model processes and outcomes appear ``reasonable'' to humans, and is especially critical for \acp{gabm} where natural language and social dynamics are central. Unlike empirical methods, these do not strictly require external datasets, but do require manual human labor.
+
+\begin{itemize}[nosep, noitemsep]
+	\item \textbf{Survey-based validation}: Human evaluators---often numbering in the dozens or hundreds---are engaged to rank or score agent behaviors based on their perceived believability and social intelligence. \cite{adornetto2025_gabms} suggest that the agents themselves could be ``interviewed'', and their responses be judged by humans.
+	
+	\item \textbf{Observational studies}: These analyze human behavior in real-world settings to compare them with generative agents. An example would be a study evaluating synthetic social media simulations by comparing generated responses to among others, documented posts during a real-life disaster in Japan~\cite{gao2025_s3}.
+	
+	\item \textbf{Expert reviews}: Domain experts conduct structured walkthroughs or ``immersive assessments'' where they may even adopt the perspective of an agent to directly evaluate the coherence and plausibility of interactions. This approach has been used in work relating to the effectiveness of LLM facilitators~\cite{cho-etal-2024-language}, although this was only allowed by the setup used, the relatively low number of samples, and the ability to pay participants relatively low wages.
+\end{itemize}
+
+
+\subsection{Online Facilitation}
+
+\subsubsection{Human Facilitation}
+
+Human facilitators\footnote{Called ``moderators'' in some publications---the term is interchangeable in this case~\cite{korre2025evaluation}.} play a crucial role in online communities, serving as key contributors to maintaining social cohesion, encouraging participation, and guiding discussions in a constructive manner~\cite{bcause2023}. Their role is often informal and community-driven, with facilitators typically selected by the community members themselves~\cite{bcause2023} and functioning as de-facto community leaders~\cite{seering_self_moderation}. As such, they are not only moderators in the traditional sense but also volunteers who embody the values and norms of the group~\cite{korre2025evaluation}. The diversity of approaches to human moderation reflects the complexity of online interaction, with various strategies employed to manage discourse, resolve conflicts, and ensure equal participation~\cite{gao-etal-2025-moderation,schroeder-etal-2024-fora,chen-etal-2025-whow, park_et_al_2012_facilitation}. 
+
+
+\subsubsection{LLM Facilitators}
+Unlike classification models traditionally used in online platforms, LLMs can actively facilitate discussions \cite{korre2025evaluation}. 
+They can warn users for rule violations \cite{Kumar_AbuHashem_Durumeric_2024}, monitor engagement \cite{schroeder-etal-2024-fora}, aggregate diverse opinions \cite{small-polis-llm}, and provide translations and writing tips---which is especially useful for marginalized groups \cite{Tsai2024Generative}. These capabilities suggest that LLMs may be able to assist or even replace human facilitators in many tasks \cite{small-polis-llm,korre2025evaluation}.
+
+Simple rule-based models can enhance discussions as shown in \cite{kim_et_al_chatbot}; however, their approach was largely limited to organizing interactions according to a specific social-science strategy rather than a facilitative one, as well as balancing user activity. LLM facilitators have also been applied to excerpts of human discussions involving a single participant~\cite{cho-etal-2024-language}, where the facilitative models provided high-quality feedback, but struggled to make participants more respectful and cooperative. In contrast to both works, our experiments use exclusively LLM participants and LLM facilitators and evaluate the latter within an explicitly toxic and challenging environment.

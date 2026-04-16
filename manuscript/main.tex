@@ -1,0 +1,132 @@
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX,which is strongly recommended.
+\pdfoutput=1
+% In particular,the hyperref package requires pdfLaTeX in order to break URLs across lines.
+
+\documentclass[acmsmall,anonymous,review]{acmart}
+
+% my packages
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{array,etoolbox}
+\usepackage{hyperref}
+\usepackage{orcidlink}
+\usepackage{acronym}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{enumitem}
+\usepackage{amsfonts}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{amsthm}
+
+% graphix commands
+\graphicspath{ {../graphs} {graphs} }
+
+
+\newcommand{\asterisknote}{
+	$\cdot p<0.1$,\textsuperscript{*} $p<0.05$,\textsuperscript{**} $p<0.01$,\textsuperscript{***} $p<0.001$
+}
+
+\AtEndPreamble{%
+	\theoremstyle{acmdefinition}
+	\newtheorem{research-question}{RQ}}
+	
+\theoremstyle{acmdefinition}\newtheorem*{definition}{Definition}
+
+\theoremstyle{acmdefinition}\newtheorem{principle}{Principle}
+
+
+\newcommand{\usercolor}[2]{%
+	\ifcase#1
+	\or \textcolor{ACMDarkBlue}{#2}%
+	\or \textcolor{ACMPurple}{#2}%
+	\or \textcolor{ACMOrange}{#2}%
+	\or \textcolor{ACMRed}{#2}%
+	\or \textcolor{ACMLightBlue}{#2}%
+	\or \textcolor{ACMGreen}{#2}%
+	\or \textcolor{ACMYellow}{#2}%
+	\or \textcolor{ACMBlue}{#2}%
+	\else #2%
+	\fi
+}
+
+\newcommand{\experimentslink}{\url{https://anonymous.4open.science/r/synthetic_moderation_experiments-31E7}}
+\newcommand{\librarylink}{\url{https://anonymous.4open.science/r/sdg-7567}}
+
+\acmJournal{TSC}
+\title[Designing Synthetic Discussions]{Designing Synthetic Discussion Generation Systems: A Case Study for Online Facilitation}
+
+\keywords{LLMs, discussions, facilitation, GABM, synthetic, experiments}
+\begin{CCSXML}
+	<ccs2012>
+	<concept>
+	<concept_id>10010147.10010178.10010179.10010182</concept_id>
+	<concept_desc>Computing methodologies~Natural language generation</concept_desc>
+	<concept_significance>500</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10010147.10010178.10010179.10010181</concept_id>
+	<concept_desc>Computing methodologies~Discourse, dialogue and pragmatics</concept_desc>
+	<concept_significance>300</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10010147.10010178.10010179.10010186</concept_id>
+	<concept_desc>Computing methodologies~Language resources</concept_desc>
+	<concept_significance>300</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003120.10003130.10003233.10003597</concept_id>
+	<concept_desc>Human-centered computing~Open source software</concept_desc>
+	<concept_significance>300</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003120.10003130.10003233.10010519</concept_id>
+	<concept_desc>Human-centered computing~Social networking sites</concept_desc>
+	<concept_significance>100</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003120.10003130.10003131.10011761</concept_id>
+	<concept_desc>Human-centered computing~Social media</concept_desc>
+	<concept_significance>100</concept_significance>
+	</concept>
+	<concept>
+	<concept_id>10003120.10003130.10003134</concept_id>
+	<concept_desc>Human-centered computing~Collaborative and social computing design and evaluation methods</concept_desc>
+	<concept_significance>100</concept_significance>
+	</concept>
+	</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Computing methodologies~Natural language generation}
+\ccsdesc[300]{Computing methodologies~Discourse, dialogue and pragmatics}
+\ccsdesc[300]{Computing methodologies~Language resources}
+\ccsdesc[300]{Human-centered computing~Open source software}
+\ccsdesc[100]{Human-centered computing~Social networking sites}
+\ccsdesc[100]{Human-centered computing~Social media}
+\ccsdesc[100]{Human-centered computing~Collaborative and social computing design and evaluation methods}
+
+
+\begin{document}
+
+\input{sections/00-abstract}
+
+\maketitle
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-sdg-design}
+\input{sections/04-scalability}
+\input{sections/05-facilitation}
+\input{sections/06-dataset-software}
+\input{sections/07-discussion}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
+
+\appendix
+\input{sections/99-appendix}
+
+\end{document}

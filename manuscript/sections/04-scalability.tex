@@ -1,0 +1,136 @@
+% !TEX root = ../main.tex
+%
+\section{Scalability}
+\label{sec:scalability}
+
+\subsection{Calculating Cost}
+\label{sec:scalability:cost}
+
+\subsubsection{Constraints imposed by cost}
+\label{sec:scalability:cost:sources}
+
+\begin{table}[ht]
+	\centering
+	\caption{Economic constraints imposed to researchers over operational and capital expenditure.}
+	\label{tab:cost-sources}
+	\begin{tabular}{lcc}
+		\toprule
+		& \textbf{\ac{opex}} & \textbf{\ac{capex}} \\
+		\midrule
+		Constraints & Volume of experiments & Capabilities of experimental design \\
+		Funding & Continuous funding & Large upfront investment \\
+		Consumption & Immediate (electricity/API) & Hardware depreciation \\
+		Local Model & Low & Variable \\
+		Propr. Model & High & None \\
+		Human & Very High & None \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+One of the defining arguments for the development and use of \ac{sdg} frameworks is the ability to scale up experiments, since the data extracted from synthetic discussions are of strictly worse ``quality'' and utility compared to human discussions. To partially offset this inherent limitation, we should try minimizing the costs associated with these experiments.
+
+%This is achieved in two ways; speed and cost. The former is intuitive, since we no longer need to recruit, orient and instruct human participants. Unlike humans, LLMs also can completely forget previous experiments, making successive experiment runs independent between each other. We consider it outside of the scope of this work, since speed is dependent on many variables such as model implementation, the specific hardware used and sometimes volatile proprietary model availability. 
+
+The transition from human-centric to synthetic research shifts the economic burden from logistical overhead to computational infrastructure. This trade-off is best understood through the lens of \ac{opex} and \ac{capex}, which impose distinct structural constraints on the research process, as summarized in Table~\ref{tab:cost-sources}. \acf{opex} represents the immediate, ``pay-as-you-go'' costs of research. In the context of \ac{sdg}, these costs---whether electricity for local models or API credits for proprietary models\footnote{There are also cloud providers for open-source models, although these can be seen as special cases of hosted models with no \ac{capex} costs and much higher \ac{opex} costs. The key distinction is whether cost is calculated by throughput, or on a pay-by-token basis.}---act as a ceiling on experimental \textbf{volume}. High operational costs force researchers to be selective about the number of iterations or the sample size of synthetic agents, effectively limiting the statistical power of the study, and the number of research questions or dimensions explored in studies. Conversely, \acf{capex} dictates what is possible in our experimental setups. Because \ac{sdg} requires substantial GPU infrastructure due to the utilization of LLMs, the upfront investment is often prohibitively high depending on the model and setup. In practice, researchers frequently navigate this by scaling down their experimental designs to fit existing hardware rather than securing the funding to expand it.
+
+\subsubsection{Cost comparison}
+\label{sec:scalability:cost:calculation}
+
+\begin{table}[ht]
+	\centering
+	\caption{Estimated \ac{cpt} and total cost for our final experiments in U.S.D. for human participation, proprietary models with GPT-5.1 pricing, our own experimental setup, and a production-stage setup with a single consumer-grade GPU. While capital costs are factored in the \ac{cpt} calculation (see Appendix~\ref{sec:appendix:cost}), we also include them separately in this table.}
+	\label{tab:cost}
+	\begin{tabular}{cccc}
+		\toprule
+		& \ac{cpt} & \textbf{Total cost} & \textbf{Infrastructure} \\
+		\midrule
+		Humans & \$ 9.3100 & \$ 16{,}758.00 & None \\
+		Proprietary (GPT-5.1) & \$ 0.247957 & \$ 446.32 & None \\
+		Open Source (Our setup) & \$ 0.032680 & \$ 58.82 & Basic GPU server \\
+		Open Source (Small models only) & \$ 0.005447 & \$ 9.80 & Consumer-grade computer \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+An exact cost derivation is impossible due to the sheer amount of variables influencing LLM inference cost, but nevertheless, an estimation remains invaluable for experiment design. Since there is no standardized methodology for comparing the costs of human and synthetic experiments, we extend a proposed methodology which compares on-premises LLMs with cloud-based proprietary models~\cite{pan2025_cost_benefit} to include human costs. 
+
+Since the nature of the costs incurred by each option is different (\S\ref{sec:scalability:cost:sources}), any cost comparison necessitates normalizing costs to a universal metric. We define the \acf{cpt} as the monetary cost of completing an arbitrary task. Specifically, in our case a task is defined as the generation of a single discussion instance in the experimental pipeline. A task may involve multiple model calls, multiple human actions, or multiple system requests depending on the implementation. The total cost of the experiment is then computed as $\text{Total Cost} = \text{CPT} \times N_{\text{tasks}}$, where $N_{\text{tasks}}$ is the number of discussion-generation tasks executed in the experiment. The full methodology can be found in Appendix~\ref{sec:appendix:cost:methodology}.
+
+Table~\ref{tab:cost} summarizes the estimated cost per task and total experiment cost for human participants, proprietary models, our GPU-server-based setup, and a lightweight setup using only small models (\S\ref{sec:scalability:experimental}). As shown in Table~\ref{tab:cost}, the latter approach reduces the total cost of our experiments by roughly \emph{three orders of magnitude} compared with using human participants, and \emph{by twenty times} compared to proprietary models. Our actual experimental setup relied on a basic GPU server in order to evaluate both larger and smaller open-source models for exploratory purposes. However, our results show that smaller models are sufficient for the task (\S\ref{sec:scalability:model}); in a production setting, the experiments could therefore be run using only these smaller models on a single consumer-grade computer equipped with a GPU, reducing the total cost to approximately \$10. We note that the reported costs reflect only the final batch of experiments presented in this paper, as we have the most reliable data for this period. Had we included the costs associated with all previous iterations of our experimental design, the total expenditure for all configurations could have been five to ten times higher. See Appendix~\ref{sec:appendix:cost:assumptions} for the full set of assumptions.
+
+
+\subsection{Model Selection}
+\label{sec:scalability:model}
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.45\columnwidth]{diversity_main_model.png}
+	\includegraphics[width=0.45\columnwidth]{toxicity_through_time_model.png}
+	\Description{Distribution plot of diversity in discussions by LLM, including human discussions. Lineplot showing the evolution of toxicity during the course of discussions (1--15 discussion turns) by model.}
+	\caption{\textbf{Left}: Diversity of synthetic discussions by model compared with human ones from the CMV-AWRY dataset (\S\ref{sec:methodology:seed}). We find that only the Qwen-7B model matches human discussion variety to a reasonable degree. Other models such as Mistral-7B, LLaMa-8B and Qwen-32B feature significantly divergent content-variety distributions. \textbf{Right}: Cumulative average toxicity through each participant turn in the synthetic discussions by model. Only LLaMa-8B seems capable of escalating discussions over time. See \S\ref{sec:scalability:experimental} for experimental details.}
+	\label{fig:models}
+\end{figure}
+
+We investigate three families of open-source models. For each model family we select the 4-bit-quantized versions of a small and large variant to investigate whether LLM size is a contributing factor to \ac{sdg} simulations. Details about the models are provided in Appendix~\ref{sec:appendix:replication:models}.
+
+The text generated by each model differs substantially in content. Figure~\ref{fig:models} illustrates the diversity (\S\ref{sec:related:quality:diversity}) of discussions produced by each model, compared with human discussions (shown as the black, left-striped distribution). Our results suggest that \emph{model size does not significantly influence the variety of generated content}. For example, a smaller model such as Qwen-7B closely resembles human discussions in terms of content, whereas its larger counterpart (Qwen-32B) diverges considerably, producing discussions whose comments are largely unrelated to one another, as reflected in its extremely high diversity scores (\S\ref{sec:related:quality}).\footnote{There may be a correlation between relatively high diversity scores and a model’s tendency to abstain from responding (Table~\ref{tab:participation}). However, because only the Qwen models exhibit either pattern, it is not possible to perform a meaningful correlation analysis, as model type and diversity cannot be decoupled in our case.} This pattern is not unique: the larger variants of LLaMa and Mistral also fail to closely match human discussions, although in their case the generated text shows lower diversity than human discussions.
+
+We first evaluate the models in terms of content diversity, where Qwen-7B appears well suited for simulating human discussions. However, content diversity alone is insufficient for our intended use cases. When evaluated with respect to \emph{toxicity generation}, Qwen-7B proves unsuitable. As discussed in \S\ref{sec:methodology:initialization:trolls}, our framework ideally permits limited model ``jailbreaking'' so that LLM facilitators can be tested in more challenging environments. Among the evaluated models, this behavior is clearly observed only in LLaMA-8B (Fig.~\ref{fig:models}), whose toxicity levels increase rapidly over the course of synthetic discussions. Overall, these results suggest that \emph{smaller models may be not only sufficient, but better for \ac{sdg} tasks}, allowing researchers to significantly reduce infrastructure and inference costs without compromising data quality.
+
+
+\subsection{Experimental Setup}
+\label{sec:scalability:experimental}
+
+\begin{algorithm}[ht]
+	\caption{Experimental setup for the facilitation experiments using our \ac{sdg} framework.}
+	\label{alg:exp_generation}
+	\begin{flushleft}
+		\textbf{Input:}
+		\begin{itemize}
+			\item User SDBs $\Theta$, number of participants $N_{users}$, facilitation strategies $S$
+			\item Seed discussions $D_{\text{seed}}$, number of seed comments per discussion $N_{\text{seed}}$
+			\item LLMs $llms$, number of experiments $N_e$, discussion length $N_d$
+		\end{itemize}
+		\textbf{Output:} set of generated discussions $D$
+	\end{flushleft}
+	
+	\begin{algorithmic}[1]
+		\State $D \gets \emptyset$
+		
+		\ForAll{$llm \in llms$'}
+		\ForAll{$strat \in S$}
+		\For{$1,\ldots,N_e$}
+		
+		\State $users \gets$ \Call{InitializeParticipants}{$llm, \Theta, N_{users}$}
+		\State $mod \gets$ \Call{InitializeMod}{$llm, strat$}
+		\State $d \gets$ \Call{InitializeDiscussion}{$D_{\text{seed}}, N_{\text{seed}}$}
+		
+		\For{$1,\ldots,N_d$}
+		\State $last\_user \gets$ \Call{LastUser}{$d$}
+		\State $user \gets$ \Call{NextSpeaker}{$users, last\_user$}
+		\State $d \gets d \cup$ \Call{Post}{$user, d$}
+		\State $d \gets d \cup$ \Call{Post}{$mod, d, strat$}
+		\EndFor
+		
+		\State $D \gets D \cup \{d\}$
+		\EndFor
+		\EndFor
+		\EndFor
+		
+		\State \Return $D$
+	\end{algorithmic}
+\end{algorithm}
+
+We adopt a single-model local setup, as such configurations are commonly used in \ac{sdg} tasks, whether with local or proprietary models alone. This choice reduces both the cost and complexity of our experiments and significantly simplifies the subsequent analysis. However, it also introduces an unavoidable dependency between the synthetic users and the facilitator. Additionally, this setup is not well suited for scenarios in which the central agent (here, the facilitator) must be fine-tuned. In such cases, a configuration with two separate models possessing different capabilities would be preferable, as demonstrated in~\cite{ulmer2024}.
+
+\begin{principle}
+\label{principle:finetuning}
+    \textbf{Finetuning should be used as a last resort in \ac{sdg}}. Besides the computational cost of finetuning the model itself, we would need to load additional LLMs into VRAM memory, multiplying the capital costs associated with the experiments (\S\ref{sec:scalability:cost:sources}), and violating Principle~\ref{principle:scalable}. Additionally, doing so will inject bias in our models~\cite{Taubenfeld2024SystematicBI}, violating Principle~\ref{principle:bias}, and make our experiments less reproducible.
+\end{principle}
+
+
+
+An overview of the experimental generation process is provided in Algorithm~\ref{alg:exp_generation}. We evaluate toxicity using the Perspective API~\cite{google_perspective_api}, since it has been used extensively in research~\cite{pozzobon-etal-2023-challenges} and it requires no additional computational resources. %We note that researchers should not directly compare our results with older studies using the same API, since the underlying model is frequently retrained~\cite{pozzobon-etal-2023-challenges}.
+% on second thought, I should NOT include that
+
+We run $N_d=30$ discussions for each possible configuration of LLMs, turn-taking function, and facilitation strategy. Each discussion is composed of up to $30$ comments, including facilitator interventions. All experiments were collectively completed within a week of computational time, using two Quadro RTX 6000 GPUs. Toxicity evaluation was conducted using the Perspective API service~\cite{google_perspective_api}. The execution script is available in the project's repository. We provide the $h=3$ last comments for context.

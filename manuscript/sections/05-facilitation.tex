@@ -1,0 +1,105 @@
+% !TEX root = ../main.tex
+%
+
+\section{Investigating facilitation through SDG}
+\label{sec:facilitation}
+
+\subsection{LLM facilitators constantly intervene}
+\label{sec:facilitation:interventions}
+
+ \begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.45\linewidth]{intervention_count_model.png}
+	\includegraphics[width=0.45\linewidth]{intervention_count_strategy.png}
+	\Description{Lineplots showing the number of interventions by strategy and by model, for each discussion turn. All lines are close to the 100\% mark, except for the ``No Instructions'' strategy and the Qwen-32B model, which hover around the 80\% and 30\% marks respectively.}
+	\caption{Percentage of cumulative facilitator interventions averaged across discussions, showing how often the facilitator chose to respond up to each point in the conversation. Results are grouped by model (right) and facilitation strategy (left; see~\S\ref{sec:facilitation:strategies}). LLM facilitators consistently and constantly intervene in discussions, with little overall variation between models and strategies. Error bars indicate 95\% confidence intervals.}
+	\label{fig:facilitation-model}
+\end{figure}
+
+Fig.~\ref{fig:facilitation-model} shows that LLM facilitators tend to intervene at nearly every opportunity, despite being instructed to act only when necessary (see Appendix~\ref{ssec:appendix:moderation_strategies}). This behavior is consistent across time, model families, model sizes, and facilitation strategies. The only notable exception is the Qwen-32B model, which exhibits comparatively low toxicity; however, this is unlikely due to more effective facilitation, as this model is known to produce atypical speech patterns (Fig.~\ref{fig:models}). This analysis is an instance of applying multiple evaluation criteria, to separate genuine behavioral patterns from artifacts arising from limitations in the \ac{sdg} simulations (\S\ref{sec:methodology:evaluation}).
+
+Our results confirm that LLMs generally can not decide to not speak even when instructed to do so (\S\ref{sec:methodology:management:turn-taking}).
+Notably, giving any specific instructions to the LLM seems to significantly increase its tendency to intervene. The inability to keep silent has not been reported in relevant literature to our knowledge, and \emph{is an example of ``debugging'' problems with LLMs}---a core motivation of our work. Furthermore, the fact that interventions remain constant throughout the discussion without toxicity being lowered may imply that facilitation is not effective, since effective facilitation needs targeted, non-repetitive interventions~\cite{chen-etal-2025-whow, park_et_al_2012_facilitation, schroeder-etal-2024-fora}.
+
+
+\subsection{Facilitative strategies have an observable effect on conversational dynamics}
+\label{sec:facilitation:strategies}
+
+We test two facilitation strategies used in real-life and compare them with two baselines. We summarize both documents using a proprietary LLM (Google Gemini~\cite{geminiteam2025}), since LLMs have been proven to work well in these tasks~\cite{ts2024}, manually inspected the output, and removed instructions not relevant for our scenario (Appendix~\ref{sec:appendix:prompts}).\footnote{Note that the process of turning sometimes extensive documents into short prompts, necessitated by open-source LLMs, is necessarily imperfect. We leave the optimal derivation of strategy prompts to future work.}
+
+\begin{enumerate}[nosep,noitemsep]
+	\item \textbf{No Facilitator}: A \emph{baseline} where no facilitator is present.
+	
+	\item \textbf{No Instructions}: A \emph{baseline} where a LLM facilitator is present, but is provided only with basic instructions e.g.,: “You are a moderator, keep the discussion civil”. This approach is already being used in some platforms \cite{Tsai_Deliberate_Lab_Open-Source_2025}. 
+	
+	\item \textbf{Moderation Guidelines}: A \emph{real-life} strategy based on guidelines given to human facilitators of the ``Regulation Room'' platform \cite{Cornell_eRulemaking2017}. The instructions are suitable for online fora, where facilitators also engage in content moderation, and their effectiveness must be balanced by their throughput e.g., ``Stick to a maximum of two questions, use simple and clear language, deal with off-topic comments''.
+	
+	\item \textbf{Constructive Communications}: A \emph{real-life} strategy~\cite{dimitra-guide} which approaches facilitation from a more personalized and indirect angle, forbidding facilitators from directly providing opinions or directions e.g., ``Do not make decisions, be a guide, provide explanations''. This makes the strategy ideal for deliberative environments.
+\end{enumerate}
+
+\begin{table}[ht]
+	\centering
+	\caption{\ac{mem} on LLM participant toxicity depending on the facilitator's strategy. Comments in the same discussion should feature highly correlated content, and therefore toxicity, which makes the use of a \ac{mem} grouping comments by discussions necessary. Reference level is \texttt{No Facilitator}. Acronyms: CC = Constructive Communications, MG = Moderation Guidelines, MI = Minimal Instructions, T = Discussion Turn (centered number of comments in the discussion so far). $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
+	\label{tab:regression-overall}
+	\begin{tabular}{lcccccccc}
+		\toprule
+		& Intercept & CC & MG & MI & T & CC $\times$ T & MG $\times$ T & MI $\times$ T \\
+		\midrule
+		& \begin{tabular}[c]{@{}c@{}}$0.184^{***}$ \\ $(0.008)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.040^{***}$ \\ $(0.011)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.032^{**}$ \\ $(0.011)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.030^{**}$ \\ $(0.011)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.001^{*}$ \\ $(0.000)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.002^{**}$ \\ $(0.001)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.001$ \\ $(0.001)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.001^{*}$ \\ $(0.001)$\end{tabular} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\caption{\ac{mem} on toxicity exhibited by the \emph{LLM facilitator} depending on the facilitation strategy. Reference level is \texttt{No Instructions}. Acronyms: CC = Constructive Communications, MG = Moderation Guidelines, T = message order (centered). $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
+	\label{tab:regression-facilitator}
+	\begin{tabular}{lcccccc}
+		\toprule
+		& Intercept & CC & MG & T & CC $\times$ T & MG $\times$ T \\
+		\midrule
+		Facilitator 	Toxicity 
+		& \begin{tabular}[c]{@{}c@{}}$0.061^{***}$ \\ $(0.002)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.020^{***}$ \\ $(0.003)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.023^{***}$ \\ $(0.003)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.000$ \\ $(0.000)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.000$ \\ $(0.000)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.000$ \\ $(0.000)$\end{tabular} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\caption{\ac{mem} predicting post-intervention toxicity. In a chain of user A commenting, followed by an intervention, followed by user A commenting again, we consider the first and last comments to be the pre- and post-intervention toxicity levels respectively. We control for pre-toxicity, since it should be highly correlated with post-toxicity. Reference levels: \texttt{No Instructions} for strategy, \texttt{False} for trolls. Acronyms: CC = Constructive Communications, ER = E-Rulemaking, TR = whether the participant is a troll, PI= Pre-Intervention toxicity. $^*p<0.05$, $^{**}p<0.01$, $^{***}p<0.001$. Standard errors in parentheses.}
+	\label{tab:regression-response}
+	\begin{tabular}{lccccccc}
+		\toprule
+		& Intercept & CC & ER & TR & CC $\times$ TR & ER $\times$ TR & PI \\
+		\midrule
+		Post-Interv. Toxicity
+		& \begin{tabular}[c]{@{}c@{}}$0.084^{***}$ \\ $(0.006)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.007$ \\ $(0.009)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.002$ \\ $(0.009)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.150^{***}$ \\ $(0.007)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$-0.006$ \\ $(0.008)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.007$ \\ $(0.008)$\end{tabular}
+		& \begin{tabular}[c]{@{}c@{}}$0.172^{***}$ \\ $(0.016)$\end{tabular} \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+The choice of different facilitation strategies significantly influences the dynamics of simulated discussions. As shown in Table~\ref{tab:regression-overall}, overall participant toxicity varies both in total and throughout the discussion depending on the facilitation approach used. Additionally, the toxicity displayed by the LLM facilitators themselves is also impacted by the strategy, as illustrated in Table~\ref{tab:regression-facilitator}. Since facilitator toxicity generally remains low, we interpret higher values as an indicator of more assertive or heavy-handed interventions, which is corroborated by an analysis of the discussion logs. Crucially, this effect does not appear to be limited to the user who was directly targeted by an intervention. As demonstrated in Table~\ref{tab:regression-response}, the facilitation strategy does not significantly affect the toxicity of responses from users who were intervened upon, suggesting that the impact is broader, influencing the overall trajectory of the discussion rather than just isolated incidents.
+
+Taken together, these findings suggest that supplying facilitators with different strategic instructions influences more than individual moderation events; it appears to shift the overall trajectory of the discussion. While toxicity is a useful signal in the context of LLM-facilitated discussions, other domains may require different heuristics to detect such shifts. Thus, future work should aim to identify more general, task-agnostic methods for detecting behavioral changes among participants. This could be achieved by using reference-free LLMs-as-a-judge methodologies, which could filter through discussions to find changes in discussion patterns and suggest labels for subsequent human annotation~\cite{zhang2023llmaaa} (although severe limitations exist with such approaches~\cite{krumdick2025no}). Moreover, understanding the precise nature of these dynamics will likely require experiments involving human participants. Nonetheless, our results indicate that studying alternative facilitation strategies is a promising direction for future research.
+
+%Unfortunately, we cannot claim that the results in Table~\ref{tab:toxicity_regression} are representative of human discussions, since we can not evaluate whether the LLM participants react to facilitation in the same ways as human discussants. In fact, there are many reasons to believe the opposite. Firstly, human participants are likely to react poorly to LLM facilitators and not treat them similarly to their human counterparts; indeed, humans react negatively to AI-generated content~\cite{alessandro2025emotional, yao2025assistants, schlesener2025understood}---although this is not certain~\cite{xu2026mitigating, schlesener2025understood}. Secondly, while our experimental assumptions have been focused on making the simulations as realistic as possible, we are still a far cry away from fully autonomous, complex, social agents. Thirdly, even if LLMs were capable of replicating the exact reactions as the ``average human'', there would be no robust way of evaluating this fact~\cite{rossi_2024}. However, our results clearly show that \emph{providing the LLM facilitators with different strategies changes something fundamental} in the conversational dynamics.
+
+
