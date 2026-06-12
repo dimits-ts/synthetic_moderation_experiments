@@ -1,16 +1,30 @@
+
+# Synthetic discussion generation experiments
+# Copyright (C) 2026 Dimitris Tsirmpas
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# You may contact the author at dim.tsirmpas@aueb.gr
+
 from pathlib import Path
-import itertools
 
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.axes
 import seaborn as sns
-import scikit_posthocs as sp
 
-from . import stats
-from . import constants
 
+MARKERS = ["o", "s", "D", "^", "v", "P", "X"]
+HATCHES = ["//", "\\\\", "xx", "oo", "..", "**", "++", "--"]
 
 COLORBLIND_PALETTE = [
     "#000000",  # black
@@ -46,7 +60,7 @@ def seaborn_setup() -> None:
 
     plt.rcParams.update(
         {
-            "text.usetex": False,
+            "text.usetex": True,
             # Figure
             "figure.figsize": (12, 8),
             "figure.dpi": 300,
@@ -57,7 +71,7 @@ def seaborn_setup() -> None:
             "font.family": "serif",
             "font.serif": ["Liberation Serif", "Nimbus Roman"],
             "font.size": 18,
-            "axes.titlesize": 18,
+            "axes.titlesize": 24,
             "axes.labelsize": 22,
             "xtick.labelsize": 14,
             "ytick.labelsize": 14,

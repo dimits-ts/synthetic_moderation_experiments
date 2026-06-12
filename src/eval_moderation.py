@@ -1,3 +1,22 @@
+
+# Synthetic discussion generation experiments
+# Copyright (C) 2026 Dimitris Tsirmpas
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# You may contact the author at dim.tsirmpas@aueb.gr
+
 import argparse
 from pathlib import Path
 
@@ -137,12 +156,18 @@ def intervention_through_time_plot(
         df["cum_interventions"] / df["cum_messages"] * 100
     )
 
-    # Average across conversations for each model and turn index
+    # Average + 95% CI across conversations for each group and turn index
     summary = (
         df.groupby([groupby_col, "turn_index"])["cum_intervention_pct"]
-        .mean()
+        .agg(
+            mean="mean",
+            sem=lambda x: x.sem() if len(x) > 1 else 0.0,
+            n="count",
+        )
         .reset_index()
     )
+    # 95% CI half-width (1.96 * SEM)
+    summary["ci95"] = 1.96 * summary["sem"]
 
     # build consistent color map from label_order
     base_colors = tasks.graphs.COLORBLIND_PALETTE
@@ -150,8 +175,6 @@ def intervention_through_time_plot(
         label: base_colors[i % len(base_colors)]
         for i, label in enumerate(label_order)
     }
-
-    markers = ["o", "s", "D", "^", "v", "P", "X"]
 
     fig, ax = plt.subplots(figsize=(12, 6))
 
@@ -161,19 +184,29 @@ def intervention_through_time_plot(
         if group_df.empty:
             continue  # skip labels not present in this plot
 
-        ax.plot(
-            group_df["turn_index"],
-            group_df["cum_intervention_pct"],
-            label=label,
-            color=palette[label],
-            marker=markers[i % len(markers)],
-        )
+        x = group_df["turn_index"]
+        y = group_df["mean"]
+        ci = group_df["ci95"]
 
-    ax.set_xlabel("#Comments (start -> end)")
-    ax.set_ylabel("% Interventions")
+        color = palette[label]
+        ax.plot(
+            x,
+            y,
+            label=label,
+            color=color,
+            marker=tasks.graphs.MARKERS[i % len(tasks.graphs.MARKERS)],
+        )
+        ax.fill_between(x, y - ci, y + ci, color=color, alpha=0.15)
+        ax.set_ylim(0, 100)
+
+    ax.set_xticks(sorted(summary["turn_index"].unique()))
+    ax.xaxis.set_minor_locator(plt.NullLocator())
+    ax.set_xlabel(r"\#Comments (start $\rightarrow$ end)")
+    ax.set_ylabel(r"Avg. Cum. Intervention Rate (\%)")
+    ax.set_title(f"Facilitator interventions per {groupby_col}")
 
     # legend already sorted because plotting order is sorted
-    ax.legend(title=groupby_col)
+    ax.legend(title="")
 
     plt.tight_layout()
 

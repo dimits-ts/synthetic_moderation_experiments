@@ -1,7 +1,7 @@
 logging:
   print_to_terminal: true
   write_to_file: true
-  logs_dir: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/logs"
+  logs_dir: "/media/SSD_4TB_2/XXXX-6/projects/synthetic_moderation_experiments/logs"
   level: "info"
 
 discussion_model:
@@ -10,8 +10,8 @@ discussion_model:
 
 discussions:
   files:
-    topics_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/topics/final/cmv_awry2.csv"
-    troll_instructions_path: "/media/SSD_4TB_2/dtsirmpas/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/troll.txt" 
+    topics_path: "/media/SSD_4TB_2/XXXX-6/projects/synthetic_moderation_experiments/data/discussions_input/topics/final/cmv_awry2.csv"
+    troll_instructions_path: "/media/SSD_4TB_2/XXXX-6/projects/synthetic_moderation_experiments/data/discussions_input/user_instructions/troll.txt" 
 
   experiment_variables:
     num_experiments: 20

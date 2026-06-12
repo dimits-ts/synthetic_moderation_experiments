@@ -1,3 +1,7 @@
+#!/bin/bash
+
+# Define the header to prepend
+HEADER="
 # Synthetic discussion generation experiments
 # Copyright (C) 2026 Dimitris Tsirmpas
 
@@ -15,27 +19,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # You may contact the author at dim.tsirmpas@aueb.gr
+"
 
-import itertools
-from typing import Iterable, Callable
+# Check if a directory is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <directory>"
+    exit 1
+fi
 
-import numpy as np
-import pandas as pd
-import scipy.stats
-from rouge_score import rouge_scorer
+DIRECTORY="$1"
 
+# Check if the directory exists
+if [ ! -d "$DIRECTORY" ]; then
+    echo "Directory not found: $DIRECTORY"
+    exit 1
+fi
 
-def rougel_similarity(comments: list[str]) -> list[float]:
-    """
-    Return the average of the pairwise ROUGE-L similarity for all
-    comments in a discussion.
-    :param: comments: the list of comments to compute ROUGE-L
-     similarities on
-    :return: a similarity score from 0 (no similarities) to 1 (identical)
-    """
-    scorer = rouge_scorer.RougeScorer(["rougeL"])
-    scores = []
-    for c1, c2 in itertools.combinations(comments, 2):
-        scores.append(scorer.score(c1.lower(), c2.lower())["rougeL"].fmeasure)
-    return (1 - float(np.mean(scores))) if scores else np.nan
-
+# Find all .py files recursively and process them
+find "$DIRECTORY" -type f -name "*.py" | while read -r file; do
+    # Check if the file already has the header
+    if ! grep -q "^# SynDisco: Automated experiment creation and execution using only LLM agents" "$file"; then
+        # Prepend the header
+        echo "$HEADER" | cat - "$file" > temp && mv temp "$file"
+        echo "Header added to: $file"
+    else
+        echo "Header already exists in: $file"
+    fi
+done
